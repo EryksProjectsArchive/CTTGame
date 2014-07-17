@@ -46,7 +46,7 @@ namespace Win32
 		mWndClass.hInstance = GetModuleHandle(NULL);
 		mWndClass.hCursor = LoadCursor(0, IDC_ARROW);
 		mWndClass.hIcon = mWndClass.hIconSm = LoadIcon(0, IDI_APPLICATION);
-		mWndClass.style = CS_HREDRAW | CS_VREDRAW;
+		mWndClass.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
 		mWndClass.hbrBackground = (HBRUSH)COLOR_WINDOW;
 		mWndClass.lpszClassName = "AppWindow";
 

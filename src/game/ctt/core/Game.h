@@ -13,6 +13,8 @@
 
 #include <video/Window.h>
 
+#include <video/renderer/OpenGLRenderer.h>
+
 class Game
 {
 private:
@@ -20,6 +22,7 @@ private:
 	bool mInitialized;
 
 	IWindow * mWindow;
+	OpenGL::Renderer * mRenderer;
 public:
 	Game();
 	~Game();

@@ -21,6 +21,7 @@ Game::Game()
 	this->mRunning = false;
 	this->mInitialized = false;
 	this->mWindow = 0;
+	this->mRenderer = 0;
 }
 
 Game::~Game()
@@ -51,6 +52,9 @@ bool Game::init()
 	this->mWindow = OS::createWindowInstance();
 	this->mWindow->setup("City Transport Tycoon", 800, 600);
 
+	this->mRenderer = new OpenGL::Renderer();
+	this->mRenderer->setup(this->mWindow);
+
 	this->mInitialized = true;
 	this->mRunning = true;
 	return true;
@@ -66,6 +70,12 @@ bool Game::pulse()
 		}
 	}
  
+	if (this->mRenderer)
+	{
+		this->mRenderer->preFrame();
+
+		this->mRenderer->postFrame();
+	}
 
 	return this->mRunning;
 }
