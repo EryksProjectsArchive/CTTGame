@@ -4,20 +4,27 @@
 //	   Copyright (C) Black Ice Mountains
 //		 	All rights reserved
 //
-// File		: main.cpp
+// File		: core/Game.h
 // Author	: Eryk Dwornicki
 //
 //////////////////////////////////////////////
 
-#include <core/Game.h>
+#pragma once
 
-int main()
+#include <video/Window.h>
+
+class Game
 {
-	Game *game = new Game();
-	if (game->init())
-	{
-		while (game->pulse());
-	}
-	delete game;
-	return 1;
-}
+private:
+	bool mRunning;
+	bool mInitialized;
+
+	IWindow * mWindow;
+public:
+	Game();
+	~Game();
+
+	bool init();
+
+	bool pulse();
+};

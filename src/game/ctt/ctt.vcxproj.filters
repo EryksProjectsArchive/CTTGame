@@ -13,10 +13,66 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\core">
+      <UniqueIdentifier>{b90b2155-e72d-4134-9d93-8a70293dfc3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\core">
+      <UniqueIdentifier>{13786c6c-95b5-4a48-9b7a-b543cd6bc354}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\os">
+      <UniqueIdentifier>{0601c3bf-2fd7-473d-abe3-46852e342657}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\os">
+      <UniqueIdentifier>{d26f86f3-da0f-4aad-9448-9b1d4a569196}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\os\win32">
+      <UniqueIdentifier>{4fb62505-d168-4f7e-936d-d0aeb90b939d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\os\win32">
+      <UniqueIdentifier>{3d067636-e8ae-43c0-8d62-94ca53d3a7bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\video">
+      <UniqueIdentifier>{642a9b4b-e2fa-497e-97cf-3c73e659bfc2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\video">
+      <UniqueIdentifier>{56c16caf-505b-4f20-a359-61a3e9147ca8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="core\Game.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="os\OS.cpp">
+      <Filter>Source Files\os</Filter>
+    </ClCompile>
+    <ClCompile Include="os\win32\Win32Window.cpp">
+      <Filter>Source Files\os\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="video\Window.cpp">
+      <Filter>Source Files\video</Filter>
+    </ClCompile>
+    <ClCompile Include="core\Logger.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="core\Game.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="os\OS.h">
+      <Filter>Header Files\os</Filter>
+    </ClInclude>
+    <ClInclude Include="os\win32\Win32Window.h">
+      <Filter>Header Files\os\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="video\Window.h">
+      <Filter>Header Files\video</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Logger.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -4,20 +4,20 @@
 //	   Copyright (C) Black Ice Mountains
 //		 	All rights reserved
 //
-// File		: main.cpp
+// File		: video/Window.h
 // Author	: Eryk Dwornicki
 //
 //////////////////////////////////////////////
 
-#include <core/Game.h>
+#pragma once
 
-int main()
+class IWindow
 {
-	Game *game = new Game();
-	if (game->init())
-	{
-		while (game->pulse());
-	}
-	delete game;
-	return 1;
-}
+public:
+	IWindow();
+	virtual ~IWindow();
+
+	virtual bool setup(const char *title, int width, int height);
+	virtual bool processMessages();
+	virtual void * getPtr();
+};
