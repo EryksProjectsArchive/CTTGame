@@ -15,47 +15,36 @@
 #include <Windows.h>
 #endif
 
+#include <video/Window.h>
+#include <gl/GL.h>
+#include <gl/GLU.h>
+
 namespace OpenGL
 {
-	// OpenGL definitions
-	typedef unsigned int GLenum;
-	typedef unsigned char GLboolean;
-	typedef unsigned int GLbitfield;
-	typedef signed char GLbyte;
-	typedef short GLshort;
-	typedef int GLint;
-	typedef int GLsizei;
-	typedef unsigned char GLubyte;
-	typedef unsigned short GLushort;
-	typedef unsigned int GLuint;
-	typedef float GLfloat;
-	typedef float GLclampf;
-	typedef double GLdouble;
-	typedef double GLclampd;
-	typedef void GLvoid;
-
-	/* StringName */
-	#define GL_VENDOR                         0x1F00
-	#define GL_RENDERER                       0x1F01
-	#define GL_VERSION                        0x1F02
-	#define GL_EXTENSIONS                     0x1F03
-
+	#define MAKE_GL_VERSION(major, minor) (unsigned short)((major << 8) | minor)
 
 	class Context
 	{
 	private:
 #ifdef _WIN32
 		HMODULE mModule;
+
+		HDC mHDC;
+		HGLRC mHRC;
 #endif
 	public:
 		Context();
 		~Context();
 
-		void init();
+		bool setup(IWindow * window, unsigned short minVersion);
 
+		void swapBuffers();
 
+#ifdef _WIN32
 		HGLRC	(_stdcall *wglCreateContext)(HDC);
 		BOOL	(_stdcall *wglMakeCurrent)(HDC, HGLRC);
+		BOOL (_stdcall *wglDeleteContext)(HGLRC);
+#endif
 
 		void	(_stdcall *glShadeModel)(GLenum mode);
 		void	(_stdcall *glClear)(GLbitfield mask);
@@ -63,6 +52,7 @@ namespace OpenGL
 		void	(_stdcall *glClearColor)(GLclampf red, GLclampf green, GLclampf blue, GLclampf alpha);
 		void	(_stdcall *glClearDepth)(GLclampd depth);
 
-		const GLubyte * (_stdcall * glGetString)(GLenum name);
+		const	GLubyte * (_stdcall * glGetString)(GLenum name);
+		void	(_stdcall * glGetIntegerv)(GLenum pname, GLint *params);
 	};
 };

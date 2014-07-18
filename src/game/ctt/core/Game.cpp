@@ -53,7 +53,11 @@ bool Game::init()
 	this->mWindow->setup("City Transport Tycoon", 800, 600);
 
 	this->mRenderer = new OpenGL::Renderer();
-	this->mRenderer->setup(this->mWindow);
+	if (!this->mRenderer->setup(this->mWindow))
+	{
+		Error("game", "Cannot setup renderer.");
+		return false;
+	}
 
 	this->mInitialized = true;
 	this->mRunning = true;

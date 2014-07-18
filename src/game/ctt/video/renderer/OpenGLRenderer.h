@@ -15,24 +15,17 @@
 
 #include "OpenGLContext.h"
 
-#ifdef _WIN32
-#include <Windows.h>
-#endif
-
 namespace OpenGL
 {
 	class Renderer
 	{
 	private:
-#ifdef _WIN32
-		HDC mHDC;
-#endif
 		Context * mContext;
 	public:
 		Renderer();
 		~Renderer();
 
-		void setup(IWindow * window);
+		bool setup(IWindow * window);
 
 		void preFrame();
 		void postFrame();
