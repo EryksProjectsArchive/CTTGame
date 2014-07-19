@@ -160,7 +160,7 @@ namespace Win32
 			this->mWidth = width;
 
 		if (height != 0)
-			this->mHeight = width;
+			this->mHeight = height;
 
 		SetWindowPos(this->mWindow, NULL, 0, 0, this->mWidth, this->mHeight, SWP_NOCOPYBITS | SWP_SHOWWINDOW | SWP_FRAMECHANGED);
 

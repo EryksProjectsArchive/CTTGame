@@ -169,7 +169,7 @@ namespace OpenGL
 
 			Info("gfx", "OpenGL version detected: %s (%d.%d.%d)", version, majorVersion, minorVersion, revision);
 
-			if (majorVersion < reqMajorVersion || minorVersion < reqMinorVersion)
+			if (majorVersion < reqMajorVersion || (majorVersion == reqMajorVersion && minorVersion < reqMinorVersion))
 			{
 				Error("gfx", "Too old OpenGL detected %d.%d required using %d.%d!", reqMajorVersion, reqMinorVersion, majorVersion, minorVersion);
 				return false;
