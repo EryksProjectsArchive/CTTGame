@@ -63,6 +63,8 @@ namespace OpenGL
 			this->mGL->glMatrixMode(GL_MODELVIEW);						
 			this->mGL->glLoadIdentity();
 
+			
+
 			Info("gfx", "OpenGL Renderer started version %s. (Graphics vendor: %s, Graphics renderer: %s)", this->mGL->glGetString(GL_VERSION), this->mGL->glGetString(GL_VENDOR), this->mGL->glGetString(GL_RENDERER));
 			return true;
 		}

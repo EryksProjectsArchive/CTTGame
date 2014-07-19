@@ -114,19 +114,26 @@ namespace OpenGL
 			METHOD(glClear);
 			METHOD(glClearDepth);
 			METHOD(glClearColor);
-
-			METHOD(glLoadIdentity);
-			
+			METHOD(glLoadIdentity);			
 			METHOD(glMatrixMode);
-
 			METHOD(glViewport);
-
 			METHOD(glEnable);
 			METHOD(glDepthFunc);
 			METHOD(glHint);
-
 			METHOD(glGetString);
 			METHOD(glGetIntegerv);
+			METHOD(glVertexPointer);
+			METHOD(glTexCoordPointer);
+			METHOD(glColorPointer);
+			METHOD(glNormalPointer);
+			METHOD(glBindBuffer);
+			METHOD(glDrawArrays);
+			METHOD(glGenBuffers);
+			METHOD(glBufferData);
+			METHOD(glGenTextures);
+			METHOD(glBindTexture);
+			METHOD(glTexImage2D);
+			METHOD(glTexParameteri);
 
 			const unsigned char * version = this->glGetString(GL_VERSION);
 
