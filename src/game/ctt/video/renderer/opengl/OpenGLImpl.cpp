@@ -94,10 +94,26 @@ namespace OpenGL
 				return false;\
 			}
 
+#define EXT_METHOD(name)\
+			*(unsigned int *)&this->name = (unsigned int)this->wglGetProcAddress(#name);\
+			if(!this->name) { \
+				Error("gfx","Cannot find OpenGL Method - '%s'.",#name);\
+				return false;\
+			}
+
+			METHOD(glGetString);
+
+			//if (this->isExtensionPresent("GL_ARB_vertex_buffer_object")) // crashy for now
+			//{
+			//	Error("gfx", "OpenGL extension GL_ARB_vertex_buffer_object is not presented.");
+			//	return false;
+			//}
+
 			METHOD(wglCreateContext);
 			METHOD(wglMakeCurrent);
 			METHOD(wglDeleteContext);
-
+			METHOD(wglGetProcAddress);
+			
 			if (!(this->mHRC = this->wglCreateContext(mHDC)))
 			{
 				Error("gfx", "Cannot create wgl Impl");
@@ -118,22 +134,24 @@ namespace OpenGL
 			METHOD(glMatrixMode);
 			METHOD(glViewport);
 			METHOD(glEnable);
+			METHOD(glDisable);
 			METHOD(glDepthFunc);
-			METHOD(glHint);
-			METHOD(glGetString);
+			METHOD(glHint);			
 			METHOD(glGetIntegerv);
 			METHOD(glVertexPointer);
 			METHOD(glTexCoordPointer);
 			METHOD(glColorPointer);
 			METHOD(glNormalPointer);
-			METHOD(glBindBuffer);
+			EXT_METHOD(glBindBuffer);
 			METHOD(glDrawArrays);
-			METHOD(glGenBuffers);
-			METHOD(glBufferData);
+			EXT_METHOD(glGenBuffers);
+			EXT_METHOD(glBufferData);
 			METHOD(glGenTextures);
 			METHOD(glBindTexture);
 			METHOD(glTexImage2D);
 			METHOD(glTexParameteri);
+			METHOD(glEnableClientState);
+			METHOD(glDisableClientState);
 
 			const unsigned char * version = this->glGetString(GL_VERSION);
 
@@ -155,7 +173,7 @@ namespace OpenGL
 			{
 				Error("gfx", "Too old OpenGL detected %d.%d required using %d.%d!", reqMajorVersion, reqMinorVersion, majorVersion, minorVersion);
 				return false;
-			}
+			}			
 			return true;
 		}
 		else
@@ -172,5 +190,35 @@ namespace OpenGL
 #ifdef _WIN32
 		SwapBuffers(this->mHDC);
 #endif
+	}
+
+	bool Impl::isExtensionPresent(const char *extension)
+	{
+		const unsigned char *extensions = NULL;
+		const unsigned char *start;
+		unsigned char *where, *terminator;
+
+		// Extension names should not have spaces
+		where = (unsigned char *)strchr(extension, ' ');
+		if (where || *extension == '\0')
+			return false;
+
+		// Get Extensions String
+		extensions = this->glGetString(GL_EXTENSIONS);
+
+		// Search The Extensions String For An Exact Copy
+		start = extensions;
+		for (;;)
+		{
+			where = (unsigned char *)strstr((const char *)start, extension);
+			if (!where)
+				break;
+			terminator = where + strlen(extension);
+			if (where == start || *(where - 1) == ' ')
+				if (*terminator == ' ' || *terminator == '\0')
+					return true;
+			start = terminator;
+		}
+		return false;
 	}
 };

@@ -42,10 +42,13 @@ namespace OpenGL
 
 		void swapBuffers();
 
+		bool isExtensionPresent(const char *extension);
+
 #ifdef _WIN32
 		HGLRC	(_stdcall *wglCreateContext)(HDC);
 		BOOL	(_stdcall *wglMakeCurrent)(HDC, HGLRC);
-		BOOL (_stdcall *wglDeleteContext)(HGLRC);
+		BOOL	(_stdcall *wglDeleteContext)(HGLRC);
+		PROC	(_stdcall *wglGetProcAddress)(LPCSTR);
 #endif
 
 		void	(_stdcall *glShadeModel)(GLenum mode);
@@ -60,6 +63,8 @@ namespace OpenGL
 		void	(_stdcall * glViewport)(GLint x, GLint y, GLsizei width, GLsizei height);
 
 		void	(_stdcall *glEnable)(GLenum cap);
+		void	(_stdcall *glDisable)(GLenum cap);
+
 		void	(_stdcall *glDepthFunc)(GLenum func);
 		void	(_stdcall *glHint)(GLenum target, GLenum mode);
 
@@ -77,6 +82,9 @@ namespace OpenGL
 		void	(_stdcall *glBindTexture)(GLenum target, GLuint texture);
 		void	(_stdcall *glTexImage2D)(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, const GLvoid *pixels);
 		void	(_stdcall *glTexParameteri)(GLenum target, GLenum pname, GLint param);
+
+		void	(_stdcall *glDisableClientState)(GLenum array);
+		void	(_stdcall *glEnableClientState)(GLenum array);
 
 		const	GLubyte * (_stdcall * glGetString)(GLenum name);
 		void	(_stdcall * glGetIntegerv)(GLenum pname, GLint *params);
