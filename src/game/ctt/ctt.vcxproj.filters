@@ -43,6 +43,12 @@
     <Filter Include="Source Files\video\renderer">
       <UniqueIdentifier>{ee9a6d7d-d2b0-44e7-bb06-58f1653eb0f9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\video\renderer\opengl">
+      <UniqueIdentifier>{4bc8dcc4-dfbf-403f-af8f-f0f2d4ccac77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\video\renderer\opengl">
+      <UniqueIdentifier>{d50c7fa7-f2cf-4415-91d4-fa5a81e0eb69}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -63,11 +69,14 @@
     <ClCompile Include="core\Logger.cpp">
       <Filter>Source Files\core</Filter>
     </ClCompile>
-    <ClCompile Include="video\renderer\OpenGLRenderer.cpp">
+    <ClCompile Include="video\renderer\opengl\OpenGLRenderer.cpp">
+      <Filter>Source Files\video\renderer\opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="video\renderer\Renderer.cpp">
       <Filter>Source Files\video\renderer</Filter>
     </ClCompile>
-    <ClCompile Include="video\renderer\OpenGLContext.cpp">
-      <Filter>Source Files\video\renderer</Filter>
+    <ClCompile Include="video\renderer\opengl\OpenGLImpl.cpp">
+      <Filter>Source Files\video\renderer\opengl</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -86,11 +95,14 @@
     <ClInclude Include="core\Logger.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
-    <ClInclude Include="video\renderer\OpenGLRenderer.h">
+    <ClInclude Include="video\renderer\Renderer.h">
       <Filter>Header Files\video\renderer</Filter>
     </ClInclude>
-    <ClInclude Include="video\renderer\OpenGLContext.h">
-      <Filter>Header Files\video\renderer</Filter>
+    <ClInclude Include="video\renderer\opengl\OpenGLRenderer.h">
+      <Filter>Header Files\video\renderer\opengl</Filter>
+    </ClInclude>
+    <ClInclude Include="video\renderer\opengl\OpenGLImpl.h">
+      <Filter>Header Files\video\renderer\opengl</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

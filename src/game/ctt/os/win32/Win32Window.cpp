@@ -16,13 +16,19 @@
 
 namespace Win32
 {
-	Window::Window()
-		: mWindow(NULL)
+	Window::Window()		
 	{
+		this->mWindow = NULL;
 	}
 
 	Window::~Window()
 	{
+		if (mFullscreen)
+		{
+			ChangeDisplaySettings(NULL, 0);
+			ShowCursor(TRUE);
+		}
+
 		if (mWindow)
 		{
 			DestroyWindow(mWindow);
@@ -30,13 +36,16 @@ namespace Win32
 		}
 	}
 
-	bool Window::setup(const char *title, int width, int height)
+	bool Window::setup(const char *title, unsigned short width, unsigned short height, bool fullscreen)
 	{
 		if (mWindow)
 		{
 			Warning("window", "Cannot setup window twice.");
 			return false;
 		}
+
+		this->mWidth = width;
+		this->mHeight = height;
 
 		Debug("window", "Creating window (Title: %s, Width: %d, Height: %d)", title, width, height);
 
@@ -64,9 +73,14 @@ namespace Win32
 			return false;
 		}
 			
-		SetWindowLongPtr(mWindow, 0, (LONG_PTR)this);
+		SetWindowLongPtr(mWindow, GWLP_USERDATA, (LONG_PTR)this);
+
+		setFullscreen(fullscreen, width, height);
 
 		ShowWindow(mWindow, SW_SHOWNORMAL);
+		SetFocus(mWindow);
+		SetForegroundWindow(mWindow);
+
 		Debug("window", "Window has been created sucessfully.");			
 		return true;
 	}
@@ -92,11 +106,108 @@ namespace Win32
 		return (void *)mWindow;
 	}
 
+	unsigned short Window::getWidth()
+	{
+		return mWidth;
+	}
+
+	unsigned short Window::getHeight()
+	{
+		return mHeight;
+	}
+
+	void Window::setFullscreen(bool fullscreen, unsigned short width, unsigned short height)
+	{
+		unsigned int style = NULL;
+		if (fullscreen)
+		{
+			DEVMODE dmScreenSettings;									
+			memset(&dmScreenSettings, 0, sizeof(dmScreenSettings));
+			dmScreenSettings.dmSize = sizeof(dmScreenSettings);
+			dmScreenSettings.dmPelsWidth = width;
+			dmScreenSettings.dmPelsHeight = height;
+			dmScreenSettings.dmBitsPerPel = 16;
+			dmScreenSettings.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
+
+			unsigned int retn = ChangeDisplaySettings(&dmScreenSettings, CDS_FULLSCREEN);
+			if (retn != DISP_CHANGE_SUCCESSFUL)
+			{
+				dmScreenSettings.dmBitsPerPel = 32;
+				retn = ChangeDisplaySettings(&dmScreenSettings, CDS_FULLSCREEN);
+				if (retn != DISP_CHANGE_SUCCESSFUL)
+				{
+					Error("win32_window", "Cannot change display settings for fullscreen mode (%d).", retn);
+					return;
+				}
+			}
+			style = WS_POPUP;
+		//	ShowCursor(FALSE);
+
+			Info("win32_window", "Setting window fullscreen mode");
+		}		
+		else 
+		{
+			ChangeDisplaySettings(0, NULL);
+			style = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX;
+		//	ShowCursor(TRUE);
+		}
+
+		SetWindowLong(this->mWindow, GWL_STYLE, style);
+
+		this->mFullscreen = fullscreen;
+
+		if (width != 0)
+			this->mWidth = width;
+
+		if (height != 0)
+			this->mHeight = width;
+
+		SetWindowPos(this->mWindow, NULL, 0, 0, this->mWidth, this->mHeight, SWP_NOCOPYBITS | SWP_SHOWWINDOW | SWP_FRAMECHANGED);
+
+		if (this->mRenderer)
+			this->mRenderer->setFullscreen(fullscreen);
+	}
+
+	void Window::handleFocusLost()
+	{
+		if (mFullscreen)
+		{
+		//	ShowCursor(TRUE);
+			ShowWindow(mWindow, SW_MINIMIZE);
+		}
+	}
+	
+	void Window::handleFocus()
+	{
+		if (mFullscreen)
+		{	
+			ShowWindow(mWindow, SW_SHOW);			
+		//	ShowCursor(FALSE);
+		}
+	}
+
 	LRESULT WINAPI Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
-		Window *wnd = (Window *)GetWindowLongPtr(hWnd, 0);
+		Window *wnd = (Window *)GetWindowLongPtr(hWnd, GWLP_USERDATA);
 		switch (uMsg)
-		{
+		{		
+		case WM_ACTIVATE:
+			{				
+				if (wnd)
+				{
+					if (LOWORD(wParam) == WA_ACTIVE)
+						wnd->handleFocus();
+					else
+						wnd->handleFocusLost();
+				}
+			} break;
+		case WM_KEYDOWN:
+			{
+				if (wParam == VK_ESCAPE)
+				{
+					PostQuitMessage(0);
+				}
+			} break;
 		case WM_CLOSE:
 			{
 				DestroyWindow(hWnd);

@@ -4,7 +4,7 @@
 //	   Copyright (C) Black Ice Mountains
 //		 	All rights reserved
 //
-// File		: video/renderer/OpenGLRenderer.h
+// File		: video/renderer/opengl/OpenGLRenderer.h
 // Author	: Eryk Dwornicki
 //
 //////////////////////////////////////////////
@@ -12,15 +12,16 @@
 #pragma once
 
 #include <video/Window.h>
+#include <video/renderer/Renderer.h>
 
-#include "OpenGLContext.h"
+#include "OpenGLImpl.h"
 
 namespace OpenGL
 {
-	class Renderer
+	class Renderer : public IRenderer
 	{
 	private:
-		Context * mContext;
+		Impl * mGL;
 	public:
 		Renderer();
 		~Renderer();
@@ -29,5 +30,9 @@ namespace OpenGL
 
 		void preFrame();
 		void postFrame();
+
+		void setFullscreen(bool fullscreen);
+
+		char * getAPIName();
 	};
 };

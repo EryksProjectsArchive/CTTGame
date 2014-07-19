@@ -50,9 +50,9 @@ bool Game::init()
 
 	// Create game window
 	this->mWindow = OS::createWindowInstance();
-	this->mWindow->setup("City Transport Tycoon", 800, 600);
+	this->mWindow->setup("City Transport Tycoon", 1360, 768, true);
 
-	this->mRenderer = new OpenGL::Renderer();
+	this->mRenderer = IRenderer::create(RENDERER_API_OPENGL);
 	if (!this->mRenderer->setup(this->mWindow))
 	{
 		Error("game", "Cannot setup renderer.");

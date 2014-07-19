@@ -84,8 +84,9 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="os\OS.cpp" />
     <ClCompile Include="os\win32\Win32Window.cpp" />
-    <ClCompile Include="video\renderer\OpenGLContext.cpp" />
-    <ClCompile Include="video\renderer\OpenGLRenderer.cpp" />
+    <ClCompile Include="video\renderer\opengl\OpenGLImpl.cpp" />
+    <ClCompile Include="video\renderer\opengl\OpenGLRenderer.cpp" />
+    <ClCompile Include="video\renderer\Renderer.cpp" />
     <ClCompile Include="video\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -93,8 +94,9 @@
     <ClInclude Include="core\Logger.h" />
     <ClInclude Include="os\OS.h" />
     <ClInclude Include="os\win32\Win32Window.h" />
-    <ClInclude Include="video\renderer\OpenGLContext.h" />
-    <ClInclude Include="video\renderer\OpenGLRenderer.h" />
+    <ClInclude Include="video\renderer\opengl\OpenGLImpl.h" />
+    <ClInclude Include="video\renderer\opengl\OpenGLRenderer.h" />
+    <ClInclude Include="video\renderer\Renderer.h" />
     <ClInclude Include="video\Window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

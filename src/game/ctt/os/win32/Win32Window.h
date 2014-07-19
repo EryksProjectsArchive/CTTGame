@@ -22,15 +22,26 @@ namespace Win32
 		HWND mWindow;
 		WNDCLASSEX mWndClass;
 
+		unsigned short mWidth;
+		unsigned short mHeight;
+
 		static LRESULT WINAPI WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 	public:
 		Window();
 		~Window();
 
-		bool setup(const char *title, int width, int height);
+		bool setup(const char *title, unsigned short width, unsigned short height, bool fullscreen);
 
 		bool processMessages();
 
+		void handleFocusLost();
+		void handleFocus();
+
 		void * getPtr();
+
+		unsigned short getWidth();
+		unsigned short getHeight();
+
+		void setFullscreen(bool fullscreen, unsigned short width, unsigned short height);
 	};
 };
