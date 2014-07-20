@@ -12,6 +12,7 @@
 #pragma once
 
 #include <video/Window.h>
+#include "BufferBase.h"
 
 enum RendererAPIs
 {
@@ -36,6 +37,8 @@ public:
 	virtual char * getAPIName();
 
 	virtual void setFullscreen(bool fullscreen);
+
+	virtual BufferBase * createBuffer(BufferType type);
 
 	static IRenderer * create(RendererAPIs api);
 	static RendererAPIs getAPIIdFromString(const char *api);

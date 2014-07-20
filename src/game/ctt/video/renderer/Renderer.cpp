@@ -46,6 +46,11 @@ void IRenderer::setFullscreen(bool fullscreen)
 {
 }
 
+BufferBase * IRenderer::createBuffer(BufferType type)
+{
+	return 0;
+}
+
 IRenderer * IRenderer::create(RendererAPIs api)
 {
 	if (api == RENDERER_API_OPENGL)
