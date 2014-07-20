@@ -44,6 +44,7 @@ char * IRenderer::getAPIName()
 
 void IRenderer::setFullscreen(bool fullscreen)
 {
+	
 }
 
 BufferBase * IRenderer::createBuffer(BufferType type)

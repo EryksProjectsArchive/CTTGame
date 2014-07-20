@@ -11,6 +11,9 @@
 
 #include <core/Game.h>
 
+#include <core/Logger.h>
+#include <math/Matrix.h>
+
 int main()
 {
 	Game *game = new Game();

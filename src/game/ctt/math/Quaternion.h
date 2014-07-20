@@ -15,4 +15,10 @@ class Quaternion
 {
 public:
 	float w, x, y, z;
+
+	Quaternion()
+	{
+		x = y = z = 0;
+		w = 1;
+	}
 };

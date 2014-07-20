@@ -49,6 +49,12 @@
     <Filter Include="Source Files\video\renderer\opengl">
       <UniqueIdentifier>{d50c7fa7-f2cf-4415-91d4-fa5a81e0eb69}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\math">
+      <UniqueIdentifier>{94b2b005-e014-4c13-bb58-142bf3132adc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\math">
+      <UniqueIdentifier>{f5b83e27-dcc0-484b-bd37-8bafdc344092}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -78,6 +84,12 @@
     <ClCompile Include="video\renderer\opengl\OpenGLImpl.cpp">
       <Filter>Source Files\video\renderer\opengl</Filter>
     </ClCompile>
+    <ClCompile Include="video\renderer\BufferBase.cpp">
+      <Filter>Source Files\video\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="math\Vector.cpp">
+      <Filter>Source Files\math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\Game.h">
@@ -103,6 +115,21 @@
     </ClInclude>
     <ClInclude Include="video\renderer\opengl\OpenGLImpl.h">
       <Filter>Header Files\video\renderer\opengl</Filter>
+    </ClInclude>
+    <ClInclude Include="video\renderer\BufferBase.h">
+      <Filter>Header Files\video\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="math\Matrix.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="math\Quaternion.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="math\Vector.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="math\EulerAngles.h">
+      <Filter>Header Files\math</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
