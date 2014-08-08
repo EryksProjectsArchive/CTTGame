@@ -39,12 +39,10 @@ public:
 
 	~SharedPtr()
 	{
-		printf("~SharedPtr\n");
 		if (--*m_refCount <= 0)
 		{
 			delete m_value;	
 			delete m_refCount;
-			printf("REMOVE OBJECT\n");
 		}
 	}
 
