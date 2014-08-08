@@ -20,38 +20,38 @@ namespace OpenAL
 {
 	Sound::Sound(Impl *al)
 	{
-		mAL = al;
-		mSourceID = 0;
-		mBufferID = 0;
+		m_al = al;
+		m_sourceID = 0;
+		m_bufferID = 0;
 	}
 
 	Sound::~Sound()
 	{
-		if (mSourceID)
+		if (m_sourceID)
 		{
-			mAL->alDeleteSources(1, &mSourceID);
-			mSourceID = NULL;
+			m_al->alDeleteSources(1, &m_sourceID);
+			m_sourceID = NULL;
 		}
-		if (mBufferID)
+		if (m_bufferID)
 		{
-			mAL->alDeleteBuffers(1, &mBufferID);
-			mBufferID = NULL;
+			m_al->alDeleteBuffers(1, &m_bufferID);
+			m_bufferID = NULL;
 		}
 	}
 
 	void Sound::play()
 	{
-		if (!this->isPlaying())
+		if (!isPlaying())
 		{
             //mAL->alSourcef(mSourceID, AL_GAIN, 1.01f);
-			mAL->alSourcePlay(mSourceID);
+			m_al->alSourcePlay(m_sourceID);
 		}
 	}
 
 	bool Sound::isPlaying()
 	{
 		int State;
-		mAL->alGetSourcei(mSourceID, AL_SOURCE_STATE, &State);
+		m_al->alGetSourcei(m_sourceID, AL_SOURCE_STATE, &State);
 		return State == AL_PLAYING;
 	}
 
@@ -133,10 +133,10 @@ namespace OpenAL
 
 		fclose(fp);
 
-		mAL->alGenBuffers(1, &mBufferID);
-		mAL->alBufferData(mBufferID, format, file.data.Data, file.data.ChunkSize, file.info.SampleRate);
-		mAL->alGenSources(1, &mSourceID);
-		mAL->alSourcei(mSourceID, AL_BUFFER, mBufferID);
+		m_al->alGenBuffers(1, &m_bufferID);
+		m_al->alBufferData(m_bufferID, format, file.data.Data, file.data.ChunkSize, file.info.SampleRate);
+		m_al->alGenSources(1, &m_sourceID);
+		m_al->alSourcei(m_sourceID, AL_BUFFER, m_bufferID);
 		delete[]file.data.Data;
 		return true;
 	}

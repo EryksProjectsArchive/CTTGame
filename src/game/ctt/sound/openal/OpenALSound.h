@@ -19,10 +19,10 @@ namespace OpenAL
 	class Sound : public ISound
 	{
 	private:
-		Impl * mAL;
+		Impl * m_al;
 
-		unsigned int mBufferID;
-		unsigned int mSourceID;
+		unsigned int m_bufferID;
+		unsigned int m_sourceID;
 
 	public:
 		Sound(Impl *al);

@@ -19,55 +19,55 @@ namespace OpenAL
 {
 	SoundMgr::SoundMgr()
 	{
-		mContext = 0;
-		mDevice = 0;
-		mAL = new Impl();
+		m_context = 0;
+		m_device = 0;
+		m_al = new Impl();
 	}
 
 	SoundMgr::~SoundMgr()
 	{
-		if (mAL)
+		if (m_al)
 		{
-			mAL->alcMakeContextCurrent(NULL);
-			if (mContext)
+			m_al->alcMakeContextCurrent(NULL);
+			if (m_context)
 			{
-				mAL->alcDestroyContext(mContext);
-				mContext = 0;
+				m_al->alcDestroyContext(m_context);
+				m_context = 0;
 			}
-			if (mDevice)
+			if (m_device)
 			{
-				mAL->alcCloseDevice(mDevice);
-				mDevice = 0;
+				m_al->alcCloseDevice(m_device);
+				m_device = 0;
 			}
 
-			delete mAL;
-			mAL = NULL;
+			delete m_al;
+			m_al = NULL;
 		}
 	}
 
 	bool SoundMgr::setup()
 	{
-		if (mAL->setup())
+		if (m_al->setup())
 		{
 
 			//Info("[OpenAL]", "OpenAL started version %s. (vendor: %s, renderer: %s)", this->mAL->alcGetString(NULL, AL_VERSION), this->mAL->alcGetString(NULL, AL_VENDOR), this->mAL->alcGetString(NULL, AL_RENDERER));
 
-			const char * defaultDevice = mAL->alcGetString(NULL, ALC_DEFAULT_DEVICE_SPECIFIER);
+			const char * defaultDevice = m_al->alcGetString(NULL, ALC_DEFAULT_DEVICE_SPECIFIER);
 
-			mDevice = mAL->alcOpenDevice(defaultDevice);
-			if (mDevice == NULL)
+			m_device = m_al->alcOpenDevice(defaultDevice);
+			if (m_device == NULL)
 			{
 				return false;
 			}
 
 			//Create a context
-			mContext = mAL->alcCreateContext(mDevice, NULL);
+			m_context = m_al->alcCreateContext(m_device, NULL);
 
 			//Set active context
-			mAL->alcMakeContextCurrent(mContext);
+			m_al->alcMakeContextCurrent(m_context);
 
 			// Clear Error Code
-			mAL->alGetError();
+			m_al->alGetError();
 			return true;
 		}
 		else
@@ -79,6 +79,6 @@ namespace OpenAL
 
 	ISound * SoundMgr::createSound(SoundType type)
 	{
-		return new Sound(mAL);
+		return new Sound(m_al);
 	}
 };

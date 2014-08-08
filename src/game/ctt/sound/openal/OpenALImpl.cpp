@@ -18,48 +18,46 @@ namespace OpenAL
 {
 	Impl::Impl()
 	{
-        mModule = 0;
+		m_module = 0;
 	}
 
 	Impl::~Impl()
 	{
-        if(mModule)
+		if (m_module)
         {
 #ifdef _WIN32
-            FreeLibrary(mModule);
+			FreeLibrary(m_module);
 #elif __linux__ 
-            dlclose(mModule);
+			dlclose(m_module);
 #endif
-            mModule = 0;
+			m_module = 0;
 		}
 	}
 
 	bool Impl::setup()
 	{
 #ifdef _WIN32
-        mModule = LoadLibrary("OpenAL32.dll");
-        if (mModule)
-		{
-			// Macro to make code looking slightly better.
-#define METHOD(name)\
-    *(unsigned int *)&name = (unsigned int)GetProcAddress(mModule, #name);\
-    if(!name) { \
-		Error("openAL", "Cannot find OpenAL Method - '%s'.",#name);\
-		return false;\
-	}
+		m_module = LoadLibrary("OpenAL32.dll");
 #elif __linux__
-        mModule = dlopen("libopenal.so", RTLD_NOW);
-        if (mModule)
-        {
+		m_module = dlopen("libopenal.so", RTLD_NOW);
+#endif
+		if (m_module)
+		{
+
+#ifdef _WIN32
+#define GET_PROC GetProcAddress
+#elif __linux__
+#define GET_PROC dlsym
+#endif
+
             // Macro to make code looking slightly better.
 #define METHOD(name)\
-    *(unsigned int *)&name = (unsigned int)dlsym(mModule, #name);\
+    *(unsigned int *)&name = (unsigned int)GET_PROC(m_module, #name);\
     if(!name) { \
         Error("openAL", "Cannot find OpenAL Method - '%s'.",#name);\
         return false;\
     }
 
-#endif
             METHOD(alGetProcAddress);
 
 #define EXT_METHOD(name)\
