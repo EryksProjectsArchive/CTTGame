@@ -18,17 +18,17 @@
 
 FILE * Logger::s_logFile = 0;
 
-void Logger::init(const char *szFile, bool bAppend)
+void Logger::init(FilePath file, bool bAppend)
 {
 	if (!s_logFile)
 	{
-		if (s_logFile = fopen(szFile, bAppend?"a+":"w+"))
+		if (s_logFile = fopen(file, bAppend?"a+":"w+"))
 		{
-			Info("log", "Logger started!");
+			Info("log", "Logger started! (%s)", *file);
 		}
 		else
 		{
-			printf("[FATAL ERROR] Cannot initialize logger (%s)\n", szFile);
+			printf("[FATAL ERROR] Cannot initialize logger (%s)\n", (const char *)file);
 		}
 	}
 	else

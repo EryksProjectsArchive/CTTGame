@@ -4,7 +4,7 @@
 //	   Copyright (C) Black Ice Mountains
 //		 	All rights reserved
 //
-// File		: core/Game.h
+// File		: game/Game.h
 // Author	: Eryk Dwornicki
 //
 //////////////////////////////////////////////

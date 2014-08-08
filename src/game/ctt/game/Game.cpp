@@ -4,7 +4,7 @@
 //	   Copyright (C) Black Ice Mountains
 //		 	All rights reserved
 //
-// File		: core/Game.cpp
+// File		: game/Game.cpp
 // Author	: Eryk Dwornicki
 //
 //////////////////////////////////////////////
@@ -12,7 +12,7 @@
 #include <cstring>
 
 #include "Game.h"
-#include "Logger.h"
+#include <core/Logger.h>
 
 #include <os/OS.h>
 
@@ -54,11 +54,7 @@ bool Game::init()
 	char szHomePath[MAX_PATH] = { 0 };
 	strcpy(szHomePath, OS::initHomePath("City Transport Tycoon"));
 
-	char szLogPath[256] = { 0 };
-	strcpy(szLogPath, szHomePath);
-	strcat(szLogPath, "game.log");
-
-	Logger::init(szLogPath, false);
+	Logger::init(FilePath("%sgame.log", szHomePath), false);
 
 	// Create game window
 	m_window = OS::createWindowInstance();

@@ -67,13 +67,16 @@
     <Filter Include="Source Files\graphics\renderer\opengl">
       <UniqueIdentifier>{51b82679-e37a-4747-8892-2a26b72f3d5a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\game">
+      <UniqueIdentifier>{dab718cd-d399-4c50-88f2-c842130c00bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\game">
+      <UniqueIdentifier>{bdd4a0db-086f-408c-8fe9-d2221149d232}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="core\Game.cpp">
-      <Filter>Source Files\core</Filter>
     </ClCompile>
     <ClCompile Include="os\OS.cpp">
       <Filter>Source Files\os</Filter>
@@ -132,11 +135,11 @@
     <ClCompile Include="graphics\Graphics.cpp">
       <Filter>Source Files\graphics</Filter>
     </ClCompile>
+    <ClCompile Include="game\Game.cpp">
+      <Filter>Source Files\game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="core\Game.h">
-      <Filter>Header Files\core</Filter>
-    </ClInclude>
     <ClInclude Include="os\OS.h">
       <Filter>Header Files\os</Filter>
     </ClInclude>
@@ -205,6 +208,12 @@
     </ClInclude>
     <ClInclude Include="graphics\Graphics.h">
       <Filter>Header Files\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="game\Game.h">
+      <Filter>Header Files\game</Filter>
+    </ClInclude>
+    <ClInclude Include="core\String.h">
+      <Filter>Header Files\core</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

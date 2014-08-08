@@ -79,8 +79,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="core\Game.cpp" />
     <ClCompile Include="core\Logger.cpp" />
+    <ClCompile Include="game\Game.cpp" />
     <ClCompile Include="graphics\Graphics.cpp" />
     <ClCompile Include="graphics\Mesh.cpp" />
     <ClCompile Include="graphics\Model.cpp" />
@@ -100,8 +100,9 @@
     <ClCompile Include="sound\SoundMgr.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="core\Game.h" />
     <ClInclude Include="core\Logger.h" />
+    <ClInclude Include="core\String.h" />
+    <ClInclude Include="game\Game.h" />
     <ClInclude Include="graphics\Graphics.h" />
     <ClInclude Include="graphics\Mesh.h" />
     <ClInclude Include="graphics\Model.h" />

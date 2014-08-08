@@ -13,6 +13,7 @@
 #pragma once
 
 #include <stdio.h>
+#include "String.h"
 
 enum LogType
 {
@@ -29,7 +30,7 @@ class Logger
 private:
 	static FILE * s_logFile;
 public:
-	static void init(const char * file, bool append = false);
+	static void init(FilePath file, bool append = false);
 
 	static void shutdown();
 

@@ -9,7 +9,7 @@
 //
 //////////////////////////////////////////////
 
-#include <core/Game.h>
+#include <game/Game.h>
 
 int main()
 {
