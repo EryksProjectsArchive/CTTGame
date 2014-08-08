@@ -101,6 +101,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\Logger.h" />
+    <ClInclude Include="core\SharedPtr.h" />
     <ClInclude Include="core\String.h" />
     <ClInclude Include="game\Game.h" />
     <ClInclude Include="graphics\Graphics.h" />

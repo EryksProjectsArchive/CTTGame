@@ -215,5 +215,8 @@
     <ClInclude Include="core\String.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
+    <ClInclude Include="core\SharedPtr.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
