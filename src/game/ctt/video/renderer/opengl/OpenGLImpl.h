@@ -31,9 +31,8 @@ namespace OpenGL
 
 		HDC mHDC;
 		HGLRC mHRC;
-
-		IWindow *mWindow;
 #endif
+		IWindow *mWindow;
 	public:
 		Impl();
 		~Impl();

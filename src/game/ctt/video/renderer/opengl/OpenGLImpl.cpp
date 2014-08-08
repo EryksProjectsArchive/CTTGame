@@ -84,31 +84,25 @@ namespace OpenGL
 		}
 
 		this->mModule = LoadLibrary("opengl32.dll");
+#elif __linux__
+		//this->mModule = dlopen("libGL.so", )
+#endif
 		if (this->mModule)
 		{
+#ifdef _WIN32
+#define GET_PROC GetProcAddress
+#elif __linux__
+#define GET_PROC dlsym
+#endif
 			// Macro to make code looking slightly better.
 #define METHOD(name)\
-			*(unsigned int *)&this->name = (unsigned int)GetProcAddress(this->mModule, #name);\
+			*(unsigned int *)&this->name = (unsigned int)GET_PROC(this->mModule, #name);\
 			if(!this->name) { \
 				Error("gfx","Cannot find OpenGL Method - '%s'.",#name);\
 				return false;\
 			}
-
-#define EXT_METHOD(name)\
-			*(unsigned int *)&this->name = (unsigned int)this->wglGetProcAddress(#name);\
-			if(!this->name) { \
-				Error("gfx","Cannot find OpenGL Method - '%s'.",#name);\
-				return false;\
-			}
-
-			METHOD(glGetString);
-
-			//if (this->isExtensionPresent("GL_ARB_vertex_buffer_object")) // crashy for now
-			//{
-			//	Error("gfx", "OpenGL extension GL_ARB_vertex_buffer_object is not presented.");
-			//	return false;
-			//}
-
+			
+#ifdef _WIN32
 			METHOD(wglCreateContext);
 			METHOD(wglMakeCurrent);
 			METHOD(wglDeleteContext);
@@ -126,6 +120,18 @@ namespace OpenGL
 				return false;
 			}
 
+#define EXT_METHOD(name)\
+			*(unsigned int *)&this->name = (unsigned int)this->wglGetProcAddress(#name);\
+			if(!this->name) { \
+				Error("gfx","Cannot find OpenGL Method - '%s'.",#name);\
+				return false;\
+						}
+
+#elif __linux__
+
+#endif
+
+			METHOD(glGetString);
 			METHOD(glShadeModel);
 			METHOD(glClear);
 			METHOD(glClearDepth);
@@ -180,9 +186,6 @@ namespace OpenGL
 			Error("gfx", "Cannot find OpenGL32.dll file. Try to reinstall your graphics driver to fix that issue.");
 
 		return false;
-#else
-		return false;
-#endif
 	}
 
 	void Impl::swapBuffers()

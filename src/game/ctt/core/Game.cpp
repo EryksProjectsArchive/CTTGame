@@ -16,6 +16,8 @@
 
 #include <os/OS.h>
 
+#include <video/Model.h>
+
 Game::Game()
 {
 	this->mRunning = false;
@@ -28,6 +30,8 @@ Game::~Game()
 {
 
 }
+
+Model *gModel = 0;
 
 bool Game::init()
 {
@@ -59,6 +63,9 @@ bool Game::init()
 		return false;
 	}
 
+	gModel = new Model();
+	gModel->load("data/models/bus.mdl");
+
 	this->mInitialized = true;
 	this->mRunning = true;
 	return true;
@@ -73,10 +80,15 @@ bool Game::pulse()
 			this->mRunning = false;
 		}
 	}
+
+	// TODO: update physics here
  
 	if (this->mRenderer)
 	{
 		this->mRenderer->preFrame();
+
+		if (gModel)
+			gModel->render(this->mRenderer);
 
 		this->mRenderer->postFrame();
 	}

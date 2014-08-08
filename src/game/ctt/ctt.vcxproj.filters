@@ -90,6 +90,12 @@
     <ClCompile Include="math\Vector.cpp">
       <Filter>Source Files\math</Filter>
     </ClCompile>
+    <ClCompile Include="video\Model.cpp">
+      <Filter>Source Files\video</Filter>
+    </ClCompile>
+    <ClCompile Include="video\Mesh.cpp">
+      <Filter>Source Files\video</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\Game.h">
@@ -130,6 +136,12 @@
     </ClInclude>
     <ClInclude Include="math\EulerAngles.h">
       <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="video\Model.h">
+      <Filter>Header Files\video</Filter>
+    </ClInclude>
+    <ClInclude Include="video\Mesh.h">
+      <Filter>Header Files\video</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

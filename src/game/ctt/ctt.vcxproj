@@ -85,6 +85,8 @@
     <ClCompile Include="math\Vector.cpp" />
     <ClCompile Include="os\OS.cpp" />
     <ClCompile Include="os\win32\Win32Window.cpp" />
+    <ClCompile Include="video\Mesh.cpp" />
+    <ClCompile Include="video\Model.cpp" />
     <ClCompile Include="video\renderer\BufferBase.cpp" />
     <ClCompile Include="video\renderer\opengl\OpenGLImpl.cpp" />
     <ClCompile Include="video\renderer\opengl\OpenGLRenderer.cpp" />
@@ -100,6 +102,8 @@
     <ClInclude Include="math\Vector.h" />
     <ClInclude Include="os\OS.h" />
     <ClInclude Include="os\win32\Win32Window.h" />
+    <ClInclude Include="video\Mesh.h" />
+    <ClInclude Include="video\Model.h" />
     <ClInclude Include="video\renderer\BufferBase.h" />
     <ClInclude Include="video\renderer\opengl\OpenGLImpl.h" />
     <ClInclude Include="video\renderer\opengl\OpenGLRenderer.h" />

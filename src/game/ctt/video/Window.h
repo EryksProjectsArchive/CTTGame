@@ -14,6 +14,7 @@
 class IWindow;
 #include <video/renderer/Renderer.h>
 
+class IRenderer;
 class IWindow
 {
 protected:
