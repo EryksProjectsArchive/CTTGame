@@ -26,10 +26,6 @@ void Logger::init(FilePath file, bool bAppend)
 		{
 			Info("log", "Logger started! (%s)", *file);
 		}
-		else
-		{
-			printf("[FATAL ERROR] Cannot initialize logger (%s)\n", (const char *)file);
-		}
 	}
 	else
 	{
@@ -51,7 +47,6 @@ void Logger::log(const char *tag, LogType type, const char *msg, ...)
 {
 	if (!s_logFile)
 	{
-		printf("[FATAL ERROR] Cannot use Logger::log - no log file set!\n");
 		return;
 	}
 
