@@ -36,7 +36,7 @@ public:
 		memcpy(m_buffer, buffer, size);
 	}
 
-	String(const char *buffer, ...)
+	explicit String(const char *buffer, ...)
 	{
 		char tempBuffer[maxSize] = { 0 };
 		va_list args;
@@ -48,6 +48,28 @@ public:
 
 	String::~String()
 	{
+	}
+
+	void append(const char *buffer)
+	{
+		unsigned int size = strlen(buffer);
+		unsigned int length = getLength();
+
+		if (length + size >= maxSize)
+			size = maxSize - length;
+		
+		if (size > 0)
+			memcpy(m_buffer + length, buffer, size);
+	}
+
+	String& operator=(String& string)
+	{
+		memcpy(m_buffer, string.m_buffer, maxSize);
+	}
+
+	String& operator=(const char *buffer)
+	{
+		memcpy(m_buffer, buffer, maxSize);
 	}
 
 	operator const char*() const

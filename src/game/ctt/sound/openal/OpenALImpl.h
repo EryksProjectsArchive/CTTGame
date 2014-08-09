@@ -24,16 +24,14 @@
 #define __cdecl __attribute__((__cdecl__))
 #endif
 
+#include <os/DynamicLibrary.h>
+
 namespace OpenAL
 {
 	class Impl
 	{
 	private:
-#ifdef _WIN32
-		HMODULE m_module;
-#elif __linux__
-		void* m_module;
-#endif
+		DynamicLibrary * m_openALDynLib;
 	public:
 		Impl();
 		~Impl();

@@ -138,6 +138,12 @@
     <ClCompile Include="game\Game.cpp">
       <Filter>Source Files\game</Filter>
     </ClCompile>
+    <ClCompile Include="os\DynamicLibrary.cpp">
+      <Filter>Source Files\os</Filter>
+    </ClCompile>
+    <ClCompile Include="os\win32\Win32DynamicLibrary.cpp">
+      <Filter>Source Files\os\win32</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="os\OS.h">
@@ -220,6 +226,12 @@
     </ClInclude>
     <ClInclude Include="core\ProtectedPtr.h">
       <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="os\DynamicLibrary.h">
+      <Filter>Header Files\os</Filter>
+    </ClInclude>
+    <ClInclude Include="os\win32\Win32DynamicLibrary.h">
+      <Filter>Header Files\os\win32</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

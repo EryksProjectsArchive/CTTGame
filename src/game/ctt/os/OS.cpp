@@ -22,6 +22,7 @@
 #	include <ShlObj.h>
 
 #	include "win32/Win32Window.h"
+#	include "win32/Win32DynamicLibrary.h"
 #elif __linux__ 
 #	include <sys/stat.h>
 #	include <sys/types.h>
@@ -92,7 +93,7 @@ namespace OS
 #endif
 	}
 
-	bool fileExists(const char *path)
+	bool fileExists(FilePath path)
 	{
 #ifdef _WIN32
 		return GetFileAttributes(path) != INVALID_FILE_ATTRIBUTES;
@@ -102,7 +103,7 @@ namespace OS
 #endif
 	}
 
-	bool directoryExists(const char *path)
+	bool directoryExists(FilePath path)
 	{
 #ifdef _WIN32
 		return GetFileAttributes(path) != INVALID_FILE_ATTRIBUTES;
@@ -112,7 +113,7 @@ namespace OS
 #endif
 	}
 
-	bool makeDirectory(const char *path)
+	bool makeDirectory(FilePath path)
 	{
 #ifdef _WIN32
 		return ::CreateDirectory(path, NULL) == TRUE;
@@ -128,6 +129,36 @@ namespace OS
 #elif __linux__ 
 		return new Linux::Window();
 #endif
+	}
+
+	bool isFileOSDynLib(FilePath path)
+	{
+#ifdef _WIN32
+		char windowsDirectory[256] = { 0 };
+		GetWindowsDirectory(windowsDirectory, 256);
+		return fileExists(FilePath("%s\\System32\\%s", windowsDirectory, *path));
+#elif __linux__
+		***** TODO: Linux support ***** (ERROR HERE ERROR HERE ERROR)
+#endif
+		return false;
+	}
+
+	DynamicLibrary * openDynamicLibrary(FilePath path)
+	{
+#ifdef _WIN32
+		path.append(".dll");
+		if (isFileOSDynLib(path) || fileExists(path)) 
+		{
+			return new Win32::DynamicLibrary(path);
+		}
+#elif __linux__
+		path.append(".so");
+		if (isFileOSDynLib(path) || fileExists(path))
+		{
+			return new Linux::DynamicLibrary(path);
+		}
+#endif
+		return 0;
 	}
 
 	void msgBox(const char *message, const char *title)

@@ -11,48 +11,39 @@
 //////////////////////////////////////////////
 
 #include <core/Logger.h>
+#include <os/OS.h>
 
 #include "OpenALImpl.h"
 
 namespace OpenAL
 {
 	Impl::Impl()
+		: m_openALDynLib(0)
 	{
-		m_module = 0;
 	}
 
 	Impl::~Impl()
 	{
-		if (m_module)
+		if (m_openALDynLib)
         {
-#ifdef _WIN32
-			FreeLibrary(m_module);
-#elif __linux__ 
-			dlclose(m_module);
-#endif
-			m_module = 0;
+			delete m_openALDynLib;
+			m_openALDynLib = 0;
 		}
 	}
 
 	bool Impl::setup()
 	{
 #ifdef _WIN32
-		m_module = LoadLibrary("OpenAL32.dll");
+#define DYN_LIB_NAME "OpenAL32"
 #elif __linux__
-		m_module = dlopen("libopenal.so", RTLD_NOW);
+#define DYN_LIB_NAME "libopenal"
 #endif
-		if (m_module)
+		m_openALDynLib = OS::openDynamicLibrary(DYN_LIB_NAME);
+		if (m_openALDynLib)
 		{
-
-#ifdef _WIN32
-#define GET_PROC GetProcAddress
-#elif __linux__
-#define GET_PROC dlsym
-#endif
-
             // Macro to make code looking slightly better.
 #define METHOD(name)\
-    *(unsigned int *)&name = (unsigned int)GET_PROC(m_module, #name);\
+    *(unsigned int *)&name = (unsigned int)m_openALDynLib->getProcAddress(#name);\
     if(!name) { \
         Error("openAL", "Cannot find OpenAL Method - '%s'.",#name);\
         return false;\
@@ -160,18 +151,12 @@ namespace OpenAL
 			METHOD(alDopplerVelocity);
 			METHOD(alSpeedOfSound);
 			METHOD(alDistanceModel);
-
 			return true;
 		}
 		else
         {
-#ifdef _WIN32
-            Error("openAL", "Cannot find OpenAL32.dll file.");
-#elif __linux__ 
-            Error("openAL", "Cannot find libopenal.so file.");
-#endif
+            Error("openAL", "Cannot find %s dynamic library.", DYN_LIB_NAME);
         }
-
 		return false;
     }
 };

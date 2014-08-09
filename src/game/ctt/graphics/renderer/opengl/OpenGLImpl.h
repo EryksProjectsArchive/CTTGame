@@ -23,6 +23,8 @@
 #include <graphics/Window.h>
 #include <GL/gl.h>
 
+#include <os/DynamicLibrary.h>
+
 #ifndef _WIN32
 #	define _stdcall __attribute__((_stdcall_))
 #endif
@@ -36,15 +38,13 @@ namespace OpenGL
 	{
 	private:
 #ifdef _WIN32
-		HMODULE m_module;
-
 		HDC m_hDC;
 		HGLRC m_hRC;
 #elif __linux__
-        void* m_module;
-
         GLXContext m_GLXContext;
 #endif
+		DynamicLibrary* m_openGLDynLib;
+
         IWindow* m_window;
 	public:
 		Impl();

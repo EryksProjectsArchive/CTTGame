@@ -12,6 +12,9 @@
 #pragma once
 
 #include <graphics/Window.h>
+#include <core/String.h>
+
+#include "DynamicLibrary.h"
 
 #ifndef MAX_PATH
 #define MAX_PATH 260
@@ -25,12 +28,16 @@ namespace OS
 	char* initHomePath(const char *appName);
 
 	// Files
-	bool directoryExists(const char *path);
-	bool fileExists(const char *path);
-	bool makeDirectory(const char *path);
+	bool directoryExists(FilePath path);
+	bool fileExists(FilePath path);
+	bool makeDirectory(FilePath path);
+	bool isFileOSDynLib(FilePath path);
 
 	// Window
 	IWindow* createWindowInstance();
+
+	// Dynamic libs
+	DynamicLibrary * openDynamicLibrary(FilePath path);
 
 	// Message box
 	void msgBox(const char *message, const char *title);

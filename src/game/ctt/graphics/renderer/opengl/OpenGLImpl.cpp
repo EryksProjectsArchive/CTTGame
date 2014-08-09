@@ -11,15 +11,15 @@
 //////////////////////////////////////////////
 
 #include <core/Logger.h>
+#include <os/OS.h>
 
 #include "OpenGLImpl.h"
 
 namespace OpenGL
 {
 	Impl::Impl()
+		: m_window(0), m_openGLDynLib(0)
 	{
-		m_module = 0;
-		m_window = 0;
 #ifdef _WIN32
 		m_hDC = NULL;
 		m_hRC = NULL;
@@ -36,14 +36,10 @@ namespace OpenGL
 		ReleaseDC((HWND)m_window->getPtr(), m_hDC);
 		m_hDC = NULL;
 #endif
-		if (m_module)
+		if (m_openGLDynLib)
 		{
-#ifdef _WIN32
-			FreeLibrary(m_module);
-#elif __linux__ 
-			dlclose(m_module);
-#endif
-			m_module = 0;
+			delete m_openGLDynLib;
+			m_openGLDynLib = 0;
 		}
 	}
 
@@ -87,20 +83,17 @@ namespace OpenGL
 			return false;
 		}
 
-		m_module = LoadLibrary("opengl32.dll");
+#define DYN_LIB_NAME "opengl32"
 #elif __linux__
-		m_module = dlopen("libGL.so", RTLD_NOW);
+#define DYN_LIB_NAME "libGL"
 #endif
-		if (m_module)
+
+		m_openGLDynLib = OS::openDynamicLibrary(DYN_LIB_NAME);
+		if (m_openGLDynLib)
 		{
-#ifdef _WIN32
-#define GET_PROC GetProcAddress
-#elif __linux__
-#define GET_PROC dlsym
-#endif
 			// Macro to make code looking slightly better.
 #define METHOD(name)\
-			*(unsigned int *)&this->name = (unsigned int)GET_PROC(m_module, #name);\
+			*(unsigned int *)&this->name = (unsigned int)m_openGLDynLib->getProcAddress(#name);\
 			if(!this->name) { \
 				Error("gfx","Cannot find OpenGL Method - '%s'.",#name);\
 				return false;\
@@ -203,8 +196,9 @@ namespace OpenGL
 			return true;
 		}
 		else
-			Error("gfx", "Cannot find OpenGL32.dll file. Try to reinstall your graphics driver to fix that issue.");
-
+		{
+			Error("gfx", "Cannot find %s dynamic library. Try to reinstall your graphics driver to fix that issue.", DYN_LIB_NAME);
+		}
 		return false;
 	}
 
