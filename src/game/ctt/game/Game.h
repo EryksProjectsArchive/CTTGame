@@ -22,9 +22,9 @@ private:
 	bool m_isRunning;
 	bool m_isInitialized;
 
-	IWindow * m_window;
-	IRenderer * m_renderer;
-	ISoundMgr * m_soundMgr;
+	IWindow* m_window;
+	IRenderer* m_renderer;
+	ISoundMgr* m_soundMgr;
 public:
 	Game();
 	~Game();

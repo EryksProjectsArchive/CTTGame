@@ -13,6 +13,7 @@
 
 #include "Game.h"
 #include <core/Logger.h>
+#include <core/SharedPtr.h>
 
 #include <os/OS.h>
 
@@ -20,26 +21,32 @@
 #include <graphics/Graphics.h>
 
 Game::Game()
-	: m_renderer(0), m_window(0), m_isRunning(false), m_isInitialized(false)
+	: m_isRunning(false), m_isInitialized(false)
 {
 }
 
 Game::~Game()
 {
-	if(m_window)
+	if (m_window)
 	{
 		delete m_window;
 		m_window = 0;
 	}
 
-	if(m_soundMgr)
+	if (m_renderer)
+	{
+		delete m_renderer;
+		m_renderer = 0;
+	}
+
+	if (m_soundMgr)
 	{
 		delete m_soundMgr;
 		m_soundMgr = 0;
 	}
 }
 
-Model *g_sampleModel = 0;
+SharedPtr<Model> g_sampleModel;
 
 bool Game::init()
 {
@@ -67,7 +74,7 @@ bool Game::init()
 		return false;
 	}
 
-	g_sampleModel = new Model();
+	g_sampleModel = SharedPtr<Model>(new Model());
 	g_sampleModel->load("data/models/bus.mdl");
 
 	// create game sound mgr

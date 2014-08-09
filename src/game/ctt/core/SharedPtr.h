@@ -49,6 +49,7 @@ public:
 	operator Type& () { return m_value; }
 	operator Type*() { return m_value; }
 	Type * operator*() { return m_value; }
+	Type * operator->() { return m_value; }
 	Type& operator&() { return m_value; }
 
 	SharedPtr<Type>& operator=(const SharedPtr& sharedPtr)

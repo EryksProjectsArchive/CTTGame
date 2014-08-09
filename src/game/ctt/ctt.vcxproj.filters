@@ -218,5 +218,8 @@
     <ClInclude Include="core\SharedPtr.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
+    <ClInclude Include="core\ProtectedPtr.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
