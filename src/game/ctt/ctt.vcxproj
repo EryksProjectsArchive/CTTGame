@@ -155,15 +155,25 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="core\Logger.cpp" />
+    <ClCompile Include="core\Timer.cpp" />
     <ClCompile Include="game\Game.cpp" />
+    <ClCompile Include="game\scene\entities\Entity.cpp" />
+    <ClCompile Include="game\scene\Scene.cpp" />
+    <ClCompile Include="graphics\Geometry.cpp" />
     <ClCompile Include="graphics\Graphics.cpp" />
+    <ClCompile Include="graphics\Material.cpp" />
     <ClCompile Include="graphics\Mesh.cpp" />
     <ClCompile Include="graphics\Model.cpp" />
     <ClCompile Include="graphics\renderer\BufferBase.cpp" />
     <ClCompile Include="graphics\renderer\opengl\OpenGLImpl.cpp" />
     <ClCompile Include="graphics\renderer\opengl\OpenGLRenderer.cpp" />
+    <ClCompile Include="graphics\renderer\RenderContext.cpp" />
     <ClCompile Include="graphics\renderer\Renderer.cpp" />
+    <ClCompile Include="graphics\renderer\RenderQueue.cpp" />
+    <ClCompile Include="graphics\Shader.cpp" />
+    <ClCompile Include="graphics\Texture.cpp" />
     <ClCompile Include="graphics\Window.cpp" />
+    <ClCompile Include="io\FileSystem.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="math\Vector.cpp" />
     <ClCompile Include="os\DynamicLibrary.cpp" />
@@ -178,20 +188,35 @@
     <ClCompile Include="sound\SoundMgr.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="core\DynString.h" />
+    <ClInclude Include="core\hashing\Hash.h" />
+    <ClInclude Include="core\hashing\JenkinsHash.h" />
+    <ClInclude Include="core\List.h" />
     <ClInclude Include="core\Logger.h" />
     <ClInclude Include="core\ProtectedPtr.h" />
     <ClInclude Include="core\SharedPtr.h" />
     <ClInclude Include="core\String.h" />
+    <ClInclude Include="core\Timer.h" />
     <ClInclude Include="game\Game.h" />
+    <ClInclude Include="game\scene\entities\Entity.h" />
+    <ClInclude Include="game\scene\Scene.h" />
+    <ClInclude Include="graphics\Geometry.h" />
     <ClInclude Include="graphics\Graphics.h" />
+    <ClInclude Include="graphics\Material.h" />
     <ClInclude Include="graphics\Mesh.h" />
     <ClInclude Include="graphics\Model.h" />
     <ClInclude Include="graphics\renderer\BufferBase.h" />
     <ClInclude Include="graphics\renderer\opengl\OpenGLImpl.h" />
     <ClInclude Include="graphics\renderer\opengl\OpenGLRenderer.h" />
+    <ClInclude Include="graphics\renderer\RenderContext.h" />
     <ClInclude Include="graphics\renderer\Renderer.h" />
+    <ClInclude Include="graphics\renderer\RenderQueue.h" />
+    <ClInclude Include="graphics\Shader.h" />
+    <ClInclude Include="graphics\Texture.h" />
     <ClInclude Include="graphics\Window.h" />
     <ClInclude Include="io\CachedItem.h" />
+    <ClInclude Include="io\File.h" />
+    <ClInclude Include="io\FileSystem.h" />
     <ClInclude Include="math\EulerAngles.h" />
     <ClInclude Include="math\Matrix.h" />
     <ClInclude Include="math\Quaternion.h" />

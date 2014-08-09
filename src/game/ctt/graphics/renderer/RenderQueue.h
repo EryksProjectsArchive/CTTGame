@@ -4,29 +4,24 @@
 //	   Copyright (C) Black Ice Mountains
 //		 	All rights reserved
 //
-// File		: graphics/renderer/BufferBase.h
+// File		: graphics/renderer/RenderQueue.h
 // Author	: Eryk Dwornicki
 //
 //////////////////////////////////////////////
 
 #pragma once
 
-struct BufferType
-{
-	enum Type
-	{
-		VERTEX = 1,
-		INDEX = 2
-	};
-};
+class Geometry;
+class Material;
+class Matrix4x4;
 
-class BufferBase
+class RenderQueue
 {
+private:
+	
 public:
-	BufferBase();
-	~BufferBase();
+	RenderQueue();
+	~RenderQueue();
 
-	virtual void allocate(unsigned int size);
-
-	virtual void fillData(void * data);
+	void push(Geometry * geometry, Material *material, Matrix4x4 *matrix);
 };

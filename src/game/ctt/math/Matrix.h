@@ -50,6 +50,13 @@ public:
 		m[3][2] = z;
 	}
 
+	void translate(const Vector3 translateVector)
+	{
+		m[3][0] = translateVector.x;
+		m[3][1] = translateVector.y;
+		m[3][2] = translateVector.z;
+	}
+
 	void scale(float x, float y, float z)
 	{
 		m[0][0] = x;

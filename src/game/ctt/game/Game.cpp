@@ -12,18 +12,27 @@
 #include <cstring>
 
 #include "Game.h"
+
 #include <core/Logger.h>
 #include <core/SharedPtr.h>
+#include <core/Timer.h>
 
 #include <os/OS.h>
 
 #include <graphics/Model.h>
 #include <graphics/Graphics.h>
+#include <graphics/renderer/Renderer.h>
+#include <graphics/renderer/RenderContext.h>
 
 #include <io/CachedItem.h>
+#include <io/FileSystem.h>
+
+#include <sound/SoundMgr.h>
+
+#include <game/scene/Scene.h>
 
 Game::Game()
-	: m_isRunning(false), m_isInitialized(false)
+	: m_isRunning(false), m_isInitialized(false), m_fileSystem(0), m_renderer(0), m_window(0), m_soundMgr(0), m_scene(0)
 {
 }
 
@@ -46,9 +55,19 @@ Game::~Game()
 		delete m_soundMgr;
 		m_soundMgr = 0;
 	}
-}
 
-CachedItem<Model> g_sampleModel("data/models/bus.mdl");
+	if (m_fileSystem)
+	{
+		delete m_fileSystem;
+		m_fileSystem = 0;
+	}
+
+	if (m_scene)
+	{
+		delete m_scene;
+		m_scene = 0;
+	}
+}
 
 bool Game::init()
 {
@@ -57,7 +76,9 @@ bool Game::init()
 		return false;
 	}
 
-	// Initialize sounds mgr, assets mgr etc
+	// Create file system
+	m_fileSystem = new FileSystem();
+	m_fileSystem->setBaseDirectory(OS::getAppPath());
 
 	// Setup home directory
 	char szHomePath[MAX_PATH] = { 0 };
@@ -85,6 +106,13 @@ bool Game::init()
 		return false;
 	}
 
+	// Create scene
+	m_scene = new Scene();
+
+	Entity *entity = new Entity("building");
+	
+	m_scene->addEntity(entity);
+
 	m_isInitialized = true;
 	m_isRunning = true;
 	return true;
@@ -92,6 +120,9 @@ bool Game::init()
 
 bool Game::pulse()
 {
+	Timer::frameStart();
+
+	// Main loop - whole magic is done here \o/
 	if (m_window)
 	{
 		if (!m_window->processMessages())
@@ -100,16 +131,24 @@ bool Game::pulse()
 		}
 	}
 
-	// TODO: update physics here
+	if (m_scene)
+		m_scene->updatePhysics();
  
 	if (m_renderer)
 	{
 		m_renderer->preFrame();
 
-		g_sampleModel->render(m_renderer);
+		RenderQueue queue; // render queue - batching etc is done there
+
+		RenderContext ctx(&queue); // render context - simple render context, presorting of geometry etc is done there :-)
+		if (m_scene)
+			m_scene->render(ctx);
+
+		m_renderer->doQueueRender(&queue);
 
 		m_renderer->postFrame();
 	}
 
+	Timer::frameEnd();
 	return m_isRunning;
 }

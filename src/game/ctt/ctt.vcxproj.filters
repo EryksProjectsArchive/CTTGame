@@ -85,6 +85,24 @@
     <Filter Include="Source Files\io">
       <UniqueIdentifier>{256fa763-d537-4de1-9d09-2945eab23e0d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\game\scene">
+      <UniqueIdentifier>{850cb88c-4250-4978-8804-7d8eb9611912}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\game\scene">
+      <UniqueIdentifier>{ea903975-33d4-4d96-8619-2694cef3864a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\game\scene\entities">
+      <UniqueIdentifier>{d77ad9e7-4720-4fb5-8db0-b07765dabe3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\game\scene\entities">
+      <UniqueIdentifier>{c111edb3-3e5f-4bbe-b441-44e9fc87b852}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\core\hashing">
+      <UniqueIdentifier>{cbe4d6eb-af11-4a82-bfd0-386691495773}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\core\hashing">
+      <UniqueIdentifier>{8cd167e3-7264-4c0c-911b-454f6648b500}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -158,6 +176,36 @@
     </ClCompile>
     <ClCompile Include="resources\Resource.cpp">
       <Filter>Source Files\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\renderer\RenderContext.cpp">
+      <Filter>Source Files\graphics\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\renderer\RenderQueue.cpp">
+      <Filter>Source Files\graphics\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\Geometry.cpp">
+      <Filter>Source Files\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\Material.cpp">
+      <Filter>Source Files\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\Shader.cpp">
+      <Filter>Source Files\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\Texture.cpp">
+      <Filter>Source Files\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="io\FileSystem.cpp">
+      <Filter>Source Files\io</Filter>
+    </ClCompile>
+    <ClCompile Include="game\scene\Scene.cpp">
+      <Filter>Source Files\game\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="core\Timer.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="game\scene\entities\Entity.cpp">
+      <Filter>Source Files\game\scene\entities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -247,6 +295,51 @@
     </ClInclude>
     <ClInclude Include="resources\Resource.h">
       <Filter>Header Files\resources</Filter>
+    </ClInclude>
+    <ClInclude Include="io\FileSystem.h">
+      <Filter>Header Files\io</Filter>
+    </ClInclude>
+    <ClInclude Include="io\File.h">
+      <Filter>Header Files\io</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\renderer\RenderQueue.h">
+      <Filter>Header Files\graphics\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\renderer\RenderContext.h">
+      <Filter>Header Files\graphics\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\Geometry.h">
+      <Filter>Header Files\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\Material.h">
+      <Filter>Header Files\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\Texture.h">
+      <Filter>Header Files\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\Shader.h">
+      <Filter>Header Files\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="game\scene\Scene.h">
+      <Filter>Header Files\game\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Timer.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\List.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="game\scene\entities\Entity.h">
+      <Filter>Header Files\game\scene\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="core\DynString.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\hashing\JenkinsHash.h">
+      <Filter>Header Files\core\hashing</Filter>
+    </ClInclude>
+    <ClInclude Include="core\hashing\Hash.h">
+      <Filter>Header Files\core\hashing</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

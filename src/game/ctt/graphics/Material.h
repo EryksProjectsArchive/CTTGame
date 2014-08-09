@@ -4,29 +4,23 @@
 //	   Copyright (C) Black Ice Mountains
 //		 	All rights reserved
 //
-// File		: graphics/renderer/BufferBase.h
+// File		: graphics/Material.h
 // Author	: Eryk Dwornicki
 //
 //////////////////////////////////////////////
 
 #pragma once
 
-struct BufferType
-{
-	enum Type
-	{
-		VERTEX = 1,
-		INDEX = 2
-	};
-};
+class Texture;
+class Shader;
 
-class BufferBase
+class Material
 {
+private:
+	Texture *m_texture;
+	Shader *m_vertexShader;
+	Shader *m_pixelShader;
 public:
-	BufferBase();
-	~BufferBase();
-
-	virtual void allocate(unsigned int size);
-
-	virtual void fillData(void * data);
+	Material();
+	~Material();
 };

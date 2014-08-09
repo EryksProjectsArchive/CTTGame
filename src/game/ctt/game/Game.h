@@ -11,10 +11,11 @@
 
 #pragma once
 
-#include <graphics/Window.h>
-#include <sound/SoundMgr.h>
-
+class IWindow;
 class IRenderer;
+class ISoundMgr;
+class FileSystem;
+class Scene;
 
 class Game
 {
@@ -25,6 +26,10 @@ private:
 	IWindow* m_window;
 	IRenderer* m_renderer;
 	ISoundMgr* m_soundMgr;
+
+	FileSystem *m_fileSystem;
+
+	Scene *m_scene;
 public:
 	Game();
 	~Game();

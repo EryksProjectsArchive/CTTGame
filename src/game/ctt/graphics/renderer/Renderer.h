@@ -11,8 +11,11 @@
 
 #pragma once
 
-#include <graphics/Window.h>
 #include "BufferBase.h"
+
+class RenderQueue;
+
+class IWindow;
 
 class IRenderer
 {
@@ -31,5 +34,7 @@ public:
 
 	virtual void setFullscreen(bool fullscreen);
 
-	virtual BufferBase * createBuffer(BufferType type);
+	virtual void doQueueRender(RenderQueue * queue);
+
+	virtual BufferBase * createBuffer(BufferType::Type type);
 };

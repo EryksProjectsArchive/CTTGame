@@ -161,6 +161,19 @@ namespace OS
 		return 0;
 	}
 
+	unsigned long long getMicrosecondsCount()
+	{
+		unsigned long long result = 0ull;
+#ifdef _WIN32
+		LARGE_INTEGER largeInt;
+		QueryPerformanceCounter(&largeInt);
+		result = largeInt.QuadPart;
+#elif __linux__
+		ERROR ERROR TO BE PORTED
+#endif
+		return result;
+	}
+
 	void msgBox(const char *message, const char *title)
 	{
 #ifdef _WIN32

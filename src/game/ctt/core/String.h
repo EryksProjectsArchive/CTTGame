@@ -65,11 +65,21 @@ public:
 	String& operator=(String& string)
 	{
 		memcpy(m_buffer, string.m_buffer, maxSize);
+		return *this;
 	}
 
 	String& operator=(const char *buffer)
 	{
 		memcpy(m_buffer, buffer, maxSize);
+		return *this;
+	}
+
+	unsigned char operator[](unsigned int index)
+	{
+		if (index < 0 || index > maxSize)
+			return 0;
+
+		return m_buffer[index];
 	}
 
 	operator const char*() const

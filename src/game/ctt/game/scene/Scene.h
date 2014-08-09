@@ -4,29 +4,30 @@
 //	   Copyright (C) Black Ice Mountains
 //		 	All rights reserved
 //
-// File		: graphics/Model.h
+// File		: game/scene/Scene.h
 // Author	: Eryk Dwornicki
 //
 //////////////////////////////////////////////
 
 #pragma once
 
-#include <resources/Resource.h>
-#include "Mesh.h"
+#include <core/List.h>
+
+#include "entities/Entity.h"
 
 class RenderContext;
 
-class Model : public Resource
+class Scene
 {
 private:
-	unsigned char m_meshesCount;
-	Mesh** m_meshes;
+	List<Entity *> m_entities;
 public:
-	Model();
-	~Model() override;
-	
-	void destroy() override;
-	bool load(FilePath file) override;
+	Scene();
+	~Scene();
+
+	void updatePhysics(); // Do some delta time calculation here to make physics FPS indepent
+
+	void addEntity(Entity *entity);
 
 	void render(RenderContext& renderContext);
 };

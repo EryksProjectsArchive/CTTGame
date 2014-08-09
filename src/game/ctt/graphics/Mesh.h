@@ -11,11 +11,13 @@
 
 #pragma once
 
-#include "renderer/Renderer.h"
-#include "renderer/BufferBase.h"
-
 #include <math/Vector.h>
 #include <math/Quaternion.h>
+
+#include "Material.h"
+#include "Geometry.h"
+
+class RenderContext;
 
 class Mesh
 {
@@ -23,11 +25,11 @@ private:
 	Vector3 m_position;
 	Quaternion m_rotation;
 
-	BufferBase* m_vertexBuffer;
-	BufferBase* m_indexBuffer;
+	Geometry *m_geometry;
+	Material *m_material;
 public:
 	Mesh();
 	~Mesh();
 
-	void render(IRenderer* renderer);
+	void render(RenderContext& context);
 };

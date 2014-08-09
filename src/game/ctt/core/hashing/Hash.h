@@ -4,29 +4,34 @@
 //	   Copyright (C) Black Ice Mountains
 //		 	All rights reserved
 //
-// File		: graphics/renderer/BufferBase.h
+// File		: core/hashing/Hash.h
 // Author	: Eryk Dwornicki
 //
 //////////////////////////////////////////////
 
 #pragma once
 
-struct BufferType
-{
-	enum Type
-	{
-		VERTEX = 1,
-		INDEX = 2
-	};
-};
-
-class BufferBase
+class Hash
 {
 public:
-	BufferBase();
-	~BufferBase();
+	Hash()
+	{
 
-	virtual void allocate(unsigned int size);
+	}
 
-	virtual void fillData(void * data);
+	virtual ~Hash()
+	{
+
+	}
+
+	virtual int encode(const char *data, size_t size)
+	{
+		return 0;
+	}
+
+
+	virtual unsigned int encode(const char *data, size_t size) const
+	{
+		return 0;
+	}
 };

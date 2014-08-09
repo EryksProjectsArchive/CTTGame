@@ -38,16 +38,15 @@ bool Model::load(FilePath file)
 {
 	if (!m_isLoaded)
 	{
+	
 		m_isLoaded = true;
 		return true;
 	}
 	return false;
 }
 
-void Model::render(IRenderer * renderer)
+void Model::render(RenderContext & renderContext)
 {
 	for (unsigned char i = 0; i < m_meshesCount; i++)
-	{
-		m_meshes[i]->render(renderer);
-	}
+		m_meshes[i]->render(renderContext);	
 }

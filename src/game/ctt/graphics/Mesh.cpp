@@ -11,6 +11,8 @@
 
 #include "Mesh.h"
 
+#include "renderer/RenderContext.h"
+
 Mesh::Mesh()
 {
 }
@@ -19,6 +21,9 @@ Mesh::~Mesh()
 {
 }
 
-void Mesh::render(IRenderer *renderer)
+void Mesh::render(RenderContext& context)
 {
+	Matrix4x4 translationMatrix;
+	translationMatrix.translate(m_position);	
+	context.push(m_geometry, m_material, &(translationMatrix * m_rotation.toMatrix4x4()));
 }

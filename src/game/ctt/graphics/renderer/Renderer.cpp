@@ -44,7 +44,12 @@ void IRenderer::setFullscreen(bool fullscreen)
 	
 }
 
-BufferBase * IRenderer::createBuffer(BufferType type)
+BufferBase * IRenderer::createBuffer(BufferType::Type type)
 {
 	return 0;
+}
+
+void IRenderer::doQueueRender(RenderQueue * queue)
+{
+
 }
