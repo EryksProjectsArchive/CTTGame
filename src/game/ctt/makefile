@@ -12,7 +12,7 @@ CXXSOURCE+=$(wildcard video/*.cpp)
 CXXSOURCE+=$(wildcard video/renderer/*.cpp)
 CXXSOURCE+=$(wildcard video/renderer/opengl/*.cpp)
 CXXOBJECTS=$(CXXSOURCE:.cpp=.o)
-EXECUTABLE=../../../bin/cttgame
+EXECUTABLE=../../../bin/ctt_linux_x86
 
 all: $(CSOURCE) $(CXXSOURCE) $(EXECUTABLE)
 
