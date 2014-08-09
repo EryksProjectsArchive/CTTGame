@@ -41,11 +41,11 @@ namespace OpenGL
 		HDC m_hDC;
 		HGLRC m_hRC;
 #elif __linux__
-        void * m_module;
+        void* m_module;
 
         GLXContext m_GLXContext;
 #endif
-        IWindow *m_window;
+        IWindow* m_window;
 	public:
 		Impl();
 		~Impl();
@@ -104,7 +104,7 @@ namespace OpenGL
 		void	(_stdcall *glDisableClientState)(GLenum array);
 		void	(_stdcall *glEnableClientState)(GLenum array);
 
-		const	GLubyte * (_stdcall * glGetString)(GLenum name);
-		void	(_stdcall * glGetIntegerv)(GLenum pname, GLint *params);
+		const	GLubyte* (_stdcall *glGetString)(GLenum name);
+		void	(_stdcall *glGetIntegerv)(GLenum pname, GLint *params);
 	};
 };

@@ -20,9 +20,9 @@
 namespace OS
 {
 	// Paths
-	char * getAppPath();
-	char * getHomePath(const char *file);
-	char * initHomePath(const char *appName);
+	char* getAppPath();
+	char* getHomePath(const char *file);
+	char* initHomePath(const char *appName);
 
 	// Files
 	bool directoryExists(const char *path);
@@ -30,7 +30,7 @@ namespace OS
 	bool makeDirectory(const char *path);
 
 	// Window
-	IWindow * createWindowInstance();
+	IWindow* createWindowInstance();
 
 	// Message box
 	void msgBox(const char *message, const char *title);

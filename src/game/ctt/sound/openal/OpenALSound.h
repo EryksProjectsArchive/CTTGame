@@ -19,13 +19,13 @@ namespace OpenAL
 	class Sound : public ISound
 	{
 	private:
-		Impl * m_al;
+		Impl* m_al;
 
 		unsigned int m_bufferID;
 		unsigned int m_sourceID;
 
 	public:
-		Sound(Impl *al);
+		Sound(Impl* al);
 		~Sound();
 
 		bool load(const char* filename);

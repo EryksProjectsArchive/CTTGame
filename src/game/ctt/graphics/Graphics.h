@@ -16,7 +16,7 @@ class IRenderer;
 class Graphics
 {
 private:
-	static IRenderer * s_rendererInstance;
+	static IRenderer* s_rendererInstance;
 public:
 	struct RendererAPIs
 	{
@@ -28,7 +28,7 @@ public:
 		};
 	};
 
-	static IRenderer * createRenderer(RendererAPIs::Type api);
+	static IRenderer* createRenderer(RendererAPIs::Type api);
 	static RendererAPIs::Type getRendererAPIFromString(const char *api);
-	static IRenderer * getRenderer();
+	static IRenderer* getRenderer();
 };

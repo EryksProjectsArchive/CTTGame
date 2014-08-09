@@ -23,11 +23,11 @@ private:
 	Vector3 m_position;
 	Quaternion m_rotation;
 
-	BufferBase *m_vertexBuffer;
-	BufferBase *m_indexBuffer;
+	BufferBase* m_vertexBuffer;
+	BufferBase* m_indexBuffer;
 public:
 	Mesh();
 	~Mesh();
 
-	void render(IRenderer *renderer);
+	void render(IRenderer* renderer);
 };

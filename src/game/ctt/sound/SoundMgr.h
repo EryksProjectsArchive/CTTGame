@@ -36,8 +36,8 @@ public:
 	virtual ~ISoundMgr();
 
 	virtual bool setup();
-	virtual ISound * createSound(SoundType type);
+	virtual ISound* createSound(SoundType type);
 
-	static ISoundMgr * create(SoundAPIs api);
+	static ISoundMgr* create(SoundAPIs api);
 	static SoundAPIs getAPIIdFromString(const char *api);
 };

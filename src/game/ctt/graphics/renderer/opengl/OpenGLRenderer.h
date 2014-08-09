@@ -21,18 +21,18 @@ namespace OpenGL
 	class Renderer : public IRenderer
 	{
 	private:
-		Impl * m_gl;
+		Impl* m_gl;
 	public:
 		Renderer();
 		~Renderer();
 
-		bool setup(IWindow * window);
+		bool setup(IWindow* window);
 
 		void preFrame();
 		void postFrame();
 
 		void setFullscreen(bool fullscreen);
 
-		char * getAPIName();
+		char* getAPIName();
 	};
 };

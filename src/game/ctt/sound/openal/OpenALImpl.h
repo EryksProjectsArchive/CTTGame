@@ -32,7 +32,7 @@ namespace OpenAL
 #ifdef _WIN32
 		HMODULE m_module;
 #elif __linux__
-		void *m_module;
+		void* m_module;
 #endif
 	public:
 		Impl();

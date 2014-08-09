@@ -18,12 +18,12 @@ class Model
 {
 private:
 	unsigned char mMeshesCount;
-	Mesh ** mMeshes;
+	Mesh** mMeshes;
 public:
 	Model();
 	~Model();
 
-	void load(const char *fileName);
+	void load(const char* fileName);
 
-	void render(IRenderer * renderer);
+	void render(IRenderer* renderer);
 };

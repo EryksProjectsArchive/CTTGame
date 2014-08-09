@@ -17,7 +17,7 @@
 class IRenderer
 {
 protected:
-	IWindow * m_window;
+	IWindow* m_window;
 public:
 	IRenderer();
 	virtual ~IRenderer();

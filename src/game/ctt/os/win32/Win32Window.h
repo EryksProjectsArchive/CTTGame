@@ -34,7 +34,7 @@ namespace Win32
 		void handleFocusLost()override;
 		void handleFocus()override;
 
-		void * getPtr() override;
+		void* getPtr() override;
 
 		void setFullscreen(bool fullscreen, unsigned short width, unsigned short height) override;
 	};

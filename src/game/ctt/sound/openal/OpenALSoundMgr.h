@@ -20,16 +20,16 @@ namespace OpenAL
 	class SoundMgr : public ISoundMgr
 	{
 	private:
-		Impl * m_al;
+		Impl* m_al;
 
-		ALCcontext *m_context;
-		ALCdevice *m_device;
+		ALCcontext* m_context;
+		ALCdevice* m_device;
 	public:
 		SoundMgr();
 		~SoundMgr();
 
 		bool setup();
 
-		ISound * createSound(SoundType type);
+		ISound* createSound(SoundType type);
 	};
 }
