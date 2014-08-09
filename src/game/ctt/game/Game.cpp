@@ -20,6 +20,8 @@
 #include <graphics/Model.h>
 #include <graphics/Graphics.h>
 
+#include <io/CachedItem.h>
+
 Game::Game()
 	: m_isRunning(false), m_isInitialized(false)
 {
@@ -46,7 +48,7 @@ Game::~Game()
 	}
 }
 
-SharedPtr<Model> g_sampleModel;
+CachedItem<Model> g_sampleModel("data/models/bus.mdl");
 
 bool Game::init()
 {
@@ -73,9 +75,6 @@ bool Game::init()
 		Error("game", "Cannot setup renderer.");
 		return false;
 	}
-
-	g_sampleModel = SharedPtr<Model>(new Model());
-	g_sampleModel->load("data/models/bus.mdl");
 
 	// create game sound mgr
 	m_soundMgr = ISoundMgr::create(SOUND_API_OPENAL);
@@ -107,8 +106,7 @@ bool Game::pulse()
 	{
 		m_renderer->preFrame();
 
-		if (g_sampleModel)
-			g_sampleModel->render(m_renderer);
+		g_sampleModel->render(m_renderer);
 
 		m_renderer->postFrame();
 	}

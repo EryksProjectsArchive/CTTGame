@@ -73,6 +73,18 @@
     <Filter Include="Header Files\game">
       <UniqueIdentifier>{bdd4a0db-086f-408c-8fe9-d2221149d232}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\resources">
+      <UniqueIdentifier>{5cc808eb-91e7-4667-b4e7-fbacab343d7c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\resources">
+      <UniqueIdentifier>{c954d331-a764-4f78-978e-3f5232b3ddd7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\io">
+      <UniqueIdentifier>{8f2cedf0-65b6-4ba0-8ba3-00b55a8ed124}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\io">
+      <UniqueIdentifier>{256fa763-d537-4de1-9d09-2945eab23e0d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -144,6 +156,9 @@
     <ClCompile Include="os\win32\Win32DynamicLibrary.cpp">
       <Filter>Source Files\os\win32</Filter>
     </ClCompile>
+    <ClCompile Include="resources\Resource.cpp">
+      <Filter>Source Files\resources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="os\OS.h">
@@ -184,12 +199,6 @@
     </ClInclude>
     <ClInclude Include="sound\openal\OpenALSoundMgr.h">
       <Filter>Header Files\sound\openal</Filter>
-    </ClInclude>
-    <ClInclude Include="video\Mesh.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="video\Model.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="graphics\Mesh.h">
       <Filter>Header Files\graphics</Filter>
@@ -232,6 +241,12 @@
     </ClInclude>
     <ClInclude Include="os\win32\Win32DynamicLibrary.h">
       <Filter>Header Files\os\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="io\CachedItem.h">
+      <Filter>Header Files\io</Filter>
+    </ClInclude>
+    <ClInclude Include="resources\Resource.h">
+      <Filter>Header Files\resources</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

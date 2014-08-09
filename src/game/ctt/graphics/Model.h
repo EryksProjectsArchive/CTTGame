@@ -11,19 +11,21 @@
 
 #pragma once
 
-#include "renderer/Renderer.h"
+#include <resources/Resource.h>
 #include "Mesh.h"
 
-class Model
+class IRenderer;
+class Model : public Resource
 {
 private:
-	unsigned char mMeshesCount;
-	Mesh** mMeshes;
+	unsigned char m_meshesCount;
+	Mesh** m_meshes;
 public:
 	Model();
-	~Model();
-
-	void load(const char* fileName);
+	~Model() override;
+	
+	void destroy() override;
+	bool load(FilePath file) override;
 
 	void render(IRenderer* renderer);
 };
