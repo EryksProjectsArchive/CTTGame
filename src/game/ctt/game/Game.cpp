@@ -27,16 +27,16 @@ Game::Game()
 
 Game::~Game()
 {
-	if (m_window)
-	{
-		delete m_window;
-		m_window = 0;
-	}
-
 	if (m_renderer)
 	{
 		delete m_renderer;
 		m_renderer = 0;
+	}
+
+	if (m_window)
+	{
+		delete m_window;
+		m_window = 0;
 	}
 
 	if (m_soundMgr)

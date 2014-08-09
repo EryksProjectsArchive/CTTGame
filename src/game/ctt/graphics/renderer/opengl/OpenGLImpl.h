@@ -54,6 +54,8 @@ namespace OpenGL
 
 		void swapBuffers();
 
+		bool hasRequiredExtensions();
+
 		bool isExtensionPresent(const char *extension);
 
 #ifdef _WIN32

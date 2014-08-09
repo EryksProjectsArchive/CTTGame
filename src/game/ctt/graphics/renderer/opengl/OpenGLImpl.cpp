@@ -145,6 +145,13 @@ namespace OpenGL
 #endif
 
 			METHOD(glGetString);
+
+			if (!hasRequiredExtensions())
+			{
+				Error("gfx", "Graphics adapter does not contains all required OpenGL extensions!");
+				return false;
+			}
+
 			METHOD(glShadeModel);
 			METHOD(glClear);
 			METHOD(glClearDepth);
@@ -192,7 +199,7 @@ namespace OpenGL
 			{
 				Error("gfx", "Too old OpenGL detected %d.%d required using %d.%d!", reqMajorVersion, reqMinorVersion, majorVersion, minorVersion);
 				return false;
-			}			
+			}
 			return true;
 		}
 		else
@@ -213,6 +220,12 @@ namespace OpenGL
 
 	bool Impl::isExtensionPresent(const char *extension)
 	{
+		if (!this->glGetString)
+		{
+			Error("gfx", "Tried to use isExtensionPresent function when OpenGL Implementation is not ready yet!");
+			return false;
+		}
+
 		const unsigned char *extensions = NULL;
 		const unsigned char *start;
 		unsigned char *where, *terminator;
@@ -239,5 +252,27 @@ namespace OpenGL
 			start = terminator;
 		}
 		return false;
+	}
+	
+	bool Impl::hasRequiredExtensions()
+	{
+		bool hasAllOfThem = true;
+
+		// Check extensions
+		char * requiredExtensions[] = {
+			"GL_ARB_vertex_array_object"
+		};
+
+		for (unsigned int i = 0; i < sizeof(requiredExtensions) / 4; ++i)
+		{
+			if (isExtensionPresent(requiredExtensions[i]))
+				Info("gfx", "Required extension %s is present.", requiredExtensions[i]);
+			else
+			{
+				Error("gfx", "Required extension %s is not present!", requiredExtensions[i]);
+				hasAllOfThem = false;
+			}
+		}
+		return hasAllOfThem;
 	}
 };
