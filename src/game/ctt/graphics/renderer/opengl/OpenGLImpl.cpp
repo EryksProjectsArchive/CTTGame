@@ -260,7 +260,12 @@ namespace OpenGL
 
 		// Check extensions
 		char * requiredExtensions[] = {
-			"GL_ARB_vertex_array_object"
+			"GL_ARB_draw_buffers",
+			"GL_ARB_depth_texture",
+			"GL_ARB_fragment_shader",
+			"GL_SGIS_generate_mipmap",
+			"GL_NV_fragment_program2",
+			"GL_NV_vertex_program3"
 		};
 
 		for (unsigned int i = 0; i < sizeof(requiredExtensions) / 4; ++i)
