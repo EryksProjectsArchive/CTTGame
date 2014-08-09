@@ -20,7 +20,7 @@ Entity::Entity(String<32> name)
 	JenkinsHash hash;
 	m_hashedName = hash.encode(m_name, m_name.getLength());
 
-	Info("entity", "NEW N: %s HN: 0x%X", *m_name, m_hashedName);
+	Debug("entity", "NEW N: %s HN: 0x%X", *m_name, m_hashedName);
 }
 
 Entity::~Entity()
@@ -40,10 +40,10 @@ unsigned int Entity::getHashedName()
 
 void Entity::render(RenderContext& renderContext)
 {
-	Info("entity", "render N: %s", *m_name);
+	//Info("entity", "render N: %s", *m_name);
 }
 
 void Entity::updatePhysics()
 {
-	Info("entity", "updatePhysics N: %s", *m_name);
+	//Info("entity", "updatePhysics N: %s", *m_name);
 }

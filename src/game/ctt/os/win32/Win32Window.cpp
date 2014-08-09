@@ -65,7 +65,10 @@ namespace Win32
 			return false;
 		}
 
-		m_window = CreateWindowEx(0, "AppWindow", title, WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX, 0, 0, width, height, 0, 0, m_wndClass.hInstance, 0);
+		RECT rct = { 0, 0, width, height };		
+		AdjustWindowRectEx(&rct, WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX, FALSE, NULL);
+
+		m_window = CreateWindowEx(0, "AppWindow", title, WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX, 0, 0, rct.right, rct.bottom, 0, 0, m_wndClass.hInstance, 0);
 	
 		if (m_window == 0)
 		{

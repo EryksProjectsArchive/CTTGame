@@ -45,7 +45,7 @@ namespace OpenAL
 #define METHOD(name)\
     *(unsigned long *)&name = m_openALDynLib->getProcAddress(#name);\
     if(!name) { \
-        Error("openAL", "Cannot find OpenAL Method - '%s'.",#name);\
+        Debug("openAL", "Cannot find OpenAL Method - '%s'.",#name);\
         return false;\
     }
 
@@ -54,7 +54,7 @@ namespace OpenAL
 #define EXT_METHOD(name)\
     *(unsigned long *)&name = alGetProcAddress(#name);\
     if(!name) { \
-        Error("openAL", "Cannot find OpenAL Method - '%s'.",#name);\
+        Debug("openAL", "Cannot find OpenAL Method - '%s'.",#name);\
         return false;\
     }
 

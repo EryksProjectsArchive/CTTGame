@@ -83,8 +83,6 @@ namespace OpenGL
 			return false;
 		}
 
-		printf("GLE:%d\n", GetLastError());
-
 #define DYN_LIB_NAME "opengl32"
 #elif __linux__
 #define DYN_LIB_NAME "libGL"
@@ -97,7 +95,7 @@ namespace OpenGL
 #define METHOD(name)\
 			*(unsigned long *)&this->name = m_openGLDynLib->getProcAddress(#name);\
 			if(!this->name) { \
-				Error("gfx","Cannot find OpenGL Method - '%s'.",#name);\
+				Debug("gfx","Cannot find OpenGL Method - '%s'.",#name);\
 				return false;\
 			}
 
@@ -123,7 +121,7 @@ namespace OpenGL
 #define EXT_METHOD(name)\
 			*(unsigned long *)&this->name = (unsigned long)this->wglGetProcAddress(#name);\
 			if(!this->name) { \
-				Error("gfx","Cannot find OpenGL Method - '%s'.",#name);\
+				Debug("gfx","Cannot find OpenGL Method - '%s'.",#name);\
 				return false;\
 			}
 #elif __linux__
@@ -142,7 +140,7 @@ namespace OpenGL
 #define EXT_METHOD(name)\
 			*(unsigned long *)&name = (unsigned long)glXGetProcAddress(#name);\
 			if(!name) { \
-				Error("gfx","Cannot find OpenGL Method - '%s'.",#name);\
+				Debug("gfx","Cannot find OpenGL Method - '%s'.",#name);\
 				return false;\
 			}
 #endif

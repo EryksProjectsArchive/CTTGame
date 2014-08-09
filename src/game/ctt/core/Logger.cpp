@@ -65,33 +65,25 @@ void Logger::log(const char *tag, LogType type, const char *msg, ...)
 		printf("[%s] ", tag);
 	}
 
+	const char * prefix = 0;
 	switch (type)
 	{
 	case LogType_Error:
-		{
-			fputs("<error> ", s_logFile);
-			printf("<error> ");
-			break;
-		}
+		prefix = "<error> ";
+		break;
 	case LogType_Warning:
-		{
-			fputs("<warning> ", s_logFile);
-			printf("<warning> ");
-			break;
-		}
+		prefix = "<warning> ";
+		break;
 	case LogType_Debug:
-		{
-			fputs("<debug> ", s_logFile);
-			printf("<debug> ");
-			break;
-		}
+		prefix = "<debug> ";
+		break;
 	default:
-		{
-			fputs("<info> ", s_logFile);
-			printf("<info> ");
-			break;
-		}
+		prefix = "<info> ";
+		break;		
 	}
+
+	printf(prefix);
+	fprintf(s_logFile, prefix);
 
 	va_copy(args2, args);
 	vfprintf(s_logFile, msg, args2);
