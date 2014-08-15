@@ -28,10 +28,10 @@ void Scene::updatePhysics()
 		entity->updatePhysics();
 }
 
-void Scene::render(RenderContext& renderContext)
+void Scene::render()
 {
 	for (auto entity : m_entities)
-		entity->render(renderContext);
+		entity->render();
 }
 
 void Scene::addEntity(Entity *entity)

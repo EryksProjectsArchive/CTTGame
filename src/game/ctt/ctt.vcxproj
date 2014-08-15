@@ -129,6 +129,8 @@
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <PreprocessorDefinitions>
+      </PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -150,6 +152,8 @@
       <DisableSpecificWarnings>4996;</DisableSpecificWarnings>
       <DisableLanguageExtensions>false</DisableLanguageExtensions>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <PreprocessorDefinitions>
+      </PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -165,6 +169,7 @@
     <ClCompile Include="game\Game.cpp" />
     <ClCompile Include="game\scene\entities\Entity.cpp" />
     <ClCompile Include="game\scene\Scene.cpp" />
+    <ClCompile Include="graphics\FragmentShader.cpp" />
     <ClCompile Include="graphics\Geometry.cpp" />
     <ClCompile Include="graphics\Graphics.cpp" />
     <ClCompile Include="graphics\Material.cpp" />
@@ -173,9 +178,10 @@
     <ClCompile Include="graphics\renderer\BufferBase.cpp" />
     <ClCompile Include="graphics\renderer\RenderContext.cpp" />
     <ClCompile Include="graphics\renderer\Renderer.cpp" />
-    <ClCompile Include="graphics\renderer\RenderQueue.cpp" />
     <ClCompile Include="graphics\Shader.cpp" />
+    <ClCompile Include="graphics\ShaderProgram.cpp" />
     <ClCompile Include="graphics\Texture.cpp" />
+    <ClCompile Include="graphics\VertexShader.cpp" />
     <ClCompile Include="graphics\Window.cpp" />
     <ClCompile Include="io\FileSystem.cpp" />
     <ClCompile Include="main.cpp" />
@@ -203,6 +209,7 @@
     <ClInclude Include="game\Game.h" />
     <ClInclude Include="game\scene\entities\Entity.h" />
     <ClInclude Include="game\scene\Scene.h" />
+    <ClInclude Include="graphics\FragmentShader.h" />
     <ClInclude Include="graphics\Geometry.h" />
     <ClInclude Include="graphics\Graphics.h" />
     <ClInclude Include="graphics\Material.h" />
@@ -211,9 +218,10 @@
     <ClInclude Include="graphics\renderer\BufferBase.h" />
     <ClInclude Include="graphics\renderer\RenderContext.h" />
     <ClInclude Include="graphics\renderer\Renderer.h" />
-    <ClInclude Include="graphics\renderer\RenderQueue.h" />
     <ClInclude Include="graphics\Shader.h" />
+    <ClInclude Include="graphics\ShaderProgram.h" />
     <ClInclude Include="graphics\Texture.h" />
+    <ClInclude Include="graphics\VertexShader.h" />
     <ClInclude Include="graphics\Window.h" />
     <ClInclude Include="io\CachedItem.h" />
     <ClInclude Include="io\File.h" />

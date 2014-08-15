@@ -11,19 +11,19 @@
 
 #pragma once
 
-#include "RenderQueue.h"
 #include <graphics/Geometry.h>
 #include <graphics/Material.h>
 
 #include <math/Matrix.h>
 
+class ShaderProgram;
 class RenderContext
 {
 private:
-	RenderQueue * m_queue;
+	ShaderProgram *m_shaderProgram;
 public:
-	RenderContext(RenderQueue * queue);
+	RenderContext();
 	~RenderContext();
 
-	void push(Geometry * geometry, Material *material, Matrix4x4 *matrix);
+	void setShaderProgram(ShaderProgram *shaderProgram);
 };

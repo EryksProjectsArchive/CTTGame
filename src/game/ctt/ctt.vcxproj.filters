@@ -162,9 +162,6 @@
     <ClCompile Include="graphics\renderer\RenderContext.cpp">
       <Filter>Source Files\graphics\renderer</Filter>
     </ClCompile>
-    <ClCompile Include="graphics\renderer\RenderQueue.cpp">
-      <Filter>Source Files\graphics\renderer</Filter>
-    </ClCompile>
     <ClCompile Include="graphics\Geometry.cpp">
       <Filter>Source Files\graphics</Filter>
     </ClCompile>
@@ -188,6 +185,15 @@
     </ClCompile>
     <ClCompile Include="game\scene\entities\Entity.cpp">
       <Filter>Source Files\game\scene\entities</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\FragmentShader.cpp">
+      <Filter>Source Files\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\ShaderProgram.cpp">
+      <Filter>Source Files\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\VertexShader.cpp">
+      <Filter>Source Files\graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -272,9 +278,6 @@
     <ClInclude Include="io\File.h">
       <Filter>Header Files\io</Filter>
     </ClInclude>
-    <ClInclude Include="graphics\renderer\RenderQueue.h">
-      <Filter>Header Files\graphics\renderer</Filter>
-    </ClInclude>
     <ClInclude Include="graphics\renderer\RenderContext.h">
       <Filter>Header Files\graphics\renderer</Filter>
     </ClInclude>
@@ -310,6 +313,15 @@
     </ClInclude>
     <ClInclude Include="core\hashing\Hash.h">
       <Filter>Header Files\core\hashing</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\FragmentShader.h">
+      <Filter>Header Files\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\ShaderProgram.h">
+      <Filter>Header Files\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\VertexShader.h">
+      <Filter>Header Files\graphics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -38,7 +38,7 @@ unsigned int Entity::getHashedName()
 	return m_hashedName;
 }
 
-void Entity::render(RenderContext& renderContext)
+void Entity::render()
 {
 	//Info("entity", "render N: %s", *m_name);
 }

@@ -10,20 +10,20 @@
 //////////////////////////////////////////////
 
 #include "RenderContext.h"
+#include "Renderer.h"
 
-RenderContext::RenderContext(RenderQueue * queue)
-	: m_queue(queue)
+RenderContext::RenderContext()
+	: m_shaderProgram(0)
 {
 
 }
 
 RenderContext::~RenderContext()
 {
-
+	// Do whole rendering here
 }
 
-void RenderContext::push(Geometry * geometry, Material *material, Matrix4x4 *matrix)
+void RenderContext::setShaderProgram(ShaderProgram * shaderProgram)
 {
-	if (m_queue)
-		m_queue->push(geometry, material, matrix);
+	m_shaderProgram = shaderProgram;
 }

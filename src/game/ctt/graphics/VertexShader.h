@@ -4,23 +4,18 @@
 //	   Copyright (C) Black Ice Mountains
 //		 	All rights reserved
 //
-// File		: graphics/Shader.h
+// File		: graphics/VertexShader.h
 // Author	: Eryk Dwornicki
 //
 //////////////////////////////////////////////
 
 #pragma once
 
-#include <SDL_opengl.h>
+#include "Shader.h"
 
-class ShaderProgram;
-class Shader
+class VertexShader : public Shader
 {
-protected:
-	GLuint m_shaderId;
 public:
-	Shader(const char *source);
-	virtual ~Shader();
-
-	friend class ShaderProgram;
+	VertexShader(const char * source);
+	virtual ~VertexShader();
 };

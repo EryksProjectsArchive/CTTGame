@@ -4,22 +4,23 @@
 //	   Copyright (C) Black Ice Mountains
 //		 	All rights reserved
 //
-// File		: graphics/renderer/RenderQueue.cpp
+// File		: graphics/ShaderProgram.h
 // Author	: Eryk Dwornicki
 //
 //////////////////////////////////////////////
 
-#include "RenderQueue.h"
+#pragma once
 
-RenderQueue::RenderQueue()
+#include "Shader.h"
+
+class ShaderProgram
 {
-}
+private:
+	GLint m_programId;
+public:
 
-RenderQueue::~RenderQueue()
-{
-}
+	ShaderProgram();
+	~ShaderProgram();
 
-void RenderQueue::push(Geometry * geometry, Material *material, Matrix4x4 *matrix)
-{
-
-}
+	void attachShader(Shader * shader);
+};

@@ -32,6 +32,10 @@
 
 #include <game/scene/Scene.h>
 
+#include <graphics/FragmentShader.h>
+#include <graphics/VertexShader.h>
+#include <graphics/ShaderProgram.h>
+
 Game::Game()
 	: m_isRunning(false), m_isInitialized(false), m_fileSystem(0), m_renderer(0), m_window(0), m_soundMgr(0), m_scene(0)
 {
@@ -117,6 +121,18 @@ bool Game::init()
 	
 	m_scene->addEntity(entity);
 
+	ShaderProgram *shaderProgram = new ShaderProgram();
+
+	FragmentShader * fragmentShader = new FragmentShader("../../data/shaders/simple.frag");
+	shaderProgram->attachShader(fragmentShader);
+
+	VertexShader * vertexShader = new VertexShader("../../data/shaders/simple.vert");
+	shaderProgram->attachShader(vertexShader);
+
+
+	RenderContext context;
+	context.setShaderProgram(shaderProgram);
+
 	m_isInitialized = true;
 	m_isRunning = true;
 	return true;
@@ -142,13 +158,8 @@ bool Game::pulse()
 	{
 		m_renderer->preFrame();
 
-		RenderQueue queue; // render queue - batching etc is done there
-
-		RenderContext ctx(&queue); // render context - simple render context, presorting of geometry etc is done there :-)
 		if (m_scene)
-			m_scene->render(ctx);
-
-		m_renderer->doQueueRender(&queue);
+			m_scene->render();
 
 		m_renderer->postFrame();
 	}

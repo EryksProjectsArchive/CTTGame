@@ -21,12 +21,15 @@ class RenderQueue;
 
 class Window;
 
+
+
 class Renderer
 {
 protected:
 	Window* m_window;
 
 	SDL_GLContext m_glContext;
+	static Renderer* s_instance;
 public:
 	Renderer();
 	~Renderer();
@@ -38,7 +41,16 @@ public:
 
 	void setFullscreen(bool fullscreen);
 
-	void doQueueRender(RenderQueue * queue);
-
 	BufferBase * createBuffer(BufferType::Type type);
+
+	static Renderer& get();
+
+	// Extension methods
+	static PFNGLCOMPILESHADERPROC glCompileShader;
+	static PFNGLCREATESHADERPROC glCreateShader;
+	static PFNGLDELETESHADERPROC glDeleteShader;
+	static PFNGLSHADERSOURCEPROC glShaderSource;
+	static PFNGLCREATEPROGRAMPROC glCreateProgram;
+	static PFNGLDELETEPROGRAMPROC glDeleteProgram;
+	static PFNGLATTACHSHADERPROC glAttachShader;
 };

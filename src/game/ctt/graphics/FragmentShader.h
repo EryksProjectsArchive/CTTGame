@@ -4,24 +4,18 @@
 //	   Copyright (C) Black Ice Mountains
 //		 	All rights reserved
 //
-// File		: graphics/renderer/RenderQueue.h
+// File		: graphics/FragmentShader.h
 // Author	: Eryk Dwornicki
 //
 //////////////////////////////////////////////
 
 #pragma once
 
-class Geometry;
-class Material;
-class Matrix4x4;
+#include "Shader.h"
 
-class RenderQueue
+class FragmentShader : public Shader
 {
-private:
-	
 public:
-	RenderQueue();
-	~RenderQueue();
-
-	void push(Geometry * geometry, Material *material, Matrix4x4 *matrix);
+	FragmentShader(const char * source);
+	virtual ~FragmentShader();
 };

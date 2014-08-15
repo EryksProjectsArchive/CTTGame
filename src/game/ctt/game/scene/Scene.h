@@ -29,5 +29,5 @@ public:
 
 	void addEntity(Entity *entity);
 
-	void render(RenderContext& renderContext);
+	void render();
 };

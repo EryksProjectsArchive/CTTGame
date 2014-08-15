@@ -25,5 +25,5 @@ void Mesh::render(RenderContext& context)
 {
 	Matrix4x4 translationMatrix;
 	translationMatrix.translate(m_position);	
-	context.push(m_geometry, m_material, &(translationMatrix * m_rotation.toMatrix4x4()));
+	//context.push(m_geometry, m_material, &(translationMatrix * m_rotation.toMatrix4x4()));
 }

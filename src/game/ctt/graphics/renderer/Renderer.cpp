@@ -11,10 +11,22 @@
 
 #include "Renderer.h"
 
+// Extension methods
+PFNGLCOMPILESHADERPROC Renderer::glCompileShader = 0;
+PFNGLCREATESHADERPROC Renderer::glCreateShader = 0;
+PFNGLDELETESHADERPROC Renderer::glDeleteShader = 0;
+PFNGLSHADERSOURCEPROC Renderer::glShaderSource = 0;
+PFNGLCREATEPROGRAMPROC Renderer::glCreateProgram = 0;
+PFNGLDELETEPROGRAMPROC Renderer::glDeleteProgram = 0;
+PFNGLATTACHSHADERPROC Renderer::glAttachShader = 0;
+
+Renderer * Renderer::s_instance = 0;
+
 Renderer::Renderer()
 {
 	m_window = 0;
 	m_glContext = 0;
+	s_instance = this;
 }
 
 Renderer::~Renderer()
@@ -36,6 +48,14 @@ bool Renderer::setup(Window * window)
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
 	m_glContext = SDL_GL_CreateContext(window->_window);
+
+	glCompileShader = (PFNGLCOMPILESHADERPROC)SDL_GL_GetProcAddress("glCompileShader");
+	glDeleteShader = (PFNGLDELETESHADERPROC)SDL_GL_GetProcAddress("glDeleteShader");
+	glCreateShader = (PFNGLCREATESHADERPROC)SDL_GL_GetProcAddress("glCreateShader");
+	glShaderSource = (PFNGLSHADERSOURCEPROC)SDL_GL_GetProcAddress("glShaderSource");
+	glCreateProgram = (PFNGLCREATEPROGRAMPROC)SDL_GL_GetProcAddress("glCreateProgram");
+	glDeleteProgram = (PFNGLDELETEPROGRAMPROC)SDL_GL_GetProcAddress("glDeleteProgram");
+	glAttachShader = (PFNGLATTACHSHADERPROC)SDL_GL_GetProcAddress("glAttachShader");
 
 	SDL_GL_SetSwapInterval(1);
 
@@ -66,7 +86,7 @@ BufferBase * Renderer::createBuffer(BufferType::Type type)
 	return 0;
 }
 
-void Renderer::doQueueRender(RenderQueue * queue)
+Renderer& Renderer::get()
 {
-
+	return *s_instance;
 }
