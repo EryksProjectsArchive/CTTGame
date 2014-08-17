@@ -22,4 +22,6 @@ private:
 public:
 	Geometry();
 	~Geometry();
+
+	void fillData(void *vertices, unsigned short verticesCount, void *triangles, unsigned short trianglesCount);
 };

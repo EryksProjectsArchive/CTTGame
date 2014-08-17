@@ -9,7 +9,13 @@
 //
 //////////////////////////////////////////////
 
+#include <stdio.h>
+
+#include <core/Logger.h>
+
 #include "Model.h"
+#include "ModelFormat.h"
+
 
 Model::Model()
 {
@@ -38,9 +44,35 @@ bool Model::load(FilePath file)
 {
 	if (!m_isLoaded)
 	{
-	
-		m_isLoaded = true;
-		return true;
+		FILE *fp = fopen(file, "rb");
+
+		if (fp)
+		{
+			mdl mdlData;
+			if (ModelFormat::load(&mdlData, fp))
+			{
+				Info("Model", "Model loaded. %d meshes", mdlData.meshCount);
+
+				m_meshes = new Mesh*[mdlData.meshCount];
+				for (unsigned char i = 0; i < mdlData.meshCount; ++i)
+				{
+					Info("Model", "Mesh: %s", mdlData.meshes[i].material.value);
+
+					m_meshes[i] = new Mesh(&mdlData.meshes[i]);
+
+					delete[] mdlData.meshes[i].name.value;
+					delete[] mdlData.meshes[i].material.value;
+					delete[] mdlData.meshes[i].triangles;
+					delete[] mdlData.meshes[i].vertices;
+				}
+
+				delete[] mdlData.meshes;
+
+				m_isLoaded = true;
+				return true;
+			}
+			fclose(fp);			
+		}
 	}
 	return false;
 }

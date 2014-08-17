@@ -18,3 +18,8 @@ Geometry::Geometry()
 Geometry::~Geometry()
 {
 }
+
+void Geometry::fillData(void *vertices, unsigned short verticesCount, void *triangles, unsigned short trianglesCount)
+{
+
+}

@@ -117,21 +117,24 @@ bool Game::init()
 	// Create scene
 	m_scene = new Scene();
 
-	Entity *entity = new Entity("building");
+	/*Entity *entity = new Entity("building");
 	
-	m_scene->addEntity(entity);
+	m_scene->addEntity(entity);*/
 
-	ShaderProgram *shaderProgram = new ShaderProgram();
+	/*ShaderProgram *shaderProgram = new ShaderProgram();
 
 	FragmentShader * fragmentShader = new FragmentShader("../../data/shaders/simple.frag");
 	shaderProgram->attachShader(fragmentShader);
 
 	VertexShader * vertexShader = new VertexShader("../../data/shaders/simple.vert");
-	shaderProgram->attachShader(vertexShader);
+	shaderProgram->attachShader(vertexShader);*/
 
 
-	RenderContext context;
-	context.setShaderProgram(shaderProgram);
+	Model * model = new Model;
+	model->load("../../data/models/test.mdl");
+
+	/*RenderContext context;
+	context.setShaderProgram(shaderProgram);*/
 
 	m_isInitialized = true;
 	m_isRunning = true;

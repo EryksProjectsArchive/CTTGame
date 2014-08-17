@@ -195,6 +195,9 @@
     <ClCompile Include="graphics\VertexShader.cpp">
       <Filter>Source Files\graphics</Filter>
     </ClCompile>
+    <ClCompile Include="graphics\ModelFormat.cpp">
+      <Filter>Source Files\graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="os\OS.h">
@@ -321,6 +324,9 @@
       <Filter>Header Files\graphics</Filter>
     </ClInclude>
     <ClInclude Include="graphics\VertexShader.h">
+      <Filter>Header Files\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\ModelFormat.h">
       <Filter>Header Files\graphics</Filter>
     </ClInclude>
   </ItemGroup>

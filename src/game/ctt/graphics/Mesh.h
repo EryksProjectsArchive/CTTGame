@@ -17,6 +17,8 @@
 #include "Material.h"
 #include "Geometry.h"
 
+#include "ModelFormat.h"
+
 class RenderContext;
 
 class Mesh
@@ -28,7 +30,7 @@ private:
 	Geometry *m_geometry;
 	Material *m_material;
 public:
-	Mesh();
+	Mesh(mesh * meshData);
 	~Mesh();
 
 	void render(RenderContext& context);

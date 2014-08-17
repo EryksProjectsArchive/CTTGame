@@ -175,6 +175,7 @@
     <ClCompile Include="graphics\Material.cpp" />
     <ClCompile Include="graphics\Mesh.cpp" />
     <ClCompile Include="graphics\Model.cpp" />
+    <ClCompile Include="graphics\ModelFormat.cpp" />
     <ClCompile Include="graphics\renderer\BufferBase.cpp" />
     <ClCompile Include="graphics\renderer\RenderContext.cpp" />
     <ClCompile Include="graphics\renderer\Renderer.cpp" />
@@ -215,6 +216,7 @@
     <ClInclude Include="graphics\Material.h" />
     <ClInclude Include="graphics\Mesh.h" />
     <ClInclude Include="graphics\Model.h" />
+    <ClInclude Include="graphics\ModelFormat.h" />
     <ClInclude Include="graphics\renderer\BufferBase.h" />
     <ClInclude Include="graphics\renderer\RenderContext.h" />
     <ClInclude Include="graphics\renderer\Renderer.h" />
