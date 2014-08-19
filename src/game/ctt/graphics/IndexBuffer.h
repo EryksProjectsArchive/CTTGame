@@ -4,29 +4,19 @@
 //	   Copyright (C) Black Ice Mountains
 //		 	All rights reserved
 //
-// File		: graphics/renderer/BufferBase.h
+// File		: graphics/IndexBuffer.h
 // Author	: Eryk Dwornicki
 //
 //////////////////////////////////////////////
 
 #pragma once
 
-struct BufferType
-{
-	enum Type
-	{
-		VERTEX = 1,
-		INDEX = 2
-	};
-};
+#include <Prerequisites.h>
 
-class BufferBase
+class IndexBuffer : public BufferBase
 {
 public:
-	BufferBase();
-	~BufferBase();
+	IndexBuffer();
 
-	virtual void allocate(unsigned int size);
-
-	virtual void fillData(void * data);
+	void fillData(void * data) override;
 };

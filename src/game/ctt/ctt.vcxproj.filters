@@ -141,9 +141,6 @@
     <ClCompile Include="graphics\renderer\Renderer.cpp">
       <Filter>Source Files\graphics\renderer</Filter>
     </ClCompile>
-    <ClCompile Include="graphics\renderer\BufferBase.cpp">
-      <Filter>Source Files\graphics\renderer</Filter>
-    </ClCompile>
     <ClCompile Include="graphics\Graphics.cpp">
       <Filter>Source Files\graphics</Filter>
     </ClCompile>
@@ -198,6 +195,15 @@
     <ClCompile Include="graphics\ModelFormat.cpp">
       <Filter>Source Files\graphics</Filter>
     </ClCompile>
+    <ClCompile Include="graphics\VertexBuffer.cpp">
+      <Filter>Source Files\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\IndexBuffer.cpp">
+      <Filter>Source Files\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\BufferBase.cpp">
+      <Filter>Source Files\graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="os\OS.h">
@@ -244,9 +250,6 @@
     </ClInclude>
     <ClInclude Include="graphics\Window.h">
       <Filter>Header Files\graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="graphics\renderer\BufferBase.h">
-      <Filter>Header Files\graphics\renderer</Filter>
     </ClInclude>
     <ClInclude Include="graphics\renderer\Renderer.h">
       <Filter>Header Files\graphics\renderer</Filter>
@@ -327,6 +330,21 @@
       <Filter>Header Files\graphics</Filter>
     </ClInclude>
     <ClInclude Include="graphics\ModelFormat.h">
+      <Filter>Header Files\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\VertexBuffer.h">
+      <Filter>Header Files\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\IndexBuffer.h">
+      <Filter>Header Files\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\BufferBase.h">
+      <Filter>Header Files\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Prerequisites.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\Vertex3d.h">
       <Filter>Header Files\graphics</Filter>
     </ClInclude>
   </ItemGroup>

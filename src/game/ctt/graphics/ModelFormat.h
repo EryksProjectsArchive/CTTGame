@@ -39,7 +39,6 @@ struct triangle
 	unsigned short c;
 };
 
-
 struct vertex
 {
 	float x;

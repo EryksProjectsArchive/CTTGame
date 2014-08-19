@@ -4,22 +4,28 @@
 //	   Copyright (C) Black Ice Mountains
 //		 	All rights reserved
 //
-// File		: graphics/Shader.h
+// File		: graphics/Vertex3d.h
 // Author	: Eryk Dwornicki
 //
 //////////////////////////////////////////////
 
 #pragma once
 
-#include <Prerequisites.h>
-
-class Shader
+struct Vertex3d
 {
-protected:
-	unsigned int m_shaderId;
-public:
-	Shader(const char *source);
-	virtual ~Shader();
-
-	friend class ShaderProgram;
+	float x;
+	float y;
+	float z;
+	float nx;
+	float ny;
+	float nz;
+	float u;
+	float v;
+	unsigned int color;
+	float tanx;
+	float tany;
+	float tanz;
+	float bitanx;
+	float bitany;
+	float bitanz;
 };

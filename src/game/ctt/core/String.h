@@ -14,7 +14,7 @@
 #include <cstring>
 #include <cstdarg>
 
-template <int maxSize = 256>
+template <int maxSize>
 class String
 {
 private:

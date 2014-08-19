@@ -29,9 +29,13 @@ private:
 
 	Geometry *m_geometry;
 	Material *m_material;
+
+	char *m_meshName;
 public:
 	Mesh(mesh * meshData);
 	~Mesh();
+
+	const char * getName();
 
 	void render(RenderContext& context);
 };

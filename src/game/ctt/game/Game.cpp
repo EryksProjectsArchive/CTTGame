@@ -36,6 +36,7 @@
 #include <graphics/VertexShader.h>
 #include <graphics/ShaderProgram.h>
 
+Model * model = 0;
 Game::Game()
 	: m_isRunning(false), m_isInitialized(false), m_fileSystem(0), m_renderer(0), m_window(0), m_soundMgr(0), m_scene(0)
 {
@@ -43,6 +44,9 @@ Game::Game()
 
 Game::~Game()
 {
+	if (model)
+		delete model;
+
 	if (m_renderer)
 	{
 		delete m_renderer;
@@ -130,7 +134,7 @@ bool Game::init()
 	shaderProgram->attachShader(vertexShader);*/
 
 
-	Model * model = new Model;
+	model = new Model;
 	model->load("../../data/models/test.mdl");
 
 	/*RenderContext context;
@@ -163,6 +167,9 @@ bool Game::pulse()
 
 		if (m_scene)
 			m_scene->render();
+
+		RenderContext ctx;
+		model->render(ctx);
 
 		m_renderer->postFrame();
 	}

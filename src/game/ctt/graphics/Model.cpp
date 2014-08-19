@@ -65,6 +65,7 @@ bool Model::load(FilePath file)
 					delete[] mdlData.meshes[i].triangles;
 					delete[] mdlData.meshes[i].vertices;
 				}
+				m_meshesCount = mdlData.meshCount;
 
 				delete[] mdlData.meshes;
 

@@ -11,16 +11,16 @@
 
 #pragma once
 
-class Texture;
-class Shader;
+#include <Prerequisites.h>
 
 class Material
 {
 private:
 	Texture *m_texture;
-	Shader *m_vertexShader;
-	Shader *m_pixelShader;
+	ShaderProgram * m_program;
 public:
 	Material();
 	~Material();
+
+	friend class Renderer;
 };

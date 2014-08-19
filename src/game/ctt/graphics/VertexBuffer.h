@@ -4,20 +4,19 @@
 //	   Copyright (C) Black Ice Mountains
 //		 	All rights reserved
 //
-// File		: graphics/Material.cpp
+// File		: graphics/VertexBuffer.h
 // Author	: Eryk Dwornicki
 //
 //////////////////////////////////////////////
 
-#include "Material.h"
+#pragma once
 
-Material::Material()
+#include <Prerequisites.h>
+
+class VertexBuffer : public BufferBase
 {
-	m_program = 0;
-	m_texture = 0;
-}
+public:
+	VertexBuffer();
 
-Material::~Material()
-{
-
-}
+	void fillData(void * data) override;
+};

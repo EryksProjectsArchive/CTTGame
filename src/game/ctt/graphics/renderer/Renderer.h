@@ -11,17 +11,10 @@
 
 #pragma once
 
+#include <Prerequisites.h>
 #include <SDL.h>
 #include <SDL_opengl.h>
-
-#include "BufferBase.h"
-#include <graphics/Window.h>
-
-class RenderQueue;
-
-class Window;
-
-
+#include <graphics/BufferBase.h>
 
 class Renderer
 {
@@ -30,6 +23,9 @@ protected:
 
 	SDL_GLContext m_glContext;
 	static Renderer* s_instance;
+
+	Material * m_currentMaterial;
+	Material * m_defaultMaterial;
 public:
 	Renderer();
 	~Renderer();
@@ -43,6 +39,9 @@ public:
 
 	BufferBase * createBuffer(BufferType::Type type);
 
+	void setMaterial(Material * material);
+	void renderGeometry(Geometry *geometry, Matrix4x4 * matrix);;
+
 	static Renderer& get();
 
 	// Extension methods
@@ -53,4 +52,12 @@ public:
 	static PFNGLCREATEPROGRAMPROC glCreateProgram;
 	static PFNGLDELETEPROGRAMPROC glDeleteProgram;
 	static PFNGLATTACHSHADERPROC glAttachShader;
+	static PFNGLUSEPROGRAMPROC glUseProgram;
+
+	static PFNGLGENBUFFERSPROC glGenBuffers;
+	static PFNGLBINDBUFFERPROC glBindBuffer;
+	static PFNGLBUFFERDATAPROC glBufferData;
+	static PFNGLMAPBUFFERPROC glMapBuffer;
+	static PFNGLUNMAPBUFFERPROC glUnmapBuffer;
+	static PFNGLDELETEBUFFERSPROC glDeleteBuffers;
 };

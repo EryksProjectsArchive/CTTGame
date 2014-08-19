@@ -15,12 +15,13 @@
 
 class ShaderProgram
 {
-private:
-	GLint m_programId;
+protected:
+	unsigned int m_programId;
 public:
-
 	ShaderProgram();
 	~ShaderProgram();
 
 	void attachShader(Shader * shader);
+
+	friend class Renderer;
 };

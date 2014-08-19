@@ -19,7 +19,6 @@
 VertexShader::VertexShader(const char * source) : Shader(source)
 {
 	FILE *shaderFile = fopen(source, "r");
-	printf("%s\n", source);
 	if (shaderFile)
 	{
 		m_shaderId = Renderer::glCreateShader(GL_VERTEX_SHADER);

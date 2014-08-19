@@ -19,3 +19,5 @@ public:
 	FragmentShader(const char * source);
 	virtual ~FragmentShader();
 };
+
+typedef FragmentShader PixelShader;

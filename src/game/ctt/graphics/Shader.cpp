@@ -13,7 +13,6 @@
 
 Shader::Shader(const char *source) : m_shaderId(0)
 {
-
 }
 
 Shader::~Shader()

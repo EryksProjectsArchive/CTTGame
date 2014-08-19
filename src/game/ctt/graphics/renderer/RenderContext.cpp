@@ -20,7 +20,20 @@ RenderContext::RenderContext()
 
 RenderContext::~RenderContext()
 {
-	// Do whole rendering here
+	for (auto task : m_renderTasks)
+	{
+		Renderer::get().setMaterial(task->m_material);
+		Renderer::get().renderGeometry(task->m_geometry, task->m_matrix);
+		delete task;
+	}
+	m_renderTasks.clear();
+}
+
+RenderTask * RenderContext::newTask()
+{
+	RenderTask *task = new RenderTask();
+	m_renderTasks.pushBack(task);
+	return task;
 }
 
 void RenderContext::setShaderProgram(ShaderProgram * shaderProgram)
