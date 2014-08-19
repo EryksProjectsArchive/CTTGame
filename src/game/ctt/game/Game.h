@@ -11,11 +11,7 @@
 
 #pragma once
 
-class Window;
-class Renderer;
-class ISoundMgr;
-class FileSystem;
-class Scene;
+#include <Prerequisites.h>
 
 class Game
 {

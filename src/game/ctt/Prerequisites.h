@@ -35,6 +35,12 @@ typedef signed long long sint64;
 typedef long long int64;
 typedef unsigned long long uint64;
 
+#ifdef DOUBLE_SCALAR_PRECISION
+typedef double Scalar;
+#else 
+typedef float Scalar;
+#endif
+
 // Predefinitions
 
 // Core

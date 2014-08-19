@@ -101,15 +101,15 @@ bool Renderer::setup(Window * window)
 
 void Renderer::preFrame()
 {
+	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_DEPTH_BUFFER_BIT);
+	glClearDepth(1.0f);
+	glClearColor(1.0f, 1.0f, 0.0f, 0.1f);
 
 }
 
 void Renderer::postFrame()
 {
-	glClear(GL_COLOR_BUFFER_BIT);
-	glClear(GL_DEPTH_BUFFER_BIT);
-	glClearDepth(1.0f);
-	glClearColor(1.0f, 0.5f, 1.0f, 1.0f);
 
 
 	SDL_GL_SwapWindow(m_window->_window);
