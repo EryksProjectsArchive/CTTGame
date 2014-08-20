@@ -227,4 +227,9 @@ public:
 		matrix(3, 3) = (m[3][0] * right.m[0][3]) + (m[3][1] * right.m[1][3]) + (m[3][2] * right.m[2][3]) + (m[3][3] * right.m[3][3]);
 		return matrix;
 	}
+
+	operator float*()
+	{
+		return &m[0][0];
+	}
 };
