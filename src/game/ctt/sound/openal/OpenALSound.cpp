@@ -48,6 +48,28 @@ namespace OpenAL
 		}
 	}
 
+	void Sound::pause()
+	{
+		m_al->alSourcePause(m_sourceID);
+	}
+
+	void Sound::stop()
+	{
+		m_al->alSourceStop(m_sourceID);
+	}
+
+	void Sound::setVolume(float volume)
+	{
+		m_al->alSourcef(m_sourceID, AL_GAIN, volume);
+	}
+
+	float Sound::getVolume()
+	{
+		float volume = 0.0f;
+		m_al->alGetSourcef(m_sourceID, AL_GAIN, &volume);
+		return volume;
+	}
+
 	bool Sound::isPlaying()
 	{
 		int State;

@@ -31,6 +31,12 @@ namespace OpenAL
 		bool load(const char* filename) override;
 
 		void play(bool loop = false) override;
+		void pause() override;
+		void stop() override;
+
+		void setVolume(float volume) override;
+		float getVolume() override;
+
 		bool isPlaying() override;
 	};
 };

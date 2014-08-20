@@ -21,5 +21,11 @@ public:
 	virtual bool load(const char* filename);
 
 	virtual void play(bool loop = false);
+	virtual void pause();
+	virtual void stop();
+
+	virtual void setVolume(float volume);
+	virtual float getVolume();
+
 	virtual bool isPlaying();
 };
