@@ -11,6 +11,8 @@
 
 #pragma once
 
+#include <Prerequisites.h>
+
 #include <resources/Resource.h>
 #include "Mesh.h"
 

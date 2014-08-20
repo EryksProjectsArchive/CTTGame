@@ -9,10 +9,12 @@
 //
 //////////////////////////////////////////////
 
-#include "Scene.h"
-
+#include <core/List.h>
 #include <core/Timer.h>
 #include <core/Logger.h>
+
+#include "entities/Entity.h"
+#include "Scene.h"
 
 Scene::Scene()
 {

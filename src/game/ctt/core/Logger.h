@@ -12,6 +12,8 @@
 
 #pragma once
 
+#include <Prerequisites.h>
+
 #include <stdio.h>
 #include "String.h"
 

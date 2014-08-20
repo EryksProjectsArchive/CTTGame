@@ -11,6 +11,8 @@
 
 #pragma once
 
+#include <Prerequisites.h>
+
 template <class Type>
 class ProtectedPtr
 {

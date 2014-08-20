@@ -9,14 +9,16 @@
 //
 //////////////////////////////////////////////
 
-#include "Mesh.h"
-
-#include "renderer/RenderContext.h"
-
 #include <cstring>
 
+#include "Mesh.h"
+#include "renderer/RenderContext.h"
+#include "Material.h"
+#include "Geometry.h"
+#include "ModelFormat.h"
+
 Mesh::Mesh(mesh * meshData)
-	: m_geometry(0), m_meshName(0)
+	: m_geometry(0), m_meshName(0), m_material(0)
 {
 	m_geometry = new Geometry();
 	if (m_geometry)

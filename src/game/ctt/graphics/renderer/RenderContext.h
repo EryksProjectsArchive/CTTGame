@@ -11,6 +11,8 @@
 
 #pragma once
 
+#include <Prerequisites.h>
+
 #include <graphics/Geometry.h>
 #include <graphics/Material.h>
 

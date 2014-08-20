@@ -11,7 +11,7 @@
 
 #pragma once
 
-#include "Shader.h"
+#include <Prerequisites.h>
 
 class ShaderProgram
 {

@@ -13,7 +13,12 @@
 
 int main()
 {
-	Game game;
-	if (game.init()) while (game.pulse());
+	Game *game = new Game();
+	if (game->init()) while (game->pulse());
+	delete game;
+
+#ifdef _MEM_LEAKS_DEBUG
+	_CrtDumpMemoryLeaks();
+#endif
 	return 1;
 }

@@ -9,10 +9,12 @@
 //
 //////////////////////////////////////////////
 
-#include "Entity.h"
+#include <graphics/renderer/RenderContext.h>
 
 #include <core/hashing/JenkinsHash.h>
 #include <core/Logger.h>
+
+#include "Entity.h"
 
 Entity::Entity(String<32> name)
 	: m_name(name)

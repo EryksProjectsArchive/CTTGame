@@ -51,6 +51,8 @@ Renderer::Renderer()
 	m_window = 0;
 	m_glContext = 0;
 	s_instance = this;
+	m_defaultMaterial = 0;
+	m_currentMaterial = 0;
 }
 
 Renderer::~Renderer()
@@ -138,7 +140,6 @@ void Renderer::setMaterial(Material * material)
 	m_currentMaterial = material;
 }
 
-#include <stdio.h>
 void Renderer::renderGeometry(Geometry *geometry, Matrix4x4 * matrix)
 {
 	Material *material = m_currentMaterial;

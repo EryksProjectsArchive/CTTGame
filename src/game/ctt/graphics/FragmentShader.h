@@ -11,6 +11,8 @@
 
 #pragma once
 
+#include <Prerequisites.h>
+
 #include "Shader.h"
 
 class FragmentShader : public Shader

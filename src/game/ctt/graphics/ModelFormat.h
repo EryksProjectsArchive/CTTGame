@@ -86,6 +86,8 @@ struct mdl
 	struct mesh * meshes;
 };
 
+#include <Prerequisites.h>
+
 #include <stdio.h>
 
 class ModelFormat

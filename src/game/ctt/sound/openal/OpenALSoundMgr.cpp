@@ -28,7 +28,7 @@ namespace OpenAL
 	{
 		if (m_al)
 		{
-			m_al->alcMakeContextCurrent(NULL);
+			m_al->alcMakeContextCurrent(0);
 			if (m_context)
 			{
 				m_al->alcDestroyContext(m_context);
@@ -41,7 +41,7 @@ namespace OpenAL
 			}
 
 			delete m_al;
-			m_al = NULL;
+			m_al = 0;
 		}
 	}
 

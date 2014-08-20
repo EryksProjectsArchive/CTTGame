@@ -11,9 +11,9 @@
 
 #pragma once
 
-#include <core/DynString.h>
+#include <Prerequisites.h>
 
-#include <graphics/renderer/RenderContext.h>
+#include <core/DynString.h>
 
 class Entity
 {

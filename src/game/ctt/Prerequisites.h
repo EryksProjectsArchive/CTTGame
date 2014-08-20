@@ -11,6 +11,13 @@
 
 #pragma once
 
+#ifdef _MEM_LEAKS_DEBUG
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
+#define new new(_NORMAL_BLOCK, __FILE__, __LINE__)
+#endif
+
 // Versioning
 #define GAME_NAME "City Transport Tycoon"
 #define GAME_VERSION_MAJOR 1

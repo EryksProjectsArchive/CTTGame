@@ -45,7 +45,11 @@ Game::Game()
 Game::~Game()
 {
 	if (model)
+	{
+		model->destroy();
 		delete model;
+		model = 0;
+	}
 
 	if (m_renderer)
 	{

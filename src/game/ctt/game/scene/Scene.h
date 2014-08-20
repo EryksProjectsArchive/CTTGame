@@ -11,11 +11,7 @@
 
 #pragma once
 
-#include <core/List.h>
-
-#include "entities/Entity.h"
-
-class RenderContext;
+#include <Prerequisites.h>
 
 class Scene
 {

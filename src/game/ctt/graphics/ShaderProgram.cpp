@@ -11,6 +11,7 @@
 
 #include "ShaderProgram.h"
 #include "renderer/Renderer.h"
+#include "Shader.h"
 
 ShaderProgram::ShaderProgram()
 {

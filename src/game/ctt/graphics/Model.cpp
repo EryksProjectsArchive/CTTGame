@@ -25,18 +25,27 @@ Model::Model()
 
 Model::~Model()
 {
-
+	destroy();
 }
 
 void Model::destroy()
 {
 	if (m_isLoaded)
 	{
-		for (unsigned char i = 0; i < m_meshesCount; i++)
+		if (m_meshes)
 		{
-			delete m_meshes[i];
+			for (unsigned char i = 0; i < m_meshesCount; i++)
+			{
+				if (m_meshes[i])
+				{
+					delete m_meshes[i];
+					m_meshes[i] = 0;
+				}
+			}
+			delete[] m_meshes;
+			m_meshes = 0;
 		}
-		delete m_meshes;
+		m_isLoaded = false;
 	}
 }
 

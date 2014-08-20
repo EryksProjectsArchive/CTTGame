@@ -11,15 +11,12 @@
 
 #pragma once
 
+#include <Prerequisites.h>
+
 #include <math/Vector.h>
 #include <math/Quaternion.h>
 
-#include "Material.h"
-#include "Geometry.h"
-
 #include "ModelFormat.h"
-
-class RenderContext;
 
 class Mesh
 {
