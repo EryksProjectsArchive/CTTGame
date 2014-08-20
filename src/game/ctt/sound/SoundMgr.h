@@ -12,20 +12,26 @@
 
 #pragma once
 
-enum SoundType
+struct SoundType
 {
-	SOUND_TYPE_MUSIC,
-	SOUND_TYPE_EFFECT,
-	SOUND_TYPEs_COUNT
+	enum Type
+	{
+		Music,
+		Effect,
+		COUNT
+	};
 };
 
 #include "Sound.h"
 
-enum SoundAPIs
+struct SoundAPI
 {
-	SOUND_API_NOAPI,
-	SOUND_API_OPENAL,
-	SOUND_APIs_COUNT
+	enum Type
+	{
+		NoAPI,
+		OpenAL,
+		COUNT
+	};
 };
 
 class ISoundMgr
@@ -36,8 +42,8 @@ public:
 	virtual ~ISoundMgr();
 
 	virtual bool setup();
-	virtual ISound* createSound(SoundType type);
+	virtual ISound* createSound(SoundType::Type type);
 
-	static ISoundMgr* create(SoundAPIs api);
-	static SoundAPIs getAPIIdFromString(const char *api);
+	static ISoundMgr* create(SoundAPI::Type api);
+	static SoundAPI::Type getAPIIdFromString(const char *api);
 };

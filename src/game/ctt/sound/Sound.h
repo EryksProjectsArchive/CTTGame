@@ -20,6 +20,6 @@ public:
 
 	virtual bool load(const char* filename);
 
-	virtual void play();
+	virtual void play(bool loop = false);
 	virtual bool isPlaying();
 };

@@ -28,23 +28,23 @@ bool ISoundMgr::setup()
 	return false;
 }
 
-ISound * ISoundMgr::createSound(SoundType type)
+ISound * ISoundMgr::createSound(SoundType::Type type)
 {
 	return new ISound();
 }
 
-ISoundMgr * ISoundMgr::create(SoundAPIs api)
+ISoundMgr * ISoundMgr::create(SoundAPI::Type api)
 {
-	if (api == SOUND_API_OPENAL)
+	if (api == SoundAPI::OpenAL)
 		return new OpenAL::SoundMgr();
 
 	return new ISoundMgr();
 }
 
-SoundAPIs ISoundMgr::getAPIIdFromString(const char *api)
+SoundAPI::Type ISoundMgr::getAPIIdFromString(const char *api)
 {
 	if (!strcmp(api, "al") || !strcmp(api, "oal") || !strcmp(api, "openal"))
-		return SOUND_API_OPENAL;
+		return SoundAPI::OpenAL;
 
-	return SOUND_API_NOAPI;
+	return SoundAPI::NoAPI;
 }

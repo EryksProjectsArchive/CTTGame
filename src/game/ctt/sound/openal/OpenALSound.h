@@ -26,11 +26,11 @@ namespace OpenAL
 
 	public:
 		Sound(Impl* al);
-		~Sound();
+		~Sound() override;
 
-		bool load(const char* filename);
+		bool load(const char* filename) override;
 
-		void play();
-		bool isPlaying();
+		void play(bool loop = false) override;
+		bool isPlaying() override;
 	};
 };

@@ -25,7 +25,7 @@ bool ISound::load(const char* filename)
 	return false;
 }
 
-void ISound::play()
+void ISound::play(bool loop)
 {
 }
 

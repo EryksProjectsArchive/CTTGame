@@ -114,13 +114,22 @@ bool Game::init()
 	}
 
 	// create game sound mgr
-	m_soundMgr = ISoundMgr::create(SOUND_API_OPENAL);
+	m_soundMgr = ISoundMgr::create(SoundAPI::OpenAL);
 
 	if (!m_soundMgr->setup())
 	{
 		Error("game", "Cannot setup SoundMgr!");
 		return false;
 	}
+
+	ISound *sound = m_soundMgr->createSound(SoundType::Effect);
+
+	if (!sound->load("../../data/sounds/test.wav"))
+	{
+		return false;
+	}
+
+	sound->play();
 
 	// Create scene
 	m_scene = new Scene();
@@ -176,6 +185,7 @@ bool Game::pulse()
 		model->render(ctx);
 
 		m_renderer->postFrame();
+
 	}
 
 	Timer::frameEnd();

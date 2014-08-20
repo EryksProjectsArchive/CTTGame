@@ -39,12 +39,12 @@ namespace OpenAL
 		}
 	}
 
-	void Sound::play()
+	void Sound::play(bool loop)
 	{
 		if (!isPlaying())
 		{
-            //mAL->alSourcef(mSourceID, AL_GAIN, 1.01f);
 			m_al->alSourcePlay(m_sourceID);
+			m_al->alSourcei(m_sourceID, AL_LOOPING, loop?AL_TRUE:AL_FALSE);
 		}
 	}
 

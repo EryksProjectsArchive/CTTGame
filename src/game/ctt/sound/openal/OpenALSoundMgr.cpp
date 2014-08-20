@@ -77,7 +77,7 @@ namespace OpenAL
 		return false;
 	}
 
-	ISound * SoundMgr::createSound(SoundType type)
+	ISound * SoundMgr::createSound(SoundType::Type type)
 	{
 		return new Sound(m_al);
 	}

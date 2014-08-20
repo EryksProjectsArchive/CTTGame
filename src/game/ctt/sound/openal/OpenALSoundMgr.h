@@ -26,10 +26,10 @@ namespace OpenAL
 		ALCdevice* m_device;
 	public:
 		SoundMgr();
-		~SoundMgr();
+		~SoundMgr() override;
 
-		bool setup();
+		bool setup() override;
 
-		ISound* createSound(SoundType type);
+		ISound* createSound(SoundType::Type type) override;
 	};
 }
