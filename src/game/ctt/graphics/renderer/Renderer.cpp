@@ -278,8 +278,7 @@ bool Renderer::setup(Window * window)
 
 void Renderer::preFrame()
 {
-	glClear(GL_COLOR_BUFFER_BIT);
-	glClear(GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearDepth(1.0f);
 	glClearColor(1.0f, 1.0f, 0.0f, 0.1f);
 }
@@ -366,23 +365,28 @@ void Renderer::renderGeometry(Geometry *geometry, Matrix4x4 * matrix)
 		}
 	}
 	
-	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
+	/*glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_COLOR_ARRAY);
-	glEnableClientState(GL_NORMAL_ARRAY);
+	glEnableClientState(GL_NORMAL_ARRAY);*/
 	
 	glBindBuffer(GL_ARRAY_BUFFER, geometry->m_vertexBuffer->m_bufferId);
 
-	glVertexPointer(3, GL_FLOAT, 0, 0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, offsetof(Vertex3d, nx), 0);
+
+	/*glVertexPointer(3, GL_FLOAT, 0, 0);
 	glColorPointer(1, GL_INT, offsetof(Vertex3d, color), 0);
-	glNormalPointer(GL_FLOAT, offsetof(Vertex3d, nx), 0);
+	glNormalPointer(GL_FLOAT, offsetof(Vertex3d, nx), 0);*/
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geometry->m_indexBuffer->m_bufferId);
 
 	glDrawElements(GL_TRIANGLES, geometry->m_trianglesCount*3, GL_UNSIGNED_SHORT, 0);
 
-	glDisableClientState(GL_VERTEX_ARRAY);
+	/*glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_COLOR_ARRAY);
-	glDisableClientState(GL_NORMAL_ARRAY);
+	glDisableClientState(GL_NORMAL_ARRAY);*/
 }
 
 Renderer& Renderer::get()
