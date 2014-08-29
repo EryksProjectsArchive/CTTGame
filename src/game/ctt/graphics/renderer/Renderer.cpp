@@ -30,6 +30,8 @@
 #include <graphics/ShaderProgram.h>
 
 // Extension methods
+PFNGLENABLEIPROC Renderer::glEnablei = 0;
+
 PFNGLGENBUFFERSPROC Renderer::glGenBuffers = 0;
 PFNGLBINDBUFFERPROC Renderer::glBindBuffer = 0;
 PFNGLBUFFERDATAPROC Renderer::glBufferData = 0;
@@ -37,6 +39,7 @@ PFNGLMAPBUFFERPROC Renderer::glMapBuffer = 0;
 PFNGLUNMAPBUFFERPROC Renderer::glUnmapBuffer = 0;
 PFNGLDELETEBUFFERSPROC Renderer::glDeleteBuffers = 0;
 PFNGLBINDVERTEXARRAYPROC Renderer::glBindVertexArray = 0;
+PFNGLGETBUFFERPARAMETERIVPROC Renderer::glGetBufferParameteriv = 0;
 
 PFNGLBLENDEQUATIONSEPARATEPROC Renderer::glBlendEquationSeparate = 0;
 PFNGLDRAWBUFFERSPROC Renderer::glDrawBuffers = 0;
@@ -134,7 +137,7 @@ PFNGLVERTEXATTRIBPOINTERPROC Renderer::glVertexAttribPointer = 0;
 PFNGLGENVERTEXARRAYSPROC Renderer::glGenVertexArrays = 0;
 
 Renderer * Renderer::s_instance = 0;
-
+Geometry * geometry2d = 0;
 Renderer::Renderer()
 {
 	m_window = 0;
@@ -158,12 +161,14 @@ bool Renderer::setup(Window * window)
 	m_window = window;
 	
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
 	m_glContext = SDL_GL_CreateContext(window->_window);
 	
+	glEnablei = (PFNGLENABLEIPROC)SDL_GL_GetProcAddress("glEnablei");
+
 	// Buffers (OpenGL 1.5)
 	glGenBuffers = (PFNGLGENBUFFERSPROC)SDL_GL_GetProcAddress("glGenBuffers");
 	glBindBuffer = (PFNGLBINDBUFFERPROC)SDL_GL_GetProcAddress("glBindBuffer");
@@ -172,6 +177,7 @@ bool Renderer::setup(Window * window)
 	glMapBuffer	= (PFNGLMAPBUFFERPROC)SDL_GL_GetProcAddress("glMapBuffer");
 	glUnmapBuffer = (PFNGLUNMAPBUFFERPROC)SDL_GL_GetProcAddress("glUnmapBuffer");
 	glBindVertexArray = (PFNGLBINDVERTEXARRAYPROC)SDL_GL_GetProcAddress("glBindVertexArray");
+	glGetBufferParameteriv = (PFNGLGETBUFFERPARAMETERIVPROC)SDL_GL_GetProcAddress("glGetBufferParameteriv");
 
 	// Shaders (OpenGL 2.0)
 	glBlendEquationSeparate = (PFNGLBLENDEQUATIONSEPARATEPROC)SDL_GL_GetProcAddress("glBlendEquationSeparate");
@@ -273,13 +279,17 @@ bool Renderer::setup(Window * window)
 	SDL_GL_SetSwapInterval(1);
 
 	glViewport(0, 0, 800, 600);
-	//glEnablei(GL_BLEND, 0);
-	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
-
 	
+	glEnable(GL_CULL_FACE);
+	glFrontFace(GL_CCW);
+
+
 	m_defaultMaterial = new Material();// MaterialLib::FindByName("default");
 
 	ShaderProgram *shaderProgram = new ShaderProgram();
@@ -297,21 +307,19 @@ bool Renderer::setup(Window * window)
 	unsigned int HackVAO;
 	glGenVertexArrays(1, &HackVAO);
 	glBindVertexArray(HackVAO);
-
 	return true;
 }
 
 void Renderer::preFrame()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClearDepth(1.0f);
 	glClearColor(0.0f, 0.5f, 0.0f, 0.0f);	
+	glClearDepth(1.0f);
 }
 
 void Renderer::postFrame()
-{
-	
-	SDL_GL_SwapWindow(m_window->_window);
+{	
+	SDL_GL_SwapWindow(m_window->_window);	
 }
 
 void Renderer::setFullscreen(bool fullscreen)
@@ -337,7 +345,7 @@ void Renderer::setMaterial(Material * material)
 	m_currentMaterial = material;
 }
 
-void Renderer::renderGeometry(Geometry *geometry, glm::mat4x4 * matrix)
+void Renderer::renderGeometry(Geometry *geometry, const glm::mat4x4& matrix)
 {
 	Material *material = m_currentMaterial;
 	if (!material)
@@ -353,40 +361,38 @@ void Renderer::renderGeometry(Geometry *geometry, glm::mat4x4 * matrix)
 			unsigned int modelMatrixLocation = material->m_program->getUniformLocation("modelMatrix");
 			if (modelMatrixLocation != -1)
 			{
-				glUniformMatrix4fv(modelMatrixLocation, 1, false, (float *)matrix);
+				glUniformMatrix4fv(modelMatrixLocation, 1, GL_FALSE, glm::value_ptr(matrix));
 			}
 		
-			glm::mat4x4 projectionMatrix;
-			projectionMatrix = glm::perspective(0.78f, 800.f / 600.f, 0.1f, 10000.0f);
+			glm::mat4x4 projectionMatrix = glm::perspective(45.0f, 800.f / 600.f, 0.1f, 1000.0f);
 
 			unsigned int projectionMatrixLocation = material->m_program->getUniformLocation("projectionMatrix");
 			if (projectionMatrixLocation != -1)
 			{
-				glUniformMatrix4fv(projectionMatrixLocation, 1, false, &projectionMatrix[0][0]);
+				glUniformMatrix4fv(projectionMatrixLocation, 1, GL_FALSE, glm::value_ptr(projectionMatrix));
 			}
 
-			glm::mat4x4 viewMatrix = glm::lookAt(glm::vec3(30, 30, 30), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+			glm::mat4x4 viewMatrix = glm::lookAt(glm::vec3(10, 10, 10), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 			
 			unsigned int viewMatrixLocation = material->m_program->getUniformLocation("viewMatrix");
 			if (viewMatrixLocation != -1)
 			{
-				glUniformMatrix4fv(viewMatrixLocation, 1, false, &viewMatrix[0][0]);
+				glUniformMatrix4fv(viewMatrixLocation, 1, GL_FALSE, glm::value_ptr(viewMatrix));
 			}
 			
-			glm::mat4x4 mvp = projectionMatrix * viewMatrix * *matrix;
+			glm::mat4x4 mvp = projectionMatrix * viewMatrix * matrix;
 
 			unsigned int mvpMatrixLocation = material->m_program->getUniformLocation("mvpMatrix");
 			if (mvpMatrixLocation != -1)
 			{
 				glUniformMatrix4fv(mvpMatrixLocation, 1, GL_FALSE, glm::value_ptr(mvp));
 			}
-			
+
 			unsigned int texture0Location = material->m_program->getUniformLocation("texture0");
 			if (texture0Location != -1)
 			{
 				glUniform1i(texture0Location, 0);
-			}
-			
+			}			
 			
 #ifdef DEBUG_PROGRAM_ON_RUNTIME
 			int m_programId = material->m_program->m_programId;
@@ -406,22 +412,30 @@ void Renderer::renderGeometry(Geometry *geometry, glm::mat4x4 * matrix)
 		
 	}
 
-	glEnableVertexAttribArray(0);
-	glEnableVertexAttribArray(1);
+	unsigned int attributePosition = glGetAttribLocation(material->m_program->m_programId, "position");
+	unsigned int attributeNormal = glGetAttribLocation(material->m_program->m_programId, "normal");
+
+	glEnableVertexAttribArray(attributePosition);
+	if (attributeNormal != -1)
+		glEnableVertexAttribArray(attributeNormal);
 
 	glBindBuffer(GL_ARRAY_BUFFER, geometry->m_vertexBuffer->m_bufferId);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex3d), 0);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex3d), (void *)(sizeof(float) * 3));
+	glVertexAttribPointer(attributePosition, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex3d), 0);
+	if (attributeNormal != -1)
+		glVertexAttribPointer(attributeNormal, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex3d), (void *)offsetof(Vertex3d, nx));
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geometry->m_indexBuffer->m_bufferId);
 
 	glDrawElements(GL_TRIANGLES, geometry->m_trianglesCount * 3, GL_UNSIGNED_SHORT, 0);
 
-	glDisableVertexAttribArray(0);
-	glDisableVertexAttribArray(1);
+	glDisableVertexAttribArray(attributePosition);
+	if (attributeNormal != -1)
+		glDisableVertexAttribArray(attributeNormal);
 
-	glUseProgram(0);	
+	glUseProgram(0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
 Renderer& Renderer::get()

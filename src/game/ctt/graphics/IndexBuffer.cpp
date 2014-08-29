@@ -15,6 +15,8 @@
 #include "IndexBuffer.h"
 #include <core/Logger.h>
 
+#include <graphics/ModelFormat.h>
+
 IndexBuffer::IndexBuffer()
 {
 }
@@ -23,4 +25,5 @@ void IndexBuffer::fillData(void * data)
 {
 	Renderer::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_bufferId);
 	Renderer::glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_size, data, m_isDynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
+	Renderer::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }

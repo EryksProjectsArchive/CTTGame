@@ -5,13 +5,16 @@ uniform sampler2D texture0; // Base texture from material.
 uniform mat4 modelMatrix; // Model matrix.
 uniform mat4 projectionMatrix; // Projection matrix.
 uniform mat4 viewMatrix; // View matrix.
-uniform mat4 mvpMatrix; // Model*View*Projection matrix.
+uniform mat4 mvpMatrix; // MVP matrix.
 
-layout(location = 0) in vec3 position;
-layout(location = 1) in vec3 normal;
+attribute vec3 position;
+attribute vec3 normal;
+
+out vec3 fragNormal;
 
 // Simple vertex shader
 void main(void)
 {
-	gl_Position = mvpMatrix * vec4(position, 1);
+	fragNormal = normal;
+	gl_Position = mvpMatrix * vec4(position, 1.0);
 }

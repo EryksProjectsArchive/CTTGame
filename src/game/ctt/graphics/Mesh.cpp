@@ -63,5 +63,5 @@ void Mesh::render(RenderContext& context)
 
 	renderingTask->m_geometry = m_geometry;
 	renderingTask->m_material = m_material;
-	renderingTask->m_matrix = (translationMatrix * glm::mat4_cast(m_rotation));
+	renderingTask->m_matrix = translationMatrix;// (translationMatrix * glm::mat4_cast(m_rotation));
 }

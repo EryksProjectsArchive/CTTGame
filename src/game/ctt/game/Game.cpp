@@ -124,14 +124,14 @@ bool Game::init()
 		return false;
 	}
 
-	ISound *sound = m_soundMgr->createSound(SoundType::Effect);
+	/*ISound *sound = m_soundMgr->createSound(SoundType::Effect);
 
 	if (!sound->load("../../data/sounds/test.wav"))
 	{
 		return false;
 	}
 
-	sound->play();
+	sound->play();*/
 
 	// Create scene
 	m_scene = new Scene();
@@ -180,14 +180,14 @@ bool Game::pulse()
 	{
 		m_renderer->preFrame();
 
-		if (m_scene)
-			m_scene->render();
-
-		RenderContext ctx;
-		model->render(ctx);
+		/*if (m_scene)
+			m_scene->render();*/
+		{
+			RenderContext ctx;
+			model->render(ctx);			
+		}
 
 		m_renderer->postFrame();
-
 	}
 
 	Timer::frameEnd();

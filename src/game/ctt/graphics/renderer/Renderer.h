@@ -26,6 +26,7 @@ protected:
 
 	Material * m_currentMaterial;
 	Material * m_defaultMaterial;
+	Material * m_default2DMaterial;
 public:
 	Renderer();
 	~Renderer();
@@ -40,11 +41,13 @@ public:
 	BufferBase * createBuffer(BufferType::Type type);
 
 	void setMaterial(Material * material);
-	void renderGeometry(Geometry *geometry, glm::mat4x4 * matrix);
+	void renderGeometry(Geometry *geometry, const glm::mat4x4& matrix);
 
 	static Renderer& get();
 
 	// Extension methods
+	static PFNGLENABLEIPROC glEnablei;
+
 	static PFNGLGENBUFFERSPROC glGenBuffers;
 	static PFNGLBINDBUFFERPROC glBindBuffer;
 	static PFNGLBUFFERDATAPROC glBufferData;
@@ -52,6 +55,7 @@ public:
 	static PFNGLUNMAPBUFFERPROC glUnmapBuffer;
 	static PFNGLDELETEBUFFERSPROC glDeleteBuffers;
 	static PFNGLBINDVERTEXARRAYPROC glBindVertexArray;
+	static PFNGLGETBUFFERPARAMETERIVPROC glGetBufferParameteriv;
 
 	static PFNGLBLENDEQUATIONSEPARATEPROC glBlendEquationSeparate;
 	static PFNGLDRAWBUFFERSPROC glDrawBuffers;

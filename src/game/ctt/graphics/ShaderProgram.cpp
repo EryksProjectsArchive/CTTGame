@@ -58,9 +58,14 @@ void ShaderProgram::link()
 
 		Renderer::glGetProgramInfoLog(m_programId, maxLength, &maxLength, errorLog);
 
-		Error("program", "Link error: %s", errorLog);
+		Error("program", "Linker error: %s", errorLog);
 
 		delete[]errorLog;
+	}
+
+	for (auto shader : m_shaders)
+	{
+		Renderer::glDetachShader(m_programId, shader->m_shaderId);
 	}
 }
 

@@ -1,9 +1,9 @@
 #version 330 core
 
-in vec3 fragNormal;
+out vec4 color;
 
 // Simple fragment shader
 void main(void)
 {
-	gl_FragColor = vec4(fragNormal, 1.0);
+	color = vec4(1.0, 1.0, 1.0, 0.5);
 }
