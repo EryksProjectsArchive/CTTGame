@@ -170,6 +170,7 @@
     <ClCompile Include="game\scene\entities\Entity.cpp" />
     <ClCompile Include="game\scene\Scene.cpp" />
     <ClCompile Include="graphics\BufferBase.cpp" />
+    <ClCompile Include="graphics\Camera.cpp" />
     <ClCompile Include="graphics\FragmentShader.cpp" />
     <ClCompile Include="graphics\Geometry.cpp" />
     <ClCompile Include="graphics\Graphics.cpp" />
@@ -191,6 +192,7 @@
     <ClCompile Include="os\DynamicLibrary.cpp" />
     <ClCompile Include="os\OS.cpp" />
     <ClCompile Include="os\win32\Win32DynamicLibrary.cpp" />
+    <ClCompile Include="resources\CacheableResource.cpp" />
     <ClCompile Include="resources\Resource.cpp" />
     <ClCompile Include="sound\openal\OpenALImpl.cpp" />
     <ClCompile Include="sound\openal\OpenALSound.cpp" />
@@ -212,6 +214,7 @@
     <ClInclude Include="game\scene\entities\Entity.h" />
     <ClInclude Include="game\scene\Scene.h" />
     <ClInclude Include="graphics\BufferBase.h" />
+    <ClInclude Include="graphics\Camera.h" />
     <ClInclude Include="graphics\FragmentShader.h" />
     <ClInclude Include="graphics\Geometry.h" />
     <ClInclude Include="graphics\Graphics.h" />
@@ -235,6 +238,7 @@
     <ClInclude Include="os\DynamicLibrary.h" />
     <ClInclude Include="os\OS.h" />
     <ClInclude Include="Prerequisites.h" />
+    <ClInclude Include="resources\CacheableResource.h" />
     <ClInclude Include="resources\Resource.h" />
     <ClInclude Include="sound\openal\OpenALImpl.h" />
     <ClInclude Include="sound\openal\OpenALSound.h" />

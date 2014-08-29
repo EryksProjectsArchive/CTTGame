@@ -16,12 +16,21 @@
 #include "entities/Entity.h"
 #include "Scene.h"
 
+#include <graphics/Camera.h>
+
 Scene::Scene()
 {
+	m_camera = new Camera();
+	Camera::setCurrent(m_camera);
 }
 
 Scene::~Scene()
 {
+	if (m_camera)
+	{
+		delete m_camera;
+		m_camera = 0;
+	}
 }
 
 void Scene::updatePhysics()

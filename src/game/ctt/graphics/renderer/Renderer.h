@@ -21,6 +21,8 @@ class Renderer
 protected:
 	Window* m_window;
 
+	glm::mat4x4 m_projectionMatrix;
+	
 	SDL_GLContext m_glContext;
 	static Renderer* s_instance;
 

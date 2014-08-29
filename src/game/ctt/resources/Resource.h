@@ -17,12 +17,13 @@ class Resource
 {
 protected:
 	bool m_isLoaded;
+	FilePath m_filePath;
 public:
-	Resource();
+	Resource(FilePath filePath);
 	virtual ~Resource();
 	virtual void destroy();
 
-	virtual bool load(FilePath path);
+	virtual bool load();
 
 	virtual bool isLoaded();
 };

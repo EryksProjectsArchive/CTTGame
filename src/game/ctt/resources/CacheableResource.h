@@ -4,7 +4,7 @@
 //	   Copyright (C) Black Ice Mountains
 //		 	All rights reserved
 //
-// File		: graphics/Window.h
+// File		: resources/CacheableResource.h
 // Author	: Eryk Dwornicki
 //
 //////////////////////////////////////////////
@@ -13,17 +13,16 @@
 
 #include <Prerequisites.h>
 
-#include <SDL.h>
+#include "Resource.h"
 
-class Window
+class CacheableResource : public Resource
 {
+private:
+	unsigned int m_refCount;
 public:
-	SDL_Window * _window;
+	CacheableResource(FilePath filePath);
+	virtual ~CacheableResource();
 
-	Window();
-	~Window();
-
-	bool setup(const char *title, unsigned short width = 800, unsigned short height = 600, bool fullscreen = false);
-	bool processMessages();
-	float getAspectRatio();
+	void acquire();
+	void free();
 };

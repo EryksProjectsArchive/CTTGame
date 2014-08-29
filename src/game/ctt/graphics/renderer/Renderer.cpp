@@ -29,6 +29,8 @@
 
 #include <graphics/ShaderProgram.h>
 
+#include <graphics/Camera.h>
+
 // Extension methods
 PFNGLENABLEIPROC Renderer::glEnablei = 0;
 
@@ -145,6 +147,7 @@ Renderer::Renderer()
 	s_instance = this;
 	m_defaultMaterial = 0;
 	m_currentMaterial = 0;
+	m_projectionMatrix = glm::perspective(45.0f, 800.f / 600.f, 0.1f, 1000.0f);
 }
 
 Renderer::~Renderer()
@@ -159,6 +162,8 @@ Renderer::~Renderer()
 bool Renderer::setup(Window * window)
 {
 	m_window = window;
+
+	m_projectionMatrix = glm::perspective(45.0f, window->getAspectRatio(), 0.1f, 1000.0f);
 	
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
@@ -289,7 +294,6 @@ bool Renderer::setup(Window * window)
 	glEnable(GL_CULL_FACE);
 	glFrontFace(GL_CCW);
 
-
 	m_defaultMaterial = new Material();// MaterialLib::FindByName("default");
 
 	ShaderProgram *shaderProgram = new ShaderProgram();
@@ -352,68 +356,71 @@ void Renderer::renderGeometry(Geometry *geometry, const glm::mat4x4& matrix)
 		material = m_defaultMaterial;
 
 	// Shaders
-	if (material)
+	if (!material)
 	{
-		if (material->m_program && glIsProgram(material->m_program->m_programId))
-		{
-			glUseProgram(material->m_program->m_programId);
-
-			unsigned int modelMatrixLocation = material->m_program->getUniformLocation("modelMatrix");
-			if (modelMatrixLocation != -1)
-			{
-				glUniformMatrix4fv(modelMatrixLocation, 1, GL_FALSE, glm::value_ptr(matrix));
-			}
-		
-			glm::mat4x4 projectionMatrix = glm::perspective(45.0f, 800.f / 600.f, 0.1f, 1000.0f);
-
-			unsigned int projectionMatrixLocation = material->m_program->getUniformLocation("projectionMatrix");
-			if (projectionMatrixLocation != -1)
-			{
-				glUniformMatrix4fv(projectionMatrixLocation, 1, GL_FALSE, glm::value_ptr(projectionMatrix));
-			}
-
-			glm::mat4x4 viewMatrix = glm::lookAt(glm::vec3(10, 10, 10), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
-			
-			unsigned int viewMatrixLocation = material->m_program->getUniformLocation("viewMatrix");
-			if (viewMatrixLocation != -1)
-			{
-				glUniformMatrix4fv(viewMatrixLocation, 1, GL_FALSE, glm::value_ptr(viewMatrix));
-			}
-			
-			glm::mat4x4 mvp = projectionMatrix * viewMatrix * matrix;
-
-			unsigned int mvpMatrixLocation = material->m_program->getUniformLocation("mvpMatrix");
-			if (mvpMatrixLocation != -1)
-			{
-				glUniformMatrix4fv(mvpMatrixLocation, 1, GL_FALSE, glm::value_ptr(mvp));
-			}
-
-			unsigned int texture0Location = material->m_program->getUniformLocation("texture0");
-			if (texture0Location != -1)
-			{
-				glUniform1i(texture0Location, 0);
-			}			
-			
-#ifdef DEBUG_PROGRAM_ON_RUNTIME
-			int m_programId = material->m_program->m_programId;
-			GLint maxLength = 0;
-			Renderer::glGetProgramiv(m_programId, GL_INFO_LOG_LENGTH, &maxLength);
-
-			//The maxLength includes the NULL character
-			char *errorLog = new char[maxLength + 1];
-
-			Renderer::glGetProgramInfoLog(m_programId, maxLength, &maxLength, errorLog);
-
-			Error("program", "LOG: %s", errorLog);
-
-			delete[]errorLog;
-#endif
-		}
-		
+		Error("renderer", "Cannot render geometry. No material found!");
+		return;
 	}
 
-	unsigned int attributePosition = glGetAttribLocation(material->m_program->m_programId, "position");
-	unsigned int attributeNormal = glGetAttribLocation(material->m_program->m_programId, "normal");
+	if (!material->m_program || !glIsProgram(material->m_program->m_programId))
+	{
+		Error("renderer", "Cannot render geometry. No shader program assigned for material.");
+		return;
+	}
+
+	glUseProgram(material->m_program->m_programId);
+
+	unsigned int modelMatrixLocation = material->m_program->getUniformLocation("modelMatrix");
+	if (modelMatrixLocation != -1)
+	{
+		glUniformMatrix4fv(modelMatrixLocation, 1, GL_FALSE, glm::value_ptr(matrix));
+	}
+
+	unsigned int projectionMatrixLocation = material->m_program->getUniformLocation("projectionMatrix");
+	if (projectionMatrixLocation != -1)
+	{
+		glUniformMatrix4fv(projectionMatrixLocation, 1, GL_FALSE, glm::value_ptr(m_projectionMatrix));
+	}
+
+	glm::mat4x4 viewMatrix = Camera::current->getViewMatrix();
+			
+	unsigned int viewMatrixLocation = material->m_program->getUniformLocation("viewMatrix");
+	if (viewMatrixLocation != -1)
+	{
+		glUniformMatrix4fv(viewMatrixLocation, 1, GL_FALSE, glm::value_ptr(viewMatrix));
+	}
+			
+	glm::mat4x4 mvp = m_projectionMatrix * viewMatrix * matrix;
+
+	unsigned int mvpMatrixLocation = material->m_program->getUniformLocation("mvpMatrix");
+	if (mvpMatrixLocation != -1)
+	{
+		glUniformMatrix4fv(mvpMatrixLocation, 1, GL_FALSE, glm::value_ptr(mvp));
+	}
+
+	unsigned int texture0Location = material->m_program->getUniformLocation("texture0");
+	if (texture0Location != -1)
+	{
+		glUniform1i(texture0Location, 0);
+	}			
+			
+#ifdef DEBUG_PROGRAM_ON_RUNTIME
+	int m_programId = material->m_program->m_programId;
+	GLint maxLength = 0;
+	Renderer::glGetProgramiv(m_programId, GL_INFO_LOG_LENGTH, &maxLength);
+
+	//The maxLength includes the NULL character
+	char *errorLog = new char[maxLength + 1];
+
+	Renderer::glGetProgramInfoLog(m_programId, maxLength, &maxLength, errorLog);
+
+	Error("program", "LOG: %s", errorLog);
+
+	delete[]errorLog;
+#endif
+
+	unsigned int attributePosition = material->m_program->getAttributeLocation("position");
+	unsigned int attributeNormal = material->m_program->getAttributeLocation("normal");
 
 	glEnableVertexAttribArray(attributePosition);
 	if (attributeNormal != -1)

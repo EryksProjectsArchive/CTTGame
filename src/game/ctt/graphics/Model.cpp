@@ -16,8 +16,7 @@
 #include "Model.h"
 #include "ModelFormat.h"
 
-
-Model::Model()
+Model::Model(FilePath file) : CacheableResource(file)
 {
 	m_meshesCount = 0;
 	m_meshes = 0;
@@ -49,23 +48,23 @@ void Model::destroy()
 	}
 }
 
-bool Model::load(FilePath file)
+bool Model::load()
 {
 	if (!m_isLoaded)
 	{
-		FILE *fp = fopen(file, "rb");
+		FILE *fp = fopen(m_filePath, "rb");
 
 		if (fp)
 		{
 			mdl mdlData;
 			if (ModelFormat::load(&mdlData, fp))
 			{
-				Info("Model", "Model loaded. %d meshes", mdlData.meshCount);
+				Debug("model", "Model loaded (%d meshes)", mdlData.meshCount);
 
 				m_meshes = new Mesh*[mdlData.meshCount];
 				for (unsigned char i = 0; i < mdlData.meshCount; ++i)
 				{
-					Info("Model", "Mesh: %s", mdlData.meshes[i].material.value);
+					Debug("model", "Mesh: %s", mdlData.meshes[i].name.value);
 
 					m_meshes[i] = new Mesh(&mdlData.meshes[i]);
 

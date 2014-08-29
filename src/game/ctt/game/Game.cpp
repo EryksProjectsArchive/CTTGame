@@ -38,6 +38,8 @@
 
 #include <game/scene/entities/Entity.h>
 
+#include <graphics/Camera.h>
+
 Model * model = 0;
 Game::Game()
 	: m_isRunning(false), m_isInitialized(false), m_fileSystem(0), m_renderer(0), m_window(0), m_soundMgr(0), m_scene(0)
@@ -48,7 +50,7 @@ Game::~Game()
 {
 	if (model)
 	{
-		model->destroy();
+		model->free();
 		delete model;
 		model = 0;
 	}
@@ -140,20 +142,11 @@ bool Game::init()
 	
 	m_scene->addEntity(entity);
 
-	/*ShaderProgram *shaderProgram = new ShaderProgram();
+	Camera::current->setPosition(Vector3(4.0f, 2.0f, 0.0f));
+	Camera::current->setTarget(Vector3());
 
-	FragmentShader * fragmentShader = new FragmentShader("../../data/shaders/simple.frag");
-	shaderProgram->attachShader(fragmentShader);
-
-	VertexShader * vertexShader = new VertexShader("../../data/shaders/simple.vert");
-	shaderProgram->attachShader(vertexShader);*/
-
-
-	model = new Model;
-	model->load("../../data/models/test.mdl");
-
-	/*RenderContext context;
-	context.setShaderProgram(shaderProgram);*/
+	model = new Model("../../data/models/test.mdl");
+	model->acquire();
 
 	m_isInitialized = true;
 	m_isRunning = true;

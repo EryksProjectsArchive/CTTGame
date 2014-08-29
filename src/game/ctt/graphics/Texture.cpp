@@ -10,3 +10,15 @@
 //////////////////////////////////////////////
 
 #include "Texture.h"
+#include "renderer/Renderer.h"
+
+
+Texture::Texture(char * filePath, bool mipmaps)
+{
+	glGenTextures(1, &m_textureID);
+}
+
+Texture::~Texture()
+{
+
+}

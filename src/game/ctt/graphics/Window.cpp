@@ -53,3 +53,10 @@ bool Window::processMessages()
 	}
 	return true;
 }
+
+float Window::getAspectRatio()
+{
+	int width = 0, height = 0;
+	SDL_GetWindowSize(_window, &width, &height);
+	return (float)width / (float)height;
+}

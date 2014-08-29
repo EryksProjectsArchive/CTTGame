@@ -13,19 +13,30 @@
 
 #include <Prerequisites.h>
 #include <core/List.h>
-struct UniformData
-{
-	char name[32];
-	unsigned int location;
-};
 
 class ShaderProgram
 {
+private:
+	struct UniformData
+	{
+		char name[32];
+		unsigned int location;
+	};
+
+	struct AttributeData
+	{
+		char name[32];
+		unsigned int location;
+	};
+
 protected:
 	unsigned int m_programId;
 
 	UniformData * m_uniforms;
 	unsigned int m_uniformsCount;
+
+	AttributeData * m_attributes;
+	unsigned int m_attributesCount;
 
 	List<Shader *> m_shaders;
 public:
@@ -36,6 +47,7 @@ public:
 	void link();
 
 	unsigned int getUniformLocation(const char *name);
+	unsigned int getAttributeLocation(const char *name);
 
 	friend class Renderer;
 };

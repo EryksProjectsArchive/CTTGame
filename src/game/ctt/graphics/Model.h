@@ -13,22 +13,20 @@
 
 #include <Prerequisites.h>
 
-#include <resources/Resource.h>
+#include <resources/CacheableResource.h>
 #include "Mesh.h"
 
-class RenderContext;
-
-class Model : public Resource
+class Model : public CacheableResource
 {
 private:
 	unsigned char m_meshesCount;
 	Mesh** m_meshes;
 public:
-	Model();
+	Model(FilePath file);
 	~Model() override;
 	
 	void destroy() override;
-	bool load(FilePath file) override;
+	bool load() override;
 
 	void render(RenderContext& renderContext);
 };

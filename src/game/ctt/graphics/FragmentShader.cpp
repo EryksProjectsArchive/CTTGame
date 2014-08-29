@@ -49,7 +49,7 @@ FragmentShader::FragmentShader(const char * source) : Shader(source)
 
 			Renderer::glGetShaderInfoLog(m_shaderId, maxLength, &maxLength, errorLog);
 
-			Error("shader", "Compilation error: %s", errorLog);
+			Debug("shader", "Compilation error: %s", errorLog);
 
 			delete[]errorLog;
 
@@ -58,7 +58,7 @@ FragmentShader::FragmentShader(const char * source) : Shader(source)
 			Renderer::glDeleteShader(m_shaderId); //Don't leak the shader.
 		}
 		else {
-			Info("shader", "Compilation success '%s'.", source);
+			Debug("shader", "Compilation success '%s'.", source);
 		}
 
 		delete [] shaderSource;

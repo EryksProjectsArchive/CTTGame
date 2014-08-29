@@ -11,8 +11,8 @@
 
 #include "Resource.h"
 
-Resource::Resource()
-	: m_isLoaded(false)
+Resource::Resource(FilePath filePath)
+	: m_filePath(filePath), m_isLoaded(false)
 {
 }
 
@@ -32,7 +32,7 @@ void Resource::destroy()
 	}
 }
 
-bool Resource::load(FilePath path)
+bool Resource::load()
 {
 	if (!m_isLoaded)
 	{

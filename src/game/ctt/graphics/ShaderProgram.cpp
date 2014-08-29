@@ -71,14 +71,13 @@ void ShaderProgram::link()
 
 unsigned int ShaderProgram::getUniformLocation(const char *name)
 {
-	return Renderer::glGetUniformLocation(m_programId, name);
-	/*
 	if (m_uniforms)
 	{
 		for (unsigned int i = 0; i < m_uniformsCount; ++i)
 		{
 			if (!strcmp(m_uniforms[i].name, name))
 			{
+				//Info("shader program", "Cached uniform found. Name: '%s', Location: '%d'", name, m_uniforms[i].location);
 				return m_uniforms[i].location;
 			}
 		}
@@ -103,5 +102,41 @@ unsigned int ShaderProgram::getUniformLocation(const char *name)
 		m_uniforms[m_uniformsCount - 1].location = location;
 		return location;
 	}
-	return -1;*/
+	return -1;
+}
+
+unsigned int ShaderProgram::getAttributeLocation(const char *name)
+{
+	if (m_attributes)
+	{
+		for (unsigned int i = 0; i < m_attributesCount; ++i)
+		{
+			if (!strcmp(m_attributes[i].name, name))
+			{
+				//Info("shader program", "Cached attribute found. Name: '%s', Location: '%d'", name, m_attributes[i].location);
+				return m_attributes[i].location;
+			}
+		}
+	}
+
+	unsigned int location = Renderer::glGetAttribLocation(m_programId, name);
+	if (location != GL_INVALID_VALUE && location != GL_INVALID_OPERATION)
+	{
+		// Add new uniform
+		++m_attributesCount;
+
+		if (!m_attributes)
+		{
+			m_attributes = (AttributeData *)malloc(sizeof(AttributeData));
+		}
+		else
+		{
+			m_attributes = (AttributeData *)realloc(m_attributes, sizeof(AttributeData) * m_attributesCount);
+		}
+
+		strcpy(m_attributes[m_attributesCount - 1].name, name);
+		m_attributes[m_attributesCount - 1].location = location;
+		return location;
+	}
+	return -1;
 }
