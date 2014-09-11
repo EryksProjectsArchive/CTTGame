@@ -193,6 +193,8 @@
     <ClCompile Include="os\OS.cpp" />
     <ClCompile Include="os\win32\Win32DynamicLibrary.cpp" />
     <ClCompile Include="resources\CacheableResource.cpp" />
+    <ClCompile Include="resources\ImageLoader.cpp" />
+    <ClCompile Include="resources\images\bmp\BMPImageLoader.cpp" />
     <ClCompile Include="resources\Resource.cpp" />
     <ClCompile Include="sound\openal\OpenALImpl.cpp" />
     <ClCompile Include="sound\openal\OpenALSound.cpp" />
@@ -218,6 +220,7 @@
     <ClInclude Include="graphics\FragmentShader.h" />
     <ClInclude Include="graphics\Geometry.h" />
     <ClInclude Include="graphics\Graphics.h" />
+    <ClInclude Include="graphics\ImageData.h" />
     <ClInclude Include="graphics\IndexBuffer.h" />
     <ClInclude Include="graphics\Material.h" />
     <ClInclude Include="graphics\Mesh.h" />
@@ -239,6 +242,8 @@
     <ClInclude Include="os\OS.h" />
     <ClInclude Include="Prerequisites.h" />
     <ClInclude Include="resources\CacheableResource.h" />
+    <ClInclude Include="resources\ImageLoader.h" />
+    <ClInclude Include="resources\images\bmp\BMPImageLoader.h" />
     <ClInclude Include="resources\Resource.h" />
     <ClInclude Include="sound\openal\OpenALImpl.h" />
     <ClInclude Include="sound\openal\OpenALSound.h" />

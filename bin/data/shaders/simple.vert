@@ -1,20 +1,17 @@
 #version 330 core
 
-// Engine uniforms.
-uniform sampler2D texture0; // Base texture from material.
-uniform mat4 modelMatrix; // Model matrix.
-uniform mat4 projectionMatrix; // Projection matrix.
-uniform mat4 viewMatrix; // View matrix.
-uniform mat4 mvpMatrix; // MVP matrix.
+uniform mat4 mvpMatrix;
 
-attribute vec3 position;
-attribute vec3 normal;
+attribute vec3 vertexPosition;
+attribute vec3 vertexNormal;
+attribute vec2 vertexUV;
 
-out vec3 fragNormal;
+out vec2 uv;
 
 // Simple vertex shader
 void main(void)
 {
-	fragNormal = normal;
-	gl_Position = mvpMatrix * vec4(position, 1.0);
+	gl_Position = mvpMatrix * vec4(vertexPosition, 1.0);
+
+	uv = vertexUV;
 }

@@ -59,6 +59,10 @@ public:
 	static PFNGLBINDVERTEXARRAYPROC glBindVertexArray;
 	static PFNGLGETBUFFERPARAMETERIVPROC glGetBufferParameteriv;
 
+	static PFNGLGENERATEMIPMAPPROC glGenerateMipmap;
+	static PFNGLACTIVETEXTUREPROC glActiveTexture;
+	static PFNGLBINDSAMPLERPROC glBindSampler;
+	
 	static PFNGLBLENDEQUATIONSEPARATEPROC glBlendEquationSeparate;
 	static PFNGLDRAWBUFFERSPROC glDrawBuffers;
 	static PFNGLSTENCILOPSEPARATEPROC glStencilOpSeparate;

@@ -13,11 +13,23 @@
 
 #include <Prerequisites.h>
 
-class Texture
+#include <core/String.h>
+#include <resources/CacheableResource.h>
+
+class Texture : public CacheableResource
 {
 private:
 	unsigned int m_textureID;
+	bool m_mipmaps;
 public:
-	Texture(char * filePath, bool mipmaps = false);
+	Texture(FilePath filePath, bool mipmaps = false);
 	~Texture();
+
+	void destroy();
+
+	bool load();
+
+	bool isLoaded();
+
+	friend class Renderer;
 };

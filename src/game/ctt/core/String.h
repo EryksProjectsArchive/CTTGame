@@ -30,7 +30,7 @@ public:
 	String(const char *buffer)
 	{
 		memset(m_buffer, 0, maxSize);
-
+		
 		size_t size = strlen(buffer);
 		if (size > maxSize)
 			size = maxSize;
@@ -66,13 +66,14 @@ public:
 
 	String& operator=(String& string)
 	{
-		memcpy(m_buffer, string.m_buffer, maxSize);
+		unsigned int size = strlen(string.m_buffer);
+		memcpy(m_buffer, string.m_buffer, size > maxSize ? maxSize : size);
 		return *this;
 	}
 
 	String& operator=(const char *buffer)
 	{
-		memcpy(m_buffer, buffer, maxSize);
+		memcpy(m_buffer, buffer, (unsigned int size = strlen(buffer)) > maxSize ? maxSize : size);
 		return *this;
 	}
 
@@ -107,6 +108,15 @@ public:
 	unsigned short String::getMaxSize()
 	{
 		return maxSize;
+	}
+
+	unsigned short String::find(const char * key)
+	{		
+		for (unsigned int i = 0; i < maxSize; ++i)		
+			if (!memcmp(&m_buffer[i], key, strlen(key)))
+				return i;			
+		
+		return -1;
 	}
 };
 

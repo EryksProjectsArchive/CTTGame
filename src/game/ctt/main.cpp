@@ -13,9 +13,10 @@
 
 int main()
 {
-	Game *game = new Game();
-	if (game->init()) while (game->pulse());
-	delete game;
+	{
+		Game game;
+		if (game.init()) while (game.pulse());
+	}
 
 #ifdef _MEM_LEAKS_DEBUG
 	_CrtDumpMemoryLeaks();

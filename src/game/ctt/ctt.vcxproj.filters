@@ -94,6 +94,18 @@
     <Filter Include="Source Files\core\hashing">
       <UniqueIdentifier>{8cd167e3-7264-4c0c-911b-454f6648b500}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\resources\images">
+      <UniqueIdentifier>{1b3a2a61-cffa-412f-91d8-0d8bb938be5c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\resources\images\bmp">
+      <UniqueIdentifier>{db3105b8-3ff8-47f0-9146-4c38b321b68a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\resources\images">
+      <UniqueIdentifier>{84a853d5-038f-43f5-842b-fba303a521fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\resources\images\bmp">
+      <UniqueIdentifier>{9adfbd33-24e6-42ea-949b-23ffd5060f8a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -209,6 +221,12 @@
     </ClCompile>
     <ClCompile Include="resources\CacheableResource.cpp">
       <Filter>Source Files\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="resources\ImageLoader.cpp">
+      <Filter>Source Files\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="resources\images\bmp\BMPImageLoader.cpp">
+      <Filter>Source Files\resources\images\bmp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -346,6 +364,15 @@
     </ClInclude>
     <ClInclude Include="resources\CacheableResource.h">
       <Filter>Header Files\resources</Filter>
+    </ClInclude>
+    <ClInclude Include="resources\ImageLoader.h">
+      <Filter>Header Files\resources</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\ImageData.h">
+      <Filter>Header Files\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="resources\images\bmp\BMPImageLoader.h">
+      <Filter>Header Files\resources\images\bmp</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -26,6 +26,7 @@
 
 #include <graphics/Material.h>
 #include <graphics/Geometry.h>
+#include <graphics/Texture.h>
 
 #include <graphics/ShaderProgram.h>
 
@@ -42,6 +43,10 @@ PFNGLUNMAPBUFFERPROC Renderer::glUnmapBuffer = 0;
 PFNGLDELETEBUFFERSPROC Renderer::glDeleteBuffers = 0;
 PFNGLBINDVERTEXARRAYPROC Renderer::glBindVertexArray = 0;
 PFNGLGETBUFFERPARAMETERIVPROC Renderer::glGetBufferParameteriv = 0;
+
+PFNGLGENERATEMIPMAPPROC Renderer::glGenerateMipmap = 0;
+PFNGLACTIVETEXTUREPROC Renderer::glActiveTexture = 0;
+PFNGLBINDSAMPLERPROC Renderer::glBindSampler = 0;
 
 PFNGLBLENDEQUATIONSEPARATEPROC Renderer::glBlendEquationSeparate = 0;
 PFNGLDRAWBUFFERSPROC Renderer::glDrawBuffers = 0;
@@ -184,6 +189,15 @@ bool Renderer::setup(Window * window)
 	glBindVertexArray = (PFNGLBINDVERTEXARRAYPROC)SDL_GL_GetProcAddress("glBindVertexArray");
 	glGetBufferParameteriv = (PFNGLGETBUFFERPARAMETERIVPROC)SDL_GL_GetProcAddress("glGetBufferParameteriv");
 
+	// Texture functions (OpenGL 3.0)
+	glGenerateMipmap = (PFNGLGENERATEMIPMAPPROC)SDL_GL_GetProcAddress("glGenerateMipmap");
+
+	// OpenGL (3.2)
+	glBindSampler = (PFNGLBINDSAMPLERPROC)SDL_GL_GetProcAddress("glBindSampler");
+
+	// (OpenGL 2.0)
+	glActiveTexture = (PFNGLACTIVETEXTUREPROC)SDL_GL_GetProcAddress("glActiveTexture");
+
 	// Shaders (OpenGL 2.0)
 	glBlendEquationSeparate = (PFNGLBLENDEQUATIONSEPARATEPROC)SDL_GL_GetProcAddress("glBlendEquationSeparate");
 	glDrawBuffers = (PFNGLDRAWBUFFERSPROC)SDL_GL_GetProcAddress("glDrawBuffers");
@@ -292,7 +306,7 @@ bool Renderer::setup(Window * window)
 	glDepthFunc(GL_LESS);
 	
 	glEnable(GL_CULL_FACE);
-	glFrontFace(GL_CCW);
+	glFrontFace(GL_CW);
 
 	m_defaultMaterial = new Material();// MaterialLib::FindByName("default");
 
@@ -398,11 +412,33 @@ void Renderer::renderGeometry(Geometry *geometry, const glm::mat4x4& matrix)
 		glUniformMatrix4fv(mvpMatrixLocation, 1, GL_FALSE, glm::value_ptr(mvp));
 	}
 
-	unsigned int texture0Location = material->m_program->getUniformLocation("texture0");
-	if (texture0Location != -1)
+
+	if (material->m_texture)
 	{
-		glUniform1i(texture0Location, 0);
-	}			
+
+		unsigned int texture0Location = material->m_program->getUniformLocation("texture0");
+		if (texture0Location != -1 && material->m_texture->isLoaded())
+		{
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, material->m_texture->m_textureID);		
+
+			if (material->m_texture->m_mipmaps)
+			{
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+			}
+			else 
+			{
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			}
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+			
+			
+			glUniform1i(texture0Location, 0);
+		}
+	}
 			
 #ifdef DEBUG_PROGRAM_ON_RUNTIME
 	int m_programId = material->m_program->m_programId;
@@ -419,18 +455,23 @@ void Renderer::renderGeometry(Geometry *geometry, const glm::mat4x4& matrix)
 	delete[]errorLog;
 #endif
 
-	unsigned int attributePosition = material->m_program->getAttributeLocation("position");
-	unsigned int attributeNormal = material->m_program->getAttributeLocation("normal");
+	unsigned int attributePosition = material->m_program->getAttributeLocation("vertexPosition");
+	unsigned int attributeNormal = material->m_program->getAttributeLocation("vertexNormal");
+	unsigned int attributeUV = material->m_program->getAttributeLocation("vertexUV");
 
 	glEnableVertexAttribArray(attributePosition);
 	if (attributeNormal != -1)
 		glEnableVertexAttribArray(attributeNormal);
+	if (attributeUV != -1)
+		glEnableVertexAttribArray(attributeUV);
 
 	glBindBuffer(GL_ARRAY_BUFFER, geometry->m_vertexBuffer->m_bufferId);
 
 	glVertexAttribPointer(attributePosition, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex3d), 0);
 	if (attributeNormal != -1)
 		glVertexAttribPointer(attributeNormal, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex3d), (void *)offsetof(Vertex3d, nx));
+	if (attributeUV != -1)
+		glVertexAttribPointer(attributeUV, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex3d), (void *)offsetof(Vertex3d, u));
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geometry->m_indexBuffer->m_bufferId);
 
@@ -439,6 +480,8 @@ void Renderer::renderGeometry(Geometry *geometry, const glm::mat4x4& matrix)
 	glDisableVertexAttribArray(attributePosition);
 	if (attributeNormal != -1)
 		glDisableVertexAttribArray(attributeNormal);
+	if (attributeUV != -1)
+		glDisableVertexAttribArray(attributeUV);
 
 	glUseProgram(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);

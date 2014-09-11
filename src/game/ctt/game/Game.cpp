@@ -24,6 +24,8 @@
 #include <graphics/Graphics.h>
 #include <graphics/renderer/Renderer.h>
 #include <graphics/renderer/RenderContext.h>
+#include <graphics/Camera.h>
+#include <graphics/ImageData.h>
 
 #include <io/CachedItem.h>
 #include <io/FileSystem.h>
@@ -38,7 +40,8 @@
 
 #include <game/scene/entities/Entity.h>
 
-#include <graphics/Camera.h>
+#include <resources/ImageLoader.h>
+#include <resources/images/bmp/BMPImageLoader.h>
 
 Model * model = 0;
 Game::Game()
@@ -106,6 +109,9 @@ bool Game::init()
 
 	Logger::init(FilePath("%sgame.log", szHomePath), false);
 
+	// create image loader
+	ImageLoader::get()->registerLoader(new BMP::ImageLoader());
+
 	// Create game window
 	m_window = new Window();
 	m_window->setup("City Transport Tycoon", 800, 600);
@@ -125,6 +131,7 @@ bool Game::init()
 		Error("game", "Cannot setup SoundMgr!");
 		return false;
 	}
+
 
 	/*ISound *sound = m_soundMgr->createSound(SoundType::Effect);
 

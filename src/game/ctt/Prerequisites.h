@@ -88,6 +88,7 @@ class DynamicLibrary;
 // Resources
 class Resource;
 class CacheableResource;
+class ImageLoader;
 
 // Sound
 namespace OpenAL
@@ -123,6 +124,7 @@ class Model;
 class Mesh;
 struct Vertex3d;
 class Camera;
+struct ImageData;
 
 // Math
 typedef glm::quat Quaternion;

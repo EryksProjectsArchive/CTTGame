@@ -122,7 +122,7 @@ unsigned int ShaderProgram::getAttributeLocation(const char *name)
 	unsigned int location = Renderer::glGetAttribLocation(m_programId, name);
 	if (location != GL_INVALID_VALUE && location != GL_INVALID_OPERATION)
 	{
-		// Add new uniform
+		// Add new attribute
 		++m_attributesCount;
 
 		if (!m_attributes)

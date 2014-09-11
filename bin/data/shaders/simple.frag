@@ -1,9 +1,11 @@
 #version 330 core
 
-in vec3 fragNormal;
+in vec2 uv;
+uniform sampler2D texture0; // Base texture from material.
+out vec4 color;
 
 // Simple fragment shader
 void main(void)
 {
-	gl_FragColor = vec4(fragNormal, 1.0);
+	color = vec4(texture2D(texture0, uv).rgb, 1);
 }
