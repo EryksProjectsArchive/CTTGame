@@ -350,25 +350,14 @@ bool Renderer::setup(Window * window)
 
 	Vertex3d vertices[4] = { 0 };
 
-	vertices[0].color_a = 0;
-
 	vertices[1].x = 8;
-	vertices[1].color_a = 1;
-	vertices[1].color_r = 1;
-	vertices[1].color_g = 0;
-	vertices[1].color_b = 0;
+	vertices[1].color = 0xFFFF0000;
 
 	vertices[2].y = 8;
-	vertices[2].color_a = 1;
-	vertices[2].color_r = 0;
-	vertices[2].color_g = 1;
-	vertices[2].color_b = 0;
+	vertices[2].color = 0xFF00FF00;
 
 	vertices[3].z = 8;
-	vertices[3].color_a = 1;
-	vertices[3].color_r = 0;
-	vertices[3].color_g = 0;
-	vertices[3].color_b = 1;
+	vertices[3].color = 0xFF0000FF;
 
 	unsigned short indices[6] = {
 		0, 1,
@@ -532,7 +521,7 @@ void Renderer::renderGeometry(Geometry *geometry, const glm::mat4x4& matrix)
 	if (attributeUV != -1)
 		glVertexAttribPointer(attributeUV, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex3d), (void *)offsetof(Vertex3d, u));
 	if (attributeColor != -1)
-		glVertexAttribPointer(attributeColor, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex3d), (void *)offsetof(Vertex3d, color_r));
+		glVertexAttribPointer(attributeColor, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(Vertex3d), (void *)offsetof(Vertex3d, color));
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geometry->m_indexBuffer->m_bufferId);
 

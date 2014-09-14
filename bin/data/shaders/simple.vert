@@ -18,5 +18,5 @@ void main(void)
 
 	vUV = vertexUV;
 	vPos = vertexPosition;
-	vColor = vertexColor;//vec4(vertexColor.rgb, 1);
+	vColor = vertexColor;
 }

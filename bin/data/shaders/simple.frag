@@ -11,6 +11,4 @@ in vec3 vPos;
 void main(void)
 {
 	color = vColor * texture2D(texture0, vUV);
-	//color = vec4(pos, 1);
-
 }
