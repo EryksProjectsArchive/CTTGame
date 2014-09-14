@@ -26,6 +26,12 @@ Geometry::Geometry()
 
 	m_trianglesCount = 0;
 	m_verticesCount = 0;
+	m_drawType = EDrawType::TRIANGLES;
+}
+
+Geometry::Geometry(EDrawType::Type type) : Geometry()
+{
+	m_drawType = type;
 }
 
 Geometry::~Geometry()

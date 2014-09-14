@@ -49,13 +49,14 @@ struct vertex
 	float nz;
 	float u;
 	float v;
-	unsigned int color;
+	float color_r;
+	float color_g;
+	float color_b;
+	float color_a;
+	float tanw;
 	float tanx;
 	float tany;
 	float tanz;
-	float bitanx;
-	float bitany;
-	float bitanz;
 };
 
 struct placement

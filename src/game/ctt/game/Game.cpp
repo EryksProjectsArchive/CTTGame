@@ -149,7 +149,7 @@ bool Game::init()
 	
 	m_scene->addEntity(entity);
 
-	Camera::current->setPosition(Vector3(4.0f, 2.0f, 0.0f));
+	Camera::current->setPosition(Vector3(0.0f, 2.0f, 6.0f));
 	Camera::current->setTarget(Vector3());
 
 	model = new Model("../../data/models/test.mdl");
@@ -160,6 +160,7 @@ bool Game::init()
 	return true;
 }
 
+float mov = 0.0f;
 bool Game::pulse()
 {
 	Timer::frameStart();
@@ -171,6 +172,18 @@ bool Game::pulse()
 		{
 			m_isRunning = false;
 		}
+	}
+
+	if (Camera::current)
+	{
+		glm::vec3 pos = Camera::current->getPosition();
+
+		pos.x = sinf(mov) * 10;
+		pos.z = cosf(mov) * 10;
+
+		mov += 0.01f * Timer::getDeltaTimef();
+
+		Camera::current->setPosition(pos);
 	}
 
 	if (m_scene)

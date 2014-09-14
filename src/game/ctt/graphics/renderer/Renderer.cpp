@@ -144,7 +144,9 @@ PFNGLVERTEXATTRIBPOINTERPROC Renderer::glVertexAttribPointer = 0;
 PFNGLGENVERTEXARRAYSPROC Renderer::glGenVertexArrays = 0;
 
 Renderer * Renderer::s_instance = 0;
-Geometry * geometry2d = 0;
+
+Geometry *g_helperLines = 0;
+Material * g_helperMaterial = 0;
 Renderer::Renderer()
 {
 	m_window = 0;
@@ -304,9 +306,11 @@ bool Renderer::setup(Window * window)
 
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
-	
-	glEnable(GL_CULL_FACE);
-	glFrontFace(GL_CW);
+
+	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+
+	//glEnable(GL_CULL_FACE);
+	//glFrontFace(GL_CCW);
 
 	m_defaultMaterial = new Material();// MaterialLib::FindByName("default");
 
@@ -322,17 +326,69 @@ bool Renderer::setup(Window * window)
 
 	m_defaultMaterial->m_program = shaderProgram;
 
+	g_helperMaterial = new Material();
+
+
+	shaderProgram = new ShaderProgram();
+
+	fragmentShader = new FragmentShader("../../data/shaders/simpleColor.frag");
+	shaderProgram->attachShader(fragmentShader);
+
+	vertexShader = new VertexShader("../../data/shaders/simple.vert");
+	shaderProgram->attachShader(vertexShader);
+
+	shaderProgram->link();
+
+	g_helperMaterial->m_program = shaderProgram;
+
 	unsigned int HackVAO;
 	glGenVertexArrays(1, &HackVAO);
 	glBindVertexArray(HackVAO);
+
+
+	g_helperLines = new Geometry(EDrawType::LINES);
+
+	Vertex3d vertices[4] = { 0 };
+
+	vertices[0].color_a = 0;
+
+	vertices[1].x = 8;
+	vertices[1].color_a = 1;
+	vertices[1].color_r = 1;
+	vertices[1].color_g = 0;
+	vertices[1].color_b = 0;
+
+	vertices[2].y = 8;
+	vertices[2].color_a = 1;
+	vertices[2].color_r = 0;
+	vertices[2].color_g = 1;
+	vertices[2].color_b = 0;
+
+	vertices[3].z = 8;
+	vertices[3].color_a = 1;
+	vertices[3].color_r = 0;
+	vertices[3].color_g = 0;
+	vertices[3].color_b = 1;
+
+	unsigned short indices[6] = {
+		0, 1,
+		0, 2,
+		0, 3
+	};
+
+	g_helperLines->fillData(vertices, 4, indices, 2);
 	return true;
 }
 
 void Renderer::preFrame()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClearColor(0.0f, 0.5f, 0.0f, 0.0f);	
+	glClearColor(0.9f, 0.9f, 0.9f, 1.0f);	
 	glClearDepth(1.0f);
+
+	setMaterial(g_helperMaterial);
+	renderGeometry(g_helperLines, glm::mat4x4());
+	setMaterial(NULL);
 }
 
 void Renderer::postFrame()
@@ -458,12 +514,15 @@ void Renderer::renderGeometry(Geometry *geometry, const glm::mat4x4& matrix)
 	unsigned int attributePosition = material->m_program->getAttributeLocation("vertexPosition");
 	unsigned int attributeNormal = material->m_program->getAttributeLocation("vertexNormal");
 	unsigned int attributeUV = material->m_program->getAttributeLocation("vertexUV");
+	unsigned int attributeColor = material->m_program->getAttributeLocation("vertexColor");
 
 	glEnableVertexAttribArray(attributePosition);
 	if (attributeNormal != -1)
 		glEnableVertexAttribArray(attributeNormal);
 	if (attributeUV != -1)
 		glEnableVertexAttribArray(attributeUV);
+	if (attributeColor != -1)
+		glEnableVertexAttribArray(attributeColor);
 
 	glBindBuffer(GL_ARRAY_BUFFER, geometry->m_vertexBuffer->m_bufferId);
 
@@ -472,16 +531,24 @@ void Renderer::renderGeometry(Geometry *geometry, const glm::mat4x4& matrix)
 		glVertexAttribPointer(attributeNormal, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex3d), (void *)offsetof(Vertex3d, nx));
 	if (attributeUV != -1)
 		glVertexAttribPointer(attributeUV, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex3d), (void *)offsetof(Vertex3d, u));
+	if (attributeColor != -1)
+		glVertexAttribPointer(attributeColor, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex3d), (void *)offsetof(Vertex3d, color_r));
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geometry->m_indexBuffer->m_bufferId);
 
-	glDrawElements(GL_TRIANGLES, geometry->m_trianglesCount * 3, GL_UNSIGNED_SHORT, 0);
+	unsigned int drawMode = GL_TRIANGLES;
+	if (geometry->m_drawType == EDrawType::LINES) drawMode = GL_LINES;
+	else if (geometry->m_drawType == EDrawType::LINE_STRIP) drawMode = GL_LINE_STRIP;
+
+	glDrawElements(drawMode, geometry->m_trianglesCount * 3, GL_UNSIGNED_SHORT, 0);
 
 	glDisableVertexAttribArray(attributePosition);
 	if (attributeNormal != -1)
 		glDisableVertexAttribArray(attributeNormal);
 	if (attributeUV != -1)
 		glDisableVertexAttribArray(attributeUV);
+	if (attributeColor!= -1)
+		glDisableVertexAttribArray(attributeColor);
 
 	glUseProgram(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);

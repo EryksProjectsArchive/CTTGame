@@ -22,7 +22,8 @@
 Mesh::Mesh(mesh * meshData)
 	: m_geometry(0), m_meshName(0), m_material(0),
 	  m_position(Vector3(meshData->worldPlacement.position.x, meshData->worldPlacement.position.y, meshData->worldPlacement.position.z)),
-	  m_rotation(Quaternion(meshData->worldPlacement.rotation.w, meshData->worldPlacement.rotation.x, meshData->worldPlacement.rotation.y, meshData->worldPlacement.rotation.z))
+	  m_rotation(Quaternion(meshData->worldPlacement.rotation.w, meshData->worldPlacement.rotation.x, meshData->worldPlacement.rotation.y, meshData->worldPlacement.rotation.z)),
+	  m_scale(Vector3(meshData->worldPlacement.scale.x, meshData->worldPlacement.scale.y, meshData->worldPlacement.scale.z))
 {
 	m_geometry = new Geometry();
 	if (m_geometry)
@@ -33,7 +34,6 @@ Mesh::Mesh(mesh * meshData)
 	m_meshName[meshData->name.len] = '\0';
 
 	//m_material = MaterialLib::FindByName(meshData->material.value);
-
 }
 
 Mesh::~Mesh()
@@ -56,20 +56,14 @@ const char * Mesh::getName()
 	return m_meshName;
 }
 
-float rot = 0;
-
 void Mesh::render(RenderContext& context)
 {	
 	RenderTask * renderingTask = context.newTask();
-	Matrix4x4 translationMatrix;
-	glm::translate(translationMatrix, m_position);
-
-	m_rotation = glm::rotate(glm::quat(), rot, Vector3(0.0f, 1.0f, 0.0f));
-	rot += 2.5f * Timer::getDeltaTimef();
-	if (rot > 360.f)
-		rot -= 360.f;
-	printf("%f\n", rot);
+	Matrix4x4 translationMatrix, scaleMatrix;
+	scaleMatrix = glm::scale(glm::mat4x4(), m_scale);
+	translationMatrix = glm::translate(glm::mat4x4(), m_position);
+	
 	renderingTask->m_geometry = m_geometry;
 	renderingTask->m_material = m_material;
-	renderingTask->m_matrix = (translationMatrix * glm::mat4_cast(m_rotation));
+	renderingTask->m_matrix = (translationMatrix * scaleMatrix * glm::mat4_cast(m_rotation));
 }

@@ -19,6 +19,7 @@ class Mesh
 {
 private:
 	Vector3 m_position;
+	Vector3 m_scale;
 	Quaternion m_rotation;
 
 	Geometry *m_geometry;

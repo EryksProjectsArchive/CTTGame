@@ -45,7 +45,8 @@ bool ModelFormat::load(mdl * mdlStruct, FILE * fp)
 		mdlStruct->meshes[i].name.value[mdlStruct->meshes[i].name.len] = '\0';
 		
 		// Read flags and world placement
-		fread(&mdlStruct->meshes[i].flags, sizeof(mdlStruct->meshes[i].flags) + sizeof(mdlStruct->meshes[i].worldPlacement), 1, fp);
+		fread(&mdlStruct->meshes[i].flags, sizeof(mdlStruct->meshes[i].flags), 1, fp);
+		fread(&mdlStruct->meshes[i].worldPlacement, sizeof(mdlStruct->meshes[i].worldPlacement), 1, fp);
 		
 		// Read material name
 		fread(&mdlStruct->meshes[i].material.len, sizeof(mdlStruct->meshes[i].material.len), 1, fp);
@@ -63,9 +64,6 @@ bool ModelFormat::load(mdl * mdlStruct, FILE * fp)
 		
 		mdlStruct->meshes[i].triangles = new triangle[mdlStruct->meshes[i].trianglesCount];
 		fread(mdlStruct->meshes[i].triangles, sizeof(triangle), mdlStruct->meshes[i].trianglesCount, fp);
-
-		for (uint32 x = 0; x < mdlStruct->meshes[i].verticesCount; ++x)
-			Info("modelFormat", "%f/%f", mdlStruct->meshes[i].vertices[x].u, mdlStruct->meshes[i].vertices[x].v);
 
 		Info("ModelFormat", "Mesh %s (Tris: %d, Verts: %d)", mdlStruct->meshes[i].name.value, mdlStruct->meshes[i].trianglesCount, mdlStruct->meshes[i].verticesCount);
 	}
