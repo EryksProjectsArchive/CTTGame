@@ -27,6 +27,11 @@ public:
 		memset(m_buffer, 0, maxSize);
 	}
 
+	String(const String<maxSize>& string)
+	{
+		memcpy(m_buffer, string.m_buffer, maxSize);
+	}
+
 	String(const char *buffer)
 	{
 		memset(m_buffer, 0, maxSize);

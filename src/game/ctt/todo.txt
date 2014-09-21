@@ -1,5 +1,4 @@
 CTT TODO:
-- Fix memory problems in DynString class. 
 - Add shadows and privimite lighting using shaders.
 - Add exporting materials via Blender plugin.
 - Implement Bullet.

@@ -32,6 +32,15 @@ public:
 		m_size = 0;
 	}
 
+	DynString(const DynString& string)
+	{
+		size_t size = string.m_size;
+		m_buffer = new char[size + 1];
+		strcpy(m_buffer, string.m_buffer);
+		m_buffer[size] = '\0';
+		m_size = size;
+	}
+
 	DynString(const char *buffer)
 	{
 		size_t size = strlen(buffer);
