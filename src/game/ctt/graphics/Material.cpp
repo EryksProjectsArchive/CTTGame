@@ -17,20 +17,12 @@
 Material::Material(const DynString & name)
 {
 	m_name = name;
-	m_program = 0;
-	m_texture = 0;
 }
 
 Material::~Material()
 {
-	if (m_texture)
+	if (!m_texture.isNull())
 		m_texture->free();
-
-	if (m_program)
-	{
-		delete m_program;
-		m_program = 0;
-	}
 }
 
 DynString Material::getName()

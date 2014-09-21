@@ -82,6 +82,16 @@ public:
 		return *this;
 	}
 
+	String operator+(String& string) const
+	{
+		return String("%s%s", m_buffer, string.m_buffer);
+	}
+
+	String operator+(const char *buffer) const
+	{
+		return String("%s%s", m_buffer, buffer);
+	}
+
 	unsigned char operator[](unsigned int index)
 	{
 		if (index < 0 || index > maxSize)

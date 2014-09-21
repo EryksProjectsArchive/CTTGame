@@ -36,6 +36,8 @@
 #include <resources/ImageLoader.h>
 #include <resources/images/bmp/BMPImageLoader.h>
 
+#include "environment/Environment.h"
+
 Model * road = 0;
 Model *simpleBox = 0;
 #define FREE_MODEL(mdl)\
@@ -94,7 +96,7 @@ bool Game::init()
 
 	// Setup file system
 	FileSystem::get()->registerFileSystem(new Stdio::FileSystem());
-	FileSystem::get()->setBaseDirectory(OS::getAppPath());
+	FileSystem::get()->setBaseDirectory(FilePath("%s../../data/",OS::getAppPath()));
 
 	// Setup home directory
 	char szHomePath[MAX_PATH] = { 0 };
@@ -149,6 +151,8 @@ bool Game::init()
 
 	simpleBox = new Model("../../data/models/simpleBox.mdl");
 	simpleBox->acquire();
+
+	Environment::get()->setSunPosition(Vector3(5.0f, 10.0f, 0.0f));
 
 	m_isInitialized = true;
 	m_isRunning = true;

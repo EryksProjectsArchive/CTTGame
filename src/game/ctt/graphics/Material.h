@@ -13,12 +13,13 @@
 
 #include <Prerequisites.h>
 #include <core/DynString.h>
+#include <core/SharedPtr.h>
 
 class Material
 {
 private:
-	Texture *m_texture;
-	ShaderProgram * m_program;
+	SharedPtr<Texture> m_texture;
+	SharedPtr<ShaderProgram> m_program;
 
 	DynString m_name;
 public:

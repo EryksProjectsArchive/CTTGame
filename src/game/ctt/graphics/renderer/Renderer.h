@@ -15,6 +15,7 @@
 #include <SDL.h>
 #include <SDL_opengl.h>
 #include <graphics/BufferBase.h>
+#include <core/SharedPtr.h>
 
 class Renderer
 {
@@ -26,9 +27,8 @@ protected:
 	SDL_GLContext m_glContext;
 	static Renderer* s_instance;
 
-	Material * m_currentMaterial;
-	Material * m_defaultMaterial;
-	Material * m_default2DMaterial;
+	SharedPtr<Material> m_currentMaterial;
+	SharedPtr<Material> m_defaultMaterial;
 public:
 	Renderer();
 	~Renderer();
@@ -42,7 +42,7 @@ public:
 
 	BufferBase * createBuffer(BufferType::Type type);
 
-	void setMaterial(Material * material);
+	void setMaterial(const SharedPtr<Material>& material);
 	void renderGeometry(Geometry *geometry, const glm::mat4x4& matrix);
 
 	static Renderer& get();

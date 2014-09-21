@@ -19,9 +19,9 @@ namespace Stdio
 	{
 	public:
 		FileSystem();
-		virtual ~FileSystem();
+		~FileSystem();
 
-		virtual ::File * open(FilePath file, FileOpenMode::Type mode) override;
+		::File * open(FilePath file, FileOpenMode::Type mode) override;
 
 		friend class File;
 	};

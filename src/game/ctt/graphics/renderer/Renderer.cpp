@@ -154,8 +154,6 @@ Renderer::Renderer()
 	m_window = 0;
 	m_glContext = 0;
 	s_instance = this;
-	m_defaultMaterial = 0;
-	m_currentMaterial = 0;
 	m_projectionMatrix = glm::perspective(45.0f, 800.f / 600.f, 0.1f, 1000.0f);
 }
 
@@ -328,7 +326,7 @@ bool Renderer::setup(Window * window)
 
 	shaderProgram->link();
 
-	g_helperMaterial->m_program = shaderProgram;
+	g_helperMaterial->m_program = SharedPtr<ShaderProgram>(shaderProgram);
 
 	unsigned int HackVAO;
 	glGenVertexArrays(1, &HackVAO);
@@ -339,7 +337,7 @@ bool Renderer::setup(Window * window)
 
 	Vertex3d vertices[4] = { 0 };
 
-	// Format: 0xAABBGGRR
+	// Format: 0xAABBGGRR bcz of endian
 	vertices[1].x = 8;
 	vertices[1].color = 0xFF0000FF;
 
@@ -365,9 +363,9 @@ void Renderer::preFrame()
 	glClearColor(0.9f, 0.9f, 0.9f, 1.0f);	
 	glClearDepth(1.0f);
 
-	setMaterial(g_helperMaterial);
+	setMaterial(SharedPtr<Material>(g_helperMaterial));
 	renderGeometry(g_helperLines, glm::mat4x4());
-	setMaterial(NULL);
+	setMaterial(m_defaultMaterial);
 }
 
 void Renderer::postFrame()
@@ -393,14 +391,14 @@ BufferBase * Renderer::createBuffer(BufferType::Type type)
 	return 0;
 }
 
-void Renderer::setMaterial(Material * material)
+void Renderer::setMaterial(const SharedPtr<Material> & material)
 {
 	m_currentMaterial = material;
 }
 
 void Renderer::renderGeometry(Geometry *geometry, const glm::mat4x4& matrix)
 {
-	Material *material = m_currentMaterial;
+	SharedPtr<Material> material = m_currentMaterial;
 	if (!material)
 		material = m_defaultMaterial;
 
@@ -452,7 +450,6 @@ void Renderer::renderGeometry(Geometry *geometry, const glm::mat4x4& matrix)
 
 	if (material->m_texture)
 	{
-
 		unsigned int texture0Location = material->m_program->getUniformLocation("texture0");
 		if (texture0Location != -1 && material->m_texture->isLoaded())
 		{

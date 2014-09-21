@@ -21,6 +21,8 @@
 #include <graphics/FragmentShader.h>
 #include <graphics/ShaderProgram.h>
 
+#include <io/fs/FileSystem.h>
+
 MaterialLib::MaterialLib()
 {
 
@@ -28,85 +30,70 @@ MaterialLib::MaterialLib()
 
 MaterialLib::~MaterialLib()
 {
-	for (Material *mat : m_materials)
-		delete mat;
-
 	m_materials.clear();
 }
 
-Material * MaterialLib::findByName(DynString name)
+SharedPtr<Material> MaterialLib::findByName(DynString name)
 {
-	for (Material *mat : m_materials)
+	for (SharedPtr<Material> mat : m_materials)
 	{
 		if (mat->m_name == name)
 			return mat;
 	}
 
-	// TODO: use fs here
-	Material * material = 0;
-	FILE *fp = fopen(FilePath("../../data/materials/%s.json", *name), "r");
-	if (fp)
+	SharedPtr<Material> material;
+	File *file = FileSystem::get()->open(FilePath("materials/%s.json", *name), FileOpenMode::Read);
+	if (file->isLoaded())
 	{
-		fseek(fp, 0, SEEK_END);
-		long size = ftell(fp);
-		rewind(fp);
-		char * szBuffer = new char[size+1];
-		if (szBuffer)
+		DynString content = file->getContent();
+		Json::Value root;
+		Json::Reader reader;
+
+		if (reader.parse(content.get(), root))
 		{
-			fread(szBuffer, sizeof(char), size, fp);
-			szBuffer[size] = '\0';
+			material = SharedPtr<Material>(new Material(name));
 
-			Json::Value root;
-			Json::Reader reader;
-
-			if (reader.parse(szBuffer, root))
+			if (!root["texture"].empty() && !root["texture"]["name"].empty())
 			{
-				material = new Material(name);
+				material->m_texture = SharedPtr<Texture>(new Texture(FilePath("../../data/textures/%s", root["texture"]["name"].asCString()), !root["texture"]["mipMaps"] ? false : root["texture"]["mipMaps"].asBool()));
+				material->m_texture->acquire(); // Acquire texture into material - we are calling free when material is being removed
+			}
+			else
+				Warning("MatLib", "Material %s has no textures set.", *name);
 
-				if (!root["texture"].empty() && !root["texture"]["name"].empty())
-				{
-					material->m_texture = new Texture(FilePath("../../data/textures/%s", root["texture"]["name"].asCString()), !root["texture"]["mipMaps"] ? false : root["texture"]["mipMaps"].asBool());
-					material->m_texture->acquire();
-				}
-				else
-					Warning("MatLib", "Material %s has no textures set.", *name);
+			material->m_program = SharedPtr<ShaderProgram>(new ShaderProgram());
 
-				material->m_program = new ShaderProgram();
-
-				if (root["shaders"].empty())
-				{
-					Warning("MatLib", "Material %s has no shaders set.", *name);
-				}
-				else
-				{
-					if (!root["shaders"]["vertex"].empty())
-						material->m_program->attachShader(new VertexShader(FilePath("../../data/shaders/%s.vert", root["shaders"]["vertex"].asCString())));
-					else
-						Warning("MatLib", "Material %s has no vertex shader set.", *name);
-
-					if (!root["shaders"]["fragment"].empty())
-						material->m_program->attachShader(new FragmentShader(FilePath("../../data/shaders/%s.frag", root["shaders"]["fragment"].asCString())));
-					else
-						Warning("MatLib", "Material %s has no vertex shader set.", *name);
-				}
-
-				material->m_program->link();
-
-				Debug("MatLib", "New material loaded. %s", *name);
-
-				m_materials.pushBack(material);
+			if (root["shaders"].empty())
+			{
+				Warning("MatLib", "Material %s has no shaders set.", *name);
 			}
 			else
 			{
-				Error("MatLib", "Cannot parse material file %s. Error: %s '%s'", *name, reader.getFormattedErrorMessages().c_str(), szBuffer);
+				if (!root["shaders"]["vertex"].empty())
+					material->m_program->attachShader(new VertexShader(FilePath("../../data/shaders/%s.vert", root["shaders"]["vertex"].asCString())));
+				else
+					Warning("MatLib", "Material %s has no vertex shader set.", *name);
+
+				if (!root["shaders"]["fragment"].empty())
+					material->m_program->attachShader(new FragmentShader(FilePath("../../data/shaders/%s.frag", root["shaders"]["fragment"].asCString())));
+				else
+					Warning("MatLib", "Material %s has no vertex shader set.", *name);
 			}
-			delete[]szBuffer;
+
+			material->m_program->link();
+
+			Debug("MatLib", "New material loaded. %s", *name);
+			m_materials.pushBack(material);
 		}
-		fclose(fp);
+		else
+		{
+			Error("MatLib", "Cannot parse material file %s. Error: %s '%s'", *name, reader.getFormattedErrorMessages().c_str(), content.get());
+		}
 	}
 	else 
 	{
 		Error("MatLib", "Cannot open file for material %s. Path '%s'.", *name, *FilePath("../data/materials/%s.json", *name));
 	}
+	FileSystem::get()->close(file);
 	return material;
 }

@@ -16,14 +16,15 @@
 #include <core/List.h>
 
 #include "Material.h"
+#include <list>
 
 class MaterialLib : public Singleton<MaterialLib>
 {
 private:
-	List<Material *> m_materials;
+	List<SharedPtr<Material>> m_materials;
 public:
 	MaterialLib();
 	~MaterialLib();
 
-	Material * findByName(DynString name);	
+	SharedPtr<Material> findByName(DynString name);	
 };

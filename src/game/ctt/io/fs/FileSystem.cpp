@@ -11,6 +11,7 @@
 
 #include "FileSystem.h"
 
+#include <core/Logger.h>
 
 FileSystem::FileSystem()
 {
@@ -27,9 +28,10 @@ FileSystem::~FileSystem()
 
 File * FileSystem::open(FilePath filePath, FileOpenMode::Type mode)
 {
+	FilePath path = buildPath(filePath);
 	for (FileSystem *fs : m_fileSystems)
 	{
-		if (File * file = fs->open(filePath, mode))
+		if (File * file = fs->open(path, mode))
 			return file;			
 	}
 	return 0;
@@ -37,9 +39,6 @@ File * FileSystem::open(FilePath filePath, FileOpenMode::Type mode)
 
 void FileSystem::close(File *file)
 {
-	for (FileSystem *fs : m_fileSystems)
-		fs->close(file);
-
 	if (file)
 	{
 		file->unload();
@@ -50,6 +49,7 @@ void FileSystem::close(File *file)
 
 void FileSystem::setBaseDirectory(FilePath baseDirectory)
 {
+	Info("fs", "Base directory: ", *baseDirectory);
 	m_baseDirectory = baseDirectory;
 }
 
@@ -66,4 +66,9 @@ void FileSystem::registerFileSystem(FileSystem *fileSystem)
 void FileSystem::unregisterFileSystem(FileSystem *fileSystem)
 {
 	m_fileSystems.remove(fileSystem);
+}
+
+FilePath FileSystem::buildPath(FilePath file)
+{
+	return m_baseDirectory + file;
 }

@@ -13,6 +13,8 @@
 
 #include <Prerequisites.h>
 
+#include <core/Logger.h>
+
 template <typename T>
 class List
 {
@@ -162,7 +164,7 @@ public:
 		T operator*()
 		{
 			if (!m_current)
-				return 0;
+				Error("List", "Null current pointer at %s:%d", __FILE__, __LINE__);
 
 			return m_current->m_value;
 		}

@@ -11,10 +11,9 @@
 
 #include "File.h"
 
-
 File::File()
 {
-
+	m_isLoaded = false;
 }
 	
 File::~File()
@@ -30,4 +29,44 @@ bool File::load(FilePath file, FileOpenMode::Type mode)
 bool File::unload()
 {
 	return false;
+}
+
+bool File::isLoaded()
+{
+	return m_isLoaded;
+}
+
+unsigned int File::write(const void *data, unsigned int count, unsigned int size)
+{
+	return -1;
+}
+
+unsigned int File::read(void * data, unsigned int count, unsigned int size)
+{
+	return -1;
+}
+
+void File::flush()
+{
+
+}
+
+DynString File::getContent()
+{
+	return DynString();
+}
+
+long File::tell()
+{
+	return -1;
+}
+
+void File::seek(int position, SeekOrigin::Type origin)
+{
+
+}
+
+void File::rewind()
+{
+
 }

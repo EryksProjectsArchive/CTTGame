@@ -17,18 +17,18 @@
 #include <graphics/Material.h>
 
 #include <core/List.h>
+#include <core/SharedPtr.h>
 
 class RenderTask
 {
 public:
 	Geometry * m_geometry;
-	Material * m_material;
+	SharedPtr<Material> m_material;
 	Matrix4x4 m_matrix;
 
 	RenderTask()
 	{
 		m_geometry = 0;
-		m_material = 0;
 	}
 };
 

@@ -166,6 +166,7 @@
   <ItemGroup>
     <ClCompile Include="core\Logger.cpp" />
     <ClCompile Include="core\Timer.cpp" />
+    <ClCompile Include="game\environment\Environment.cpp" />
     <ClCompile Include="game\Game.cpp" />
     <ClCompile Include="game\scene\entities\Entity.cpp" />
     <ClCompile Include="game\scene\Scene.cpp" />
@@ -191,6 +192,7 @@
     <ClCompile Include="io\fs\FileSystem.cpp" />
     <ClCompile Include="io\fs\stdio\StdioFile.cpp" />
     <ClCompile Include="io\fs\stdio\StdioFileSystem.cpp" />
+    <ClCompile Include="io\Serializeable.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="os\DynamicLibrary.cpp" />
     <ClCompile Include="os\OS.cpp" />
@@ -218,6 +220,7 @@
     <ClInclude Include="core\Singleton.h" />
     <ClInclude Include="core\String.h" />
     <ClInclude Include="core\Timer.h" />
+    <ClInclude Include="game\environment\Environment.h" />
     <ClInclude Include="game\Game.h" />
     <ClInclude Include="game\scene\entities\Entity.h" />
     <ClInclude Include="game\scene\Scene.h" />
@@ -247,6 +250,7 @@
     <ClInclude Include="io\fs\FileSystem.h" />
     <ClInclude Include="io\fs\stdio\StdioFile.h" />
     <ClInclude Include="io\fs\stdio\StdioFileSystem.h" />
+    <ClInclude Include="io\Serializeable.h" />
     <ClInclude Include="os\DynamicLibrary.h" />
     <ClInclude Include="os\OS.h" />
     <ClInclude Include="Prerequisites.h" />

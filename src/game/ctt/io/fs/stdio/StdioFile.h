@@ -11,7 +11,6 @@
 
 #pragma once
 
-#include <core/String.h>
 #include <stdio.h>
 #include <io/fs/FileOpenMode.h>
 #include <io/fs/File.h>
@@ -27,7 +26,18 @@ namespace Stdio
 		virtual bool unload();
 	public:
 		File();
-		virtual ~File();
+		~File();
+
+		unsigned int write(const void *data, unsigned int count, unsigned int size);
+		unsigned int read(void * data, unsigned int count, unsigned int size);
+
+		void flush();
+
+		DynString getContent();
+
+		long tell();
+		void seek(int position, SeekOrigin::Type origin);
+		void rewind();
 
 		friend class FileSystem;
 	};

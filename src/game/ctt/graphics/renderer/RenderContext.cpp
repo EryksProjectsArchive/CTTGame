@@ -20,7 +20,7 @@ RenderContext::RenderContext()
 
 RenderContext::~RenderContext()
 {
-	for (auto task : m_renderTasks)
+	for (RenderTask* task : m_renderTasks)
 	{
 		Renderer::get().setMaterial(task->m_material);
 		Renderer::get().renderGeometry(task->m_geometry, task->m_matrix);

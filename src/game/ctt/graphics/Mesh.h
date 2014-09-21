@@ -14,6 +14,7 @@
 #include <Prerequisites.h>
 
 #include "ModelFormat.h"
+#include <core/SharedPtr.h>
 
 class Mesh
 {
@@ -23,7 +24,7 @@ private:
 	Quaternion m_rotation;
 
 	Geometry *m_geometry;
-	Material *m_material;
+	SharedPtr<Material> m_material;
 
 	char *m_meshName;
 public:

@@ -22,6 +22,8 @@ class FileSystem : public Singleton<FileSystem>
 {
 private:
 	List<FileSystem *> m_fileSystems;
+
+	FilePath buildPath(FilePath file);
 protected:
 	FilePath m_baseDirectory;
 public:
@@ -29,11 +31,12 @@ public:
 	virtual ~FileSystem();
 
 	virtual File * open(FilePath file, FileOpenMode::Type mode);
-	virtual void close(File *file);
+	
+	void close(File *file);
 	
 	void registerFileSystem(FileSystem *fileSystem);
 	void unregisterFileSystem(FileSystem *fileSystem);
 
-	virtual void setBaseDirectory(FilePath baseDirectory);
-	virtual FilePath getBaseDirectory();
+	void setBaseDirectory(FilePath baseDirectory);
+	FilePath getBaseDirectory();
 };
