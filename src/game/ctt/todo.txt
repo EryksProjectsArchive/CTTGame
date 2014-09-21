@@ -1,6 +1,6 @@
 CTT TODO:
+- Fix memory problems in DynString class. 
 - Add shadows and privimite lighting using shaders.
-- Add MaterialLib class.
 - Add exporting materials via Blender plugin.
 - Implement Bullet.
 - Implement segment based terrain for huge maps (do own terrain and map (entities placement) format).

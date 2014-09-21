@@ -26,4 +26,7 @@ public:
 	bool setup(const char *title, unsigned short width = 800, unsigned short height = 600, bool fullscreen = false);
 	bool processMessages();
 	float getAspectRatio();
+
+	int getWidth();
+	int getHeight();
 };

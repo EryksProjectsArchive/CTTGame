@@ -55,6 +55,9 @@ bool Window::processMessages()
 			if (!event.key.repeat)
 				Game::get()->onKeyEvent(event.key.keysym.sym, event.type == SDL_KEYDOWN);
 			break;
+		case SDL_MOUSEWHEEL:
+			Game::get()->onMouseScroll(event.wheel.x, event.wheel.y);
+			break;
 		}
 	}
 	return true;
@@ -65,4 +68,18 @@ float Window::getAspectRatio()
 	int width = 0, height = 0;
 	SDL_GetWindowSize(_window, &width, &height);
 	return (float)width / (float)height;
+}
+
+int Window::getWidth()
+{
+	int width = 0, height = 0;
+	SDL_GetWindowSize(_window, &width, &height);
+	return width;
+}
+
+int Window::getHeight()
+{
+	int width = 0, height = 0;
+	SDL_GetWindowSize(_window, &width, &height);
+	return height;
 }

@@ -44,8 +44,12 @@ Model *simpleBox = 0;
 	mdl = 0;
 
 Game::Game()
-	: m_isRunning(false), m_isInitialized(false), m_renderer(0), m_window(0), m_soundMgr(0), m_scene(0), isADown(false), isDDown(false)
+	: m_isRunning(false), m_isInitialized(false), m_renderer(0), m_window(0), m_soundMgr(0), m_scene(0)
 {
+	for (unsigned int i = 0; i < 4; ++i)
+		controlls[i] = false;
+
+	distance = 28.f;
 }
 
 Game::~Game()
@@ -103,7 +107,7 @@ bool Game::init()
 
 	// Create game window
 	m_window = new Window();
-	m_window->setup("City Transport Tycoon", 800, 600);
+	m_window->setup("City Transport Tycoon", 1240, 780);
 
 	m_renderer = new Renderer();
 	if (!m_renderer->setup(m_window))
@@ -170,13 +174,19 @@ bool Game::pulse()
 		glm::vec3 pos = Camera::current->getPosition();
 
 		
-		pos.x = sinf(mov) * 28;
-		pos.z = cosf(mov) * 28;
+		pos.x = sinf(mov) * distance;
+		pos.z = cosf(mov) * distance;
 
-		if (isADown)
-			mov += 0.01f * Timer::getDeltaTimef();
-		else if (isDDown)
-			mov -= 0.01f * Timer::getDeltaTimef();
+		if (controlls[2])
+			mov += 0.05f * Timer::getDeltaTimef();
+		else if (controlls[3])
+			mov -= 0.05f * Timer::getDeltaTimef();
+
+		if (controlls[0])
+			pos.y += 1.0f * Timer::getDeltaTimef();
+
+		if (controlls[1])
+			pos.y -= 1.0f * Timer::getDeltaTimef();
 
 		Camera::current->setPosition(pos);
 	}
@@ -208,9 +218,20 @@ bool Game::pulse()
 void Game::onKeyEvent(int key, bool state)
 {
 	if (key == 'a')
-		isADown = state;
+		controlls[2] = state;
 	else if (key == 'd')
-		isDDown = state;
-	
+		controlls[3] = state;
+	else if (key == 'w')
+		controlls[0] = state;
+	else if (key == 's')
+		controlls[1] = state;
 	//printf("%c / %s\n", key, state ? "press" : "release");
+}
+
+void Game::onMouseScroll(int horizontal, int vertical)
+{
+	if (vertical > 0)
+		distance -= 1.0f * Timer::getDeltaTimef();
+	else
+		distance += 1.0f * Timer::getDeltaTimef();
 }

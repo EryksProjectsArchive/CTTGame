@@ -301,7 +301,7 @@ bool Renderer::setup(Window * window)
 
 	SDL_GL_SetSwapInterval(1); // set 0 to disable vsync
 
-	glViewport(0, 0, 800, 600);
+	glViewport(0, 0, window->getWidth(), window->getHeight());
 	
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -311,8 +311,8 @@ bool Renderer::setup(Window * window)
 
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
-	//glEnable(GL_CULL_FACE);
-	//glFrontFace(GL_CCW);
+	glEnable(GL_CULL_FACE);
+	glFrontFace(GL_CW);
 
 	m_defaultMaterial = MaterialLib::get()->findByName("default");
 

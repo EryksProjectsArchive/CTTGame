@@ -112,7 +112,7 @@ public:
 
 	unsigned short String::find(const char * key)
 	{		
-		for (unsigned int i = 0; i < maxSize; ++i)		
+		for (unsigned int i = 0; i < maxSize; ++i)		// should i change maxSize to maxSize - strlen(key)?
 			if (!memcmp(&m_buffer[i], key, strlen(key)))
 				return i;			
 		

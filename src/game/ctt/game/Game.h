@@ -27,8 +27,8 @@ private:
 
 	Scene *m_scene;
 
-	bool isADown;
-	bool isDDown;
+	bool controlls[4];
+	float distance;
 public:
 	Game();
 	~Game();
@@ -38,4 +38,5 @@ public:
 	bool pulse();
 
 	void onKeyEvent(int key, bool state);
+	void onMouseScroll(int horizontal, int vertical);
 };
