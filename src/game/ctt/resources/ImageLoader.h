@@ -14,10 +14,11 @@
 #include <Prerequisites.h>
 #include <core/String.h>
 #include <core/List.h>
+#include <core/Singleton.h>
 
 #include <stdio.h>
 
-class ImageLoader
+class ImageLoader : public Singleton<ImageLoader>
 {
 private:
 	List<ImageLoader *> m_loaders;
@@ -29,6 +30,4 @@ public:
 	virtual void registerLoader(ImageLoader * loader);
 
 	virtual ImageData * load(FilePath filePath);
-
-	static ImageLoader * get();
 };

@@ -10,6 +10,12 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ctt", "game\ctt\ctt.vcxproj
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SDL2", "libs\SDL2-2.0.3\VisualC\SDL\SDL_VS2013.vcxproj", "{81CE8DAF-EBB2-4761-8E45-B71ABCCA8C68}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "jsoncpp", "libs\jsoncpp\jsoncpp.vcxproj", "{92C379EB-18C9-41B6-9F8C-11D9F6DC52F2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Engine", "Engine", "{B6B7F81A-EE0E-4155-9AED-A52BDF487820}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{19120C62-3B01-4CC5-AF59-816AA1D60B3A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -34,8 +40,20 @@ Global
 		{81CE8DAF-EBB2-4761-8E45-B71ABCCA8C68}.Release|Win32.Build.0 = Release|Win32
 		{81CE8DAF-EBB2-4761-8E45-B71ABCCA8C68}.Release|x64.ActiveCfg = Release|x64
 		{81CE8DAF-EBB2-4761-8E45-B71ABCCA8C68}.Release|x64.Build.0 = Release|x64
+		{92C379EB-18C9-41B6-9F8C-11D9F6DC52F2}.Debug|Win32.ActiveCfg = Debug|Win32
+		{92C379EB-18C9-41B6-9F8C-11D9F6DC52F2}.Debug|Win32.Build.0 = Debug|Win32
+		{92C379EB-18C9-41B6-9F8C-11D9F6DC52F2}.Debug|x64.ActiveCfg = Debug|Win32
+		{92C379EB-18C9-41B6-9F8C-11D9F6DC52F2}.Release|Win32.ActiveCfg = Release|Win32
+		{92C379EB-18C9-41B6-9F8C-11D9F6DC52F2}.Release|Win32.Build.0 = Release|Win32
+		{92C379EB-18C9-41B6-9F8C-11D9F6DC52F2}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5C7A564B-3264-41C0-B2F7-D0A58B09A57B} = {B6B7F81A-EE0E-4155-9AED-A52BDF487820}
+		{81CE8DAF-EBB2-4761-8E45-B71ABCCA8C68} = {19120C62-3B01-4CC5-AF59-816AA1D60B3A}
+		{92C379EB-18C9-41B6-9F8C-11D9F6DC52F2} = {19120C62-3B01-4CC5-AF59-816AA1D60B3A}
+		{19120C62-3B01-4CC5-AF59-816AA1D60B3A} = {B6B7F81A-EE0E-4155-9AED-A52BDF487820}
 	EndGlobalSection
 EndGlobal

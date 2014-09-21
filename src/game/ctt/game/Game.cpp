@@ -14,49 +14,44 @@
 #include "Game.h"
 
 #include <core/Logger.h>
-#include <core/SharedPtr.h>
 #include <core/Timer.h>
 
 #include <os/OS.h>
 
 #include <graphics/Window.h>
 #include <graphics/Model.h>
-#include <graphics/Graphics.h>
 #include <graphics/renderer/Renderer.h>
 #include <graphics/renderer/RenderContext.h>
 #include <graphics/Camera.h>
-#include <graphics/ImageData.h>
 
-#include <io/CachedItem.h>
-#include <io/FileSystem.h>
+#include <io/fs/FileSystem.h>
+#include <io/fs/stdio/StdioFileSystem.h>
 
 #include <sound/SoundMgr.h>
 
 #include <game/scene/Scene.h>
-
-#include <graphics/FragmentShader.h>
-#include <graphics/VertexShader.h>
-#include <graphics/ShaderProgram.h>
 
 #include <game/scene/entities/Entity.h>
 
 #include <resources/ImageLoader.h>
 #include <resources/images/bmp/BMPImageLoader.h>
 
-Model * model = 0;
+Model * road = 0;
+Model *simpleBox = 0;
+#define FREE_MODEL(mdl)\
+	mdl->free();\
+	delete mdl;\
+	mdl = 0;
+
 Game::Game()
-	: m_isRunning(false), m_isInitialized(false), m_fileSystem(0), m_renderer(0), m_window(0), m_soundMgr(0), m_scene(0)
+	: m_isRunning(false), m_isInitialized(false), m_renderer(0), m_window(0), m_soundMgr(0), m_scene(0), isADown(false), isDDown(false)
 {
 }
 
 Game::~Game()
 {
-	if (model)
-	{
-		model->free();
-		delete model;
-		model = 0;
-	}
+	FREE_MODEL(road);
+	FREE_MODEL(simpleBox);
 
 	if (m_renderer)
 	{
@@ -76,12 +71,6 @@ Game::~Game()
 		m_soundMgr = 0;
 	}
 
-	if (m_fileSystem)
-	{
-		delete m_fileSystem;
-		m_fileSystem = 0;
-	}
-
 	if (m_scene)
 	{
 		delete m_scene;
@@ -99,9 +88,9 @@ bool Game::init()
 	// Initialize SDL
 	SDL_Init(SDL_INIT_VIDEO);
 
-	// Create file system
-	m_fileSystem = new FileSystem();
-	m_fileSystem->setBaseDirectory(OS::getAppPath());
+	// Setup file system
+	FileSystem::get()->registerFileSystem(new Stdio::FileSystem());
+	FileSystem::get()->setBaseDirectory(OS::getAppPath());
 
 	// Setup home directory
 	char szHomePath[MAX_PATH] = { 0 };
@@ -132,7 +121,6 @@ bool Game::init()
 		return false;
 	}
 
-
 	/*ISound *sound = m_soundMgr->createSound(SoundType::Effect);
 
 	if (!sound->load("../../data/sounds/test.wav"))
@@ -149,18 +137,20 @@ bool Game::init()
 	
 	m_scene->addEntity(entity);
 
-	Camera::current->setPosition(Vector3(0.0f, 2.0f, 6.0f));
+	Camera::current->setPosition(Vector3(0.0f, 4.0f, 6.0f));
 	Camera::current->setTarget(Vector3());
 
-	model = new Model("../../data/models/test.mdl");
-	model->acquire();
+	road = new Model("../../data/models/road.mdl");
+	road->acquire();
+
+	simpleBox = new Model("../../data/models/simpleBox.mdl");
+	simpleBox->acquire();
 
 	m_isInitialized = true;
 	m_isRunning = true;
 	return true;
 }
 
-float mov = 0.0f;
 bool Game::pulse()
 {
 	Timer::frameStart();
@@ -176,12 +166,17 @@ bool Game::pulse()
 
 	if (Camera::current)
 	{
+		static float mov = 0.0f;
 		glm::vec3 pos = Camera::current->getPosition();
 
-		pos.x = sinf(mov) * 10;
-		pos.z = cosf(mov) * 10;
+		
+		pos.x = sinf(mov) * 28;
+		pos.z = cosf(mov) * 28;
 
-		mov += 0.01f * Timer::getDeltaTimef();
+		if (isADown)
+			mov += 0.01f * Timer::getDeltaTimef();
+		else if (isDDown)
+			mov -= 0.01f * Timer::getDeltaTimef();
 
 		Camera::current->setPosition(pos);
 	}
@@ -193,11 +188,13 @@ bool Game::pulse()
 	{
 		m_renderer->preFrame();
 
-		/*if (m_scene)
-			m_scene->render();*/
+		if (m_scene)
+			m_scene->render();
+
 		{
 			RenderContext ctx;
-			model->render(ctx);			
+			road->render(ctx);
+			simpleBox->render(ctx);
 		}
 
 		m_renderer->postFrame();
@@ -205,4 +202,15 @@ bool Game::pulse()
 
 	Timer::frameEnd();
 	return m_isRunning;
+}
+
+// TODO: GameEvent
+void Game::onKeyEvent(int key, bool state)
+{
+	if (key == 'a')
+		isADown = state;
+	else if (key == 'd')
+		isDDown = state;
+	
+	//printf("%c / %s\n", key, state ? "press" : "release");
 }

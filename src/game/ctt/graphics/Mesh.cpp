@@ -18,6 +18,7 @@
 #include "ModelFormat.h"
 #include <core/Logger.h>
 #include <core/Timer.h>
+#include "MaterialLib.h"
 
 Mesh::Mesh(mesh * meshData)
 	: m_geometry(0), m_meshName(0), m_material(0),
@@ -33,7 +34,7 @@ Mesh::Mesh(mesh * meshData)
 	memcpy(m_meshName, meshData->name.value, meshData->name.len);
 	m_meshName[meshData->name.len] = '\0';
 
-	//m_material = MaterialLib::FindByName(meshData->material.value);
+	m_material = MaterialLib::get()->findByName(meshData->material.value);
 }
 
 Mesh::~Mesh()
@@ -65,5 +66,5 @@ void Mesh::render(RenderContext& context)
 	
 	renderingTask->m_geometry = m_geometry;
 	renderingTask->m_material = m_material;
-	renderingTask->m_matrix = (translationMatrix * scaleMatrix * glm::mat4_cast(m_rotation));
+	renderingTask->m_matrix = (translationMatrix * glm::mat4_cast(m_rotation) * scaleMatrix);
 }

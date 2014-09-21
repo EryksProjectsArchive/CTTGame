@@ -37,7 +37,7 @@ void CacheableResource::acquire()
 		}
 		else 
 		{
-			Debug("cacheable resource", "Loaded cacheable resource.");
+			Debug("cacheable resource", "Loaded cacheable resource. '%s'", *m_filePath);
 		}
 	}
 }

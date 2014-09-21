@@ -10,6 +10,7 @@
 //////////////////////////////////////////////
 
 #include "Window.h"
+#include <game/Game.h>
 
 Window::Window()
 	: _window(0)
@@ -48,6 +49,11 @@ bool Window::processMessages()
 		{
 		case SDL_QUIT:
 			return false;
+			break;
+		case SDL_KEYDOWN:
+		case SDL_KEYUP:
+			if (!event.key.repeat)
+				Game::get()->onKeyEvent(event.key.keysym.sym, event.type == SDL_KEYDOWN);
 			break;
 		}
 	}

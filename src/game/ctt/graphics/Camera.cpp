@@ -13,7 +13,7 @@
 
 Camera * Camera::current = 0;
 
-Camera::Camera() : m_viewMatrix(glm::lookAt(glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), glm::vec3(0,1,0)))
+Camera::Camera() : m_viewMatrix(glm::lookAt(glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0))), m_fov(45.f)
 {
 }
 
@@ -25,7 +25,7 @@ Camera::~Camera()
 void Camera::setPosition(const glm::vec3 & position)
 {
 	m_position = position;
-	m_viewMatrix = glm::lookAt(m_position, m_target, glm::vec3(0, 1, 0));
+	m_viewMatrix = glm::lookAt(m_position, m_target, glm::vec3(0, 1, 0)) * glm::mat4_cast(m_rotation);
 }
 
 glm::vec3 Camera::getPosition()
@@ -36,12 +36,33 @@ glm::vec3 Camera::getPosition()
 void Camera::setTarget(const glm::vec3 & position)
 {
 	m_target = position;
-	m_viewMatrix = glm::lookAt(m_position, m_target, glm::vec3(0, 1, 0));
+	m_viewMatrix = glm::lookAt(m_position, m_target, glm::vec3(0, 1, 0)) * glm::mat4_cast(m_rotation);
 }
 
 glm::vec3 Camera::getTarget()
 {
 	return m_target;
+}
+
+void Camera::setRotation(const glm::quat & rotation)
+{
+	m_rotation = rotation;	
+	m_viewMatrix *= glm::mat4_cast(m_rotation);
+}
+
+glm::quat Camera::getRotation()
+{
+	return m_rotation;
+}
+
+void Camera::setFov(float fov)
+{
+	m_fov = fov;
+}
+
+float Camera::getFov()
+{
+	return m_fov;
 }
 
 glm::mat4x4 Camera::getViewMatrix()

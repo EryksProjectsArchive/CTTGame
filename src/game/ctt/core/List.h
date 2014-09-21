@@ -120,7 +120,7 @@ public:
 				if (node == m_end)
 					m_end = node->m_previous;
 
-				Node *node = node;
+				//Node *node = node;
 				node = node->m_next;
 				delete node;
 				node = 0;

@@ -14,8 +14,8 @@
 int main()
 {
 	{
-		Game game;
-		if (game.init()) while (game.pulse());
+		if (Game::get()->init()) 
+			while (Game::get()->pulse());
 	}
 
 #ifdef _MEM_LEAKS_DEBUG

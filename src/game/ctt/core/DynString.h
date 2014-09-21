@@ -91,6 +91,11 @@ public:
 		return *this;
 	}
 
+	bool operator==(const DynString& rhs)
+	{
+		return !strcmp(m_buffer, rhs.m_buffer);
+	}
+
 	unsigned char operator[](unsigned int index)
 	{
 		if (index < 0 || index > m_size)

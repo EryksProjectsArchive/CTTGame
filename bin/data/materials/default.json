@@ -1,0 +1,6 @@
+{
+	"shaders": {
+        "vertex": "simple",
+        "fragment": "simpleColor"
+    }
+}

@@ -20,6 +20,8 @@ protected:
 
 	glm::vec3 m_position;
 	glm::vec3 m_target;
+	glm::quat m_rotation;
+	float m_fov;
 public:
 	Camera();
 	~Camera();
@@ -29,6 +31,12 @@ public:
 
 	void setTarget(const glm::vec3 & position);
 	glm::vec3 getTarget();
+
+	void setRotation(const glm::quat & rotation);
+	glm::quat getRotation();
+
+	void setFov(float fov);
+	float getFov();
 	
 	glm::mat4x4 getViewMatrix();
 	

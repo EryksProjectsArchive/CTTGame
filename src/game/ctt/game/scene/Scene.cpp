@@ -17,6 +17,7 @@
 #include "Scene.h"
 
 #include <graphics/Camera.h>
+#include <graphics/renderer/RenderContext.h>
 
 Scene::Scene()
 {
@@ -41,8 +42,12 @@ void Scene::updatePhysics()
 
 void Scene::render()
 {
+	// Separated render context for entities
+	RenderContext ctx;
 	for (auto entity : m_entities)
-		entity->render();
+	{
+		entity->render(ctx);
+	}
 }
 
 void Scene::addEntity(Entity *entity)

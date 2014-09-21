@@ -4,9 +4,30 @@
 //	   Copyright (C) Black Ice Mountains
 //		 	All rights reserved
 //
-// File		: graphics/Graphics.cpp
+// File		: io/File.cpp
 // Author	: Eryk Dwornicki
 //
 //////////////////////////////////////////////
 
-#include "Graphics.h"
+#include "File.h"
+
+
+File::File()
+{
+
+}
+	
+File::~File()
+{
+
+}
+
+bool File::load(FilePath file, FileOpenMode::Type mode)
+{
+	return false;
+}
+	
+bool File::unload()
+{
+	return false;
+}

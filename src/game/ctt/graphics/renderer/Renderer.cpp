@@ -30,6 +30,8 @@
 
 #include <graphics/ShaderProgram.h>
 
+#include <graphics/MaterialLib.h>
+
 #include <graphics/Camera.h>
 
 // Extension methods
@@ -297,7 +299,7 @@ bool Renderer::setup(Window * window)
 
 	glGenVertexArrays = (PFNGLGENVERTEXARRAYSPROC)SDL_GL_GetProcAddress("glGenVertexArrays");
 
-	SDL_GL_SetSwapInterval(1);
+	SDL_GL_SetSwapInterval(1); // set 0 to disable vsync
 
 	glViewport(0, 0, 800, 600);
 	
@@ -312,29 +314,16 @@ bool Renderer::setup(Window * window)
 	//glEnable(GL_CULL_FACE);
 	//glFrontFace(GL_CCW);
 
-	m_defaultMaterial = new Material();// MaterialLib::FindByName("default");
+	m_defaultMaterial = MaterialLib::get()->findByName("default");
+
+	g_helperMaterial = new Material("helper");
 
 	ShaderProgram *shaderProgram = new ShaderProgram();
 
-	FragmentShader * fragmentShader = new FragmentShader("../../data/shaders/simple.frag");
+	FragmentShader*fragmentShader = new FragmentShader("../../data/shaders/simpleColor.frag");
 	shaderProgram->attachShader(fragmentShader);
 
-	VertexShader * vertexShader = new VertexShader("../../data/shaders/simple.vert");
-	shaderProgram->attachShader(vertexShader);
-
-	shaderProgram->link();
-
-	m_defaultMaterial->m_program = shaderProgram;
-
-	g_helperMaterial = new Material();
-
-
-	shaderProgram = new ShaderProgram();
-
-	fragmentShader = new FragmentShader("../../data/shaders/simpleColor.frag");
-	shaderProgram->attachShader(fragmentShader);
-
-	vertexShader = new VertexShader("../../data/shaders/simple.vert");
+	VertexShader *vertexShader = new VertexShader("../../data/shaders/simple.vert");
 	shaderProgram->attachShader(vertexShader);
 
 	shaderProgram->link();
@@ -350,14 +339,15 @@ bool Renderer::setup(Window * window)
 
 	Vertex3d vertices[4] = { 0 };
 
+	// Format: 0xAABBGGRR
 	vertices[1].x = 8;
-	vertices[1].color = 0xFFFF0000;
+	vertices[1].color = 0xFF0000FF;
 
 	vertices[2].y = 8;
 	vertices[2].color = 0xFF00FF00;
 
 	vertices[3].z = 8;
-	vertices[3].color = 0xFF0000FF;
+	vertices[3].color = 0xFFFF0000;
 
 	unsigned short indices[6] = {
 		0, 1,
@@ -413,6 +403,8 @@ void Renderer::renderGeometry(Geometry *geometry, const glm::mat4x4& matrix)
 	Material *material = m_currentMaterial;
 	if (!material)
 		material = m_defaultMaterial;
+
+	m_projectionMatrix = glm::perspective(Camera::current->getFov(), m_window->getAspectRatio(), 0.1f, 1000.0f);
 
 	// Shaders
 	if (!material)
@@ -471,6 +463,11 @@ void Renderer::renderGeometry(Geometry *geometry, const glm::mat4x4& matrix)
 			{
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+				// Set max anisotropy level (TODO: user settings)
+				GLfloat largest;
+				glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &largest);
+				glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, largest);
 			}
 			else 
 			{

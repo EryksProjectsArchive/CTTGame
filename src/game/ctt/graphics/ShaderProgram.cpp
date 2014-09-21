@@ -30,6 +30,11 @@ ShaderProgram::~ShaderProgram()
 		m_uniforms = 0;
 		m_uniformsCount = 0;
 	}
+
+	for (auto shader : m_shaders)
+		delete shader;
+
+	m_shaders.clear();
 }
 
 void ShaderProgram::attachShader(Shader * shader)

@@ -12,15 +12,28 @@
 #include "Material.h"
 #include "Texture.h"
 
-Material::Material()
+#include "ShaderProgram.h"
+
+Material::Material(const DynString & name)
 {
+	m_name = name;
 	m_program = 0;
-	m_texture = new Texture("../../data/textures/testbitmap.bmp", true);
-	m_texture->acquire();
+	m_texture = 0;
 }
 
 Material::~Material()
 {
 	if (m_texture)
 		m_texture->free();
+
+	if (m_program)
+	{
+		delete m_program;
+		m_program = 0;
+	}
+}
+
+DynString Material::getName()
+{
+	return m_name;
 }

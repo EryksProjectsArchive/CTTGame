@@ -31,9 +31,6 @@
     <Filter Include="Header Files\math">
       <UniqueIdentifier>{94b2b005-e014-4c13-bb58-142bf3132adc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\math">
-      <UniqueIdentifier>{f5b83e27-dcc0-484b-bd37-8bafdc344092}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\sound">
       <UniqueIdentifier>{e564fcf7-556e-4f5b-b016-7e298fee1a8a}</UniqueIdentifier>
     </Filter>
@@ -106,6 +103,21 @@
     <Filter Include="Source Files\resources\images\bmp">
       <UniqueIdentifier>{9adfbd33-24e6-42ea-949b-23ffd5060f8a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\io\fs">
+      <UniqueIdentifier>{8e3bcd26-987d-4038-93f7-d5f6f503ed6e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\io\fs\stdio">
+      <UniqueIdentifier>{7264187b-66a4-45b7-8236-3f3b689fdc03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\io\fs">
+      <UniqueIdentifier>{a6130ffb-66fe-4faa-baa9-546e5337c83a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\io\fs\stdio">
+      <UniqueIdentifier>{4d923e7d-281d-4db2-ad61-8af15b9e2749}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\math">
+      <UniqueIdentifier>{f5b83e27-dcc0-484b-bd37-8bafdc344092}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -153,9 +165,6 @@
     <ClCompile Include="graphics\renderer\Renderer.cpp">
       <Filter>Source Files\graphics\renderer</Filter>
     </ClCompile>
-    <ClCompile Include="graphics\Graphics.cpp">
-      <Filter>Source Files\graphics</Filter>
-    </ClCompile>
     <ClCompile Include="game\Game.cpp">
       <Filter>Source Files\game</Filter>
     </ClCompile>
@@ -182,9 +191,6 @@
     </ClCompile>
     <ClCompile Include="graphics\Texture.cpp">
       <Filter>Source Files\graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="io\FileSystem.cpp">
-      <Filter>Source Files\io</Filter>
     </ClCompile>
     <ClCompile Include="game\scene\Scene.cpp">
       <Filter>Source Files\game\scene</Filter>
@@ -228,6 +234,21 @@
     <ClCompile Include="resources\images\bmp\BMPImageLoader.cpp">
       <Filter>Source Files\resources\images\bmp</Filter>
     </ClCompile>
+    <ClCompile Include="io\fs\stdio\StdioFileSystem.cpp">
+      <Filter>Source Files\io\fs\stdio</Filter>
+    </ClCompile>
+    <ClCompile Include="io\fs\stdio\StdioFile.cpp">
+      <Filter>Source Files\io\fs\stdio</Filter>
+    </ClCompile>
+    <ClCompile Include="io\fs\FileSystem.cpp">
+      <Filter>Source Files\io\fs</Filter>
+    </ClCompile>
+    <ClCompile Include="io\fs\File.cpp">
+      <Filter>Source Files\io\fs</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\MaterialLib.cpp">
+      <Filter>Source Files\graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="os\OS.h">
@@ -266,9 +287,6 @@
     <ClInclude Include="graphics\renderer\Renderer.h">
       <Filter>Header Files\graphics\renderer</Filter>
     </ClInclude>
-    <ClInclude Include="graphics\Graphics.h">
-      <Filter>Header Files\graphics</Filter>
-    </ClInclude>
     <ClInclude Include="game\Game.h">
       <Filter>Header Files\game</Filter>
     </ClInclude>
@@ -289,12 +307,6 @@
     </ClInclude>
     <ClInclude Include="resources\Resource.h">
       <Filter>Header Files\resources</Filter>
-    </ClInclude>
-    <ClInclude Include="io\FileSystem.h">
-      <Filter>Header Files\io</Filter>
-    </ClInclude>
-    <ClInclude Include="io\File.h">
-      <Filter>Header Files\io</Filter>
     </ClInclude>
     <ClInclude Include="graphics\renderer\RenderContext.h">
       <Filter>Header Files\graphics\renderer</Filter>
@@ -373,6 +385,33 @@
     </ClInclude>
     <ClInclude Include="resources\images\bmp\BMPImageLoader.h">
       <Filter>Header Files\resources\images\bmp</Filter>
+    </ClInclude>
+    <ClInclude Include="io\fs\stdio\StdioFile.h">
+      <Filter>Header Files\io\fs\stdio</Filter>
+    </ClInclude>
+    <ClInclude Include="io\fs\stdio\StdioFileSystem.h">
+      <Filter>Header Files\io\fs\stdio</Filter>
+    </ClInclude>
+    <ClInclude Include="io\fs\File.h">
+      <Filter>Header Files\io\fs</Filter>
+    </ClInclude>
+    <ClInclude Include="io\fs\FileSystem.h">
+      <Filter>Header Files\io\fs</Filter>
+    </ClInclude>
+    <ClInclude Include="io\fs\FileOpenMode.h">
+      <Filter>Header Files\io\fs</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Singleton.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Array.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\DynArray.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\MaterialLib.h">
+      <Filter>Header Files\graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

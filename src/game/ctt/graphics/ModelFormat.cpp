@@ -65,7 +65,7 @@ bool ModelFormat::load(mdl * mdlStruct, FILE * fp)
 		mdlStruct->meshes[i].triangles = new triangle[mdlStruct->meshes[i].trianglesCount];
 		fread(mdlStruct->meshes[i].triangles, sizeof(triangle), mdlStruct->meshes[i].trianglesCount, fp);
 
-		Info("ModelFormat", "Mesh %s (Tris: %d, Verts: %d)", mdlStruct->meshes[i].name.value, mdlStruct->meshes[i].trianglesCount, mdlStruct->meshes[i].verticesCount);
+		//Debug("ModelFormat", "Mesh %s (Tris: %d, Verts: %d)", mdlStruct->meshes[i].name.value, mdlStruct->meshes[i].trianglesCount, mdlStruct->meshes[i].verticesCount);
 	}
 	return true;
 }

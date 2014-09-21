@@ -12,15 +12,21 @@
 #pragma once
 
 #include <Prerequisites.h>
+#include <core/DynString.h>
 
 class Material
 {
 private:
 	Texture *m_texture;
 	ShaderProgram * m_program;
+
+	DynString m_name;
 public:
-	Material();
+	Material(const DynString & name);
 	~Material();
 
+	DynString getName();
+
 	friend class Renderer;
+	friend class MaterialLib;
 };

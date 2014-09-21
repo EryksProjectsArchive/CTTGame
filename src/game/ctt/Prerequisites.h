@@ -84,6 +84,11 @@ class CachedItem;
 class File;
 class FileSystem;
 class DynamicLibrary;
+namespace Stdio
+{
+	class File;
+	class FileSystem;
+};
 
 // Resources
 class Resource;
@@ -120,6 +125,7 @@ class ShaderProgram;
 class Texture;
 class Geometry;
 class Material;
+class MaterialLib;
 class Model;
 class Mesh;
 struct Vertex3d;

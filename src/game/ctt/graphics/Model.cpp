@@ -33,7 +33,7 @@ void Model::destroy()
 	{
 		if (m_meshes)
 		{
-			for (unsigned char i = 0; i < m_meshesCount; i++)
+			for (unsigned char i = 0; i < m_meshesCount; ++i)
 			{
 				if (m_meshes[i])
 				{
@@ -59,12 +59,12 @@ bool Model::load()
 			mdl mdlData;
 			if (ModelFormat::load(&mdlData, fp))
 			{
-				Debug("model", "Model loaded (%d meshes)", mdlData.meshCount);
+				//Debug("model", "Model loaded (%d meshes)", mdlData.meshCount);
 
 				m_meshes = new Mesh*[mdlData.meshCount];
 				for (unsigned char i = 0; i < mdlData.meshCount; ++i)
 				{
-					Debug("model", "Mesh: %s", mdlData.meshes[i].name.value);
+					//Debug("model", "Mesh: %s", mdlData.meshes[i].name.value);
 
 					m_meshes[i] = new Mesh(&mdlData.meshes[i]);
 
@@ -88,6 +88,6 @@ bool Model::load()
 
 void Model::render(RenderContext & renderContext)
 {
-	for (unsigned char i = 0; i < m_meshesCount; i++)
+	for (unsigned char i = 0; i < m_meshesCount; ++i)
 		m_meshes[i]->render(renderContext);	
 }

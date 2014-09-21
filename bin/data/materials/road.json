@@ -1,0 +1,9 @@
+{
+	"texture": {
+        "name": "road.bmp", "mipMaps": true
+    },
+	"shaders": {
+        "vertex": "simple",
+        "fragment": "simple"
+    }
+}

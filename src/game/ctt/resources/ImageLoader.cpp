@@ -46,9 +46,3 @@ ImageData * ImageLoader::load(FilePath filePath)
 	}
 	return data;
 }
-
-ImageLoader * ImageLoader::get()
-{
-	static ImageLoader loader;
-	return &loader;
-}

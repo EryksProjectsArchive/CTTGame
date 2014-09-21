@@ -13,7 +13,9 @@
 
 #include <Prerequisites.h>
 
-class Game
+#include <core/Singleton.h>
+
+class Game : public Singleton<Game>
 {
 private:
 	bool m_isRunning;
@@ -23,9 +25,10 @@ private:
 	Renderer* m_renderer;
 	ISoundMgr* m_soundMgr;
 
-	FileSystem *m_fileSystem;
-
 	Scene *m_scene;
+
+	bool isADown;
+	bool isDDown;
 public:
 	Game();
 	~Game();
@@ -33,4 +36,6 @@ public:
 	bool init();
 
 	bool pulse();
+
+	void onKeyEvent(int key, bool state);
 };
