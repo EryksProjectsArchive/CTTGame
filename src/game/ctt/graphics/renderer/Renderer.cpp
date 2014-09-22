@@ -34,6 +34,8 @@
 
 #include <graphics/Camera.h>
 
+#include <game/environment/Environment.h>
+
 // Extension methods
 PFNGLENABLEIPROC Renderer::glEnablei = 0;
 
@@ -447,6 +449,33 @@ void Renderer::renderGeometry(Geometry *geometry, const glm::mat4x4& matrix)
 		glUniformMatrix4fv(mvpMatrixLocation, 1, GL_FALSE, glm::value_ptr(mvp));
 	}
 
+	unsigned int sunPosLocation = material->m_program->getUniformLocation("sunPos");
+	if (sunPosLocation != -1)
+	{
+		glm::vec3 pos = Environment::get()->getSunPosition();
+		glUniform3f(sunPosLocation, pos.x, pos.y, pos.z);
+	}
+
+	unsigned int sunLightColorLocation = material->m_program->getUniformLocation("sunLightColor");
+	if (sunLightColorLocation != -1)
+	{
+		glm::vec3 color = Environment::get()->getSunLightColor();
+		glUniform3f(sunLightColorLocation, color.x, color.y, color.z);
+	}
+
+	unsigned int sunLightPowerLocation = material->m_program->getUniformLocation("sunLightPower");
+	if (sunLightPowerLocation != -1)
+	{
+		float power = Environment::get()->getSunLightPower();
+		glUniform1f(sunLightPowerLocation, power);
+	}
+
+	unsigned int sunAmbientColorLocation = material->m_program->getUniformLocation("sunAmbientColor");
+	if (sunAmbientColorLocation != -1)
+	{
+		glm::vec3 ambientColor = Environment::get()->getSunAmbientColor();
+		glUniform3f(sunAmbientColorLocation, ambientColor.x, ambientColor.y, ambientColor.z);
+	}
 
 	if (material->m_texture)
 	{

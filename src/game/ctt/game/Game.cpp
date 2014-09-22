@@ -152,7 +152,7 @@ bool Game::init()
 	simpleBox = new Model("../../data/models/simpleBox.mdl");
 	simpleBox->acquire();
 
-	Environment::get()->setSunPosition(Vector3(5.0f, 10.0f, 0.0f));
+	Environment::get()->setSunPosition(Vector3(30.0f, 10.0f, 0.0f));
 
 	m_isInitialized = true;
 	m_isRunning = true;
@@ -171,6 +171,8 @@ bool Game::pulse()
 			m_isRunning = false;
 		}
 	}
+
+	Environment::get()->pulse();
 
 	if (Camera::current)
 	{
@@ -229,6 +231,7 @@ void Game::onKeyEvent(int key, bool state)
 		controlls[0] = state;
 	else if (key == 's')
 		controlls[1] = state;
+
 	//printf("%c / %s\n", key, state ? "press" : "release");
 }
 

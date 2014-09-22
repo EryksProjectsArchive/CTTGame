@@ -49,7 +49,7 @@ FragmentShader::FragmentShader(const char * source) : Shader(source)
 
 			Renderer::glGetShaderInfoLog(m_shaderId, maxLength, &maxLength, errorLog);
 
-			Debug("shader", "Compilation error: %s", errorLog);
+			Debug("shader", "Compilation error (%s): %s", source, errorLog);
 
 			delete[]errorLog;
 
