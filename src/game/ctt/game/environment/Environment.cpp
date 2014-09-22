@@ -19,15 +19,15 @@ Environment::Environment() : m_time(0)
 	m_states[EnvironmentStates::Day] = EnvironmentState(Vector3(30.0f, 10.0f, 0.0f), glm::vec3(1, 1, 1), glm::vec3(0.96f, 0.92f, 0.76f), 100.0f, 5, 6);
 	m_states[EnvironmentStates::Night] = EnvironmentState(Vector3(30.0f, 10.0f, 0.0f), glm::vec3(1, 1, 1), glm::vec3(0.03f, 0.09f, 0.25f), 50.0f, 20, 22);
 
-	m_currentState = EnvironmentStates::Night;
-	m_nextState = EnvironmentStates::Day;
+	m_currentState = EnvironmentStates::Day;
+	m_nextState = EnvironmentStates::Night;
 
 	m_sunAmbientColor = m_states[m_currentState].sunAmbientColor;
 	m_sunLightColor = m_states[m_currentState].sunLightColor;
 	m_sunLightPower = m_states[m_currentState].sunLightPower;
 	m_sunPosition = m_states[m_currentState].sunPosition;
 
-	m_timeScale = 1000; // 1 minute per 1 second
+	m_timeScale = 1000; // 1 minute per 1 second (To be fixed soon)
 	m_lastTimeUpdate = OS::getMicrosecondsCount() / 1000;
 }
 
@@ -110,6 +110,9 @@ glm::vec3 Environment::getSunAmbientColor()
 
 void Environment::interpolateStates()
 {
+	if (true) // disable interpolateStates - we dont need it for now
+		return;
+
 	bool interpStart = getHour() == m_states[m_nextState].interpStart;
 	bool start = interpStart && !m_stateInterpolation.interpolating;
 
@@ -157,8 +160,6 @@ void Environment::interpolateStates()
 			m_currentState = m_nextState;
 			m_nextState = tmp;
 			m_stateInterpolation.interpolating = false;
-
-			printf("%d / %d\n", hour, m_states[m_nextState].interpStart);
 		}
 	}
 }
