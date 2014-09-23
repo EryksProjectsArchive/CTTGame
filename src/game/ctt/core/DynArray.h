@@ -17,27 +17,28 @@ template <typename type>
 class DynArray
 {
 private:
-	type *elements;
-	unsigned int capacity;
+	type * m_elements;
+	unsigned int m_capacity;
 public:
 	DynArray()
 	{
-		capacity = -1;
-		elements = 0;
+		m_capacity = -1;
+		m_elements = 0;
 	}
 
 	~DynArray()
 	{
-		if (elements)
+		if (m_elements)
 		{
-			free(elements);
-			elements = 0;
+			free(m_elements);
+			m_elements = 0;
 		}
+		m_capacity = -1;
 	}
 
 	type& operator[](unsigned int index)
 	{
-		if (index != -1 && capacity == -1)
+		if (capacity == -1)
 			capacity = 1;
 		else if (index > capacity - 1)
 			capacity = index;
@@ -47,11 +48,11 @@ public:
 		else
 			elements = (type *)realloc(elements, sizeof(type) * capacity);
 
-		return elements[index];
+		return m_elements[index];
 	}
 
 	unsigned int capacity()
 	{
-		return capacity;
+		return m_capacity;
 	}
 };

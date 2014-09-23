@@ -11,35 +11,26 @@
 
 #pragma once
 
-template <class type, unsigned int size>
+template <class Type, unsigned int Size>
 class Array
 {
 private:
-	type elements[size];
+	Type m_elements[Size];
 public:
 	Array()
 	{
-		for (unsigned int i = 0; i < size; ++i)
-		{
-			elements[i] = 0;
-		}
 	}
 
 	~Array()
 	{
-		for (unsigned int i = 0; i < size; ++i)
-		{
-			elements[i] = 0;
-		}
 	}
 
-	type& operator[](unsigned int index)
+	Type& operator[](unsigned int index)
 	{
 		// Make sure about that index is valid, if no then return element at first index
-		if (index < 0 || index > size)
-		{
+		if (index < 0 || index > Size)
 			index = 0;
-		}
-		return elements[index];
+
+		return m_elements[index];
 	}
 };
