@@ -42,6 +42,9 @@
 
 #include <game/scene/entities/types/CrossroadEntity.h>
 
+#include <freetype.h>
+#include <ftglyph.h>
+
 Model *simpleBox = 0;
 #define FREE_MODEL(mdl)\
 	mdl->free();\
@@ -93,6 +96,44 @@ bool Game::init()
 	// Setup file system
 	FileSystem::get()->registerFileSystem(new Stdio::FileSystem());
 	FileSystem::get()->setBaseDirectory(FilePath("%s../../data/",OS::getAppPath()));
+
+	/* Init free type
+	// TODO: Font engine
+	FT_Library ftLibrary;
+	FT_Init_FreeType(&ftLibrary);
+
+	FT_Face face;
+	FT_New_Face(ftLibrary, "../../fonts/tahoma.ttf", 0, &face);
+
+	int size = 12 << 6; // ft size = 1/64th of pixel
+	FT_Set_Char_Size(face, size, size, 96, 96);
+
+	unsigned int glyphWidth = 1024;
+	unsigned int glyphHeight = 1024;
+	unsigned char *texture = new unsigned char[2 * glyphWidth * glyphHeight];
+	for (uint8 i = 0; i < 255; ++i)
+	{
+		FT_Load_Glyph(face, FT_Get_Char_Index(face, i), FT_LOAD_DEFAULT);
+		
+		FT_Glyph glyph;
+		FT_Get_Glyph(face->glyph, &glyph);
+
+		FT_Glyph_To_Bitmap(&glyph, ft_render_mode_normal, 0, 1);
+
+		FT_BitmapGlyph bmGlyph = (FT_BitmapGlyph)glyph;
+
+		FT_Bitmap& bm = bmGlyph->bitmap;
+
+		for (uint32 x = 0; x < bm.width; ++x)
+		{
+			for (uint32 y = 0; y < bm.rows; ++y)
+			{
+				texture[2 * (x + y * bm.width)] = bm.buffer[x + bm.width * y];
+				texture[2 * (x + y * bm.width) + 1] = bm.buffer[x + bm.width * y + 1];
+			}
+		}
+	}*/
+
 
 	// Setup home directory
 	char szHomePath[MAX_PATH] = { 0 };

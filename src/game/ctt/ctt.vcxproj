@@ -87,7 +87,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>./;../../libs/OpenAL1.1/include;../../libs/SDL2-2.0.3/include;../../libs/glm-0.9.5.4/glm/;../../libs/jsoncpp/include;../../libs/bullet/src/;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./;../../libs/OpenAL1.1/include/;../../libs/SDL2-2.0.3/include/;../../libs/glm-0.9.5.4/glm/;../../libs/jsoncpp/include/;../../libs/freetype-2.5.3/include/;../../libs/bullet/src/</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4996;</DisableSpecificWarnings>
       <PreprocessorDefinitions>DEBUG;</PreprocessorDefinitions>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
@@ -124,7 +124,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>./;../../libs/OpenAL1.1/include;../../libs/SDL2-2.0.3/include;../../libs/glm-0.9.5.4/glm/;../../libs/jsoncpp/include;../../libs/bullet/src/;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./;../../libs/OpenAL1.1/include/;../../libs/SDL2-2.0.3/include/;../../libs/glm-0.9.5.4/glm/;../../libs/jsoncpp/include/;../../libs/freetype-2.5.3/include/;../../libs/bullet/src/</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4996;</DisableSpecificWarnings>
       <DisableLanguageExtensions>false</DisableLanguageExtensions>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
@@ -281,6 +281,9 @@
     </ProjectReference>
     <ProjectReference Include="..\..\libs\bullet\build3\vs2010\LinearMath.vcxproj">
       <Project>{05bc36b2-4d46-cb45-8382-50cd84c09783}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\libs\freetype-2.5.3\builds\windows\vc2013_ctt\freetype.vcxproj">
+      <Project>{78b079bd-9fc7-4b9e-b4a6-96da0f00248b}</Project>
     </ProjectReference>
     <ProjectReference Include="..\..\libs\jsoncpp\jsoncpp.vcxproj">
       <Project>{92c379eb-18c9-41b6-9f8c-11d9f6dc52f2}</Project>
