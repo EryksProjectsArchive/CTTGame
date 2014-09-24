@@ -99,16 +99,11 @@ class ImageLoader;
 namespace OpenAL
 {
 	class Impl;
-	class Sound;
-	class SoundMgr;
 };
-class ISound;
-class ISoundMgr;
 
-struct WaveFile;
-struct WaveDataChunk;
-struct WaveHeader;
-struct WaveInfoChunk;
+class Sound;
+class SoundManager;
+struct SoundData;
 
 // Graphics
 class RenderContext;

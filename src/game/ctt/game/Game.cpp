@@ -27,7 +27,7 @@
 #include <io/fs/FileSystem.h>
 #include <io/fs/stdio/StdioFileSystem.h>
 
-#include <sound/SoundMgr.h>
+#include <sound/SoundManager.h>
 
 #include <game/scene/Scene.h>
 
@@ -35,6 +35,8 @@
 
 #include <resources/ImageLoader.h>
 #include <resources/images/bmp/BMPImageLoader.h>
+#include <resources/SoundLoader.h>
+#include <resources/sounds/wav/WAVsoundLoader.h>
 
 #include "environment/Environment.h"
 
@@ -46,7 +48,7 @@ Model *simpleBox = 0;
 	mdl = 0;
 
 Game::Game()
-	: m_isRunning(false), m_isInitialized(false), m_renderer(0), m_window(0), m_soundMgr(0), m_scene(0)
+	: m_isRunning(false), m_isInitialized(false), m_renderer(0), m_window(0), m_scene(0)
 {
 	for (unsigned int i = 0; i < 4; ++i)
 		controlls[i] = false;
@@ -69,12 +71,6 @@ Game::~Game()
 	{
 		delete m_window;
 		m_window = 0;
-	}
-
-	if (m_soundMgr)
-	{
-		delete m_soundMgr;
-		m_soundMgr = 0;
 	}
 
 	if (m_scene)
@@ -107,6 +103,9 @@ bool Game::init()
 	// create image loader
 	ImageLoader::get()->registerLoader(new BMP::ImageLoader());
 
+	// create sound loader
+	SoundLoader::get()->registerLoader(new WAV::SoundLoader());
+
 	// Create game window
 	m_window = new Window();
 	m_window->setup("City Transport Tycoon", 1240, 780);
@@ -119,22 +118,22 @@ bool Game::init()
 	}
 
 	// create game sound mgr
-	m_soundMgr = ISoundMgr::create(SoundAPI::OpenAL);
 
-	if (!m_soundMgr->setup())
+	if (!SoundManager::get()->setup())
 	{
 		Error("game", "Cannot setup SoundMgr!");
 		return false;
 	}
 
-	/*ISound *sound = m_soundMgr->createSound(SoundType::Effect);
+	Sound *sound = SoundManager::get()->createSound(SoundType::Effect);
 
-	if (!sound->load("../../data/sounds/test.wav"))
+	if (!sound->load("sounds/test.wav"))
 	{
 		return false;
 	}
 
-	sound->play();*/
+	sound->setVolume(0.3f);
+	sound->play(true);
 
 	// Create scene
 	m_scene = new Scene();

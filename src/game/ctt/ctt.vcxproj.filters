@@ -124,6 +124,18 @@
     <Filter Include="Header Files\game\environment">
       <UniqueIdentifier>{b1615187-363f-4b2c-bffa-b52c324fb97d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\resources\sounds">
+      <UniqueIdentifier>{6e5f504e-d395-4e3a-b8aa-78b8ef382fa1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\resources\sounds">
+      <UniqueIdentifier>{9f957d55-1b2b-4220-81d1-74b9b4751b10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\resources\sounds\wav">
+      <UniqueIdentifier>{6ab1fef6-39b9-4d67-bd68-893a8c069547}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\resources\sounds\wav">
+      <UniqueIdentifier>{d66c336d-62c1-41f6-9304-433f3442ede6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -147,16 +159,7 @@
     <ClCompile Include="sound\Sound.cpp">
       <Filter>Source Files\sound</Filter>
     </ClCompile>
-    <ClCompile Include="sound\SoundMgr.cpp">
-      <Filter>Source Files\sound</Filter>
-    </ClCompile>
     <ClCompile Include="sound\openal\OpenALImpl.cpp">
-      <Filter>Source Files\sound\openal</Filter>
-    </ClCompile>
-    <ClCompile Include="sound\openal\OpenALSound.cpp">
-      <Filter>Source Files\sound\openal</Filter>
-    </ClCompile>
-    <ClCompile Include="sound\openal\OpenALSoundMgr.cpp">
       <Filter>Source Files\sound\openal</Filter>
     </ClCompile>
     <ClCompile Include="graphics\Model.cpp">
@@ -261,6 +264,15 @@
     <ClCompile Include="game\environment\Environment.cpp">
       <Filter>Source Files\game\environment</Filter>
     </ClCompile>
+    <ClCompile Include="resources\sounds\wav\WAVsoundLoader.cpp">
+      <Filter>Source Files\resources\sounds\wav</Filter>
+    </ClCompile>
+    <ClCompile Include="resources\SoundLoader.cpp">
+      <Filter>Source Files\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="sound\SoundManager.cpp">
+      <Filter>Source Files\sound</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="os\OS.h">
@@ -272,19 +284,7 @@
     <ClInclude Include="sound\Sound.h">
       <Filter>Header Files\sound</Filter>
     </ClInclude>
-    <ClInclude Include="sound\SoundMgr.h">
-      <Filter>Header Files\sound</Filter>
-    </ClInclude>
-    <ClInclude Include="sound\WaveFile.h">
-      <Filter>Header Files\sound</Filter>
-    </ClInclude>
     <ClInclude Include="sound\openal\OpenALImpl.h">
-      <Filter>Header Files\sound\openal</Filter>
-    </ClInclude>
-    <ClInclude Include="sound\openal\OpenALSound.h">
-      <Filter>Header Files\sound\openal</Filter>
-    </ClInclude>
-    <ClInclude Include="sound\openal\OpenALSoundMgr.h">
       <Filter>Header Files\sound\openal</Filter>
     </ClInclude>
     <ClInclude Include="graphics\Mesh.h">
@@ -430,6 +430,18 @@
     </ClInclude>
     <ClInclude Include="game\environment\Environment.h">
       <Filter>Header Files\game\environment</Filter>
+    </ClInclude>
+    <ClInclude Include="resources\SoundLoader.h">
+      <Filter>Header Files\resources</Filter>
+    </ClInclude>
+    <ClInclude Include="resources\sounds\wav\WAVsoundLoader.h">
+      <Filter>Header Files\resources\sounds\wav</Filter>
+    </ClInclude>
+    <ClInclude Include="sound\SoundData.h">
+      <Filter>Header Files\sound</Filter>
+    </ClInclude>
+    <ClInclude Include="sound\SoundManager.h">
+      <Filter>Header Files\sound</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

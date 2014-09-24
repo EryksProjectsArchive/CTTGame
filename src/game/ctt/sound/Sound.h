@@ -12,20 +12,27 @@
 
 #pragma once
 
-class ISound
+#include <sound/openal/OpenALImpl.h>
+
+class Sound
 {
+private:
+	OpenAL::Impl* m_al;
+
+	unsigned int m_bufferID;
+	unsigned int m_sourceID;
 public:
-	ISound();
-	virtual ~ISound();
+	Sound(OpenAL::Impl *al);
+	~Sound();
 
-	virtual bool load(const char* filename);
+	bool load(FilePath filepath);
 
-	virtual void play(bool loop = false);
-	virtual void pause();
-	virtual void stop();
+	void play(bool loop = false);
+	void pause();
+	void stop();
 
-	virtual void setVolume(float volume);
-	virtual float getVolume();
+	void setVolume(float volume);
+	float getVolume();
 
-	virtual bool isPlaying();
+	bool isPlaying();
 };

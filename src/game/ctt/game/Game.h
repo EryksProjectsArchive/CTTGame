@@ -23,7 +23,6 @@ private:
 
 	Window* m_window;
 	Renderer* m_renderer;
-	ISoundMgr* m_soundMgr;
 
 	Scene *m_scene;
 

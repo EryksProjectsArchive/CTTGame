@@ -201,11 +201,11 @@
     <ClCompile Include="resources\ImageLoader.cpp" />
     <ClCompile Include="resources\images\bmp\BMPImageLoader.cpp" />
     <ClCompile Include="resources\Resource.cpp" />
+    <ClCompile Include="resources\SoundLoader.cpp" />
+    <ClCompile Include="resources\sounds\wav\WAVsoundLoader.cpp" />
     <ClCompile Include="sound\openal\OpenALImpl.cpp" />
-    <ClCompile Include="sound\openal\OpenALSound.cpp" />
-    <ClCompile Include="sound\openal\OpenALSoundMgr.cpp" />
     <ClCompile Include="sound\Sound.cpp" />
-    <ClCompile Include="sound\SoundMgr.cpp" />
+    <ClCompile Include="sound\SoundManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\Array.h" />
@@ -258,12 +258,12 @@
     <ClInclude Include="resources\ImageLoader.h" />
     <ClInclude Include="resources\images\bmp\BMPImageLoader.h" />
     <ClInclude Include="resources\Resource.h" />
+    <ClInclude Include="resources\SoundLoader.h" />
+    <ClInclude Include="resources\sounds\wav\WAVsoundLoader.h" />
     <ClInclude Include="sound\openal\OpenALImpl.h" />
-    <ClInclude Include="sound\openal\OpenALSound.h" />
-    <ClInclude Include="sound\openal\OpenALSoundMgr.h" />
     <ClInclude Include="sound\Sound.h" />
-    <ClInclude Include="sound\SoundMgr.h" />
-    <ClInclude Include="sound\WaveFile.h" />
+    <ClInclude Include="sound\SoundData.h" />
+    <ClInclude Include="sound\SoundManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="todo.txt" />
