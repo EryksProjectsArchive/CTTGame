@@ -46,6 +46,7 @@ bool ModelFormat::load(mdl * mdlStruct, FILE * fp)
 		
 		// Read flags and world placement
 		fread(&mdlStruct->meshes[i].flags, sizeof(mdlStruct->meshes[i].flags), 1, fp);
+		fread(&mdlStruct->meshes[i].simpleColBox, sizeof(mdlStruct->meshes[i].simpleColBox), 1, fp);
 		fread(&mdlStruct->meshes[i].worldPlacement, sizeof(mdlStruct->meshes[i].worldPlacement), 1, fp);
 		
 		// Read material name

@@ -24,6 +24,7 @@ private:
 	Quaternion m_rotation;
 
 	Geometry *m_geometry;
+	Geometry *m_colbox;
 	SharedPtr<Material> m_material;
 
 	char *m_meshName;

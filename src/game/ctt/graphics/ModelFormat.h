@@ -63,11 +63,17 @@ struct placement
 	struct vector scale;
 };
 
+struct aabb
+{
+	vector min;
+	vector max;
+};
 
 struct mesh
 {
 	struct string name;
 	unsigned char flags;
+	aabb simpleColBox;
 	struct placement worldPlacement;
 	struct string material;
 	unsigned short verticesCount;
