@@ -36,7 +36,7 @@ Mesh::Mesh(mesh * meshData)
 
 	m_material = MaterialLib::get()->findByName(meshData->material.value);
 
-	m_colbox = new Geometry(EDrawType::LINES);
+	m_colbox = new Geometry(EDrawType::LINE_STRIP);
 	if (m_colbox)
 	{
 		vertex colbox[8] = { 0 };
@@ -44,7 +44,7 @@ Mesh::Mesh(mesh * meshData)
 			colbox[i].color = 0xFF0000FF;
 
 		colbox[0].x = meshData->simpleColBox.min.x;
-		colbox[0].y = meshData->simpleColBox.min.y;
+		colbox[0].y = meshData->simpleColBox.max.y;
 		colbox[0].z = meshData->simpleColBox.min.z;
 
 		colbox[1].x = meshData->simpleColBox.max.x;
@@ -59,28 +59,40 @@ Mesh::Mesh(mesh * meshData)
 		colbox[3].y = meshData->simpleColBox.max.y;
 		colbox[3].z = meshData->simpleColBox.min.z;
 
-		triangle triangles[5];
+		colbox[4].x = meshData->simpleColBox.min.x;
+		colbox[4].y = meshData->simpleColBox.min.y;
+		colbox[4].z = meshData->simpleColBox.min.z;
+
+		colbox[5].x = meshData->simpleColBox.max.x;
+		colbox[5].y = meshData->simpleColBox.min.y;
+		colbox[5].z = meshData->simpleColBox.max.z;
+
+		colbox[6].x = meshData->simpleColBox.min.x;
+		colbox[6].y = meshData->simpleColBox.min.y;
+		colbox[6].z = meshData->simpleColBox.max.z;
+
+		colbox[7].x = meshData->simpleColBox.max.x;
+		colbox[7].y = meshData->simpleColBox.min.y;
+		colbox[7].z = meshData->simpleColBox.min.z;
+
+		triangle triangles[4];
 		triangles[0].a = 0;
 		triangles[0].b = 1;
 		triangles[0].c = 2;
 
 		triangles[1].a = 0;
-		triangles[1].b = 2;
+		triangles[1].b = 3;
 		triangles[1].c = 1;
 
-		triangles[2].a = 0;
-		triangles[2].b = 3;
-		triangles[2].c = 1;
+		triangles[2].a = 4;
+		triangles[2].b = 5;
+		triangles[2].c = 6;
 
-		triangles[3].a = 0;
-		triangles[3].b = 3;
-		triangles[3].c = 2;
+		triangles[3].a = 4;
+		triangles[3].b = 7;
+		triangles[3].c = 5;
 
-		triangles[4].a = 1;
-		triangles[4].b = 3;
-		triangles[4].c = 2;
-
-		m_colbox->fillData(colbox, 4, triangles, 5);
+		m_colbox->fillData(colbox, 8, triangles, 4);
 	}
 }
 
@@ -90,6 +102,12 @@ Mesh::~Mesh()
 	{
 		delete m_geometry;
 		m_geometry = 0;
+	}
+
+	if (m_colbox)
+	{
+		delete m_colbox;
+		m_colbox = 0;
 	}
 
 	if (m_meshName)
