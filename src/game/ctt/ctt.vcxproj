@@ -127,7 +127,7 @@
       <AdditionalIncludeDirectories>./;../../libs/OpenAL1.1/include/;../../libs/SDL2-2.0.3/include/;../../libs/glm-0.9.5.4/glm/;../../libs/jsoncpp/include/;../../libs/freetype-2.5.3/include/;../../libs/bullet/src/</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4996;</DisableSpecificWarnings>
       <DisableLanguageExtensions>false</DisableLanguageExtensions>
-      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <PreprocessorDefinitions>
@@ -171,6 +171,7 @@
     <ClCompile Include="game\environment\Environment.cpp" />
     <ClCompile Include="game\Game.cpp" />
     <ClCompile Include="game\scene\entities\Entity.cpp" />
+    <ClCompile Include="game\scene\entities\types\BoxEntity.cpp" />
     <ClCompile Include="game\scene\entities\types\CrossroadEntity.cpp" />
     <ClCompile Include="game\scene\Scene.cpp" />
     <ClCompile Include="graphics\BufferBase.cpp" />
@@ -200,6 +201,8 @@
     <ClCompile Include="os\DynamicLibrary.cpp" />
     <ClCompile Include="os\OS.cpp" />
     <ClCompile Include="os\win32\Win32DynamicLibrary.cpp" />
+    <ClCompile Include="physics\PhysicalEntity.cpp" />
+    <ClCompile Include="physics\PhysicsWorld.cpp" />
     <ClCompile Include="resources\CacheableResource.cpp" />
     <ClCompile Include="resources\ImageLoader.cpp" />
     <ClCompile Include="resources\images\bmp\BMPImageLoader.cpp" />
@@ -226,6 +229,7 @@
     <ClInclude Include="game\environment\Environment.h" />
     <ClInclude Include="game\Game.h" />
     <ClInclude Include="game\scene\entities\Entity.h" />
+    <ClInclude Include="game\scene\entities\types\BoxEntity.h" />
     <ClInclude Include="game\scene\entities\types\CrossroadEntity.h" />
     <ClInclude Include="game\scene\Scene.h" />
     <ClInclude Include="graphics\BufferBase.h" />
@@ -255,8 +259,11 @@
     <ClInclude Include="io\fs\stdio\StdioFile.h" />
     <ClInclude Include="io\fs\stdio\StdioFileSystem.h" />
     <ClInclude Include="io\Serializeable.h" />
+    <ClInclude Include="math\AABB.h" />
     <ClInclude Include="os\DynamicLibrary.h" />
     <ClInclude Include="os\OS.h" />
+    <ClInclude Include="physics\PhysicalEntity.h" />
+    <ClInclude Include="physics\PhysicsWorld.h" />
     <ClInclude Include="Prerequisites.h" />
     <ClInclude Include="resources\CacheableResource.h" />
     <ClInclude Include="resources\ImageLoader.h" />

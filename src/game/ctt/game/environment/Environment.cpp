@@ -76,7 +76,6 @@ void Environment::pulse()
 	if (timeElapsed > 0)
 	{
 		m_time += timeElapsed;
-		printf("TIME %02d:%02d\n", getHour(), getMinute());
 	}
 }
 

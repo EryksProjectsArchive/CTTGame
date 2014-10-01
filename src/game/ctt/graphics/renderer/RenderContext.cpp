@@ -13,9 +13,7 @@
 #include "Renderer.h"
 
 RenderContext::RenderContext()
-	: m_shaderProgram(0)
 {
-
 }
 
 RenderContext::~RenderContext()
@@ -34,9 +32,4 @@ RenderTask * RenderContext::newTask()
 	RenderTask *task = new RenderTask();
 	m_renderTasks.pushBack(task);
 	return task;
-}
-
-void RenderContext::setShaderProgram(ShaderProgram * shaderProgram)
-{
-	m_shaderProgram = shaderProgram;
 }

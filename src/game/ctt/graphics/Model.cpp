@@ -56,17 +56,43 @@ bool Model::load()
 
 		if (fp)
 		{
+			Vector3 max, min;
 			mdl mdlData;
 			if (ModelFormat::load(&mdlData, fp))
 			{
-				//Debug("model", "Model loaded (%d meshes)", mdlData.meshCount);
-
 				m_meshes = new Mesh*[mdlData.meshCount];
 				for (unsigned char i = 0; i < mdlData.meshCount; ++i)
 				{
-					//Debug("model", "Mesh: %s", mdlData.meshes[i].name.value);
-
 					m_meshes[i] = new Mesh(&mdlData.meshes[i]);
+
+					// Update model AABB
+					AABB *aabb = m_meshes[i]->getAABB();
+					if (aabb)
+					{
+						float axis = aabb->getMin().x;
+						if (axis < min.x)
+							min.x = axis;
+
+						axis = aabb->getMin().y;
+						if (axis < min.y)
+							min.y = axis;
+
+						axis = aabb->getMin().z;
+						if (axis < min.z)
+							min.z = axis;
+
+						axis = aabb->getMax().x;
+						if (axis > max.x)
+							max.x = axis;
+
+						axis = aabb->getMax().y;
+						if (axis > max.y)
+							max.y = axis;
+
+						axis = aabb->getMax().z;
+						if (axis > max.z)
+							max.z = axis;
+					}
 
 					delete[] mdlData.meshes[i].name.value;
 					delete[] mdlData.meshes[i].material.value;
@@ -74,20 +100,34 @@ bool Model::load()
 					delete[] mdlData.meshes[i].vertices;
 				}
 				m_meshesCount = mdlData.meshCount;
+				
+				// Update aabb
+				m_aabb.set(min, max);
 
 				delete[] mdlData.meshes;
 
 				m_isLoaded = true;
 				return true;
 			}
+
 			fclose(fp);			
 		}
 	}
 	return false;
 }
 
+void Model::setMatrix(const Matrix4x4 matrix)
+{
+	m_matrix = matrix;
+}
+
 void Model::render(RenderContext & renderContext)
 {
 	for (unsigned char i = 0; i < m_meshesCount; ++i)
-		m_meshes[i]->render(renderContext);	
+		m_meshes[i]->render(renderContext, m_matrix);	
+}
+
+AABB * Model::getAABB()
+{
+	return &m_aabb;
 }

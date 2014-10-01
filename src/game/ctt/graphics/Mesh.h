@@ -15,17 +15,19 @@
 
 #include "ModelFormat.h"
 #include <core/SharedPtr.h>
+#include <math/AABB.h>
 
 class Mesh
 {
 private:
 	Vector3 m_position;
 	Vector3 m_scale;
-	Quaternion m_rotation;
+	Quaternion m_rotation;	
 
 	Geometry *m_geometry;
-	Geometry *m_colbox;
 	SharedPtr<Material> m_material;
+
+	AABB m_aabb;
 
 	char *m_meshName;
 public:
@@ -34,5 +36,7 @@ public:
 
 	const char * getName();
 
-	void render(RenderContext& context);
+	void render(RenderContext& context, Matrix4x4 modelMatrix);
+
+	AABB * getAABB();
 };

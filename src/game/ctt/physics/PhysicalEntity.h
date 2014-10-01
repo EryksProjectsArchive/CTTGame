@@ -4,29 +4,21 @@
 //	   Copyright (C) Black Ice Mountains
 //		 	All rights reserved
 //
-// File		: game/scene/Scene.h
+// File		: physics/PhysicalEntity.h
 // Author	: Eryk Dwornicki
 //
 //////////////////////////////////////////////
-
 #pragma once
 
-#include <Prerequisites.h>
-
-#include <core/List.h>
-#include <core/Singleton.h>
-
-class Scene
+class PhysicalEntity
 {
-private:
-	List<Entity *> m_entities;
+protected:
+	btRigidBody *m_rigidBody;
 
-	Camera * m_camera;
 public:
-	Scene();
-	~Scene();
+	PhysicalEntity();
+	~PhysicalEntity();
 
-	void addEntity(Entity *entity);
-
-	void render();
+	virtual void prePhysicsUpdate() = 0;
+	virtual void postPhysicsUpdate() = 0;
 };

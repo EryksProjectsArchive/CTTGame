@@ -21,6 +21,10 @@ class Model : public CacheableResource
 private:
 	unsigned char m_meshesCount;
 	Mesh** m_meshes;
+
+	AABB m_aabb;
+
+	Matrix4x4 m_matrix;
 public:
 	Model(FilePath file);
 	~Model() override;
@@ -29,4 +33,8 @@ public:
 	bool load() override;
 
 	void render(RenderContext& renderContext);
+
+	void setMatrix(const Matrix4x4 matrix);
+
+	AABB * getAABB();
 };

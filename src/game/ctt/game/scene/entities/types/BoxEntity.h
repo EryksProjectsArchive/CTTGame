@@ -4,7 +4,7 @@
 //	   Copyright (C) Black Ice Mountains
 //		 	All rights reserved
 //
-// File		: game/scene/entities/types/CrossroadEntity.h
+// File		: game/scene/entities/types/BoxEntity.h
 // Author	: Eryk Dwornicki
 //
 //////////////////////////////////////////////
@@ -16,13 +16,13 @@
 #include <physics/PhysicsWorld.h>
 #include <physics/PhysicalEntity.h>
 
-class CrossroadEntity : public Entity, public PhysicalEntity
+class BoxEntity : public Entity, public PhysicalEntity
 {
 private:
 	Model *m_model;
 public:
-	CrossroadEntity();
-	~CrossroadEntity();
+	BoxEntity();
+	~BoxEntity();
 
 	void render(RenderContext & ctx);
 

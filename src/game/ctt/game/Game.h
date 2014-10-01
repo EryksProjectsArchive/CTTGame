@@ -23,8 +23,8 @@ private:
 
 	Window* m_window;
 	Renderer* m_renderer;
-
 	Scene *m_scene;
+	PhysicsWorld *m_physicsWorld;
 
 	bool controlls[4];
 	float distance;
@@ -38,4 +38,6 @@ public:
 
 	void onKeyEvent(int key, bool state);
 	void onMouseScroll(int horizontal, int vertical);
+
+	PhysicsWorld * getPhysicsWorld();
 };

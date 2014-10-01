@@ -11,16 +11,13 @@
 
 #include <graphics/renderer/RenderContext.h>
 
-#include <core/hashing/JenkinsHash.h>
 #include <core/Logger.h>
 
 #include "Entity.h"
 
-Entity::Entity(String<32> name)
-	: m_name(name)
+Entity::Entity(EntityType::Type type)
+	: m_type(type)
 {
-	JenkinsHash hash;
-	m_hashedName = hash.encode(m_name, m_name.getLength());
 }
 
 Entity::~Entity()
@@ -28,22 +25,11 @@ Entity::~Entity()
 
 }
 
-DynString Entity::getName()
+EntityType::Type Entity::getType()
 {
-	return m_name;
-}
-
-unsigned int Entity::getHashedName()
-{
-	return m_hashedName;
+	return m_type;
 }
 
 void Entity::render(RenderContext& ctx)
 {
-	//Info("entity", "render N: %s", *m_name);
-}
-
-void Entity::updatePhysics()
-{
-	//Info("entity", "updatePhysics N: %s", *m_name);
 }

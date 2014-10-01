@@ -142,6 +142,12 @@
     <Filter Include="Header Files\game\scene\entities\types">
       <UniqueIdentifier>{224d7998-3d1c-4b0d-8bcf-87ca1cf6f794}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\physics">
+      <UniqueIdentifier>{f7f2be42-6caa-4eef-9f8b-28c7f9c9d614}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\physics">
+      <UniqueIdentifier>{f8f35056-7f2a-42fc-8d10-d35a027b1f3b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -281,6 +287,15 @@
     </ClCompile>
     <ClCompile Include="game\scene\entities\types\CrossroadEntity.cpp">
       <Filter>Source Files\game\scene\entities\types</Filter>
+    </ClCompile>
+    <ClCompile Include="game\scene\entities\types\BoxEntity.cpp">
+      <Filter>Source Files\game\scene\entities\types</Filter>
+    </ClCompile>
+    <ClCompile Include="physics\PhysicsWorld.cpp">
+      <Filter>Source Files\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="physics\PhysicalEntity.cpp">
+      <Filter>Source Files\physics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -454,6 +469,18 @@
     </ClInclude>
     <ClInclude Include="game\scene\entities\types\CrossroadEntity.h">
       <Filter>Header Files\game\scene\entities\types</Filter>
+    </ClInclude>
+    <ClInclude Include="math\AABB.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="game\scene\entities\types\BoxEntity.h">
+      <Filter>Header Files\game\scene\entities\types</Filter>
+    </ClInclude>
+    <ClInclude Include="physics\PhysicsWorld.h">
+      <Filter>Header Files\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="physics\PhysicalEntity.h">
+      <Filter>Header Files\physics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

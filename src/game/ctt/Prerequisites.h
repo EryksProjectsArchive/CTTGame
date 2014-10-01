@@ -78,6 +78,13 @@ class Game;
 class Scene;
 class Entity;
 
+// Physics
+class PhysicsWorld;
+class PhysicalEntity;
+
+// Math
+class AABB;
+
 // IO
 template <typename Type>
 class CachedItem;

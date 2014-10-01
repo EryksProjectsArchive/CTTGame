@@ -51,7 +51,6 @@ public:
 
 	~List()
 	{
-
 	}
 
 	void clear()
@@ -74,8 +73,8 @@ public:
 			m_begin = newNode;
 			m_end = newNode;
 		}
-		else {
-
+		else 
+		{
 			newNode->m_next = m_begin;
 			m_begin->m_previous = newNode;
 			m_begin = newNode;
@@ -122,10 +121,9 @@ public:
 				if (node == m_end)
 					m_end = node->m_previous;
 
-				//Node *node = node;
+				Node *toRemove = node;
 				node = node->m_next;
-				delete node;
-				node = 0;
+				delete toRemove;
 
 				m_size--;
 			}
@@ -134,7 +132,7 @@ public:
 		}
 	}
 
-	unsigned int Size()
+	unsigned int size()
 	{
 		return m_size;
 	}

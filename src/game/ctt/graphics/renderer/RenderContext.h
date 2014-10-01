@@ -36,14 +36,10 @@ class ShaderProgram;
 class RenderContext
 {
 private:
-	ShaderProgram *m_shaderProgram;
-
 	List<RenderTask *> m_renderTasks;
 public:
 	RenderContext();
 	~RenderContext();
 
 	RenderTask * newTask();
-
-	void setShaderProgram(ShaderProgram *shaderProgram);
 };

@@ -40,26 +40,33 @@
 
 #include "environment/Environment.h"
 
-#include <game/scene/entities/types/CrossroadEntity.h>
+#include <physics/PhysicsWorld.h>
 
-Model *simpleBox = 0;
-#define FREE_MODEL(mdl)\
-	mdl->free();\
-	delete mdl;\
-	mdl = 0;
+#include <game/scene/entities/types/CrossroadEntity.h>
+#include <game/scene/entities/types/BoxEntity.h>
 
 Game::Game()
-	: m_isRunning(false), m_isInitialized(false), m_renderer(0), m_window(0), m_scene(0)
+	: m_isRunning(false), m_isInitialized(false), m_renderer(0), m_window(0), m_scene(0), m_physicsWorld(0)
 {
 	for (unsigned int i = 0; i < 4; ++i)
 		controlls[i] = false;
 
-	distance = 28.f;
+	distance = 100.f;
 }
 
 Game::~Game()
 {
-	FREE_MODEL(simpleBox);
+	if (m_scene)
+	{
+		delete m_scene;
+		m_scene = 0;
+	}
+
+	if (m_physicsWorld)
+	{
+		delete m_physicsWorld;
+		m_physicsWorld = 0;
+	}
 
 	if (m_renderer)
 	{
@@ -72,20 +79,12 @@ Game::~Game()
 		delete m_window;
 		m_window = 0;
 	}
-
-	if (m_scene)
-	{
-		delete m_scene;
-		m_scene = 0;
-	}
 }
 
 bool Game::init()
 {
 	if (m_isInitialized)
-	{
 		return false;
-	}
 
 	// Initialize SDL
 	SDL_Init(SDL_INIT_VIDEO);
@@ -108,7 +107,7 @@ bool Game::init()
 
 	// Create game window
 	m_window = new Window();
-	m_window->setup("City Transport Tycoon", 1240, 780);
+	m_window->setup("City Transport Tycoon", 1280, 780, false);
 
 	m_renderer = new Renderer();
 	if (!m_renderer->setup(m_window))
@@ -135,22 +134,38 @@ bool Game::init()
 	sound->setVolume(0.1f);
 	sound->play(false);
 
+	// Setup physics
+	m_physicsWorld = new PhysicsWorld();
+	if (!m_physicsWorld || !m_physicsWorld->init())
+	{
+		Error("game", "Cannot initialize physics world!");
+		return false;
+	}
+
 	// Create scene
 	m_scene = new Scene();
+	if (!m_scene)
+	{
+		Error("game", "Cannot initialize scene!");
+		return false;
+	}
 
-	Entity *entity = new Entity("building");
-	
+
+	Entity *entity = new Entity(EntityType::Dummy);	
 	m_scene->addEntity(entity);
 
 	CrossroadEntity * crossroad = new CrossroadEntity();
-
 	m_scene->addEntity(crossroad);
 
-	Camera::current->setPosition(Vector3(0.0f, 4.0f, 6.0f));
-	Camera::current->setTarget(Vector3());
+	BoxEntity *testEntity = 0;
+	for (int i = 0; i < 180; ++i)
+	{
+		testEntity = new BoxEntity();
+		m_scene->addEntity(testEntity);
+	}
 
-	simpleBox = new Model("../../data/models/simpleBox.mdl");
-	simpleBox->acquire();
+	Camera::current->setPosition(Vector3(0.0f, -1.0f, 6.0f));
+	Camera::current->setTarget(Vector3());
 
 	Environment::get()->setSunPosition(Vector3(30.0f, 10.0f, 0.0f));
 
@@ -171,6 +186,9 @@ bool Game::pulse()
 			m_isRunning = false;
 		}
 	}
+
+	if (m_physicsWorld)
+		m_physicsWorld->pulse();
 
 	Environment::get()->pulse();
 
@@ -197,20 +215,13 @@ bool Game::pulse()
 		Camera::current->setPosition(pos);
 	}
 
-	if (m_scene)
-		m_scene->updatePhysics();
- 
+	
 	if (m_renderer)
 	{
 		m_renderer->preFrame();
 
-		if (m_scene)
+		if(m_scene)
 			m_scene->render();
-
-		{
-			RenderContext ctx;
-			simpleBox->render(ctx);
-		}
 
 		m_renderer->postFrame();
 	}
@@ -240,4 +251,9 @@ void Game::onMouseScroll(int horizontal, int vertical)
 		distance -= 1.0f * Timer::getDeltaTime();
 	else
 		distance += 1.0f * Timer::getDeltaTime();
+}
+
+PhysicsWorld * Game::getPhysicsWorld()
+{
+	return m_physicsWorld;
 }
