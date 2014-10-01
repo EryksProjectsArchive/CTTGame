@@ -44,6 +44,7 @@
 
 #include <game/scene/entities/types/CrossroadEntity.h>
 #include <game/scene/entities/types/BoxEntity.h>
+#include <game/scene/entities/types/BallEntity.h>
 
 Game::Game()
 	: m_isRunning(false), m_isInitialized(false), m_renderer(0), m_window(0), m_scene(0), m_physicsWorld(0)
@@ -51,7 +52,7 @@ Game::Game()
 	for (unsigned int i = 0; i < 4; ++i)
 		controlls[i] = false;
 
-	distance = 100.f;
+	distance = 40.f;
 }
 
 Game::~Game()
@@ -107,7 +108,7 @@ bool Game::init()
 
 	// Create game window
 	m_window = new Window();
-	m_window->setup("City Transport Tycoon", 1280, 780, false);
+	m_window->setup("City Transport Tycoon", 1280, 768, false);
 
 	m_renderer = new Renderer();
 	if (!m_renderer->setup(m_window))
@@ -158,7 +159,7 @@ bool Game::init()
 	m_scene->addEntity(crossroad);
 
 	BoxEntity *testEntity = 0;
-	for (int i = 0; i < 180; ++i)
+	for (int i = 0; i < 80; ++i)
 	{
 		testEntity = new BoxEntity();
 		m_scene->addEntity(testEntity);
@@ -241,6 +242,25 @@ void Game::onKeyEvent(int key, bool state)
 		controlls[0] = state;
 	else if (key == 's')
 		controlls[1] = state;
+
+	// Shooting
+	if (key == ' ' && state)
+	{
+		Vector3 a = Camera::current->getPosition();
+		Vector3 b = Camera::current->getTarget();
+
+		Vector3 diff = glm::normalize(b - a);
+		Vector3 velocity = diff;
+		velocity *= 60;
+		diff.y += 2;
+		diff.x *= 2;
+		diff.y *= 2;
+
+		BallEntity * ball = new BallEntity();
+		ball->setPosition(a + diff);
+		ball->setLinearVelocity(velocity);
+		m_scene->addEntity(ball);
+	}
 
 	//printf("%c / %s\n", key, state ? "press" : "release");
 }

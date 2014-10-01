@@ -21,7 +21,8 @@ struct EntityType
 	{
 		Dummy,
 		Crossroad,
-		Box
+		Box,
+		Ball
 	};
 };
 

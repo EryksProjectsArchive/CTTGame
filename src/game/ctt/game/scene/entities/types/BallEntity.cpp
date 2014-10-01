@@ -4,7 +4,7 @@
 //	   Copyright (C) Black Ice Mountains
 //		 	All rights reserved
 //
-// File		: game/scene/entities/types/BoxEntity.cpp
+// File		: game/scene/entities/types/BallEntity.cpp
 // Author	: Eryk Dwornicki
 //
 //////////////////////////////////////////////
@@ -14,17 +14,24 @@
 
 #include <graphics/Model.h>
 
-#include "BoxEntity.h"
+#include <physics/PhysicsWorld.h>
+#include <physics/PhysicalEntity.h>
 
-BoxEntity::BoxEntity()
-	: Entity(EntityType::Box)
+#include "BallEntity.h"
+
+BallEntity::BallEntity()
+	: Entity(EntityType::Ball)
 {
-	m_model = new Model("../../data/models/simpleBox.mdl");
+	m_model = new Model("../../data/models/ball.mdl");
 	m_model->acquire();
 
 	AABB * aabb = m_model->getAABB();
 
-	btBoxShape *physicsShape = new btBoxShape(btVector3((aabb->getMax().x - aabb->getMin().x) / 2, (aabb->getMax().y - aabb->getMin().y) / 2, (aabb->getMax().z - aabb->getMin().z) / 2));
+	// Detailed shape
+
+	float radius = (aabb->getMax().y - aabb->getMin().y) / 2;
+
+	btSphereShape *physicsShape = new btSphereShape(radius);
 
 	btTransform transform(btQuaternion(0, 0, 0, 1), btVector3(0, 10, 0));
 
@@ -35,16 +42,16 @@ BoxEntity::BoxEntity()
 	physicsShape->calculateLocalInertia(mass, fallInertia);
 
 	btRigidBody::btRigidBodyConstructionInfo fallRigidBodyCI(mass, fallMotionState, physicsShape, fallInertia);
-	fallRigidBodyCI.m_friction = 10.0f;
-	fallRigidBodyCI.m_additionalDamping = true;
+	fallRigidBodyCI.m_friction = 2.5f;
+
 	m_rigidBody = new btRigidBody(fallRigidBodyCI);
-	
-	m_rigidBody->setLinearVelocity(btVector3(2.0f, 0, 0.8f));
+
+	//m_rigidBody->setLinearVelocity(btVector3(2.0f, 0, 0.8f));
 
 	Game::get()->getPhysicsWorld()->registerRigidBody(m_rigidBody);
 }
 
-BoxEntity::~BoxEntity()
+BallEntity::~BallEntity()
 {
 	if (m_model)
 	{
@@ -54,7 +61,7 @@ BoxEntity::~BoxEntity()
 	}
 }
 
-void BoxEntity::render(RenderContext & ctx)
+void BallEntity::render(RenderContext & ctx)
 {
 	if (m_model)
 	{
@@ -71,10 +78,10 @@ void BoxEntity::render(RenderContext & ctx)
 	}
 }
 
-void BoxEntity::prePhysicsUpdate()
+void BallEntity::prePhysicsUpdate()
 {
 }
 
-void BoxEntity::postPhysicsUpdate()
+void BallEntity::postPhysicsUpdate()
 {
 }

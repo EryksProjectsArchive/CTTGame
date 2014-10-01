@@ -38,3 +38,62 @@ PhysicalEntity::~PhysicalEntity()
 		m_rigidBody = 0;
 	}
 }
+
+void PhysicalEntity::setLinearVelocity(Vector3 velocity)
+{
+	if (m_rigidBody)
+	{
+		m_rigidBody->setLinearVelocity(btVector3(velocity.x, velocity.y, velocity.z));
+	}
+}
+
+Vector3 PhysicalEntity::getLinearVelocity()
+{
+	if (m_rigidBody)
+	{
+		btVector3 vec = m_rigidBody->getLinearVelocity();
+		return Vector3(vec.x(), vec.y(), vec.z());
+	}
+
+	return Vector3();
+}
+
+void PhysicalEntity::setAngularVelocity(Vector3 velocity)
+{
+	if (m_rigidBody)
+	{
+		m_rigidBody->setAngularVelocity(btVector3(velocity.x, velocity.y, velocity.z));
+	}
+}
+
+Vector3 PhysicalEntity::getAngularVelocity()
+{
+	if (m_rigidBody)
+	{
+		btVector3 vec = m_rigidBody->getAngularVelocity();
+		return Vector3(vec.x(), vec.y(), vec.z());
+	}
+
+	return Vector3();
+}
+
+void PhysicalEntity::setPosition(Vector3 position)
+{
+	if (m_rigidBody)
+	{
+		btTransform transform = m_rigidBody->getWorldTransform();
+		transform.setOrigin(btVector3(position.x, position.y, position.z));
+		m_rigidBody->setWorldTransform(transform);
+	}
+}
+
+Vector3 PhysicalEntity::getPosition()
+{
+	if (m_rigidBody)
+	{
+		btVector3 vec = m_rigidBody->getWorldTransform().getOrigin();
+		return Vector3(vec.x(), vec.y(), vec.z());
+	}
+
+	return Vector3();
+}

@@ -10,6 +10,8 @@
 //////////////////////////////////////////////
 #pragma once
 
+#include <Prerequisites.h>
+
 class PhysicalEntity
 {
 protected:
@@ -21,4 +23,13 @@ public:
 
 	virtual void prePhysicsUpdate() = 0;
 	virtual void postPhysicsUpdate() = 0;
+
+	void setLinearVelocity(Vector3 velocity);
+	Vector3 getLinearVelocity();
+
+	void setAngularVelocity(Vector3 velocity);
+	Vector3 getAngularVelocity();
+
+	void setPosition(Vector3 position);
+	Vector3 getPosition();
 };

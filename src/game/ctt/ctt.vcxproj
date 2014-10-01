@@ -171,6 +171,7 @@
     <ClCompile Include="game\environment\Environment.cpp" />
     <ClCompile Include="game\Game.cpp" />
     <ClCompile Include="game\scene\entities\Entity.cpp" />
+    <ClCompile Include="game\scene\entities\types\BallEntity.cpp" />
     <ClCompile Include="game\scene\entities\types\BoxEntity.cpp" />
     <ClCompile Include="game\scene\entities\types\CrossroadEntity.cpp" />
     <ClCompile Include="game\scene\Scene.cpp" />
@@ -229,6 +230,7 @@
     <ClInclude Include="game\environment\Environment.h" />
     <ClInclude Include="game\Game.h" />
     <ClInclude Include="game\scene\entities\Entity.h" />
+    <ClInclude Include="game\scene\entities\types\BallEntity.h" />
     <ClInclude Include="game\scene\entities\types\BoxEntity.h" />
     <ClInclude Include="game\scene\entities\types\CrossroadEntity.h" />
     <ClInclude Include="game\scene\Scene.h" />
