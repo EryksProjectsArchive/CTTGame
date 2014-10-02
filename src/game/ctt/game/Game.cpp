@@ -186,7 +186,7 @@ bool Game::init()
 	BoxEntity *testEntity = 0;
 	float x = -34.0f;
 	int stack = 0;
-	for (int i = 0; i < 350; ++i)
+	for (int i = 0; i < 100; ++i)
 	{
 		testEntity = new BoxEntity();		
 		float y = 0;
@@ -194,9 +194,9 @@ bool Game::init()
 		testEntity->setPosition(Vector3(x, y + stack * (testEntity->getHeight() + 0.3f), 0));
 		m_scene->addEntity(testEntity);
 
-		if (++stack > 10)
+		if (++stack >= 10)
 		{
-			x += testEntity->getWidth() + 0.3f;
+			x += 5.f;
 			stack = 0;
 		}
 	}
@@ -250,10 +250,10 @@ bool Game::pulse()
 			mov -= 1 * Timer::getDeltaTime();
 
 		if (controlls[0])
-			pos.y += 5.f * Timer::getDeltaTime();
+			pos.y += 10.f * Timer::getDeltaTime();
 
 		if (controlls[1])
-			pos.y -= 5.f * Timer::getDeltaTime();
+			pos.y -= 10.f * Timer::getDeltaTime();
 
 		Camera::current->setPosition(pos);
 	}
@@ -282,6 +282,7 @@ bool Game::pulse()
 }
 
 // TODO: GameEvent
+uint64 press = 0;
 void Game::onKeyEvent(int key, bool state)
 {
 	if (key == 'a')
@@ -294,22 +295,30 @@ void Game::onKeyEvent(int key, bool state)
 		controlls[1] = state;
 
 	// Shooting
-	if (key == ' ' && state)
+	if (key == ' ')
 	{
-		Vector3 a = Camera::current->getPosition();
-		Vector3 b = Camera::current->getTarget();
+		if (state)
+		{
+			press = OS::getMicrosecondsCount();
+		}
+		else 
+		{
+			float force = (OS::getMicrosecondsCount() - press) / 999999.f;
+			Vector3 a = Camera::current->getPosition();
+			Vector3 b = Camera::current->getTarget();
 
-		Vector3 diff = glm::normalize(b - a);
-		Vector3 velocity = diff;
-		velocity *= 200;
-		diff.y += 2;
-		diff.x *= 2;
-		diff.z *= 2;
+			Vector3 diff = glm::normalize(b - a);
+			Vector3 velocity = diff;
+			velocity *= force * 90;
+			diff.y += 2;
+			diff.x *= 2;
+			diff.z *= 2;
 
-		BallEntity * ball = new BallEntity();
-		ball->setPosition(a + diff);
-		ball->setLinearVelocity(velocity);
-		m_scene->addEntity(ball);
+			BallEntity * ball = new BallEntity();
+			ball->setPosition(a + diff);
+			ball->setLinearVelocity(velocity);
+			m_scene->addEntity(ball);
+		}
 	}
 
 	//printf("%c / %s\n", key, state ? "press" : "release");
@@ -318,9 +327,9 @@ void Game::onKeyEvent(int key, bool state)
 void Game::onMouseScroll(int horizontal, int vertical)
 {
 	if (vertical > 0)
-		distance -= 10.f * Timer::getDeltaTime();
+		distance -= 100.f * Timer::getDeltaTime();
 	else
-		distance += 10.f * Timer::getDeltaTime();
+		distance += 100.f * Timer::getDeltaTime();
 }
 
 PhysicsWorld * Game::getPhysicsWorld()

@@ -37,12 +37,12 @@ BallEntity::BallEntity()
 
 	btDefaultMotionState *fallMotionState = new btDefaultMotionState(transform);
 
-	btScalar mass = 1;
+	btScalar mass = 20;
 	btVector3 fallInertia(0, 0, 0);
 	physicsShape->calculateLocalInertia(mass, fallInertia);
 
 	btRigidBody::btRigidBodyConstructionInfo fallRigidBodyCI(mass, fallMotionState, physicsShape, fallInertia);
-	fallRigidBodyCI.m_friction = 2.5f; 
+	fallRigidBodyCI.m_friction = 6.0f; 
 	m_rigidBody = new btRigidBody(fallRigidBodyCI);
 
 	Game::get()->getPhysicsWorld()->registerRigidBody(m_rigidBody);

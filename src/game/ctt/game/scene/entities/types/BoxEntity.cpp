@@ -30,13 +30,12 @@ BoxEntity::BoxEntity()
 
 	btDefaultMotionState *fallMotionState = new btDefaultMotionState(transform);
 
-	btScalar mass = 0.2f;
+	btScalar mass = 0.8f;
 	btVector3 fallInertia(0, 0, 0);
 	physicsShape->calculateLocalInertia(mass, fallInertia);
 
 	btRigidBody::btRigidBodyConstructionInfo fallRigidBodyCI(mass, fallMotionState, physicsShape, fallInertia);
 	fallRigidBodyCI.m_friction = 10.0f;
-	fallRigidBodyCI.m_additionalDamping = true;
 	m_rigidBody = new btRigidBody(fallRigidBodyCI);
 	
 	Game::get()->getPhysicsWorld()->registerRigidBody(m_rigidBody);
