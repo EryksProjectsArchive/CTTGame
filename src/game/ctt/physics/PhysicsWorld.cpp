@@ -105,7 +105,7 @@ void PhysicsWorld::pulse()
 	// TODO: Fixed timestep
 	if (m_dynamicsWorld)
 	{
-		m_dynamicsWorld->stepSimulation(Timer::getDeltaTime() / 40.0f, 1);
+		m_dynamicsWorld->stepSimulation(Timer::getDeltaTime(), 1);
 	}
 
 	for (PhysicalEntity *entity : m_entities)

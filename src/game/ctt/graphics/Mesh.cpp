@@ -38,6 +38,13 @@ Mesh::Mesh(mesh * meshData)
 
 	// Setup aabb collisions
 	m_aabb.set(Vector3(meshData->simpleColBox.min.x, meshData->simpleColBox.min.y, meshData->simpleColBox.min.z), Vector3(meshData->simpleColBox.max.x, meshData->simpleColBox.max.y, meshData->simpleColBox.max.z));
+
+	// Setup matrix
+	Matrix4x4 translationMatrix, scaleMatrix;
+	scaleMatrix = glm::scale(glm::mat4x4(), m_scale);
+	translationMatrix = glm::translate(glm::mat4x4(), m_position);
+
+	m_modelSpaceMatrix = (translationMatrix * glm::mat4_cast(m_rotation) * scaleMatrix);
 }
 
 Mesh::~Mesh()
@@ -61,18 +68,12 @@ const char * Mesh::getName()
 }
 
 void Mesh::render(RenderContext& context, Matrix4x4 modelMatrix)
-{	
-	Matrix4x4 translationMatrix, scaleMatrix;
-	scaleMatrix = glm::scale(glm::mat4x4(), m_scale);
-	translationMatrix = glm::translate(glm::mat4x4(), m_position);
-
-	RenderTask * renderingTask = 0;
-
-	renderingTask = context.newTask();
+{
+	RenderTask * renderingTask = context.newTask();
 	
 	renderingTask->m_geometry = m_geometry;
 	renderingTask->m_material = m_material;
-	renderingTask->m_matrix = (translationMatrix * glm::mat4_cast(m_rotation) * scaleMatrix) * modelMatrix;
+	renderingTask->m_matrix = m_modelSpaceMatrix * modelMatrix;
 }
 
 AABB * Mesh::getAABB()

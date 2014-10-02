@@ -20,10 +20,13 @@ private:
 	static unsigned long long s_startFrameTime;
 	static double s_deltaTimed;
 	static float s_deltaTime;
+	static float s_fps;
 public:
 	static double getDeltaTimed();
 	static float getDeltaTime();
 
 	static void frameStart();
 	static void frameEnd();
+
+	static float getFPS();
 };

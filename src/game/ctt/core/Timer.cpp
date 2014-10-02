@@ -18,6 +18,7 @@ unsigned long long Timer::s_frameTime = 0ull;
 unsigned long long Timer::s_startFrameTime = 0ull;
 float Timer::s_deltaTime = 0.0f;
 double Timer::s_deltaTimed = 0.0;
+float Timer::s_fps = 0;
 
 double Timer::getDeltaTimed()
 {
@@ -37,6 +38,14 @@ void Timer::frameStart()
 void Timer::frameEnd()
 {
 	s_frameTime = OS::getMicrosecondsCount() - s_startFrameTime;
-	s_deltaTime = s_frameTime * 0.00001f;
-	s_deltaTimed = s_frameTime * 0.00001;
+	s_deltaTime = s_frameTime / 1000000.0f;
+	s_deltaTimed = s_frameTime / 1000000.0;
+
+
+	s_fps = float(1000000.0f / s_frameTime);
+}
+
+float Timer::getFPS()
+{
+	return s_fps;
 }

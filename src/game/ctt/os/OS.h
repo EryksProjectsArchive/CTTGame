@@ -37,6 +37,7 @@ namespace OS
 
 	// Time OS functions
 	unsigned long long getMicrosecondsCount();
+	void initTime();
 
 	// Message box
 	void msgBox(const char *message, const char *title);

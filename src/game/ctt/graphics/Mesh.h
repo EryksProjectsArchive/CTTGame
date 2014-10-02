@@ -23,6 +23,7 @@ private:
 	Vector3 m_position;
 	Vector3 m_scale;
 	Quaternion m_rotation;	
+	Matrix4x4 m_modelSpaceMatrix;
 
 	Geometry *m_geometry;
 	SharedPtr<Material> m_material;

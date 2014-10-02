@@ -151,17 +151,38 @@ namespace OS
 		return 0;
 	}
 
+	uint64 g_startLargeInt = 0;
+	double g_frequency = 0.0;
+
 	unsigned long long getMicrosecondsCount()
 	{
 		unsigned long long result = 0ull;
 #ifdef _WIN32
 		LARGE_INTEGER largeInt;
 		QueryPerformanceCounter(&largeInt);
-		result = largeInt.QuadPart;
+		result = double(largeInt.QuadPart - g_startLargeInt) / g_frequency;
 #elif __linux__
 		ERROR ERROR TO BE PORTED
 #endif
 		return result;
+	}
+
+	void initTime()
+	{
+#ifdef _WIN32
+		LARGE_INTEGER li;
+		if (QueryPerformanceFrequency(&li))
+		{
+			g_frequency = double(li.QuadPart) / 1000000.0;
+		}
+
+
+		LARGE_INTEGER lInt;
+		QueryPerformanceCounter(&lInt);
+		g_startLargeInt = lInt.QuadPart;
+#elif __linux__
+		ERROR ERROR TO BE PORTED
+#endif
 	}
 
 	void msgBox(const char *message, const char *title)
