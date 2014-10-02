@@ -48,6 +48,8 @@ typedef signed long long sint64;
 typedef long long int64;
 typedef unsigned long long uint64;
 
+typedef unsigned int flags32;
+
 #ifdef DOUBLE_SCALAR_PRECISION
 typedef double Scalar;
 #else 
@@ -81,9 +83,6 @@ class Entity;
 // Physics
 class PhysicsWorld;
 class PhysicalEntity;
-
-// Math
-class AABB;
 
 // IO
 template <typename Type>
@@ -133,6 +132,7 @@ class Mesh;
 struct Vertex3d;
 class Camera;
 struct ImageData;
+class Font;
 
 // Math
 typedef glm::quat Quaternion;
@@ -140,5 +140,8 @@ typedef glm::mat4x4 Matrix4x4;
 typedef glm::vec2 Vector2;
 typedef glm::vec3 Vector3;
 typedef glm::vec4 Vector4;
+class AABB;
+class Rect;
+typedef glm::vec4 Color;
 
 // EOF

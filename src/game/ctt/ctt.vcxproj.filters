@@ -148,6 +148,12 @@
     <Filter Include="Source Files\physics">
       <UniqueIdentifier>{f8f35056-7f2a-42fc-8d10-d35a027b1f3b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\graphics\fonts">
+      <UniqueIdentifier>{eb528c73-569e-4e79-b171-6ad53e071dad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\graphics\fonts">
+      <UniqueIdentifier>{04e9a67c-87df-4002-becc-0e56aaba0ba2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -299,6 +305,9 @@
     </ClCompile>
     <ClCompile Include="game\scene\entities\types\BallEntity.cpp">
       <Filter>Source Files\game\scene\entities\types</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\fonts\Font.cpp">
+      <Filter>Source Files\graphics\fonts</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -487,6 +496,12 @@
     </ClInclude>
     <ClInclude Include="game\scene\entities\types\BallEntity.h">
       <Filter>Header Files\game\scene\entities\types</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\fonts\Font.h">
+      <Filter>Header Files\graphics\fonts</Filter>
+    </ClInclude>
+    <ClInclude Include="math\Rect.h">
+      <Filter>Header Files\math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

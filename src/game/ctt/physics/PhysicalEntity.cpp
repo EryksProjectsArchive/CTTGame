@@ -94,6 +94,27 @@ Vector3 PhysicalEntity::getPosition()
 		btVector3 vec = m_rigidBody->getWorldTransform().getOrigin();
 		return Vector3(vec.x(), vec.y(), vec.z());
 	}
-
 	return Vector3();
+}
+
+float PhysicalEntity::getHeight()
+{
+	if (m_rigidBody)
+	{
+		btVector3 min, max;
+		m_rigidBody->getAabb(min, max);
+		return max.y() - min.y();
+	}
+	return 0;
+}
+
+float PhysicalEntity::getWidth()
+{
+	if (m_rigidBody)
+	{
+		btVector3 min, max;
+		m_rigidBody->getAabb(min, max);
+		return max.x() - min.x();
+	}
+	return 0;
 }

@@ -36,6 +36,8 @@
 
 #include <game/environment/Environment.h>
 
+#include <graphics/fonts/Font.h>
+
 // Extension methods
 PFNGLENABLEIPROC Renderer::glEnablei = 0;
 
@@ -566,6 +568,95 @@ void Renderer::renderGeometry(Geometry *geometry, const glm::mat4x4& matrix)
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
+
+struct SimpleVertex2d
+{
+	float x, y;
+	unsigned int color;
+	float u, v;
+};
+
+void Renderer::renderFont(DynString string, const Rect& rect, const Color& color, flags32 flags, Font *font)
+{
+	// TODO: Use it
+	glm::detail::tmat4x4<int, glm::highp> viewport = glm::ortho(0, m_window->getWidth(), m_window->getHeight(), 0);
+
+	SharedPtr<Material> material = font->m_material;
+
+	SimpleVertex2d vertices[4] = {
+		{ 0, 0, 0xFFFFFFFF, 0, 0 },
+		{ 0, 1, 0xFFFFFFFF, 0, 1 },
+		{ 1, 0, 0xFFFFFFFF, 1, 0 },
+		{ 1, 1, 0xFFFFFFFF, 1, 1 }
+	};
+
+	unsigned int indices[6] = {
+		0, 1, 2,
+		0, 2, 3
+	};
+
+	Geometry geometry;
+	geometry.fillData(vertices, 4, indices, 2);
+
+	// Shaders
+	if (!material)
+	{
+		//Error("renderer", "Cannot render font. No material found!");
+		return;
+	}
+
+	if (!material->m_program || !glIsProgram(material->m_program->m_programId))
+	{
+		//Error("renderer", "Cannot render font. No shader program assigned for material.");
+		return;
+	}
+
+	glUseProgram(material->m_program->m_programId);
+
+	if (glIsTexture(font->m_textureId))
+	{
+		unsigned int textureLocation = material->m_program->getUniformLocation("texture");
+		if (textureLocation != -1)
+		{
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, font->m_textureId);
+			glUniform1i(textureLocation, 0);
+		}
+	}
+
+	unsigned int attributePosition = material->m_program->getAttributeLocation("vertexPosition");
+	unsigned int attributeUV = material->m_program->getAttributeLocation("vertexUV");
+	unsigned int attributeColor = material->m_program->getAttributeLocation("vertexColor");
+
+	glEnableVertexAttribArray(attributePosition);
+	if (attributeUV != -1)
+		glEnableVertexAttribArray(attributeUV);
+	if (attributeColor != -1)
+		glEnableVertexAttribArray(attributeColor);
+
+	glBindBuffer(GL_ARRAY_BUFFER, geometry.m_vertexBuffer->m_bufferId);
+
+	glVertexAttribPointer(attributePosition, 2, GL_FLOAT, GL_FALSE, sizeof(SimpleVertex2d), 0);
+	if (attributeUV != -1)
+		glVertexAttribPointer(attributeUV, 2, GL_FLOAT, GL_FALSE, sizeof(SimpleVertex2d), (void *)offsetof(SimpleVertex2d, u));
+	if (attributeColor != -1)
+		glVertexAttribPointer(attributeColor, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(SimpleVertex2d), (void *)offsetof(SimpleVertex2d, color));
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geometry.m_indexBuffer->m_bufferId);
+
+	glDrawElements(GL_TRIANGLES, geometry.m_trianglesCount * 3, GL_UNSIGNED_SHORT, 0);
+
+	glDisableVertexAttribArray(attributePosition);
+	if (attributeUV != -1)
+		glDisableVertexAttribArray(attributeUV);
+	if (attributeColor != -1)
+		glDisableVertexAttribArray(attributeColor);
+
+	glUseProgram(0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
+
 
 Renderer& Renderer::get()
 {

@@ -26,11 +26,11 @@ BoxEntity::BoxEntity()
 
 	btBoxShape *physicsShape = new btBoxShape(btVector3((aabb->getMax().x - aabb->getMin().x) / 2, (aabb->getMax().y - aabb->getMin().y) / 2, (aabb->getMax().z - aabb->getMin().z) / 2));
 
-	btTransform transform(btQuaternion(0, 0, 0, 1), btVector3(0, 10, 0));
+	btTransform transform(btQuaternion(0, 0, 0, 1), btVector3(0, 0, 0));
 
 	btDefaultMotionState *fallMotionState = new btDefaultMotionState(transform);
 
-	btScalar mass = 1;
+	btScalar mass = 0.2f;
 	btVector3 fallInertia(0, 0, 0);
 	physicsShape->calculateLocalInertia(mass, fallInertia);
 
@@ -39,8 +39,6 @@ BoxEntity::BoxEntity()
 	fallRigidBodyCI.m_additionalDamping = true;
 	m_rigidBody = new btRigidBody(fallRigidBodyCI);
 	
-	m_rigidBody->setLinearVelocity(btVector3(2.0f, 0, 0.8f));
-
 	Game::get()->getPhysicsWorld()->registerRigidBody(m_rigidBody);
 }
 

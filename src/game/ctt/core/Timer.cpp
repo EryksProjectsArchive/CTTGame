@@ -21,7 +21,7 @@ double Timer::s_deltaTimed = 0.0;
 
 double Timer::getDeltaTimed()
 {
-	return s_deltaTime;
+	return s_deltaTimed;
 }
 
 float Timer::getDeltaTime()

@@ -13,6 +13,8 @@
 
 #include "Game.h"
 
+#include <math/Rect.h>
+
 #include <core/Logger.h>
 #include <core/Timer.h>
 
@@ -45,6 +47,8 @@
 #include <game/scene/entities/types/CrossroadEntity.h>
 #include <game/scene/entities/types/BoxEntity.h>
 #include <game/scene/entities/types/BallEntity.h>
+
+#include <graphics/fonts/Font.h>
 
 Game::Game()
 	: m_isRunning(false), m_isInitialized(false), m_renderer(0), m_window(0), m_scene(0), m_physicsWorld(0)
@@ -81,6 +85,8 @@ Game::~Game()
 		m_window = 0;
 	}
 }
+
+Font *gFont = 0;
 
 bool Game::init()
 {
@@ -158,17 +164,47 @@ bool Game::init()
 	CrossroadEntity * crossroad = new CrossroadEntity();
 	m_scene->addEntity(crossroad);
 
+	crossroad = new CrossroadEntity();
+	crossroad->setPosition(Vector3(26, 0, 0));
+	m_scene->addEntity(crossroad);
+
+
+	crossroad = new CrossroadEntity();
+	crossroad->setPosition(Vector3(-26, 0, 0));
+	m_scene->addEntity(crossroad);
+
+	crossroad = new CrossroadEntity();
+	crossroad->setPosition(Vector3(0, 0, 26));
+	m_scene->addEntity(crossroad);
+
+	crossroad = new CrossroadEntity();
+	crossroad->setPosition(Vector3(0, 0, -26));
+	m_scene->addEntity(crossroad);
+
 	BoxEntity *testEntity = 0;
-	for (int i = 0; i < 80; ++i)
+	float x = -34.0f;
+	int stack = 0;
+	for (int i = 0; i < 350; ++i)
 	{
-		testEntity = new BoxEntity();
+		testEntity = new BoxEntity();		
+		float y = 0;
+
+		testEntity->setPosition(Vector3(x, y + stack * (testEntity->getHeight() + 0.3f), 0));
 		m_scene->addEntity(testEntity);
+
+		if (++stack > 10)
+		{
+			x += testEntity->getWidth() + 0.3f;
+			stack = 0;
+		}
 	}
 
 	Camera::current->setPosition(Vector3(0.0f, -1.0f, 6.0f));
 	Camera::current->setTarget(Vector3());
 
 	Environment::get()->setSunPosition(Vector3(30.0f, 10.0f, 0.0f));
+
+	gFont = new Font("../../data/fonts/tahoma.ttf", 12, Font::CreationFlags::Bold);
 
 	m_isInitialized = true;
 	m_isRunning = true;
@@ -224,6 +260,9 @@ bool Game::pulse()
 		if(m_scene)
 			m_scene->render();
 
+		if (gFont)
+			gFont->render("Test", Rect(0, 0, 10, 10), Color(1.0f, 1.0f, 1.0f, 1.0f), Font::DrawFlags::NoClip);
+
 		m_renderer->postFrame();
 	}
 
@@ -251,10 +290,10 @@ void Game::onKeyEvent(int key, bool state)
 
 		Vector3 diff = glm::normalize(b - a);
 		Vector3 velocity = diff;
-		velocity *= 60;
+		velocity *= 200;
 		diff.y += 2;
 		diff.x *= 2;
-		diff.y *= 2;
+		diff.z *= 2;
 
 		BallEntity * ball = new BallEntity();
 		ball->setPosition(a + diff);

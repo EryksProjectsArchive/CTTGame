@@ -42,11 +42,8 @@ BallEntity::BallEntity()
 	physicsShape->calculateLocalInertia(mass, fallInertia);
 
 	btRigidBody::btRigidBodyConstructionInfo fallRigidBodyCI(mass, fallMotionState, physicsShape, fallInertia);
-	fallRigidBodyCI.m_friction = 2.5f;
-
+	fallRigidBodyCI.m_friction = 2.5f; 
 	m_rigidBody = new btRigidBody(fallRigidBodyCI);
-
-	//m_rigidBody->setLinearVelocity(btVector3(2.0f, 0, 0.8f));
 
 	Game::get()->getPhysicsWorld()->registerRigidBody(m_rigidBody);
 }
@@ -71,7 +68,7 @@ void BallEntity::render(RenderContext & ctx)
 			float _matrix[16];
 			btDefaultMotionState* myMotionState = (btDefaultMotionState *)rigidBody->getMotionState();
 			myMotionState->m_graphicsWorldTrans.getOpenGLMatrix(_matrix);
-
+			
 			m_model->setMatrix(Matrix4x4(_matrix[0], _matrix[1], _matrix[2], _matrix[3], _matrix[4], _matrix[5], _matrix[6], _matrix[7], _matrix[8], _matrix[9], _matrix[10], _matrix[11], _matrix[12], _matrix[13], _matrix[14], _matrix[15]));
 			m_model->render(ctx);
 		}

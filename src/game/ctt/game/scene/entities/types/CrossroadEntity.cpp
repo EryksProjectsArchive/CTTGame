@@ -29,6 +29,12 @@ CrossroadEntity::CrossroadEntity()
 
 	// Detailed shape
 	FILE *fp = fopen("../../data/models/road.mdl", "rb");
+	if (!fp)
+	{
+		Error("CrossroadEntity", "Cannot open model file to generate tri mesh collisions.");
+		return;
+	}
+
 	mdl data;
 	if (ModelFormat::load(&data, fp))
 	{
@@ -56,12 +62,12 @@ CrossroadEntity::CrossroadEntity()
 		btBvhTriangleMeshShape*physicsShape = new btBvhTriangleMeshShape(triMesh, true);
 
 		btTransform transform(btQuaternion(0, 0, 0, 1), btVector3(0, 0, 0));
-
 		btDefaultMotionState *groundMotionState = new btDefaultMotionState(transform);
 		btRigidBody::btRigidBodyConstructionInfo groundRigidBodyCI(0, groundMotionState, physicsShape, btVector3(0, 0, 0));
 		m_rigidBody = new btRigidBody(groundRigidBodyCI);
 
 		Game::get()->getPhysicsWorld()->registerRigidBody(m_rigidBody);
+		fclose(fp);
 	}
 }
 
@@ -79,11 +85,16 @@ void CrossroadEntity::render(RenderContext & ctx)
 {
 	if (m_model)
 	{
-		btScalar m[16];
-		((btDefaultMotionState *)m_rigidBody->getMotionState())->m_graphicsWorldTrans.getOpenGLMatrix(m);
-		m_model->setMatrix(Matrix4x4(m[0], m[1], m[2], m[3], m[4], m[5], m[6], m[7], m[8], m[9], m[10], m[11], m[12], m[13], m[14], m[15]));
-
-		m_model->render(ctx);
+		btRigidBody * rigidBody = m_rigidBody;
+		if (rigidBody)
+		{			
+			float _matrix[16];
+			// it's not dynamic so we should use simple world transformation from rigid body
+			m_rigidBody->getWorldTransform().getOpenGLMatrix(_matrix);
+			
+			m_model->setMatrix(Matrix4x4(_matrix[0], _matrix[1], _matrix[2], _matrix[3], _matrix[4], _matrix[5], _matrix[6], _matrix[7], _matrix[8], _matrix[9], _matrix[10], _matrix[11], _matrix[12], _matrix[13], _matrix[14], _matrix[15]));
+			m_model->render(ctx);
+		}
 	}
 }
 

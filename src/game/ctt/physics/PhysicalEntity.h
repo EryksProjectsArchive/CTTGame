@@ -32,4 +32,7 @@ public:
 
 	void setPosition(Vector3 position);
 	Vector3 getPosition();
+
+	float getHeight();
+	float getWidth();
 };

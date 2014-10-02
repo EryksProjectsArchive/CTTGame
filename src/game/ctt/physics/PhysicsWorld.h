@@ -30,6 +30,8 @@ private:
 	bool m_initialized;
 
 	List<PhysicalEntity *> m_entities;
+
+	void internalPulse(float delta);
 public:
 	PhysicsWorld();
 	~PhysicsWorld();
