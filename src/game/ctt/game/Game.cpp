@@ -44,6 +44,8 @@
 
 #include <physics/PhysicsWorld.h>
 
+#include <input/Input.h>
+
 #include <game/scene/entities/types/CrossroadEntity.h>
 #include <game/scene/entities/types/BoxEntity.h>
 #include <game/scene/entities/types/BallEntity.h>
@@ -104,7 +106,7 @@ bool Game::init()
 
 	// Setup home directory
 	char szHomePath[MAX_PATH] = { 0 };
-	strcpy(szHomePath, OS::initHomePath("City Transport Tycoon"));
+	strcpy(szHomePath, OS::initHomePath("Engine"));
 
 	Logger::init(FilePath("%sgame.log", szHomePath), false);
 
@@ -116,7 +118,7 @@ bool Game::init()
 
 	// Create game window
 	m_window = new Window();
-	m_window->setup("City Transport Tycoon", 1280, 768, false);
+	m_window->setup("Engine", 1280, 768, false);
 
 	m_renderer = new Renderer();
 	if (!m_renderer->setup(m_window))

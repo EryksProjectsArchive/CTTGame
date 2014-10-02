@@ -144,4 +144,8 @@ class AABB;
 class Rect;
 typedef glm::vec4 Color;
 
+// Input
+class Controllable;
+class Input;
+
 // EOF

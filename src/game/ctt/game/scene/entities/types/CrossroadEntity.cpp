@@ -17,6 +17,8 @@
 #include <physics/PhysicsWorld.h>
 #include <physics/PhysicalEntity.h>
 
+#include <input/Input.h>
+
 #include "CrossroadEntity.h"
 
 CrossroadEntity::CrossroadEntity()
@@ -104,4 +106,14 @@ void CrossroadEntity::prePhysicsUpdate()
 
 void CrossroadEntity::postPhysicsUpdate()
 {
+}
+
+void CrossroadEntity::registerBinds(Input * input)
+{
+	Info("crossroad", "registerBinds");
+}
+
+void CrossroadEntity::unregisterBinds(Input *input)
+{
+	Info("crossroad", "unregisterBinds");
 }

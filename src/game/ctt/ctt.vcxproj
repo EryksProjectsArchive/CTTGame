@@ -39,7 +39,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
     <CharacterSet>NotSet</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
@@ -119,9 +119,8 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <Optimization>Full</Optimization>
+      <Optimization>Disabled</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <AdditionalIncludeDirectories>./;../../libs/OpenAL1.1/include/;../../libs/SDL2-2.0.3/include/;../../libs/glm-0.9.5.4/glm/;../../libs/jsoncpp/include/;../../libs/freetype-2.5.3/include/;../../libs/bullet/src/</AdditionalIncludeDirectories>
@@ -129,7 +128,7 @@
       <DisableLanguageExtensions>false</DisableLanguageExtensions>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
-      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
       <PreprocessorDefinitions>
       </PreprocessorDefinitions>
     </ClCompile>
@@ -194,6 +193,8 @@
     <ClCompile Include="graphics\VertexBuffer.cpp" />
     <ClCompile Include="graphics\VertexShader.cpp" />
     <ClCompile Include="graphics\Window.cpp" />
+    <ClCompile Include="input\Controllable.cpp" />
+    <ClCompile Include="input\Input.cpp" />
     <ClCompile Include="io\fs\File.cpp" />
     <ClCompile Include="io\fs\FileSystem.cpp" />
     <ClCompile Include="io\fs\stdio\StdioFile.cpp" />
@@ -256,6 +257,8 @@
     <ClInclude Include="graphics\VertexBuffer.h" />
     <ClInclude Include="graphics\VertexShader.h" />
     <ClInclude Include="graphics\Window.h" />
+    <ClInclude Include="input\Controllable.h" />
+    <ClInclude Include="input\Input.h" />
     <ClInclude Include="io\CachedItem.h" />
     <ClInclude Include="io\fs\File.h" />
     <ClInclude Include="io\fs\FileOpenMode.h" />

@@ -154,6 +154,12 @@
     <Filter Include="Source Files\graphics\fonts">
       <UniqueIdentifier>{04e9a67c-87df-4002-becc-0e56aaba0ba2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\input">
+      <UniqueIdentifier>{9e1ca4ab-d877-4614-a02a-e27a43bbc839}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\input">
+      <UniqueIdentifier>{cebb2d3b-0d94-48b2-bd1f-f9cc9f3ea79e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -308,6 +314,12 @@
     </ClCompile>
     <ClCompile Include="graphics\fonts\Font.cpp">
       <Filter>Source Files\graphics\fonts</Filter>
+    </ClCompile>
+    <ClCompile Include="input\Controllable.cpp">
+      <Filter>Source Files\input</Filter>
+    </ClCompile>
+    <ClCompile Include="input\Input.cpp">
+      <Filter>Source Files\input</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -502,6 +514,12 @@
     </ClInclude>
     <ClInclude Include="math\Rect.h">
       <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="input\Controllable.h">
+      <Filter>Header Files\input</Filter>
+    </ClInclude>
+    <ClInclude Include="input\Input.h">
+      <Filter>Header Files\input</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
