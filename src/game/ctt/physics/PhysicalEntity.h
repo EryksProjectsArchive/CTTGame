@@ -33,6 +33,9 @@ public:
 	void setPosition(Vector3 position);
 	Vector3 getPosition();
 
+	void setRotation(Quaternion rotation);
+	Quaternion getRotation();
+
 	float getHeight();
 	float getWidth();
 };

@@ -97,6 +97,27 @@ Vector3 PhysicalEntity::getPosition()
 	return Vector3();
 }
 
+void PhysicalEntity::setRotation(Quaternion rotation)
+{
+	if (m_rigidBody)
+	{
+		btTransform transform = m_rigidBody->getWorldTransform();
+		transform.setRotation(btQuaternion(rotation.x, rotation.y, rotation.z, rotation.w));
+		m_rigidBody->setWorldTransform(transform);
+	}
+}
+
+Quaternion PhysicalEntity::getRotation()
+{
+	if (m_rigidBody)
+	{
+		btQuaternion quat = m_rigidBody->getWorldTransform().getRotation();
+		return Quaternion(quat.w(), quat.x(), quat.y(), quat.z());
+	}
+	return Quaternion();
+}
+
+
 float PhysicalEntity::getHeight()
 {
 	if (m_rigidBody)
