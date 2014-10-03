@@ -28,6 +28,11 @@ private:
 
 	bool controlls[4];
 	float distance;
+	int vertical;
+
+	double m_deltaTime;
+	double m_accumulator;
+	double m_time;
 public:
 	Game();
 	~Game();

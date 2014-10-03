@@ -97,17 +97,14 @@ bool PhysicsWorld::init()
 	return true;
 }
 
-void PhysicsWorld::pulse()
+void PhysicsWorld::pulse(float dt)
 {
 	for (PhysicalEntity *entity : m_entities)
 		entity->prePhysicsUpdate();
 
-	// TODO: Fixed timestep
 	if (m_dynamicsWorld)
-	{
-		m_dynamicsWorld->stepSimulation(Timer::getDeltaTime(), 1);
-	}
-
+		m_dynamicsWorld->stepSimulation(dt, 10, dt);
+	
 	for (PhysicalEntity *entity : m_entities)
 		entity->postPhysicsUpdate();
 }

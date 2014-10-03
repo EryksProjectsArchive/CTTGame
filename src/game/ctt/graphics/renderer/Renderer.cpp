@@ -301,7 +301,7 @@ bool Renderer::setup(Window * window)
 
 	glGenVertexArrays = (PFNGLGENVERTEXARRAYSPROC)SDL_GL_GetProcAddress("glGenVertexArrays");
 
-	SDL_GL_SetSwapInterval(1); // set 0 to disable vsync
+	SDL_GL_SetSwapInterval(0); // set 0 to disable vsync
 
 	glViewport(0, 0, window->getWidth(), window->getHeight());
 	

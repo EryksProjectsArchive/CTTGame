@@ -95,7 +95,12 @@ bool Game::init()
 	if (m_isInitialized)
 		return false;
 
+	// Time
 	OS::initTime();
+
+	m_time = double(OS::getMicrosecondsCount() / 1000000);
+	m_accumulator = 0.0;
+	m_deltaTime = 1 / 60.0f;
 
 	// Initialize SDL
 	SDL_Init(SDL_INIT_VIDEO);
@@ -215,6 +220,8 @@ bool Game::init()
 	return true;
 }
 
+//#define PROFILER
+
 bool Game::pulse()
 {
 	Timer::frameStart();
@@ -228,40 +235,64 @@ bool Game::pulse()
 		}
 	}
 
+	double time = double(OS::getMicrosecondsCount() / 1000000.f);
+	double frameTime = time - m_time;
+	if (frameTime > 0.25)
+		frameTime = 0.25;
+	m_time = time;
+
+	m_accumulator += frameTime;
+
+#ifdef PROFILER
 	uint64 start = OS::getMicrosecondsCount();
+#endif
 
-	if (m_physicsWorld)
-		m_physicsWorld->pulse();
-
-	Info("profiler", "Physics: %fs", (OS::getMicrosecondsCount() - start) / 1000000.f);
-
-	Environment::get()->pulse();
-
-	if (Camera::current)
+	while (m_accumulator >= m_deltaTime)
 	{
-		static float mov = 0.0f;
-		glm::vec3 pos = Camera::current->getPosition();
+		if (m_physicsWorld)
+			m_physicsWorld->pulse(m_deltaTime);
 
-		
-		pos.x = sinf(mov) * distance;
-		pos.z = cosf(mov) * distance;
+#ifdef PROFILER
+		Info("profiler", "Physics: %fs", (OS::getMicrosecondsCount() - start) / 1000000.f);
+#endif
+		Environment::get()->pulse();
 
-		if (controlls[2])
-			mov += 1 * Timer::getDeltaTime();
-		else if (controlls[3])
-			mov -= 1 * Timer::getDeltaTime();
+		if (Camera::current)
+		{
+			static float mov = 0.0f;
+			glm::vec3 pos = Camera::current->getPosition();
 
-		if (controlls[0])
-			pos.y += 10.f * Timer::getDeltaTime();
+			if (vertical != 0)
+			{
+				if (vertical > 0)
+					distance -= 1.f;
+				else if (vertical < 0)
+					distance += 1.f;
+				vertical = 0;
+			}
 
-		if (controlls[1])
-			pos.y -= 10.f * Timer::getDeltaTime();
+			pos.x = sinf(mov) * distance;
+			pos.z = cosf(mov) * distance;
 
-		Camera::current->setPosition(pos);
+			if (controlls[2])
+				mov += 0.01f;
+			else if (controlls[3])
+				mov -= 0.01f;
+
+			if (controlls[0])
+				pos.y += 1.f;
+
+			if (controlls[1])
+				pos.y -= 1.f;
+
+			Camera::current->setPosition(pos);
+		}
+
+		m_accumulator -= m_deltaTime;
 	}
-
-	
+#ifdef PROFILER	
 	start = OS::getMicrosecondsCount();
+#endif
 	if (m_renderer)
 	{
 		m_renderer->preFrame();
@@ -275,11 +306,14 @@ bool Game::pulse()
 		m_renderer->postFrame();
 	}
 
+#ifdef PROFILER
 	Info("profiler", "GFX: %fs", (OS::getMicrosecondsCount() - start) / 1000000.f);
-
+#endif
 	Timer::frameEnd();
 
+#ifdef PROFILER
 	Info("profiler", "FPS: %f", Timer::getFPS());
+#endif
 	return m_isRunning;
 }
 
@@ -328,10 +362,7 @@ void Game::onKeyEvent(int key, bool state)
 
 void Game::onMouseScroll(int horizontal, int vertical)
 {
-	if (vertical > 0)
-		distance -= 100.f * Timer::getDeltaTime();
-	else
-		distance += 100.f * Timer::getDeltaTime();
+	this->vertical = vertical;
 }
 
 PhysicsWorld * Game::getPhysicsWorld()

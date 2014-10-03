@@ -16,7 +16,7 @@
 #include <physics/PhysicsWorld.h>
 #include <physics/PhysicalEntity.h>
 
-class CrossroadEntity : public Entity, public PhysicalEntity, public Controllable
+class CrossroadEntity : public Entity, public PhysicalEntity
 {
 private:
 	Model *m_model;
@@ -28,8 +28,4 @@ public:
 
 	void prePhysicsUpdate() override;
 	void postPhysicsUpdate() override;
-
-protected:
-	void registerBinds(Input * input) override;
-	void unregisterBinds(Input *input) override;
 };

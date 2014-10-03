@@ -15,20 +15,18 @@
 
 Controllable::Controllable()
 {
-	Input::get()->addControllable(this);
 }
 
 Controllable::~Controllable()
 {
+}
+
+void Controllable::registerInput()
+{
+	Input::get()->addControllable(this);
+}
+
+void Controllable::unregisterInput()
+{
 	Input::get()->removeControllable(this);
-}
-
-void Controllable::registerBinds(Input *input)
-{
-
-}
-
-void Controllable::unregisterBinds(Input *input)
-{
-
 }

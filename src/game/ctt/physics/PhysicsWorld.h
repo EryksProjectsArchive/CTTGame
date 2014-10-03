@@ -38,7 +38,7 @@ public:
 
 	bool init();
 
-	void pulse();
+	void pulse(float dt);
 
 	void registerEntity(PhysicalEntity * entity);
 	void unregisterEntity(PhysicalEntity * entity);
