@@ -60,7 +60,8 @@ bool Texture::load()
 
 		if (m_mipmaps)
 		{
-			Renderer::glGenerateMipmap(GL_TEXTURE_2D);
+			if (Renderer::glGenerateMipmap)
+				Renderer::glGenerateMipmap(GL_TEXTURE_2D);
 		}
 
 		delete data;

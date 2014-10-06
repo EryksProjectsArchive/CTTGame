@@ -21,7 +21,7 @@ File::~File()
 
 }
 
-bool File::load(FilePath file, FileOpenMode::Type mode)
+bool File::load(FilePath file, uint32 mode)
 {
 	return false;
 }

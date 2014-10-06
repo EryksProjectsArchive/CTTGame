@@ -22,7 +22,7 @@ namespace Stdio
 	private:
 		FILE * m_filePtr;
 
-		virtual bool load(FilePath file, FileOpenMode::Type mode);
+		virtual bool load(FilePath file, uint32 mode);
 		virtual bool unload();
 	public:
 		File();

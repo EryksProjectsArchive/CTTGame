@@ -30,7 +30,7 @@ public:
 	FileSystem();
 	virtual ~FileSystem();
 
-	virtual File * open(FilePath file, FileOpenMode::Type mode);
+	virtual File * open(FilePath file, uint32 mode);
 	
 	void close(File *file);
 	

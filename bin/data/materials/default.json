@@ -1,6 +1,9 @@
 {	
+	"texture": {
+        "name": "dictator.bmp", "mipMaps": true
+    },
 	"shaders": {
         "vertex": "simple",
-        "fragment": "simpleColor"
+        "fragment": "simple"
     }
 }

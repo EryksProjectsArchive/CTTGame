@@ -26,10 +26,6 @@ private:
 	Scene *m_scene;
 	PhysicsWorld *m_physicsWorld;
 
-	bool controlls[4];
-	float distance;
-	int vertical;
-
 	double m_deltaTime;
 	double m_accumulator;
 	double m_time;
@@ -43,6 +39,7 @@ public:
 
 	void onKeyEvent(int key, bool state);
 	void onMouseScroll(int horizontal, int vertical);
+	void onMouseMove(int x, int y, int relx, int rely);
 
 	PhysicsWorld * getPhysicsWorld();
 };

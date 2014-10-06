@@ -11,6 +11,8 @@
 
 #include "StdioFile.h"
 
+#include <core/Logger.h>
+
 namespace Stdio
 {
 	File::File()
@@ -27,7 +29,7 @@ namespace Stdio
 		}
 	}
 
-	bool File::load(FilePath file, FileOpenMode::Type mode)
+	bool File::load(FilePath file, uint32 mode)
 	{
 		if (!m_isLoaded)
 		{
@@ -95,7 +97,7 @@ namespace Stdio
 			char *buffer = new char[size + 1];
 			read(buffer, size, sizeof(char));
 
-			DynString string = buffer;
+			DynString string(buffer);
 			delete[]buffer;
 			return string;
 		}

@@ -30,7 +30,7 @@ struct SeekOrigin
 class File
 {
 private:
-	virtual bool load(FilePath file, FileOpenMode::Type mode);
+	virtual bool load(FilePath file, uint32 mode);
 	virtual bool unload();
 
 protected:

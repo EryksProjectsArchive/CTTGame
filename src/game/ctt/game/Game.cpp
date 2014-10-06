@@ -55,10 +55,6 @@
 Game::Game()
 	: m_isRunning(false), m_isInitialized(false), m_renderer(0), m_window(0), m_scene(0), m_physicsWorld(0)
 {
-	for (unsigned int i = 0; i < 4; ++i)
-		controlls[i] = false;
-
-	distance = 40.f;
 }
 
 Game::~Game()
@@ -191,29 +187,16 @@ bool Game::init()
 	m_scene->addEntity(crossroad);
 
 	BoxEntity *testEntity = 0;
-	float x = -34.0f;
-	int stack = 0;
-	for (int i = 0; i < 100; ++i)
+	for (int i = 0; i < 10; ++i)
 	{
 		testEntity = new BoxEntity();		
-		float y = 0;
-
-		testEntity->setPosition(Vector3(x, y + stack * (testEntity->getHeight() + 0.3f), 0));
+		testEntity->setPosition(Vector3(0, i * (testEntity->getHeight()+0.5f), 0));
 		m_scene->addEntity(testEntity);
-
-		if (++stack >= 10)
-		{
-			x += 5.f;
-			stack = 0;
-		}
 	}
-
-	Camera::current->setPosition(Vector3(0.0f, -1.0f, 6.0f));
-	Camera::current->setTarget(Vector3());
 
 	Environment::get()->setSunPosition(Vector3(30.0f, 10.0f, 0.0f));
 
-	gFont = new Font("../../data/fonts/tahoma.ttf", 12, Font::CreationFlags::Bold);
+	gFont = new Font("fonts/tahoma.ttf", 12, Font::CreationFlags::Bold);
 
 	m_isInitialized = true;
 	m_isRunning = true;
@@ -249,47 +232,22 @@ bool Game::pulse()
 
 	while (m_accumulator >= m_deltaTime)
 	{
+		if (Camera::current)
+			Camera::current->update(float(m_deltaTime));
+
 		if (m_physicsWorld)
-			m_physicsWorld->pulse(m_deltaTime);
+			m_physicsWorld->pulse(float(m_deltaTime));
 
 #ifdef PROFILER
 		Info("profiler", "Physics: %fs", (OS::getMicrosecondsCount() - start) / 1000000.f);
 #endif
 		Environment::get()->pulse();
 
-		if (Camera::current)
-		{
-			static float mov = 0.0f;
-			glm::vec3 pos = Camera::current->getPosition();
-
-			if (vertical != 0)
-			{
-				if (vertical > 0)
-					distance -= 1.f;
-				else if (vertical < 0)
-					distance += 1.f;
-				vertical = 0;
-			}
-
-			pos.x = sinf(mov) * distance;
-			pos.z = cosf(mov) * distance;
-
-			if (controlls[2])
-				mov += 0.01f;
-			else if (controlls[3])
-				mov -= 0.01f;
-
-			if (controlls[0])
-				pos.y += 1.f;
-
-			if (controlls[1])
-				pos.y -= 1.f;
-
-			Camera::current->setPosition(pos);
-		}
-
 		m_accumulator -= m_deltaTime;
 	}
+
+
+
 #ifdef PROFILER	
 	start = OS::getMicrosecondsCount();
 #endif
@@ -310,10 +268,6 @@ bool Game::pulse()
 	Info("profiler", "GFX: %fs", (OS::getMicrosecondsCount() - start) / 1000000.f);
 #endif
 	Timer::frameEnd();
-
-#ifdef PROFILER
-	Info("profiler", "FPS: %f", Timer::getFPS());
-#endif
 	return m_isRunning;
 }
 
@@ -321,14 +275,8 @@ bool Game::pulse()
 uint64 press = 0;
 void Game::onKeyEvent(int key, bool state)
 {
-	if (key == 'a')
-		controlls[2] = state;
-	else if (key == 'd')
-		controlls[3] = state;
-	else if (key == 'w')
-		controlls[0] = state;
-	else if (key == 's')
-		controlls[1] = state;
+	if (Camera::current)
+		Camera::current->onKeyEvent(key, state);
 
 	// Shooting
 	if (key == ' ')
@@ -356,13 +304,18 @@ void Game::onKeyEvent(int key, bool state)
 			m_scene->addEntity(ball);
 		}
 	}
-
-	//printf("%c / %s\n", key, state ? "press" : "release");
 }
 
 void Game::onMouseScroll(int horizontal, int vertical)
 {
-	this->vertical = vertical;
+	if (Camera::current)
+		Camera::current->onMouseScroll(horizontal, vertical); 
+}
+
+void Game::onMouseMove(int x, int y, int relx, int rely)
+{
+	if (Camera::current)
+		Camera::current->onMouseMove(x, y, relx, rely);
 }
 
 PhysicsWorld * Game::getPhysicsWorld()

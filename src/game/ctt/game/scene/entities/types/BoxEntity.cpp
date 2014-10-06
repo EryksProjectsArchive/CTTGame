@@ -30,7 +30,7 @@ BoxEntity::BoxEntity()
 
 	btDefaultMotionState *fallMotionState = new btDefaultMotionState(transform);
 
-	btScalar mass = 0.8f;
+	btScalar mass = 0.5f;
 	btVector3 fallInertia(0, 0, 0);
 	physicsShape->calculateLocalInertia(mass, fallInertia);
 

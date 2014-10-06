@@ -160,7 +160,7 @@ namespace OS
 #ifdef _WIN32
 		LARGE_INTEGER largeInt;
 		QueryPerformanceCounter(&largeInt);
-		result = double(largeInt.QuadPart - g_startLargeInt) / g_frequency;
+		result = uint64((largeInt.QuadPart - g_startLargeInt) / g_frequency);
 #elif __linux__
 		ERROR ERROR TO BE PORTED
 #endif

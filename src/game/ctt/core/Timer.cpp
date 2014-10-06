@@ -41,8 +41,7 @@ void Timer::frameEnd()
 	s_deltaTime = s_frameTime / 1000000.0f;
 	s_deltaTimed = s_frameTime / 1000000.0;
 
-
-	s_fps = float(1000000.0f / s_frameTime);
+	s_fps = float(1000000 / s_frameTime);
 }
 
 float Timer::getFPS()

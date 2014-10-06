@@ -24,21 +24,27 @@ protected:
 	float m_fov;
 public:
 	Camera();
-	~Camera();
+	virtual ~Camera();
 
-	void setPosition(const glm::vec3 & position);
-	glm::vec3 getPosition();
+	virtual void setPosition(const glm::vec3 & position);
+	virtual glm::vec3 getPosition();
 
-	void setTarget(const glm::vec3 & position);
-	glm::vec3 getTarget();
+	virtual void setTarget(const glm::vec3 & position);
+	virtual glm::vec3 getTarget();
 
-	void setRotation(const glm::quat & rotation);
-	glm::quat getRotation();
+	virtual void setRotation(const glm::quat & rotation);
+	virtual glm::quat getRotation();
 
-	void setFov(float fov);
-	float getFov();
+	virtual void setFov(float fov);
+	virtual float getFov();
+
+	virtual void onKeyEvent(int key, bool state) {};
+	virtual void onMouseScroll(int horizontal, int vertical) {};
+	virtual void onMouseMove(int x, int y, int relx, int rely) {};
+
+	virtual void update(float dt) {};
 	
-	glm::mat4x4 getViewMatrix();
+	virtual glm::mat4x4 getViewMatrix();
 	
 	static void setCurrent(Camera *);
 	static Camera * current;

@@ -22,7 +22,7 @@ namespace Stdio
 	{
 	}
 
-	::File * FileSystem::open(FilePath file, FileOpenMode::Type mode)
+	::File * FileSystem::open(FilePath file, uint32 mode)
 	{
 		Stdio::File * filePtr = new Stdio::File();
 		if (filePtr)

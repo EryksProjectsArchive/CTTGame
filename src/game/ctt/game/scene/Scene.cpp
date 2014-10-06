@@ -16,12 +16,12 @@
 #include "entities/Entity.h"
 #include "Scene.h"
 
-#include <graphics/Camera.h>
+#include <graphics/FreeCamera.h>
 #include <graphics/renderer/RenderContext.h>
 
 Scene::Scene()
 {
-	m_camera = new Camera();
+	m_camera = new FreeCamera();
 	Camera::setCurrent(m_camera);	
 }
 

@@ -29,6 +29,22 @@ protected:
 
 	SharedPtr<Material> m_currentMaterial;
 	SharedPtr<Material> m_defaultMaterial;
+
+	struct
+	{
+		unsigned int m_trianglesDrawn;
+		unsigned int m_drawCalls;
+		unsigned int m_verticesDrawn;
+
+		void reset()
+		{
+			m_trianglesDrawn = 0;
+			m_drawCalls = 0;
+			m_verticesDrawn = 0;
+		}
+	} m_stats;
+
+	unsigned int m_lastTitleUpdate;
 public:
 	Renderer();
 	~Renderer();
@@ -62,7 +78,6 @@ public:
 
 	static PFNGLGENERATEMIPMAPPROC glGenerateMipmap;
 	static PFNGLACTIVETEXTUREPROC glActiveTexture;
-	static PFNGLBINDSAMPLERPROC glBindSampler;
 	
 	static PFNGLBLENDEQUATIONSEPARATEPROC glBlendEquationSeparate;
 	static PFNGLDRAWBUFFERSPROC glDrawBuffers;

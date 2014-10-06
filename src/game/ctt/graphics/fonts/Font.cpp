@@ -23,16 +23,11 @@
 
 #include <core/Logger.h>
 
+#include <io/fs/FileSystem.h>
+
 Font::Font(FilePath fontPath, uint32 size, flags32 flags)
-	: m_textureId(0)
+	: m_textureId(0), m_loaded(false)
 {
-	// Basic charset
-	char *_charset = "abcdefghijklmnopqrstuwxyz"\
-		"ABCDEFGHIJKLMNOPQRSTUWXYZ"\
-		"0123456789";
-
-	uint32 characters = strlen(_charset);
-
 	// Init free type
 	FT_Library ftLibrary;
 	if (FT_Init_FreeType(&ftLibrary) != 0)
@@ -41,37 +36,52 @@ Font::Font(FilePath fontPath, uint32 size, flags32 flags)
 		return;
 	}
 
-	FT_Face face;
-	if (FT_New_Face(ftLibrary, fontPath, 0, &face) != 0)
+	File *file = FileSystem::get()->open(fontPath, FileOpenMode::Read | FileOpenMode::Binary);
+	if (!file->isLoaded())
 	{
-		Error("font", "Cannot open font file %s.", *fontPath);
+		FileSystem::get()->close(file);
+		Error("font", "Cannot open font file \"%s\".", *fontPath);
 		return;
 	}
 
-	size *= 64; // ft size = 1/64th of pixel
-	if (FT_Set_Char_Size(face, size, size, 96, 96) != 0)
-	{
-		Error("font", "Cannot set size of character");
+	file->seek(0, SeekOrigin::End);
+	long _size = file->tell();
+	file->rewind();
+	uint8 * buffer = new uint8[_size + 1];
+	file->read(buffer, _size, sizeof(uint8));
+	buffer[_size] = '\0';
+	
+	FileSystem::get()->close(file);
+
+	FT_Face face;
+	int errid = FT_New_Memory_Face(ftLibrary, buffer, _size, 0, &face);
+	if (errid != 0)
+	{	
+		Error("font", "Cannot create new face (errid: %d).", errid);
+		delete[] buffer;
 		return;
 	}
 
 	if (FT_Set_Pixel_Sizes(face, 0, size/64) != 0)
 	{
 		Error("font", "Cannot set pixel size");
+		delete[] buffer;
 		return;
 	}
 
-	uint32 penX = 0;
-	uint32 penY = 0;
+	uint32 x = 0;
+	uint32 y = 0;
 	uint32 width = 1024;
 	uint32 height = 1024;
-	uint8 *texture = new uint8[1024 * 1024];
+	uint8 *texture = new uint8[2 * 1024 * 1024]; // we are using 1 channel for luminosity and 1 channel for alpha to make fonts looking better
 	memset(texture, 0, 1024 * 1024);
 
-	for (uint32 i = 0; i < characters; ++i)
+	for (uint8 c = 32; c < 255; ++c)
 	{
-		FT_UInt charIndex = FT_Get_Char_Index(face, _charset[i]);
-		Info("font", "%c = %d", _charset[i], charIndex);
+		FT_UInt charIndex = FT_Get_Char_Index(face, c);
+		if (!charIndex)
+			continue;
+		//Info("font", "%d %c = %d", c, c, charIndex);
 
 		int32 error = FT_Load_Glyph(face, charIndex, FT_LOAD_DEFAULT);
 		if (error)
@@ -80,30 +90,38 @@ Font::Font(FilePath fontPath, uint32 size, flags32 flags)
 			continue;
 		}
 
-		if (face->glyph->format != FT_GLYPH_FORMAT_BITMAP)
+		FT_Glyph glyph;
+		FT_Get_Glyph(face->glyph, &glyph);
+
+		// Generate bitmap
+		FT_Glyph_To_Bitmap(&glyph, ft_render_mode_normal, 0, 1);
+
+		FT_BitmapGlyph bitmap_glyph = (FT_BitmapGlyph)glyph;
+
+		uint8 *image = bitmap_glyph->bitmap.buffer;
+
+
+		for (uint32 _x = 0; _x < bitmap_glyph->bitmap.width; ++_x)
 		{
-			error = FT_Render_Glyph(face->glyph, FT_RENDER_MODE_NORMAL);
-			if (error)
+			for (uint32 _y = 0; _y < bitmap_glyph->bitmap.rows; ++_y)
 			{
-				Error("font", "Skiping - %d/%d", error, __LINE__);
-				continue;
+				uint32 idx = (x + _x) + width * (y + _y);
+				uint32 fntIdx = _x + bitmap_glyph->bitmap.width * _y;
+				texture[idx + 0] = image[fntIdx + 0];
+				texture[idx + 1] = image[fntIdx + 1];
 			}
 		}
 
-		//FT_Glyph_To_Bitmap(&face->glyph, FT_RENDER_MODE_NORMAL, NULL, TRUE);
-
-		uint32 x = penX + face->glyph->bitmap_left;
-		uint32 y = penY - face->glyph->bitmap_top;
-		for (; x < penX + face->glyph->advance.x; ++x)
+		x += bitmap_glyph->bitmap.width;
+		if (x >= width)
 		{
-			for (; y < penY - face->glyph->advance.y; ++y)
-			{
-				texture[x + height * y] = face->glyph->bitmap.buffer[x * height * y];
-			}
+			x = 0;
+			y += bitmap_glyph->bitmap.rows;
 		}
-
-		penX += face->glyph->advance.x >> 6;
-		penY += face->glyph->advance.y >> 6;
+		if (y >= height)
+		{
+			Error("font", "Height is too long!");
+		}
 	}
 
 	// Free freetype
@@ -114,11 +132,16 @@ Font::Font(FilePath fontPath, uint32 size, flags32 flags)
 	glBindTexture(GL_TEXTURE_2D, m_textureId);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA8, width, height, 0, GL_ALPHA, GL_UNSIGNED_BYTE, texture);
+	
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_LUMINANCE_ALPHA, GL_UNSIGNED_BYTE, texture);
 
 	delete[]texture;
+	delete[] buffer;
 
 	m_material = MaterialLib::get()->findByName("font");
+	m_loaded = true;
+
+	
 }
 
 Font::~Font()
@@ -132,5 +155,8 @@ Font::~Font()
 
 void Font::render(DynString string, const Rect& rect, const Color& color, flags32 flags)
 {
-	Renderer::get().renderFont(string, rect, color, flags, this);
+	if (m_loaded)
+	{
+		//Renderer::get().renderFont(string, rect, color, flags, this);
+	}
 }

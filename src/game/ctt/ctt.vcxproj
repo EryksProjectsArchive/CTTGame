@@ -178,6 +178,7 @@
     <ClCompile Include="graphics\Camera.cpp" />
     <ClCompile Include="graphics\fonts\Font.cpp" />
     <ClCompile Include="graphics\FragmentShader.cpp" />
+    <ClCompile Include="graphics\FreeCamera.cpp" />
     <ClCompile Include="graphics\Geometry.cpp" />
     <ClCompile Include="graphics\IndexBuffer.cpp" />
     <ClCompile Include="graphics\Material.cpp" />
@@ -240,6 +241,7 @@
     <ClInclude Include="graphics\Camera.h" />
     <ClInclude Include="graphics\fonts\Font.h" />
     <ClInclude Include="graphics\FragmentShader.h" />
+    <ClInclude Include="graphics\FreeCamera.h" />
     <ClInclude Include="graphics\Geometry.h" />
     <ClInclude Include="graphics\ImageData.h" />
     <ClInclude Include="graphics\IndexBuffer.h" />

@@ -23,6 +23,8 @@ private:
 	uint32 m_textureId;
 
 	SharedPtr<Material> m_material;
+
+	bool m_loaded;
 public:
 	Font(FilePath fontPath, uint32 size, flags32 flags);
 	~Font();

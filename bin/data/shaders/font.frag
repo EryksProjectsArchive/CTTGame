@@ -2,13 +2,12 @@
 
 uniform sampler2D texture;
 
-int vec4 outColor;
-int vec2 outUV;
-
-out vec4 color;
+in vec4 outColor;
+in vec2 outUV;
 
 // Simple fragment shader
 void main(void)
 {
-	color = outColor * texture2D(texture, outUV);
+	gl_FragColor = outColor;
+	gl_FragColor *= texture2D(texture, outUV);
 }

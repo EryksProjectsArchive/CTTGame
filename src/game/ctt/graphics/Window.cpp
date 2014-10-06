@@ -58,6 +58,9 @@ bool Window::processMessages()
 		case SDL_MOUSEWHEEL:
 			Game::get()->onMouseScroll(event.wheel.x, event.wheel.y);
 			break;
+		case SDL_MOUSEMOTION:
+			Game::get()->onMouseMove(event.motion.x, event.motion.y, event.motion.xrel, event.motion.yrel);
+			break;
 		}
 	}
 	return true;

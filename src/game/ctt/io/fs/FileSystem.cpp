@@ -26,7 +26,7 @@ FileSystem::~FileSystem()
 	m_fileSystems.clear();
 }
 
-File * FileSystem::open(FilePath filePath, FileOpenMode::Type mode)
+File * FileSystem::open(FilePath filePath, uint32 mode)
 {
 	FilePath path = buildPath(filePath);
 	for (FileSystem *fs : m_fileSystems)

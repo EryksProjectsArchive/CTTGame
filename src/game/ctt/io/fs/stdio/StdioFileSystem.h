@@ -21,7 +21,7 @@ namespace Stdio
 		FileSystem();
 		~FileSystem();
 
-		::File * open(FilePath file, FileOpenMode::Type mode) override;
+		::File * open(FilePath file, uint32 mode) override;
 
 		friend class File;
 	};

@@ -1,6 +1,5 @@
 #version 330 core
 
-
 uniform sampler2D texture0; // Base texture from material.
 out vec4 color;
 
