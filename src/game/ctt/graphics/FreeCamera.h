@@ -1,0 +1,31 @@
+//////////////////////////////////////////////
+//
+//		   City Transport Tycoon
+//	   Copyright (C) Black Ice Mountains
+//		 	All rights reserved
+//
+// File		: graphics/FreeCamera.h
+// Author	: Eryk Dwornicki
+//
+//////////////////////////////////////////////
+#pragma once
+
+#include "Camera.h"
+
+class FreeCamera : public Camera
+{
+private:
+	float m_speed;
+	float m_sensitivity;
+
+	bool m_keys[4];
+public:
+	FreeCamera();
+	~FreeCamera();
+
+	void onMouseMove(int x, int y, int relx, int rely);
+
+	void onKeyEvent(int key, bool state);
+
+	void update(float dt);
+};
