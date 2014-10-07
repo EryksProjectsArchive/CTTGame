@@ -156,6 +156,6 @@ void Font::render(DynString string, const Rect& rect, const Color& color, flags3
 {
 	if (m_loaded)
 	{
-		Renderer::get().renderFont(string, rect, color, flags, this);
+		//Renderer::get().renderFont(string, rect, color, flags, this);
 	}
 }
