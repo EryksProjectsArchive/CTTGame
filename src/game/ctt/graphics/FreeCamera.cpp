@@ -25,7 +25,7 @@ FreeCamera::FreeCamera()
 {
 	SDL_SetRelativeMouseMode(SDL_TRUE);
 	SDL_ShowCursor(0);
-	for (unsigned int i = 0; i < 4; ++i)
+	for (unsigned int i = 0; i < 6; ++i)
 		m_keys[i] = false;
 
 	m_position = Vector3(10, 10, 0);
