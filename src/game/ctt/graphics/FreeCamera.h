@@ -19,6 +19,9 @@ private:
 	float m_sensitivity;
 
 	bool m_keys[4];
+
+	Quaternion m_rotationX;
+	Quaternion m_rotationY;
 public:
 	FreeCamera();
 	~FreeCamera();
