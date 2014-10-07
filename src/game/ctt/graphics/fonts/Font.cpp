@@ -101,14 +101,13 @@ Font::Font(FilePath fontPath, uint32 size, flags32 flags)
 		uint8 *image = bitmap_glyph->bitmap.buffer;
 
 
-		for (uint32 _x = 0; _x < bitmap_glyph->bitmap.width; ++_x)
+		for (uint32 _x = 0; _x < bitmap_glyph->bitmap.width * 2; ++_x)
 		{
-			for (uint32 _y = 0; _y < bitmap_glyph->bitmap.rows; ++_y)
+			for (uint32 _y = 0; _y < bitmap_glyph->bitmap.rows * 2; ++_y)
 			{
 				uint32 idx = (x + _x) + width * (y + _y);
 				uint32 fntIdx = _x + bitmap_glyph->bitmap.width * _y;
-				texture[idx + 0] = image[fntIdx + 0];
-				texture[idx + 1] = image[fntIdx + 1];
+				texture[idx] = image[fntIdx];
 			}
 		}
 
@@ -157,6 +156,6 @@ void Font::render(DynString string, const Rect& rect, const Color& color, flags3
 {
 	if (m_loaded)
 	{
-		//Renderer::get().renderFont(string, rect, color, flags, this);
+		Renderer::get().renderFont(string, rect, color, flags, this);
 	}
 }

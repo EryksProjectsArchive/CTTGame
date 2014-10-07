@@ -40,6 +40,10 @@ typedef signed char sint8;
 typedef char int8;
 typedef unsigned char uint8;
 
+typedef signed short sint16;
+typedef short int16;
+typedef unsigned short uint16;
+
 typedef signed int sint32;
 typedef int int32;
 typedef unsigned int uint32;

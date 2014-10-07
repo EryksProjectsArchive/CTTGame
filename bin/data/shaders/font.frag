@@ -8,6 +8,5 @@ in vec2 outUV;
 // Simple fragment shader
 void main(void)
 {
-	gl_FragColor = outColor;
-	gl_FragColor *= texture2D(texture, outUV);
+	gl_FragColor = outColor * texture2D(texture, outUV);
 }
