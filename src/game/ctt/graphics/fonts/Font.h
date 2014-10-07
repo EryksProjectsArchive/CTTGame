@@ -22,7 +22,7 @@ class Font
 private:
 	uint32 m_textureId;
 
-	SharedPtr<Material> m_material;
+	Material* m_material;
 
 	bool m_loaded;
 public:

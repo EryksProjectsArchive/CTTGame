@@ -27,8 +27,8 @@ protected:
 	SDL_GLContext m_glContext;
 	static Renderer* s_instance;
 
-	SharedPtr<Material> m_currentMaterial;
-	SharedPtr<Material> m_defaultMaterial;
+	Material* m_currentMaterial;
+	Material* m_defaultMaterial;
 
 	struct
 	{
@@ -45,6 +45,9 @@ protected:
 	} m_stats;
 
 	unsigned int m_lastTitleUpdate;
+
+	Geometry *m_helperLines;
+	Material *m_helperMaterial;
 public:
 	Renderer();
 	~Renderer();
@@ -58,7 +61,9 @@ public:
 
 	BufferBase * createBuffer(BufferType::Type type);
 
-	void setMaterial(const SharedPtr<Material>& material);
+	void setMaterial(Material* material);
+	Material * getMaterial();
+
 	void renderGeometry(Geometry *geometry, const glm::mat4x4& matrix);
 	void renderFont(DynString string, const Rect& rect, const Color& color, flags32 flags, Font *font);
 

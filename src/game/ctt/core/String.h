@@ -78,7 +78,8 @@ public:
 
 	String& operator=(const char *buffer)
 	{
-		memcpy(m_buffer, buffer, (unsigned int size = strlen(buffer)) > maxSize ? maxSize : size);
+		uint32 size = strlen(buffer);
+		memcpy(m_buffer, buffer, size > maxSize ? maxSize : size);
 		return *this;
 	}
 

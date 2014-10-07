@@ -1,0 +1,9 @@
+{
+	"texture": {
+        "name": "avatar.bmp", "mipMaps": true
+    },
+	"shaders": {
+        "vertex": "simple",
+        "fragment": "simple"
+    }
+}

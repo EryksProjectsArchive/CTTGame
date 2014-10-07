@@ -21,10 +21,10 @@
 class MaterialLib : public Singleton<MaterialLib>
 {
 private:
-	List<SharedPtr<Material>> m_materials;
+	List<Material *> m_materials;
 public:
 	MaterialLib();
 	~MaterialLib();
 
-	SharedPtr<Material> findByName(DynString name);	
+	Material * findByName(DynString name);	
 };

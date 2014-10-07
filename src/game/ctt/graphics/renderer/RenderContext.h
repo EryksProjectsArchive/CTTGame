@@ -23,12 +23,13 @@ class RenderTask
 {
 public:
 	Geometry * m_geometry;
-	SharedPtr<Material> m_material;
+	Material * m_material;
 	Matrix4x4 m_matrix;
 
 	RenderTask()
 	{
 		m_geometry = 0;
+		m_material = 0;
 	}
 };
 

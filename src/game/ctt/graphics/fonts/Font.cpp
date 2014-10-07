@@ -101,9 +101,9 @@ Font::Font(FilePath fontPath, uint32 size, flags32 flags)
 		uint8 *image = bitmap_glyph->bitmap.buffer;
 
 
-		for (uint32 _x = 0; _x < bitmap_glyph->bitmap.width * 2; ++_x)
+		for (int32 _x = 0; _x < bitmap_glyph->bitmap.width * 2; ++_x)
 		{
-			for (uint32 _y = 0; _y < bitmap_glyph->bitmap.rows * 2; ++_y)
+			for (int32 _y = 0; _y < bitmap_glyph->bitmap.rows * 2; ++_y)
 			{
 				uint32 idx = (x + _x) + width * (y + _y);
 				uint32 fntIdx = _x + bitmap_glyph->bitmap.width * _y;
@@ -138,9 +138,9 @@ Font::Font(FilePath fontPath, uint32 size, flags32 flags)
 	delete[] buffer;
 
 	m_material = MaterialLib::get()->findByName("font");
-	m_loaded = true;
+	m_material->acquire();
 
-	
+	m_loaded = true;	
 }
 
 Font::~Font()
@@ -150,6 +150,9 @@ Font::~Font()
 		glDeleteTextures(1, &m_textureId);
 		m_textureId = 0;
 	}
+
+	if (m_material)
+		m_material->free();
 }
 
 void Font::render(DynString string, const Rect& rect, const Color& color, flags32 flags)

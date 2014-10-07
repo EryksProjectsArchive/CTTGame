@@ -26,7 +26,7 @@ private:
 	Matrix4x4 m_modelSpaceMatrix;
 
 	Geometry *m_geometry;
-	SharedPtr<Material> m_material;
+	Material* m_material;
 
 	AABB m_aabb;
 

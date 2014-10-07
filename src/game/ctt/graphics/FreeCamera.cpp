@@ -122,10 +122,14 @@ void FreeCamera::update(float dt)
 
 	if (update)
 	{
-		Vector3 point;
-		if (Game::get()->getPhysicsWorld()->rayTest(begin, m_position + (m_position - begin), &point))
+		Vector3 end = m_position + (m_position - begin);
+		if (glm::length(end - begin) > 0)
 		{
-			m_position = begin;
+			Vector3 point;
+			if (Game::get()->getPhysicsWorld()->rayTest(begin, end, &point))
+			{
+				m_position = begin;
+			}
 		}
 		updateMatrix();
 	}

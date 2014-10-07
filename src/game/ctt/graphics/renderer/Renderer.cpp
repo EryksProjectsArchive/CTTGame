@@ -153,16 +153,17 @@ PFNGLGENVERTEXARRAYSPROC Renderer::glGenVertexArrays = 0;
 
 Renderer * Renderer::s_instance = 0;
 
-Geometry *g_helperLines = 0;
-Material * g_helperMaterial = 0;
+
 Renderer::Renderer()
+	: m_window(0),
+	  m_glContext(0),
+	  m_projectionMatrix(glm::perspective(45.0f, 800.f / 600.f, 0.1f, 1000.0f)),
+	  m_lastTitleUpdate(0),
+	  m_helperLines(0),
+	  m_helperMaterial(0)
 {
-	m_window = 0;
-	m_glContext = 0;
 	s_instance = this;
-	m_projectionMatrix = glm::perspective(45.0f, 800.f / 600.f, 0.1f, 1000.0f);
 	m_stats.reset();
-	m_lastTitleUpdate = 0;
 }
 
 Renderer::~Renderer()
@@ -172,6 +173,18 @@ Renderer::~Renderer()
 		SDL_GL_DeleteContext(m_glContext);
 		m_glContext = 0;
 	}
+
+	if (m_helperMaterial)
+		m_helperMaterial->free();
+
+	if (m_helperLines)
+	{
+		delete m_helperLines;
+		m_helperLines = 0;
+	}
+
+	if (m_defaultMaterial)
+		m_defaultMaterial->free();
 }
 
 #define ASSERT_FUNCTION(name) if(!(name)) { Error("gl","Function %s is not available.", #name); }
@@ -326,27 +339,14 @@ bool Renderer::setup(Window * window)
 	glFrontFace(GL_CW);
 	
 	m_defaultMaterial = MaterialLib::get()->findByName("default");
-
-	g_helperMaterial = new Material("helper");
-
-	ShaderProgram *shaderProgram = new ShaderProgram();
-
-	FragmentShader*fragmentShader = new FragmentShader("../../data/shaders/simpleColor.frag");
-	shaderProgram->attachShader(fragmentShader);
-
-	VertexShader *vertexShader = new VertexShader("../../data/shaders/simple.vert");
-	shaderProgram->attachShader(vertexShader);
-
-	shaderProgram->link();
-
-	g_helperMaterial->m_program = SharedPtr<ShaderProgram>(shaderProgram);
+	m_helperMaterial = MaterialLib::get()->findByName("primitive");
+	m_helperMaterial->acquire();
 
 	unsigned int HackVAO;
 	glGenVertexArrays(1, &HackVAO);
 	glBindVertexArray(HackVAO);
-
 	
-	g_helperLines = new Geometry(EDrawType::LINES);
+	m_helperLines = new Geometry(EDrawType::LINES);
 
 	Vertex3d vertices[4] = { 0 };
 
@@ -366,7 +366,7 @@ bool Renderer::setup(Window * window)
 		0, 3
 	};
 
-	g_helperLines->fillData(vertices, 4, indices, 2);
+	m_helperLines->fillData(vertices, 4, indices, 2);
 	return true;
 }
 
@@ -376,8 +376,8 @@ void Renderer::preFrame()
 	glClearColor(0.9f, 0.9f, 0.9f, 1.0f);	
 	glClearDepth(1.0f);
 
-	setMaterial(SharedPtr<Material>(g_helperMaterial));
-	renderGeometry(g_helperLines, glm::mat4x4());
+	setMaterial(m_helperMaterial);
+	renderGeometry(m_helperLines, glm::mat4x4());
 	setMaterial(m_defaultMaterial);
 }
 
@@ -413,14 +413,19 @@ BufferBase * Renderer::createBuffer(BufferType::Type type)
 	return 0;
 }
 
-void Renderer::setMaterial(const SharedPtr<Material> & material)
+void Renderer::setMaterial(Material* material)
 {
 	m_currentMaterial = material;
 }
 
+Material * Renderer::getMaterial()
+{
+	return m_currentMaterial;
+}
+
 void Renderer::renderGeometry(Geometry *geometry, const glm::mat4x4& matrix)
 {
-	SharedPtr<Material> material = m_currentMaterial;
+	Material* material = m_currentMaterial;
 	if (!material)
 		material = m_defaultMaterial;
 
@@ -430,13 +435,13 @@ void Renderer::renderGeometry(Geometry *geometry, const glm::mat4x4& matrix)
 	// Shaders
 	if (!material)
 	{
-		Error("renderer", "Cannot render geometry. No material found!");
+		//Error("renderer", "Cannot render geometry. No material found!");
 		return;
 	}
 
 	if (!material->m_program || !glIsProgram(material->m_program->m_programId))
 	{
-		Error("renderer", "Cannot render geometry. No shader program assigned for material.");
+		//Error("renderer", "Cannot render geometry. No shader program assigned for material.");
 		return;
 	}
 	
@@ -560,7 +565,7 @@ void Renderer::renderFont(DynString string, const Rect& rect, const Color& color
 {
 	glm::mat4 orthoMatrix = glm::ortho<float>(0, (float)m_window->getWidth(), (float)m_window->getHeight(), 0);
 
-	SharedPtr<Material> material = font->m_material;
+	Material* material = font->m_material;
 
 	SimpleVertex2d vertices[4] = {
 		{ -0.5f, -0.5f, 0xAAFFFFFF, 0, 0 },

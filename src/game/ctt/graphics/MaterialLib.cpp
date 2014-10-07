@@ -30,18 +30,21 @@ MaterialLib::MaterialLib()
 
 MaterialLib::~MaterialLib()
 {
+	for (Material * mat : m_materials)
+		delete mat;
+
 	m_materials.clear();
 }
 
-SharedPtr<Material> MaterialLib::findByName(DynString name)
+Material * MaterialLib::findByName(DynString name)
 {
-	for (SharedPtr<Material> mat : m_materials)
+	for (Material* mat : m_materials)
 	{
 		if (mat->m_name == name)
 			return mat;
 	}
 
-	SharedPtr<Material> material;
+	Material* material = 0;
 	File *file = FileSystem::get()->open(FilePath("materials/%s.json", *name), FileOpenMode::Read);
 	if (file->isLoaded())
 	{
@@ -50,18 +53,17 @@ SharedPtr<Material> MaterialLib::findByName(DynString name)
 		Json::Reader reader;
 
 		if (reader.parse(content.get(), root))
-		{
-			material = SharedPtr<Material>(new Material(name));
+		{			
+			material = new Material(name, FilePath("materials/%s.json", *name));
 
 			if (!root["texture"].empty() && !root["texture"]["name"].empty())
 			{
-				material->m_texture = SharedPtr<Texture>(new Texture(FilePath("../../data/textures/%s", root["texture"]["name"].asCString()), !root["texture"]["mipMaps"] ? false : root["texture"]["mipMaps"].asBool()));
-				material->m_texture->acquire(); // Acquire texture into material - we are calling free when material is being removed
+				material->m_textureName = root["texture"]["name"].asCString();
+				material->m_mipmaps = root["texture"].get("mipMaps", false).asBool();
+				material->m_hasTexture = 1;
 			}
 			else
 				Warning("MatLib", "Material %s has no textures set.", *name);
-
-			material->m_program = SharedPtr<ShaderProgram>(new ShaderProgram());
 
 			if (root["shaders"].empty())
 			{
@@ -70,19 +72,23 @@ SharedPtr<Material> MaterialLib::findByName(DynString name)
 			else
 			{
 				if (!root["shaders"]["vertex"].empty())
-					material->m_program->attachShader(new VertexShader(FilePath("../../data/shaders/%s.vert", root["shaders"]["vertex"].asCString())));
+				{
+					material->m_hasVertexShader = 1;
+					material->m_vertexShaderName = root["shaders"]["vertex"].asCString();
+				}
 				else
 					Warning("MatLib", "Material %s has no vertex shader set.", *name);
 
 				if (!root["shaders"]["fragment"].empty())
-					material->m_program->attachShader(new FragmentShader(FilePath("../../data/shaders/%s.frag", root["shaders"]["fragment"].asCString())));
+				{
+					material->m_hasFragmentShader = 1;
+					material->m_fragmentShaderName = root["shaders"]["fragment"].asCString();
+				}
 				else
 					Warning("MatLib", "Material %s has no vertex shader set.", *name);
 			}
-
-			material->m_program->link();
-
-			Debug("MatLib", "New material loaded. %s", *name);
+			
+			Debug("MatLib", "New material loaded %s.", *name);
 			m_materials.pushBack(material);
 		}
 		else
