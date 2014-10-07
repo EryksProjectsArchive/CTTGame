@@ -4,10 +4,13 @@
 //	   Copyright (C) Black Ice Mountains
 //		 	All rights reserved
 //
-// File		: graphics/MaterialLib.cpp
+// File		: resources/materials/MaterialLib.cpp
 // Author	: Eryk Dwornicki
 //
 //////////////////////////////////////////////
+
+//#include <core/DynString.h>
+#include <core/List.h>
 
 #include "MaterialLib.h"
 
@@ -15,11 +18,13 @@
 
 #include <json/json.h>
 
+
 #include <graphics/Texture.h>
 #include <graphics/Shader.h>
 #include <graphics/VertexShader.h>
 #include <graphics/FragmentShader.h>
 #include <graphics/ShaderProgram.h>
+#include <graphics/Material.h>
 
 #include <io/fs/FileSystem.h>
 

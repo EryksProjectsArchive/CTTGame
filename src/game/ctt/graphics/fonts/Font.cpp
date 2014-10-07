@@ -19,7 +19,8 @@
 
 #include <graphics/renderer/Renderer.h>
 #include <graphics/Material.h>
-#include <graphics/MaterialLib.h>
+
+#include <resources/materials/MaterialLib.h>
 
 #include <core/Logger.h>
 

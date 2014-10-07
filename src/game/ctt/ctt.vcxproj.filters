@@ -160,6 +160,12 @@
     <Filter Include="Source Files\input">
       <UniqueIdentifier>{cebb2d3b-0d94-48b2-bd1f-f9cc9f3ea79e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\resources\materials">
+      <UniqueIdentifier>{dc88e52c-a0cb-4538-aff5-b58b90b249f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\resources\materials">
+      <UniqueIdentifier>{db7f6ebb-225a-40f2-8175-e5f197d7c81b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -279,9 +285,6 @@
     <ClCompile Include="io\fs\File.cpp">
       <Filter>Source Files\io\fs</Filter>
     </ClCompile>
-    <ClCompile Include="graphics\MaterialLib.cpp">
-      <Filter>Source Files\graphics</Filter>
-    </ClCompile>
     <ClCompile Include="io\Serializeable.cpp">
       <Filter>Source Files\io</Filter>
     </ClCompile>
@@ -323,6 +326,9 @@
     </ClCompile>
     <ClCompile Include="graphics\FreeCamera.cpp">
       <Filter>Source Files\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="resources\materials\MaterialLib.cpp">
+      <Filter>Source Files\resources\materials</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -473,9 +479,6 @@
     <ClInclude Include="core\DynArray.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
-    <ClInclude Include="graphics\MaterialLib.h">
-      <Filter>Header Files\graphics</Filter>
-    </ClInclude>
     <ClInclude Include="io\Serializeable.h">
       <Filter>Header Files\io</Filter>
     </ClInclude>
@@ -526,6 +529,12 @@
     </ClInclude>
     <ClInclude Include="graphics\FreeCamera.h">
       <Filter>Header Files\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="resources\materials\MaterialLib.h">
+      <Filter>Header Files\resources\materials</Filter>
+    </ClInclude>
+    <ClInclude Include="resources\ResourceLib.h">
+      <Filter>Header Files\resources</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

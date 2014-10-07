@@ -104,6 +104,8 @@ namespace Stdio
 class Resource;
 class CacheableResource;
 class ImageLoader;
+template <typename Type>
+class ResourceLib;
 
 // Sound
 namespace OpenAL

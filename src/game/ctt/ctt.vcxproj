@@ -182,7 +182,6 @@
     <ClCompile Include="graphics\Geometry.cpp" />
     <ClCompile Include="graphics\IndexBuffer.cpp" />
     <ClCompile Include="graphics\Material.cpp" />
-    <ClCompile Include="graphics\MaterialLib.cpp" />
     <ClCompile Include="graphics\Mesh.cpp" />
     <ClCompile Include="graphics\Model.cpp" />
     <ClCompile Include="graphics\ModelFormat.cpp" />
@@ -210,6 +209,7 @@
     <ClCompile Include="resources\CacheableResource.cpp" />
     <ClCompile Include="resources\ImageLoader.cpp" />
     <ClCompile Include="resources\images\bmp\BMPImageLoader.cpp" />
+    <ClCompile Include="resources\materials\MaterialLib.cpp" />
     <ClCompile Include="resources\Resource.cpp" />
     <ClCompile Include="resources\SoundLoader.cpp" />
     <ClCompile Include="resources\sounds\wav\WAVsoundLoader.cpp" />
@@ -246,7 +246,6 @@
     <ClInclude Include="graphics\ImageData.h" />
     <ClInclude Include="graphics\IndexBuffer.h" />
     <ClInclude Include="graphics\Material.h" />
-    <ClInclude Include="graphics\MaterialLib.h" />
     <ClInclude Include="graphics\Mesh.h" />
     <ClInclude Include="graphics\Model.h" />
     <ClInclude Include="graphics\ModelFormat.h" />
@@ -278,7 +277,9 @@
     <ClInclude Include="resources\CacheableResource.h" />
     <ClInclude Include="resources\ImageLoader.h" />
     <ClInclude Include="resources\images\bmp\BMPImageLoader.h" />
+    <ClInclude Include="resources\materials\MaterialLib.h" />
     <ClInclude Include="resources\Resource.h" />
+    <ClInclude Include="resources\ResourceLib.h" />
     <ClInclude Include="resources\SoundLoader.h" />
     <ClInclude Include="resources\sounds\wav\WAVsoundLoader.h" />
     <ClInclude Include="sound\openal\OpenALImpl.h" />

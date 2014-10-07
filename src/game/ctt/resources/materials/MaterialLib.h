@@ -4,21 +4,19 @@
 //	   Copyright (C) Black Ice Mountains
 //		 	All rights reserved
 //
-// File		: graphics/MaterialLib.h
+// File		: resources/materials/MaterialLib.h
 // Author	: Eryk Dwornicki
 //
 //////////////////////////////////////////////
 
 #pragma once
 
+#include <Prerequisites.h>
+#include <resources/ResourceLib.h>
 #include <core/Singleton.h>
-#include <core/DynString.h>
 #include <core/List.h>
 
-#include "Material.h"
-#include <list>
-
-class MaterialLib : public Singleton<MaterialLib>
+class MaterialLib : public ResourceLib<Material>, public Singleton<MaterialLib>
 {
 private:
 	List<Material *> m_materials;
@@ -26,5 +24,5 @@ public:
 	MaterialLib();
 	~MaterialLib();
 
-	Material * findByName(DynString name);	
+	Material * findByName(DynString name) override;	
 };

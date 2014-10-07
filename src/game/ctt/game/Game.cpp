@@ -9,10 +9,6 @@
 //
 //////////////////////////////////////////////
 
-#include <cstring>
-
-#include "Game.h"
-
 #include <math/Rect.h>
 
 #include <core/Logger.h>
@@ -40,8 +36,6 @@
 #include <resources/SoundLoader.h>
 #include <resources/sounds/wav/WAVsoundLoader.h>
 
-#include "environment/Environment.h"
-
 #include <physics/PhysicsWorld.h>
 
 #include <input/Input.h>
@@ -51,6 +45,9 @@
 #include <game/scene/entities/types/BallEntity.h>
 
 #include <graphics/fonts/Font.h>
+
+#include "Game.h"
+#include "environment/Environment.h"
 
 Game::Game()
 	: m_isRunning(false), m_isInitialized(false), m_renderer(0), m_window(0), m_scene(0), m_physicsWorld(0)

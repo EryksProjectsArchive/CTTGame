@@ -30,7 +30,7 @@
 
 #include <graphics/ShaderProgram.h>
 
-#include <graphics/MaterialLib.h>
+#include <resources/materials/MaterialLib.h>
 
 #include <graphics/Camera.h>
 

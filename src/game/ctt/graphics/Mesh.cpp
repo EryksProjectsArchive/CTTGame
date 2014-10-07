@@ -18,7 +18,8 @@
 #include "ModelFormat.h"
 #include <core/Logger.h>
 #include <core/Timer.h>
-#include "MaterialLib.h"
+
+#include <resources/materials/MaterialLib.h>
 
 Mesh::Mesh(mesh * meshData)
 	: m_geometry(0), m_meshName(0), m_material(0),
