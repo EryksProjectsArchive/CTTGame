@@ -130,3 +130,22 @@ void PhysicsWorld::unregisterRigidBody(btRigidBody *rigidBody)
 	if (m_dynamicsWorld)
 		m_dynamicsWorld->removeRigidBody(rigidBody);
 }
+
+
+bool PhysicsWorld::rayTest(Vector3 begin, Vector3 end, Vector3 * position)
+{
+	if (m_dynamicsWorld)
+	{
+		btCollisionWorld::ClosestRayResultCallback result(btVector3(begin.x, begin.y, begin.z), btVector3(end.x, end.y, end.z));
+		m_dynamicsWorld->rayTest(btVector3(begin.x, begin.y, begin.z), btVector3(end.x, end.y, end.z), result);
+
+		if (result.hasHit())
+		{
+			position->x = result.m_hitPointWorld.x();
+			position->y = result.m_hitPointWorld.y();
+			position->z = result.m_hitPointWorld.z();
+			return true;
+		}
+	}
+	return false;
+}

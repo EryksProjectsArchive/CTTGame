@@ -18,10 +18,12 @@ private:
 	float m_speed;
 	float m_sensitivity;
 
-	bool m_keys[4];
+	bool m_keys[6];
 
 	Quaternion m_rotationX;
 	Quaternion m_rotationY;
+
+	void updateMatrix();
 public:
 	FreeCamera();
 	~FreeCamera();

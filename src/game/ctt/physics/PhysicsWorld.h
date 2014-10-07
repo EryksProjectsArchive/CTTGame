@@ -45,4 +45,6 @@ public:
 
 	void registerRigidBody(btRigidBody *rigidBody);
 	void unregisterRigidBody(btRigidBody *rigidBody);
+
+	bool rayTest(Vector3 begin, Vector3 end, Vector3 * position);
 };
