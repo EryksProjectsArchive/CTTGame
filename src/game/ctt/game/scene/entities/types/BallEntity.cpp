@@ -19,10 +19,12 @@
 
 #include "BallEntity.h"
 
+#include <resources/models/ModelLib.h>
+
 BallEntity::BallEntity()
 	: Entity(EntityType::Ball)
 {
-	m_model = new Model("../../data/models/ball.mdl");
+	m_model = ModelLib::get()->findByName("ball");
 	m_model->acquire();
 
 	AABB * aabb = m_model->getAABB();
@@ -51,11 +53,7 @@ BallEntity::BallEntity()
 BallEntity::~BallEntity()
 {
 	if (m_model)
-	{
 		m_model->free();
-		delete m_model;
-		m_model = 0;
-	}
 }
 
 void BallEntity::render(RenderContext & ctx)

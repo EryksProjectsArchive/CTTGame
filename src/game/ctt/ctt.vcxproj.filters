@@ -166,6 +166,12 @@
     <Filter Include="Header Files\resources\materials">
       <UniqueIdentifier>{db7f6ebb-225a-40f2-8175-e5f197d7c81b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\resources\models">
+      <UniqueIdentifier>{cf5adf2c-196d-4bc1-9c14-b1d3595124fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\resources\models">
+      <UniqueIdentifier>{4f90ea67-832c-4110-aed4-6a07df9e80a6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -329,6 +335,9 @@
     </ClCompile>
     <ClCompile Include="resources\materials\MaterialLib.cpp">
       <Filter>Source Files\resources\materials</Filter>
+    </ClCompile>
+    <ClCompile Include="resources\models\ModelLib.cpp">
+      <Filter>Source Files\resources\models</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -535,6 +544,9 @@
     </ClInclude>
     <ClInclude Include="resources\ResourceLib.h">
       <Filter>Header Files\resources</Filter>
+    </ClInclude>
+    <ClInclude Include="resources\models\ModelLib.h">
+      <Filter>Header Files\resources\models</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

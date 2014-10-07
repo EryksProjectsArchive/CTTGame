@@ -210,6 +210,7 @@
     <ClCompile Include="resources\ImageLoader.cpp" />
     <ClCompile Include="resources\images\bmp\BMPImageLoader.cpp" />
     <ClCompile Include="resources\materials\MaterialLib.cpp" />
+    <ClCompile Include="resources\models\ModelLib.cpp" />
     <ClCompile Include="resources\Resource.cpp" />
     <ClCompile Include="resources\SoundLoader.cpp" />
     <ClCompile Include="resources\sounds\wav\WAVsoundLoader.cpp" />
@@ -278,6 +279,7 @@
     <ClInclude Include="resources\ImageLoader.h" />
     <ClInclude Include="resources\images\bmp\BMPImageLoader.h" />
     <ClInclude Include="resources\materials\MaterialLib.h" />
+    <ClInclude Include="resources\models\ModelLib.h" />
     <ClInclude Include="resources\Resource.h" />
     <ClInclude Include="resources\ResourceLib.h" />
     <ClInclude Include="resources\SoundLoader.h" />

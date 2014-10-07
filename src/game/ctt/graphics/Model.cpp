@@ -16,15 +16,18 @@
 #include "Model.h"
 #include "ModelFormat.h"
 
-Model::Model(FilePath file) : CacheableResource(file)
+#include <io/fs/FileSystem.h>
+
+Model::Model(const DynString name, FilePath file) 
+	: CacheableResource(file),
+	  m_meshes(0),
+	  m_name(name),
+	  m_meshesCount(0)
 {
-	m_meshesCount = 0;
-	m_meshes = 0;
 }
 
 Model::~Model()
 {
-	destroy();
 }
 
 void Model::destroy()
@@ -52,13 +55,12 @@ bool Model::load()
 {
 	if (!m_isLoaded)
 	{
-		FILE *fp = fopen(m_filePath, "rb");
-
-		if (fp)
+		File *file = FileSystem::get()->open(m_filePath, FileOpenMode::Read | FileOpenMode::Binary);
+		if (file->isLoaded())
 		{
 			Vector3 max, min;
 			mdl mdlData;
-			if (ModelFormat::load(&mdlData, fp))
+			if (ModelFormat::load(&mdlData, file))
 			{
 				m_meshes = new Mesh*[mdlData.meshCount];
 				for (unsigned char i = 0; i < mdlData.meshCount; ++i)
@@ -106,11 +108,11 @@ bool Model::load()
 
 				delete[] mdlData.meshes;
 
-				m_isLoaded = true;
-				return true;
+				m_isLoaded = true;		
 			}
 
-			fclose(fp);			
+			FileSystem::get()->close(file);
+			return m_isLoaded;
 		}
 	}
 	return false;

@@ -97,5 +97,5 @@ struct mdl
 class ModelFormat
 {
 public:
-	static bool load(mdl * mdlStruct, FILE * fp);
+	static bool load(mdl * mdlStruct, File *file);
 };

@@ -71,7 +71,7 @@ bool Material::load()
 		// TODO: TextureLib
 		if (m_hasTexture)
 		{
-			m_texture = new Texture(FilePath("../../data/textures/%s", *m_textureName), m_mipmaps);
+			m_texture = new Texture(FilePath("../../data/textures/%s", *m_textureName), m_mipmaps ? true : false);
 			m_texture->acquire(); // Acquire texture into material - we are calling free when material is being removed
 		}
 

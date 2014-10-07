@@ -16,6 +16,8 @@
 #include <resources/CacheableResource.h>
 #include "Mesh.h"
 
+#include <core/DynString.h>
+
 class Model : public CacheableResource
 {
 private:
@@ -25,8 +27,10 @@ private:
 	AABB m_aabb;
 
 	Matrix4x4 m_matrix;
+
+	DynString m_name;
 public:
-	Model(FilePath file);
+	Model(const DynString name, FilePath file);
 	~Model() override;
 	
 	void destroy() override;
@@ -37,4 +41,6 @@ public:
 	void setMatrix(const Matrix4x4 matrix);
 
 	AABB * getAABB();
+
+	friend class ModelLib;
 };

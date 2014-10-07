@@ -14,13 +14,15 @@
 #include <cstring>
 #include <core/Logger.h>
 
-bool ModelFormat::load(mdl * mdlStruct, FILE * fp)
+#include <io/fs/FileSystem.h>
+
+bool ModelFormat::load(mdl * mdlStruct, File *file)
 {
-	if (!mdlStruct || !fp)
+	if (!mdlStruct || !file || !file->isLoaded())
 		return false;
 
 
-	fread(mdlStruct, sizeof(mdl) - sizeof(mdlStruct->meshes), 1, fp);
+	file->read(mdlStruct, 1, sizeof(mdl) - sizeof(mdlStruct->meshes));
 
 	if (memcmp(mdlStruct->id, "CTTMDL", 6) != 0)
 	{
@@ -39,32 +41,32 @@ bool ModelFormat::load(mdl * mdlStruct, FILE * fp)
 	for (unsigned char i = 0; i < mdlStruct->meshCount; ++i)
 	{
 		// Read name
-		fread(&mdlStruct->meshes[i].name.len, sizeof(mdlStruct->meshes[i].name.len), 1, fp);
+		file->read(&mdlStruct->meshes[i].name.len, 1, sizeof(mdlStruct->meshes[i].name.len));
 		mdlStruct->meshes[i].name.value = new char[mdlStruct->meshes[i].name.len+1];
-		fread(mdlStruct->meshes[i].name.value, sizeof(char), mdlStruct->meshes[i].name.len, fp);
+		file->read(mdlStruct->meshes[i].name.value, mdlStruct->meshes[i].name.len, sizeof(char));
 		mdlStruct->meshes[i].name.value[mdlStruct->meshes[i].name.len] = '\0';
 		
 		// Read flags and world placement
-		fread(&mdlStruct->meshes[i].flags, sizeof(mdlStruct->meshes[i].flags), 1, fp);
-		fread(&mdlStruct->meshes[i].simpleColBox, sizeof(mdlStruct->meshes[i].simpleColBox), 1, fp);
-		fread(&mdlStruct->meshes[i].worldPlacement, sizeof(mdlStruct->meshes[i].worldPlacement), 1, fp);
+		file->read(&mdlStruct->meshes[i].flags, 1, sizeof(mdlStruct->meshes[i].flags));
+		file->read(&mdlStruct->meshes[i].simpleColBox, 1, sizeof(mdlStruct->meshes[i].simpleColBox));
+		file->read(&mdlStruct->meshes[i].worldPlacement, 1, sizeof(mdlStruct->meshes[i].worldPlacement));
 		
 		// Read material name
-		fread(&mdlStruct->meshes[i].material.len, sizeof(mdlStruct->meshes[i].material.len), 1, fp);
+		file->read(&mdlStruct->meshes[i].material.len, 1, sizeof(mdlStruct->meshes[i].material.len));
 		mdlStruct->meshes[i].material.value = new char[mdlStruct->meshes[i].material.len+1];
-		fread(mdlStruct->meshes[i].material.value, sizeof(char), mdlStruct->meshes[i].material.len, fp);
+		file->read(mdlStruct->meshes[i].material.value, mdlStruct->meshes[i].material.len, sizeof(char));
 		mdlStruct->meshes[i].material.value [mdlStruct->meshes[i].material.len] = '\0';
 		
 		// Read vertices count and triangles count
-		fread(&mdlStruct->meshes[i].verticesCount, sizeof(mdlStruct->meshes[i].verticesCount) + sizeof(mdlStruct->meshes[i].trianglesCount), 1, fp);
+		file->read(&mdlStruct->meshes[i].verticesCount, 1, sizeof(mdlStruct->meshes[i].verticesCount) + sizeof(mdlStruct->meshes[i].trianglesCount));
 		
 		// xx 00 (vertices Count)
 		// 00 00 (triangles count)
 		mdlStruct->meshes[i].vertices = new vertex[mdlStruct->meshes[i].verticesCount];
-		fread(mdlStruct->meshes[i].vertices, sizeof(vertex), mdlStruct->meshes[i].verticesCount, fp);
+		file->read(mdlStruct->meshes[i].vertices, mdlStruct->meshes[i].verticesCount, sizeof(vertex));
 		
 		mdlStruct->meshes[i].triangles = new triangle[mdlStruct->meshes[i].trianglesCount];
-		fread(mdlStruct->meshes[i].triangles, sizeof(triangle), mdlStruct->meshes[i].trianglesCount, fp);
+		file->read(mdlStruct->meshes[i].triangles, mdlStruct->meshes[i].trianglesCount, sizeof(triangle));
 
 		//Debug("ModelFormat", "Mesh %s (Tris: %d, Verts: %d)", mdlStruct->meshes[i].name.value, mdlStruct->meshes[i].trianglesCount, mdlStruct->meshes[i].verticesCount);
 	}
