@@ -143,7 +143,7 @@ bool PhysicsWorld::rayTest(Vector3 begin, Vector3 end, Vector3 * position)
 		{
 			position->x = result.m_hitPointWorld.x();
 			position->y = result.m_hitPointWorld.y();
-			position->z = result.m_hitPointWorld.z();
+			position->z = result.m_hitPointWorld.z();			
 			return true;
 		}
 	}

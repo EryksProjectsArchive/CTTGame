@@ -294,12 +294,9 @@ void Game::onKeyEvent(int key, bool state)
 			Vector3 diff = glm::normalize(b - a);
 			Vector3 velocity = diff;
 			velocity *= force * 90;
-			diff.y += 2;
-			diff.x *= 2;
-			diff.z *= 2;
 
 			BallEntity * ball = new BallEntity();
-			ball->setPosition(a + diff);
+			ball->setPosition(a + diff*2.f);
 			ball->setLinearVelocity(velocity);
 			m_scene->addEntity(ball);
 		}
