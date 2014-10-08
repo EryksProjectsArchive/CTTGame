@@ -23,6 +23,8 @@ private:
 	Quaternion m_rotationX;
 	Quaternion m_rotationY;
 
+	Vector3 m_facing;
+
 	void updateMatrix();
 public:
 	FreeCamera();

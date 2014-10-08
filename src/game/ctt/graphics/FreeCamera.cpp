@@ -81,8 +81,6 @@ void FreeCamera::onKeyEvent(int key, bool state)
 void FreeCamera::update(float dt)
 {
 	Vector3 begin = m_position;
-	glm::mat4 matRotation = glm::mat4_cast(m_rotationX);
-	Vector3 targetX = m_position + Vector3(-matRotation[0][2], -matRotation[1][2], -matRotation[2][2]);
 
 	bool update = false;
 	if (m_keys[0])
@@ -99,14 +97,14 @@ void FreeCamera::update(float dt)
 
 	if (m_keys[2])
 	{
-		Vector3 direction = glm::cross(targetX - begin, Vector3(0, 1, 0));
+		Vector3 direction = glm::cross(m_facing - begin, Vector3(0, 1, 0));
 		m_position -= direction * m_speed * dt;
 		update = true;
 	}
 
 	if (m_keys[3])
 	{
-		Vector3 direction = glm::cross(targetX - begin, Vector3(0, 1, 0));
+		Vector3 direction = glm::cross(m_facing - begin, Vector3(0, 1, 0));
 		m_position += direction * m_speed * dt;
 		update = true;
 	}
@@ -142,4 +140,6 @@ void FreeCamera::updateMatrix()
 {
 	m_viewMatrix = glm::mat4_cast(m_rotationY) * glm::mat4_cast(m_rotationX) * glm::translate(glm::mat4(), Vector3(-m_position.x, -m_position.y, -m_position.z));
 	m_target = m_position + Vector3(-m_viewMatrix[0][2], -m_viewMatrix[1][2], -m_viewMatrix[2][2]);
+	glm::mat4 matRotation = glm::mat4_cast(m_rotationX);
+	m_facing = m_position + Vector3(-matRotation[0][2], -matRotation[1][2], -matRotation[2][2]);
 }
