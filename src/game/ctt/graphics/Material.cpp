@@ -71,7 +71,7 @@ bool Material::load()
 		// TODO: TextureLib
 		if (m_hasTexture)
 		{
-			m_texture = new Texture(FilePath("../../data/textures/%s", *m_textureName), m_mipmaps ? true : false);
+			m_texture = new Texture(FilePath("../../data/textures/%s", m_textureName.get()), m_mipmaps ? true : false);
 			m_texture->acquire(); // Acquire texture into material - we are calling free when material is being removed
 		}
 
@@ -79,12 +79,12 @@ bool Material::load()
 
 		if (m_hasVertexShader)
 		{
-			m_program->attachShader(new VertexShader(FilePath("../../data/shaders/%s.vert", *m_vertexShaderName)));
+			m_program->attachShader(new VertexShader(FilePath("../../data/shaders/%s.vert", m_vertexShaderName.get())));
 		}
 
 		if (m_hasFragmentShader)
 		{
-			m_program->attachShader(new FragmentShader(FilePath("../../data/shaders/%s.frag",*m_fragmentShaderName)));
+			m_program->attachShader(new FragmentShader(FilePath("../../data/shaders/%s.frag",m_fragmentShaderName.get())));
 		}
 
 		m_program->link();

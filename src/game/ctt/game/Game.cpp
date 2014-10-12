@@ -108,16 +108,16 @@ bool Game::init()
 	OS::initHomePath(GAME_NAME);
 
 	// setup logger
-	Logger::init(FilePath("%sgame.log", OS::getHomePath(GAME_NAME)), false);
+	Logger::init(FilePath("%sgame.log", OS::getHomePath(GAME_NAME).get()), false);
 
 	// Setup file system
-	//FileSystem::get()->setHomePath(OS::getHomePath(GAME_NAME));
+	FileSystem::get()->setHomePath(OS::getHomePath(GAME_NAME));
 	FileSystem::get()->registerFileSystem(new Stdio::FileSystem());
-	FileSystem::get()->setBaseDirectory(FilePath("%s../../data/",OS::getAppPath()));
+	FileSystem::get()->setBaseDirectory(FilePath("%s../../data/",OS::getAppPath().get()));
 
-	/*File *file = FileSystem::get()->open("home/config.json", FileOpenMode::Write | FileOpenMode::Extra);
+	File *file = FileSystem::get()->open("home/config.json", FileOpenMode::Write | FileOpenMode::Extra);
 	Config::get()->deserialize(file);
-	FileSystem::get()->close(file);*/
+	FileSystem::get()->close(file);
 
 	// create image loader
 	ImageLoader::get()->registerLoader(new BMP::ImageLoader());
@@ -127,8 +127,8 @@ bool Game::init()
 
 	// Create game window
 	m_window = new Window();
-	m_window->setup("Engine");
-	//m_window->setup("Engine", Config::get()->find("resolution")["width"].getInteger(1280), Config::get()->find("resolution")["height"].getInteger(720), Config::get()->find("fullscreen").getBool(false));
+	//m_window->setup("engine");
+	m_window->setup("Engine", Config::get()->find("resolution")["width"].getInteger(1280), Config::get()->find("resolution")["height"].getInteger(720), Config::get()->find("fullscreen").getBool(false));
 
 	m_renderer = new Renderer();
 	if (!m_renderer->setup(m_window))

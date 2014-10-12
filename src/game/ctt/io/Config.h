@@ -64,7 +64,7 @@ public:
 
 	public:
 		Entry();
-		Entry(const DynString name);
+		Entry(DynString name);
 		~Entry();
 
 		uint32 getInteger(uint32 default = 0);

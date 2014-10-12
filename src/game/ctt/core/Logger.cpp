@@ -24,7 +24,7 @@ void Logger::init(FilePath file, bool bAppend)
 	{
 		if (s_logFile = fopen(file, bAppend?"a+":"w+"))
 		{
-			Info("log", "Logger started! (%s)", *file);
+			Info("log", "Logger started! (%s)", file.get());
 		}
 	}
 	else

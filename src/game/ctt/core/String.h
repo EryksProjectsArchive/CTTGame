@@ -68,7 +68,7 @@ public:
 	{
 	}
 
-	void append(const char *buffer)
+	String& append(const char *buffer)
 	{
 		size_t size = strlen(buffer);
 		size_t length = getLength();
@@ -78,7 +78,8 @@ public:
 		
 		if (size > 0)
 			memcpy(m_buffer + length, buffer, size);
-		
+
+		return *this;		
 	}
 
 	String& operator=(String& string)
@@ -118,11 +119,6 @@ public:
 		return m_buffer;
 	}
 
-	const char * operator*() const
-	{
-		return m_buffer;
-	}
-
 	const char * String::get()
 	{
 		return m_buffer;
@@ -148,7 +144,7 @@ public:
 		return -1;
 	}
 
-	/*String operator+=(const char *value)
+	String operator+=(const char *value)
 	{
 		return append(value);
 	}
@@ -188,8 +184,8 @@ public:
 		strcpy(newString.m_buffer, value);
 		strcat(newString.m_buffer, temp);
 
-		return *this;
-	}*/
+		return newString;
+	}
 };
 
 // Default string types

@@ -128,7 +128,7 @@ namespace OS
 #ifdef _WIN32
 		char windowsDirectory[256] = { 0 };
 		GetWindowsDirectory(windowsDirectory, 256);
-		return fileExists(FilePath("%s\\System32\\%s", windowsDirectory, *path));
+		return fileExists(FilePath("%s\\System32\\%s", windowsDirectory, path.get()));
 #elif __linux__
 		***** TODO: Linux support ***** (ERROR HERE ERROR HERE ERROR)
 #endif

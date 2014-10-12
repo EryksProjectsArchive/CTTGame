@@ -28,7 +28,7 @@ FileSystem::~FileSystem()
 
 void FileSystem::setHomePath(FilePath homePath)
 {
-	Info("fs", "Home path: ", *homePath);
+	Info("fs", "Home path: %s", homePath.get());
 	m_homePath = homePath;
 }
 
@@ -55,7 +55,7 @@ void FileSystem::close(File *file)
 
 void FileSystem::setBaseDirectory(FilePath baseDirectory)
 {
-	Info("fs", "Base directory: ", *baseDirectory);
+	Info("fs", "Base directory: ", baseDirectory.get());
 	m_baseDirectory = baseDirectory;
 }
 
@@ -76,11 +76,11 @@ void FileSystem::unregisterFileSystem(FileSystem *fileSystem)
 
 FilePath FileSystem::buildPath(FilePath file)
 {
-	if (file.find("home") == 0)
+	if (file.find("home/") == 0)
 	{
-		//FilePath path = file.replace("home", m_homePath);
-		//Debug("home", "%s", *path);
-		//return path;
+		FilePath path = file.replace("home/", m_homePath);
+		Debug("home", "%s", path.get());
+		return path;
 	}
 	return m_baseDirectory + file;
 }

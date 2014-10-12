@@ -77,10 +77,9 @@ Config::Entry Config::operator[](DynString name)
 	return find(name);
 }
 
-Config::Entry::Entry(const DynString name)
+Config::Entry::Entry(DynString name)
 	: m_name(name), m_type(Config::Entry::ValueType::Empty)
 {
-	Info("x", "%p", this);
 }
 
 Config::Entry::Entry()

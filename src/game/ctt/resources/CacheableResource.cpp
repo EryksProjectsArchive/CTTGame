@@ -21,7 +21,7 @@ CacheableResource::~CacheableResource()
 {
 	if (m_refCount >= 1)
 	{
-		Warning("cacheable resource", "There is still one or more references left in cachable resource '%s'. (%d)", *m_filePath, m_refCount);
+		Warning("cacheable resource", "There is still one or more references left in cachable resource '%s'. (%d)", m_filePath.get(), m_refCount);
 	}
 
 	destroy();
@@ -33,11 +33,11 @@ void CacheableResource::acquire()
 	{
 		if (!load())
 		{
-			Error("cacheable resource", "Cannot load cacheable resource! '%s'", *m_filePath);
+			Error("cacheable resource", "Cannot load cacheable resource! '%s'", m_filePath.get());
 		}
 		else 
 		{
-			Debug("cacheable resource", "Loaded cacheable resource. '%s'", *m_filePath);
+			Debug("cacheable resource", "Loaded cacheable resource. '%s'", m_filePath.get());
 		}
 	}
 }
@@ -47,6 +47,6 @@ void CacheableResource::free()
 	if (--m_refCount < 1)
 	{
 		destroy();
-		Debug("cacheable resource", "Destroyed cacheable resource memory because ref count amount reached bellow 1. '%s'", *m_filePath);
+		Debug("cacheable resource", "Destroyed cacheable resource memory because ref count amount reached bellow 1. '%s'", m_filePath.get());
 	}
 }
