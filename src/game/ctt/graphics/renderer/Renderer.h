@@ -15,6 +15,7 @@
 #include <SDL.h>
 #include <SDL_opengl.h>
 #include <graphics/BufferBase.h>
+#include <graphics/Geometry.h>
 #include <core/SharedPtr.h>
 
 class Renderer
@@ -46,7 +47,7 @@ protected:
 
 	unsigned int m_lastTitleUpdate;
 
-	Geometry *m_helperLines;
+	Geometry<Vertex3d> *m_helperLines;
 	Material *m_helperMaterial;
 public:
 	Renderer();
@@ -64,7 +65,7 @@ public:
 	void setMaterial(Material* material);
 	Material * getMaterial();
 
-	void renderGeometry(Geometry *geometry, const glm::mat4x4& matrix);
+	void renderGeometry(Geometry<Vertex3d> *geometry, const glm::mat4x4& matrix);
 	void renderFont(DynString string, const Rect& rect, const Color& color, flags32 flags, Font *font);
 
 	static Renderer& get();

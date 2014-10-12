@@ -138,8 +138,8 @@ void FreeCamera::update(float dt)
 
 void FreeCamera::updateMatrix()
 {
-	m_viewMatrix = glm::mat4_cast(m_rotationY) * glm::mat4_cast(m_rotationX) * glm::translate(glm::mat4(), Vector3(-m_position.x, -m_position.y, -m_position.z));
+	glm::mat4 matRotationX = glm::mat4_cast(m_rotationX);
+	m_viewMatrix = glm::mat4_cast(m_rotationY) * matRotationX * glm::translate(glm::mat4(), Vector3(-m_position.x, -m_position.y, -m_position.z));
 	m_target = m_position + Vector3(-m_viewMatrix[0][2], -m_viewMatrix[1][2], -m_viewMatrix[2][2]);
-	glm::mat4 matRotation = glm::mat4_cast(m_rotationX);
-	m_facing = m_position + Vector3(-matRotation[0][2], -matRotation[1][2], -matRotation[2][2]);
+	m_facing = m_position + Vector3(-matRotationX[0][2], -matRotationX[1][2], -matRotationX[2][2]);
 }

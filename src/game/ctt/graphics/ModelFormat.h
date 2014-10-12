@@ -78,7 +78,7 @@ struct mesh
 	struct string material;
 	unsigned short verticesCount;
 	unsigned short trianglesCount;
-	struct vertex *vertices;
+	struct Vertex3d *vertices;
 	struct triangle *triangles;
 };
 

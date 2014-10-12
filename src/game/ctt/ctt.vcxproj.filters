@@ -225,9 +225,6 @@
     <ClCompile Include="graphics\renderer\RenderContext.cpp">
       <Filter>Source Files\graphics\renderer</Filter>
     </ClCompile>
-    <ClCompile Include="graphics\Geometry.cpp">
-      <Filter>Source Files\graphics</Filter>
-    </ClCompile>
     <ClCompile Include="graphics\Material.cpp">
       <Filter>Source Files\graphics</Filter>
     </ClCompile>
@@ -291,9 +288,6 @@
     <ClCompile Include="io\fs\File.cpp">
       <Filter>Source Files\io\fs</Filter>
     </ClCompile>
-    <ClCompile Include="io\Serializeable.cpp">
-      <Filter>Source Files\io</Filter>
-    </ClCompile>
     <ClCompile Include="game\environment\Environment.cpp">
       <Filter>Source Files\game\environment</Filter>
     </ClCompile>
@@ -338,6 +332,9 @@
     </ClCompile>
     <ClCompile Include="resources\models\ModelLib.cpp">
       <Filter>Source Files\resources\models</Filter>
+    </ClCompile>
+    <ClCompile Include="io\Config.cpp">
+      <Filter>Source Files\io</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -488,9 +485,6 @@
     <ClInclude Include="core\DynArray.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
-    <ClInclude Include="io\Serializeable.h">
-      <Filter>Header Files\io</Filter>
-    </ClInclude>
     <ClInclude Include="game\environment\Environment.h">
       <Filter>Header Files\game\environment</Filter>
     </ClInclude>
@@ -547,6 +541,9 @@
     </ClInclude>
     <ClInclude Include="resources\models\ModelLib.h">
       <Filter>Header Files\resources\models</Filter>
+    </ClInclude>
+    <ClInclude Include="io\Config.h">
+      <Filter>Header Files\io</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

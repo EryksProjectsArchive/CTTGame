@@ -43,6 +43,17 @@ public:
 		memcpy(m_buffer, buffer, size);
 	}
 
+	String(char *buffer)
+	{
+		memset(m_buffer, 0, maxSize);
+
+		size_t size = strlen(buffer);
+		if (size > maxSize)
+			size = maxSize;
+
+		memcpy(m_buffer, buffer, size);
+	}
+
 	explicit String(const char *buffer, ...)
 	{
 		char tempBuffer[maxSize] = { 0 };
@@ -67,6 +78,7 @@ public:
 		
 		if (size > 0)
 			memcpy(m_buffer + length, buffer, size);
+		
 	}
 
 	String& operator=(String& string)
@@ -135,6 +147,49 @@ public:
 		
 		return -1;
 	}
+
+	/*String operator+=(const char *value)
+	{
+		return append(value);
+	}
+
+	String operator+=(unsigned char c)
+	{
+		char value[2] = { 0 };
+		value[0] = c;
+		return append(value);
+	}
+
+	String substr(uint16 begin, uint16 length)
+	{
+		String newString;
+		if (begin < maxSize)
+		{
+			uint16 end = begin + length;
+			if (end > maxSize)
+				end = maxSize;
+			for (uint16 i = begin; i < end; ++i)
+			{
+				newString += m_buffer[i];
+			}
+		}
+		return newString;
+	}
+
+	String replace(const char *key, const char *value)
+	{
+		printf("replace: %s, %s\n", key, value);
+		String newString;
+		uint16 keyPos = find(key);
+		
+		char temp[maxSize] = { 0 };
+		strcpy(temp, keyPos < strlen(key) ? substr(strlen(key), strlen(m_buffer)) : substr(keyPos + strlen(key), strlen(m_buffer)));
+		
+		strcpy(newString.m_buffer, value);
+		strcat(newString.m_buffer, temp);
+
+		return *this;
+	}*/
 };
 
 // Default string types

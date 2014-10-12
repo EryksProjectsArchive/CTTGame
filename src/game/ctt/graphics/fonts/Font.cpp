@@ -29,6 +29,9 @@
 Font::Font(FilePath fontPath, uint32 size, flags32 flags)
 	: m_textureId(0), m_loaded(false)
 {
+	// Reset glyph data
+	memset(m_data, 0, sizeof(m_data));
+
 	// Init free type
 	FT_Library ftLibrary;
 	if (FT_Init_FreeType(&ftLibrary) != 0)
@@ -57,33 +60,31 @@ Font::Font(FilePath fontPath, uint32 size, flags32 flags)
 	FT_Face face;
 	int errid = FT_New_Memory_Face(ftLibrary, buffer, _size, 0, &face);
 	if (errid != 0)
-	{	
+	{
 		Error("font", "Cannot create new face (errid: %d).", errid);
 		delete[] buffer;
 		return;
 	}
 
-	if (FT_Set_Pixel_Sizes(face, 0, size/64) != 0)
-	{
-		Error("font", "Cannot set pixel size");
-		delete[] buffer;
-		return;
-	}
+	FT_Set_Char_Size(face, size<<6, size<<6, 96, 96);
+
+
+	uint32 width = 1280;
+	uint32 height = 720;
 
 	uint32 x = 0;
 	uint32 y = 0;
-	uint32 width = 1024;
-	uint32 height = 1024;
-	uint8 *texture = new uint8[2 * 1024 * 1024]; // we are using 1 channel for luminosity and 1 channel for alpha to make fonts looking better
-	memset(texture, 0, 1024 * 1024);
 
+	uint8 *texture = new uint8[2 * width * height]; // we are using 1 channel for luminosity and 1 channel for alpha to make fonts looking better
+	memset(texture, 0, width * height * 2);
+	float f_Width = (float)width;
+	float f_Height = (float)height;
 	for (uint8 c = 32; c < 255; ++c)
 	{
 		FT_UInt charIndex = FT_Get_Char_Index(face, c);
 		if (!charIndex)
 			continue;
-		//Info("font", "%d %c = %d", c, c, charIndex);
-
+	
 		int32 error = FT_Load_Glyph(face, charIndex, FT_LOAD_DEFAULT);
 		if (error)
 		{
@@ -94,33 +95,43 @@ Font::Font(FilePath fontPath, uint32 size, flags32 flags)
 		FT_Glyph glyph;
 		FT_Get_Glyph(face->glyph, &glyph);
 
-		// Generate bitmap
 		FT_Glyph_To_Bitmap(&glyph, ft_render_mode_normal, 0, 1);
-
 		FT_BitmapGlyph bitmap_glyph = (FT_BitmapGlyph)glyph;
 
 		uint8 *image = bitmap_glyph->bitmap.buffer;
-
-
-		for (int32 _x = 0; _x < bitmap_glyph->bitmap.width * 2; ++_x)
+	
+		for (int32 _y = 0; _y < bitmap_glyph->bitmap.rows; ++_y)
 		{
-			for (int32 _y = 0; _y < bitmap_glyph->bitmap.rows * 2; ++_y)
+			for (int32 _x = 0; _x < bitmap_glyph->bitmap.width; ++_x)
 			{
-				uint32 idx = (x + _x) + width * (y + _y);
-				uint32 fntIdx = _x + bitmap_glyph->bitmap.width * _y;
-				texture[idx] = image[fntIdx];
+				int32 xpadding = 0;// bitmap_glyph->left;
+				int32 ypadding = 0;// bitmap_glyph->top;
+				
+				texture[((_x + x + xpadding) + width * (_y + y + ypadding))] = image[_x + bitmap_glyph->bitmap.width * _y];
 			}
 		}
 
-		x += bitmap_glyph->bitmap.width;
-		if (x >= width)
+		uint8 idx = charIndex % 256;
+		Info("f", "%c / %d", idx ,charIndex);
+		m_data[idx].set = 1;
+		m_data[idx].code = idx;
+		m_data[idx].x = (float)x / f_Width;
+		m_data[idx].y = 1 - ((float)y / f_Height);
+		m_data[idx].w = ((float)x + (float)bitmap_glyph->bitmap.width) / (float)f_Width;
+		m_data[idx].h = 1 - (((float)y + (float)bitmap_glyph->bitmap.rows) / (float)f_Height);
+		Info("f", "%fx%fx%fx%f", m_data[idx].x, m_data[idx].y, m_data[idx].w, m_data[idx].h);
+
+		x += size + 16;
+		if ((x + size + 16) >= width)
 		{
 			x = 0;
-			y += bitmap_glyph->bitmap.rows;
+			y += size + 16;
 		}
-		if (y >= height)
+
+		if ((y + size + 16) >= height)
 		{
-			Error("font", "Height is too long!");
+			Error("Font", "Height limit of font atlas has been exceeded!");
+			break;
 		}
 	}
 
@@ -132,8 +143,9 @@ Font::Font(FilePath fontPath, uint32 size, flags32 flags)
 	glBindTexture(GL_TEXTURE_2D, m_textureId);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_LUMINANCE_ALPHA, GL_UNSIGNED_BYTE, texture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_R, width, height, 0, GL_R, GL_UNSIGNED_BYTE, texture);
 
 	delete[]texture;
 	delete[] buffer;

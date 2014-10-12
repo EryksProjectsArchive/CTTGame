@@ -99,6 +99,8 @@ namespace Stdio
 	class File;
 	class FileSystem;
 };
+class Config;
+class Serializeable;
 
 // Resources
 class Resource;
@@ -130,6 +132,7 @@ class VertexShader;
 class FragmentShader;
 class ShaderProgram;
 class Texture;
+template <class T = Vertex3d>
 class Geometry;
 class Material;
 class MaterialLib;

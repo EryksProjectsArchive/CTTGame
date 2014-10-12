@@ -49,6 +49,8 @@
 #include "Game.h"
 #include "environment/Environment.h"
 
+#include <io/Config.h>
+
 Game::Game()
 	: m_isRunning(false), m_isInitialized(false), m_renderer(0), m_window(0), m_scene(0), m_physicsWorld(0)
 {
@@ -78,7 +80,11 @@ Game::~Game()
 	{
 		delete m_window;
 		m_window = 0;
-	}
+	}	
+
+	File *file = FileSystem::get()->open("home/config.json", FileOpenMode::Write | FileOpenMode::Extra);
+	Config::get()->serialize(file);
+	FileSystem::get()->close(file);
 }
 
 Font *gFont = 0;
@@ -98,15 +104,20 @@ bool Game::init()
 	// Initialize SDL
 	SDL_Init(SDL_INIT_VIDEO);
 
+	// Setup home directory
+	OS::initHomePath(GAME_NAME);
+
+	// setup logger
+	Logger::init(FilePath("%sgame.log", OS::getHomePath(GAME_NAME)), false);
+
 	// Setup file system
+	//FileSystem::get()->setHomePath(OS::getHomePath(GAME_NAME));
 	FileSystem::get()->registerFileSystem(new Stdio::FileSystem());
 	FileSystem::get()->setBaseDirectory(FilePath("%s../../data/",OS::getAppPath()));
 
-	// Setup home directory
-	char szHomePath[MAX_PATH] = { 0 };
-	strcpy(szHomePath, OS::initHomePath("Engine"));
-
-	Logger::init(FilePath("%sgame.log", szHomePath), false);
+	/*File *file = FileSystem::get()->open("home/config.json", FileOpenMode::Write | FileOpenMode::Extra);
+	Config::get()->deserialize(file);
+	FileSystem::get()->close(file);*/
 
 	// create image loader
 	ImageLoader::get()->registerLoader(new BMP::ImageLoader());
@@ -116,7 +127,8 @@ bool Game::init()
 
 	// Create game window
 	m_window = new Window();
-	m_window->setup("Engine", 1280, 768, false);
+	m_window->setup("Engine");
+	//m_window->setup("Engine", Config::get()->find("resolution")["width"].getInteger(1280), Config::get()->find("resolution")["height"].getInteger(720), Config::get()->find("fullscreen").getBool(false));
 
 	m_renderer = new Renderer();
 	if (!m_renderer->setup(m_window))
@@ -193,7 +205,7 @@ bool Game::init()
 
 	Environment::get()->setSunPosition(Vector3(30.0f, 10.0f, 0.0f));
 
-	gFont = new Font("fonts/tahoma.ttf", 12, Font::CreationFlags::Bold);
+	gFont = new Font("fonts/tahoma.ttf", 35, Font::CreationFlags::Bold);
 
 	m_isInitialized = true;
 	m_isRunning = true;
@@ -256,7 +268,7 @@ bool Game::pulse()
 			m_scene->render();
 
 		if (gFont)
-			gFont->render("Test", Rect(0, 0, 10, 10), Color(1.0f, 1.0f, 1.0f, 1.0f), Font::DrawFlags::NoClip);
+			gFont->render("Test", Rect(0, 0, 10, 10), Color(0.0f, 0.0f, 0.0f, 1.0f), Font::DrawFlags::NoClip);
 
 		m_renderer->postFrame();
 	}

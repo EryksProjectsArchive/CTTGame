@@ -179,7 +179,6 @@
     <ClCompile Include="graphics\fonts\Font.cpp" />
     <ClCompile Include="graphics\FragmentShader.cpp" />
     <ClCompile Include="graphics\FreeCamera.cpp" />
-    <ClCompile Include="graphics\Geometry.cpp" />
     <ClCompile Include="graphics\IndexBuffer.cpp" />
     <ClCompile Include="graphics\Material.cpp" />
     <ClCompile Include="graphics\Mesh.cpp" />
@@ -195,11 +194,11 @@
     <ClCompile Include="graphics\Window.cpp" />
     <ClCompile Include="input\Controllable.cpp" />
     <ClCompile Include="input\Input.cpp" />
+    <ClCompile Include="io\Config.cpp" />
     <ClCompile Include="io\fs\File.cpp" />
     <ClCompile Include="io\fs\FileSystem.cpp" />
     <ClCompile Include="io\fs\stdio\StdioFile.cpp" />
     <ClCompile Include="io\fs\stdio\StdioFileSystem.cpp" />
-    <ClCompile Include="io\Serializeable.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="os\DynamicLibrary.cpp" />
     <ClCompile Include="os\OS.cpp" />
@@ -262,12 +261,12 @@
     <ClInclude Include="input\Controllable.h" />
     <ClInclude Include="input\Input.h" />
     <ClInclude Include="io\CachedItem.h" />
+    <ClInclude Include="io\Config.h" />
     <ClInclude Include="io\fs\File.h" />
     <ClInclude Include="io\fs\FileOpenMode.h" />
     <ClInclude Include="io\fs\FileSystem.h" />
     <ClInclude Include="io\fs\stdio\StdioFile.h" />
     <ClInclude Include="io\fs\stdio\StdioFileSystem.h" />
-    <ClInclude Include="io\Serializeable.h" />
     <ClInclude Include="math\AABB.h" />
     <ClInclude Include="math\Rect.h" />
     <ClInclude Include="os\DynamicLibrary.h" />

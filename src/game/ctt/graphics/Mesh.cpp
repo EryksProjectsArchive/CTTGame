@@ -27,7 +27,7 @@ Mesh::Mesh(mesh * meshData)
 	  m_rotation(Quaternion(meshData->worldPlacement.rotation.w, meshData->worldPlacement.rotation.x, meshData->worldPlacement.rotation.y, meshData->worldPlacement.rotation.z)),
 	  m_scale(Vector3(meshData->worldPlacement.scale.x, meshData->worldPlacement.scale.y, meshData->worldPlacement.scale.z))
 {
-	m_geometry = new Geometry();
+	m_geometry = new Geometry<Vertex3d>();
 	if (m_geometry)
 		m_geometry->fillData(meshData->vertices, meshData->verticesCount, meshData->triangles, meshData->trianglesCount);	
 

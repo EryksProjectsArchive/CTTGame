@@ -26,9 +26,12 @@ private:
 	FilePath buildPath(FilePath file);
 protected:
 	FilePath m_baseDirectory;
+	FilePath m_homePath;
 public:
 	FileSystem();
 	virtual ~FileSystem();
+
+	void setHomePath(FilePath homePath);
 
 	virtual File * open(FilePath file, uint32 mode);
 	

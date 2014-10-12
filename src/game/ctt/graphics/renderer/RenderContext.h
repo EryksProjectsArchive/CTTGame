@@ -22,7 +22,7 @@
 class RenderTask
 {
 public:
-	Geometry * m_geometry;
+	Geometry<Vertex3d> * m_geometry;
 	Material * m_material;
 	Matrix4x4 m_matrix;
 

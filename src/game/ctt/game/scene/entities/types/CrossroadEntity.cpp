@@ -25,6 +25,8 @@
 
 #include <io/fs/FileSystem.h>
 
+#include <graphics/Vertex3d.h>
+
 CrossroadEntity::CrossroadEntity()
 	: Entity(EntityType::Crossroad)
 {

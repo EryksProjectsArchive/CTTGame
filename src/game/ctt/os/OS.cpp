@@ -31,12 +31,14 @@
 #	include "win32/LinuxDynamicLibrary.h"
 #endif
 
+#include <core/String.h>
+
 namespace OS
 {
-	char * getAppPath()
+	FilePath getAppPath()
 	{
 #ifdef _WIN32
-		static char path[MAX_PATH] = { 0 };
+		char path[MAX_PATH] = { 0 };
 		GetModuleFileName(NULL, path, MAX_PATH);
 		for (size_t i = strlen(path); i > 0; i--)
 		{
@@ -46,30 +48,30 @@ namespace OS
 				break;
 			}
 		}
-		return path;
+		return FilePath(path);
 #elif __linux__ 
-		return 0;
+		return FilePath(0);
 #endif
 	}
 
-	char * initHomePath(const char *appName)
+	FilePath initHomePath(const char *appName)
 	{
-		static char homePath[MAX_PATH] = { 0 };
+		char homePath[MAX_PATH] = { 0 };
 		strcpy(homePath, getHomePath(appName));
 		if (!directoryExists(homePath))
 		{
 			if (!makeDirectory(homePath))
 			{
 				msgBox("Cannot make home directory!", "Error");
-				return 0;
+				return FilePath();
 			}
 		}
-		return homePath;
+		return FilePath(homePath);
 	}
 
-	char * getHomePath(const char *file)
+	FilePath getHomePath(const char *file)
 	{
-		static char myDocuments[MAX_PATH] = { 0 };
+		char myDocuments[MAX_PATH] = { 0 };
 #ifdef _WIN32
 		HRESULT hResult = SHGetFolderPath(NULL, CSIDL_PERSONAL, NULL, SHGFP_TYPE_CURRENT, (LPSTR)myDocuments);
 		if (file)
@@ -78,7 +80,7 @@ namespace OS
 			strcat(myDocuments, file);
 		}
 		strcat(myDocuments, "\\");
-		return myDocuments;
+		return FilePath(myDocuments);
 #elif __linux__ 
 		struct passwd *pw = getpwuid(getuid());
 		if (file)
@@ -88,7 +90,7 @@ namespace OS
 			strcat(myDocuments, file);
 		}
 		strcat(myDocuments, "/");
-		return myDocuments;
+		return FilePath(myDocuments);
 #endif
 	}
 

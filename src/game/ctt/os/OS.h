@@ -22,9 +22,9 @@
 namespace OS
 {
 	// Paths
-	char* getAppPath();
-	char* getHomePath(const char *file);
-	char* initHomePath(const char *appName);
+	FilePath getAppPath();
+	FilePath getHomePath(const char *file);
+	FilePath initHomePath(const char *appName);
 
 	// Files
 	bool directoryExists(FilePath path);

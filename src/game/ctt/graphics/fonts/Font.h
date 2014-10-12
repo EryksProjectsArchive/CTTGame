@@ -19,12 +19,24 @@
 
 class Font
 {
-private:
+private:	
+	struct GlyphData
+	{
+		unsigned char set;
+		unsigned char code;
+		float x;
+		float y;
+		float w;
+		float h;
+	};
+
 	uint32 m_textureId;
 
 	Material* m_material;
 
 	bool m_loaded;
+
+	GlyphData m_data[256];
 public:
 	Font(FilePath fontPath, uint32 size, flags32 flags);
 	~Font();

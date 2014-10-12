@@ -25,7 +25,7 @@ private:
 	Quaternion m_rotation;	
 	Matrix4x4 m_modelSpaceMatrix;
 
-	Geometry *m_geometry;
+	Geometry<Vertex3d> *m_geometry;
 	Material* m_material;
 
 	AABB m_aabb;

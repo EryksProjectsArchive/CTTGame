@@ -12,10 +12,10 @@
 #include "FileSystem.h"
 
 #include <core/Logger.h>
+#include <os/OS.h>
 
 FileSystem::FileSystem()
 {
-
 }
 
 FileSystem::~FileSystem()
@@ -24,6 +24,12 @@ FileSystem::~FileSystem()
 		delete fs;
 
 	m_fileSystems.clear();
+}
+
+void FileSystem::setHomePath(FilePath homePath)
+{
+	Info("fs", "Home path: ", *homePath);
+	m_homePath = homePath;
 }
 
 File * FileSystem::open(FilePath filePath, uint32 mode)
@@ -70,5 +76,11 @@ void FileSystem::unregisterFileSystem(FileSystem *fileSystem)
 
 FilePath FileSystem::buildPath(FilePath file)
 {
+	if (file.find("home") == 0)
+	{
+		//FilePath path = file.replace("home", m_homePath);
+		//Debug("home", "%s", *path);
+		//return path;
+	}
 	return m_baseDirectory + file;
 }

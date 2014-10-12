@@ -16,6 +16,8 @@
 
 #include <io/fs/FileSystem.h>
 
+#include "Vertex3d.h"
+
 bool ModelFormat::load(mdl * mdlStruct, File *file)
 {
 	if (!mdlStruct || !file || !file->isLoaded())
@@ -62,7 +64,7 @@ bool ModelFormat::load(mdl * mdlStruct, File *file)
 		
 		// xx 00 (vertices Count)
 		// 00 00 (triangles count)
-		mdlStruct->meshes[i].vertices = new vertex[mdlStruct->meshes[i].verticesCount];
+		mdlStruct->meshes[i].vertices = new Vertex3d[mdlStruct->meshes[i].verticesCount];
 		file->read(mdlStruct->meshes[i].vertices, mdlStruct->meshes[i].verticesCount, sizeof(vertex));
 		
 		mdlStruct->meshes[i].triangles = new triangle[mdlStruct->meshes[i].trianglesCount];

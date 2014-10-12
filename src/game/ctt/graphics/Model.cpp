@@ -18,6 +18,8 @@
 
 #include <io/fs/FileSystem.h>
 
+#include "Vertex3d.h"
+
 Model::Model(const DynString name, FilePath file) 
 	: CacheableResource(file),
 	  m_meshes(0),
