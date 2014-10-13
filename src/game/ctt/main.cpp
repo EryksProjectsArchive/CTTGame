@@ -12,6 +12,10 @@
 #include <game/Game.h>
 #include <core/ExceptionHandler.h>
 
+#include <list>
+#include <stdio.h>
+#include <cstring>
+
 int main()
 {
 	ExceptionHandler::init();

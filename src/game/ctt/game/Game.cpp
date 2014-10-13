@@ -222,7 +222,7 @@ bool Game::init()
 
 	Environment::get()->setSunPosition(Vector3(30.0f, 10.0f, 0.0f));
 
-	gFont = new Font("fonts/tahoma.ttf", 18, Font::CreationFlags::Bold);
+	gFont = new Font("fonts/tahoma.ttf", 18);
 
 	m_isInitialized = true;
 	m_isRunning = true;

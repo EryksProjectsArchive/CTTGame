@@ -26,7 +26,7 @@
 
 #include <io/fs/FileSystem.h>
 
-Font::Font(FilePath fontPath, uint32 size, flags32 flags)
+Font::Font(FilePath fontPath, uint32 size)
 	: m_textureId(0), m_loaded(false), m_size(size)
 {
 	memset(m_data, 0, sizeof(m_data));
