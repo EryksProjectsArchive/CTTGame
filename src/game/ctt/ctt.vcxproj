@@ -165,6 +165,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="core\ExceptionHandler.cpp" />
     <ClCompile Include="core\Logger.cpp" />
     <ClCompile Include="core\Timer.cpp" />
     <ClCompile Include="game\environment\Environment.cpp" />
@@ -221,6 +222,7 @@
     <ClInclude Include="core\Array.h" />
     <ClInclude Include="core\DynArray.h" />
     <ClInclude Include="core\DynString.h" />
+    <ClInclude Include="core\ExceptionHandler.h" />
     <ClInclude Include="core\hashing\Hash.h" />
     <ClInclude Include="core\hashing\JenkinsHash.h" />
     <ClInclude Include="core\List.h" />

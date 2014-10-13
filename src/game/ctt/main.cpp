@@ -10,9 +10,11 @@
 //////////////////////////////////////////////
 
 #include <game/Game.h>
+#include <core/ExceptionHandler.h>
 
 int main()
 {
+	ExceptionHandler::init();
 	{
 		Game game;
 		if (game.init()) 

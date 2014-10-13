@@ -336,6 +336,9 @@
     <ClCompile Include="io\Config.cpp">
       <Filter>Source Files\io</Filter>
     </ClCompile>
+    <ClCompile Include="core\ExceptionHandler.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="os\OS.h">
@@ -544,6 +547,9 @@
     </ClInclude>
     <ClInclude Include="io\Config.h">
       <Filter>Header Files\io</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ExceptionHandler.h">
+      <Filter>Header Files\core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

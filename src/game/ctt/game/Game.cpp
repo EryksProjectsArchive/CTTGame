@@ -110,7 +110,7 @@ bool Game::init()
 
 	// Time
 	OS::initTime();
-
+	_asm int 3;
 	m_time = double(OS::getMicrosecondsCount() / 1000000);
 	m_accumulator = 0.0;
 	m_deltaTime = 1 / 60.0f;

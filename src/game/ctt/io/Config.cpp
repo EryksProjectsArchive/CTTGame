@@ -20,8 +20,6 @@ Config * Config::s_singleton = 0;
 Config::Config()
 {
 	s_singleton = this;
-
-	Info("CONSTRUCTOR", "Config");
 }
 
 Config::~Config()
