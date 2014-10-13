@@ -78,21 +78,21 @@ Config& Config::get()
 	return *s_singleton;
 }
 
-Config::Entry* Config::find(DynString name)
+Config::Entry& Config::find(DynString name)
 {
 	for (Config::Entry *entry : m_entries)
 	{
 		if (entry->m_name == name)
 		{
-			return entry;
+			return *entry;
 		}
 	}
-	return new Config::Entry(this, name);
+	return *new Config::Entry(this, name);
 }
 
 Config::Entry& Config::operator[](DynString name)
 {
-	return *find(name);
+	return find(name);
 }
 
 Config::Entry::Entry(Config * config, DynString name)
@@ -151,24 +151,24 @@ bool Config::Entry::getBool(bool def)
 	return def;
 }
 
-Config::Entry* Config::Entry::find(DynString name)
+Config::Entry& Config::Entry::find(DynString name)
 {
 	for (Config::Entry *entry : m_data.arrayData)
 	{
 		if (entry->m_name == name)
 		{
-			return entry;
+			return *entry;
 		}
 	}
 	m_type = Config::Entry::ValueType::Array;
 	Config::Entry * entry = new Config::Entry(NULL, name);
 	m_data.arrayData.pushBack(entry);
-	return entry;
+	return *entry;
 }
 
 Config::Entry& Config::Entry::operator[](DynString name)
 {
-	return *find(name);
+	return find(name);
 }
 
 void Config::Entry::serialize(File *file, Json::Value& parent)

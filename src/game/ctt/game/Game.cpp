@@ -141,7 +141,7 @@ bool Game::init()
 
 	// Create game window
 	m_window = new Window();
-	m_window->setup("Engine", Config::get()["resolution"]["width"].getInteger(1280), Config::get()["resolution"]["height"].getInteger(720), Config::get()["fullscreen"].getBool(false));
+	m_window->setup("Engine", Config::get()["graphics"]["resolution"]["width"].getInteger(1280), Config::get()["graphics"]["resolution"]["height"].getInteger(720), Config::get()["graphics"]["fullscreen"].getBool(false));
 
 	m_renderer = new Renderer();
 	if (!m_renderer->setup(m_window))

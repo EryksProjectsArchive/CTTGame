@@ -40,6 +40,9 @@
 
 #include <os/OS.h>
 #include <core/Timer.h>
+#include <math/Rect.h>
+
+#include <io/Config.h>
 
 // Extension methods
 PFNGLENABLEIPROC Renderer::glEnablei = 0;
@@ -323,7 +326,7 @@ bool Renderer::setup(Window * window)
 
 	ASSERT_FUNCTION(glGenVertexArrays = (PFNGLGENVERTEXARRAYSPROC)SDL_GL_GetProcAddress("glGenVertexArrays"));
 
-	SDL_GL_SetSwapInterval(1); // set 0 to disable vsync
+	SDL_GL_SetSwapInterval(Config::get()["graphics"]["vsync"].getBool(false) ? 1 : 0); // set 0 to disable vsync
 	
 	glViewport(0, 0, window->getWidth(), window->getHeight());
 	
@@ -560,7 +563,6 @@ struct SimpleVertex2d
 	unsigned int color;
 	float u, v;
 };
-#include <math/Rect.h>
 
 void Renderer::renderFont(DynString string, const Rect& rect, const Color& color, flags32 flags, Font *font)
 {

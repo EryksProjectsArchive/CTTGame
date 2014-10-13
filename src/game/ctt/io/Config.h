@@ -31,7 +31,7 @@ public:
 	void serialize(File *file);
 	void deserialize(File* file);
 
-	Entry* find(DynString name);
+	Entry& find(DynString name);
 	Entry& operator[](DynString name);
 
 	static Config& get();
@@ -77,8 +77,8 @@ public:
 		DynString getString(DynString def = DynString());
 		bool getBool(bool def = false);
 
-		Entry * find(DynString name);
-		Config::Entry& operator[](DynString name);
+		Entry& find(DynString name);
+		Entry& operator[](DynString name);
 
 		void serialize(File *file, Json::Value& parent);
 		void deserialize(File* file, Json::Value& parent);
