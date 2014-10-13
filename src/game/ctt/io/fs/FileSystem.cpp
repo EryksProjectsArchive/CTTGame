@@ -77,10 +77,6 @@ void FileSystem::unregisterFileSystem(FileSystem *fileSystem)
 FilePath FileSystem::buildPath(FilePath file)
 {
 	if (file.find("home/") == 0)
-	{
-		FilePath path = file.replace("home/", m_homePath);
-		Debug("home", "%s", path.get());
-		return path;
-	}
+		return file.replace("home/", m_homePath);
 	return m_baseDirectory + file;
 }

@@ -20,9 +20,7 @@ CacheableResource::CacheableResource(FilePath filePath) : Resource(filePath), m_
 CacheableResource::~CacheableResource()
 {
 	if (m_refCount >= 1)
-	{
-		Warning("cacheable resource", "There is still one or more references left in cachable resource '%s'. (%d)", m_filePath.get(), m_refCount);
-	}
+		Warning("cacheable resource", "There is still one or more references left in cachable resource '%s'. (%d)", m_filePath.get(), m_refCount);	
 
 	destroy();
 }
@@ -42,7 +40,7 @@ void CacheableResource::acquire()
 	}
 }
 
-void CacheableResource::free()
+void CacheableResource::release()
 {
 	if (--m_refCount < 1)
 	{

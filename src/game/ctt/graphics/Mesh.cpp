@@ -58,7 +58,7 @@ Mesh::~Mesh()
 	}
 
 	if (m_material)	
-		m_material->free();	
+		m_material->release();	
 
 	if (m_meshName)
 	{

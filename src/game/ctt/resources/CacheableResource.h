@@ -24,5 +24,5 @@ public:
 	virtual ~CacheableResource();
 
 	void acquire();
-	void free();
+	void release();
 };

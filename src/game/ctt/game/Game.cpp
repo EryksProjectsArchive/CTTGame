@@ -52,6 +52,7 @@
 #include <io/Config.h>
 
 Game * Game::s_singleton = 0;
+Font *gFont = 0;
 
 Game::Game()
 	: m_isRunning(false), m_isInitialized(false), m_renderer(0), m_window(0), m_scene(0), m_physicsWorld(0), m_config(0)
@@ -61,6 +62,12 @@ Game::Game()
 
 Game::~Game()
 {
+	if (gFont)
+	{
+		delete gFont;
+		gFont = 0;
+	}
+
 	if (m_scene)
 	{
 		delete m_scene;
@@ -97,8 +104,6 @@ Game::~Game()
 
 	s_singleton = 0;
 }
-
-Font *gFont = 0;
 
 bool Game::init()
 {

@@ -83,7 +83,7 @@ CrossroadEntity::CrossroadEntity()
 CrossroadEntity::~CrossroadEntity()
 {
 	if (m_model)
-		m_model->free();
+		m_model->release();
 }
 
 void CrossroadEntity::render(RenderContext & ctx)

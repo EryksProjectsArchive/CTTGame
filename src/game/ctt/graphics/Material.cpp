@@ -36,7 +36,7 @@ Material::~Material()
 	// NOTE: I don't remember if it's necessary here.
 	if (m_texture)
 	{
-		m_texture->free();
+		m_texture->release();
 		delete m_texture;
 		m_texture = 0;
 	}
@@ -52,7 +52,7 @@ void Material::destroy()
 {
 	if (m_texture)
 	{
-		m_texture->free();
+		m_texture->release();
 		delete m_texture;
 		m_texture = 0;
 	}

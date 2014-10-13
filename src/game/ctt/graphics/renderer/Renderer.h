@@ -24,6 +24,7 @@ protected:
 	Window* m_window;
 
 	glm::mat4x4 m_projectionMatrix;
+	glm::mat4x4 m_orthoMatrix;
 	
 	SDL_GLContext m_glContext;
 	static Renderer* s_instance;

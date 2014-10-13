@@ -53,7 +53,7 @@ BallEntity::BallEntity()
 BallEntity::~BallEntity()
 {
 	if (m_model)
-		m_model->free();
+		m_model->release();
 }
 
 void BallEntity::render(RenderContext & ctx)

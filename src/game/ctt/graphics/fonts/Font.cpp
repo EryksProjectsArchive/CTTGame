@@ -168,7 +168,7 @@ Font::~Font()
 	}
 
 	if (m_material)
-		m_material->free();
+		m_material->release();
 
 	for (GlyphData *data : m_data)
 		delete data;
@@ -193,5 +193,5 @@ Font::GlyphData& Font::getData(unsigned char xc)
 			return *data;
 	}
 
-	return Font::GlyphData();
+	return Font::GlyphData(); // TODO :fix warning C4172 soon
 }

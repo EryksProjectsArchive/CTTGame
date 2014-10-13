@@ -47,7 +47,7 @@ BoxEntity::BoxEntity()
 BoxEntity::~BoxEntity()
 {
 	if (m_model)
-		m_model->free();
+		m_model->release();
 }
 
 void BoxEntity::render(RenderContext & ctx)

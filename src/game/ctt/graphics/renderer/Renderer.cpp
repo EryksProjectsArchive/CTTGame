@@ -161,6 +161,7 @@ Renderer::Renderer()
 	: m_window(0),
 	  m_glContext(0),
 	  m_projectionMatrix(glm::perspective(45.0f, 800.f / 600.f, 0.1f, 1000.0f)),
+	  m_orthoMatrix(glm::ortho(0.f, 800.f, 600.f, 0.f, -1.f, 1.f)),
 	  m_lastTitleUpdate(0),
 	  m_helperLines(0),
 	  m_helperMaterial(0)
@@ -178,7 +179,7 @@ Renderer::~Renderer()
 	}
 
 	if (m_helperMaterial)
-		m_helperMaterial->free();
+		m_helperMaterial->release();
 
 	if (m_helperLines)
 	{
@@ -187,7 +188,7 @@ Renderer::~Renderer()
 	}
 
 	if (m_defaultMaterial)
-		m_defaultMaterial->free();
+		m_defaultMaterial->release();
 }
 
 #define ASSERT_FUNCTION(name) if(!(name)) { Error("gl","Function %s is not available.", #name); }
@@ -197,6 +198,7 @@ bool Renderer::setup(Window * window)
 	m_window = window;
 
 	m_projectionMatrix = glm::perspective(45.0f, window->getAspectRatio(), 0.1f, 1000.0f);
+	m_orthoMatrix = glm::ortho(0.f, (float)m_window->getWidth(), (float)m_window->getHeight(), 0.f, -1.f, 1.f);
 
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
@@ -342,6 +344,8 @@ bool Renderer::setup(Window * window)
 	glFrontFace(GL_CW);
 	
 	m_defaultMaterial = MaterialLib::get()->findByName("default");
+	m_defaultMaterial->acquire();
+
 	m_helperMaterial = MaterialLib::get()->findByName("primitive");
 	m_helperMaterial->acquire();
 
@@ -569,8 +573,7 @@ void Renderer::renderFont(DynString string, const Rect& rect, const Color& color
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_CULL_FACE);
 
-	glm::mat4 orthoMatrix = glm::ortho(0.f, (float)m_window->getWidth(), (float)m_window->getHeight(), 0.f, -1.f, 1.f);
-
+	
 	Material* material = font->m_material;
 
 	uint32 xcolor = ((uint8)(color.a * 255) << 24) | ((uint8)(color.b * 255) << 16) | ((uint8)(color.g * 255) << 8) | ((uint8)(color.r * 255));
@@ -684,7 +687,7 @@ void Renderer::renderFont(DynString string, const Rect& rect, const Color& color
 	unsigned int orthoMatrixLocation = material->m_program->getUniformLocation("orthoMatrix");
 	if (orthoMatrixLocation != -1)
 	{
-		glUniformMatrix4fv(orthoMatrixLocation, 1, GL_FALSE, glm::value_ptr(orthoMatrix));
+		glUniformMatrix4fv(orthoMatrixLocation, 1, GL_FALSE, glm::value_ptr(m_orthoMatrix));
 	}
 
 	if (glIsTexture(font->m_textureId))

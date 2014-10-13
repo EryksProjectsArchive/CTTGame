@@ -11,6 +11,7 @@
 
 #pragma once
 
+//#define _MEM_LEAKS_DEBUG
 #ifdef _MEM_LEAKS_DEBUG
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>
