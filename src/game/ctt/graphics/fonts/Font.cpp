@@ -111,15 +111,12 @@ Font::Font(FilePath fontPath, uint32 size, flags32 flags)
 		}
 
 		m_data[c].set = 1;
-		m_data[c].code = c;
 		m_data[c].x = float(x) / f_Width;
 		m_data[c].y = ((float(y)) / f_Height);
 		m_data[c].w = (float(x) + float(bitmap_glyph->bitmap.width)) / f_Width;
 		m_data[c].h = (float(y) + float(bitmap_glyph->bitmap.rows)) / f_Height;
 		m_data[c].left = float(bitmap_glyph->left);
 		m_data[c].top = float(bitmap_glyph->top);
-		m_data[c].advance.x = float(glyph->advance.x);
-		m_data[c].advance.y = float(glyph->advance.y);
 		m_data[c].bmw = float(bitmap_glyph->bitmap.width);
 		m_data[c].bmh = float(bitmap_glyph->bitmap.rows);
 

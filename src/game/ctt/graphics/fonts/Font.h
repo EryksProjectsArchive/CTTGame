@@ -24,18 +24,12 @@ private:
 	struct GlyphData
 	{
 		unsigned char set;
-		unsigned char code;
 		float x;
 		float y;
 		float w;
 		float h;
 		float top;
 		float left;
-		struct
-		{
-			float x;
-			float y;
-		} advance;
 		float bmw;
 		float bmh;
 	};

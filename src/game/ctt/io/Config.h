@@ -89,3 +89,4 @@ public:
 private:
 	List<Entry *> m_entries;
 };
+
