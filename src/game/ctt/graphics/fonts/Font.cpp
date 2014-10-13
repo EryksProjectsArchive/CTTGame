@@ -29,6 +29,8 @@
 Font::Font(FilePath fontPath, uint32 size, flags32 flags)
 	: m_textureId(0), m_loaded(false), m_size(size)
 {
+	memset(m_data, 0, sizeof(m_data));
+
 	// Init free type
 	FT_Library ftLibrary;
 	if (FT_Init_FreeType(&ftLibrary) != 0)
@@ -108,21 +110,18 @@ Font::Font(FilePath fontPath, uint32 size, flags32 flags)
 			}
 		}
 
-		
-		GlyphData *data = new GlyphData;
-		data->set = 1;
-		data->code = c;
-		data->x = float(x) / f_Width;
-		data->y = ((float(y)) / f_Height);
-		data->w = (float(x) + float(bitmap_glyph->bitmap.width)) / f_Width;
-		data->h = ((float(y) + float(bitmap_glyph->bitmap.rows))) / f_Height;
-		data->left = float(bitmap_glyph->left);
-		data->top = float(bitmap_glyph->top);
-		data->advance.x = float(glyph->advance.x);
-		data->advance.y = float(glyph->advance.y);
-		data->bmw = float(bitmap_glyph->bitmap.width);
-		data->bmh = float(bitmap_glyph->bitmap.rows);
-		m_data.pushBack(data);
+		m_data[c].set = 1;
+		m_data[c].code = c;
+		m_data[c].x = float(x) / f_Width;
+		m_data[c].y = ((float(y)) / f_Height);
+		m_data[c].w = (float(x) + float(bitmap_glyph->bitmap.width)) / f_Width;
+		m_data[c].h = (float(y) + float(bitmap_glyph->bitmap.rows)) / f_Height;
+		m_data[c].left = float(bitmap_glyph->left);
+		m_data[c].top = float(bitmap_glyph->top);
+		m_data[c].advance.x = float(glyph->advance.x);
+		m_data[c].advance.y = float(glyph->advance.y);
+		m_data[c].bmw = float(bitmap_glyph->bitmap.width);
+		m_data[c].bmh = float(bitmap_glyph->bitmap.rows);
 
 		x += size + 5;
 		if ((x + size + 5) >= width)
@@ -169,29 +168,15 @@ Font::~Font()
 
 	if (m_material)
 		m_material->release();
-
-	for (GlyphData *data : m_data)
-		delete data;
-
-	m_data.clear();
 }
 
 void Font::render(DynString string, const Rect& rect, const Color& color, flags32 flags)
 {
 	if (m_loaded)
-	{
 		Renderer::get().renderFont(string, rect, color, flags, this);
-	}
 }
 
-
-Font::GlyphData& Font::getData(unsigned char xc)
+Font::GlyphData& Font::getData(unsigned char c)
 {
-	for (GlyphData * data : m_data)
-	{
-		if (data->code == xc)
-			return *data;
-	}
-
-	return Font::GlyphData(); // TODO :fix warning C4172 soon
+	return m_data[c];
 }

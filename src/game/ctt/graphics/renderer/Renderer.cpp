@@ -573,7 +573,6 @@ void Renderer::renderFont(DynString string, const Rect& rect, const Color& color
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_CULL_FACE);
 
-	
 	Material* material = font->m_material;
 
 	uint32 xcolor = ((uint8)(color.a * 255) << 24) | ((uint8)(color.b * 255) << 16) | ((uint8)(color.g * 255) << 8) | ((uint8)(color.r * 255));

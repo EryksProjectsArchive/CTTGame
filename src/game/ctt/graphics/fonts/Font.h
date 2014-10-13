@@ -46,7 +46,7 @@ private:
 
 	bool m_loaded;
 
-	List<GlyphData *> m_data;
+	GlyphData m_data[256];
 	uint32 m_size;
 public:
 	Font(FilePath fontPath, uint32 size, flags32 flags);
