@@ -129,7 +129,7 @@ bool Game::init()
 	// setup logger
 	Logger::init(FilePath("%sgame.log", OS::getHomePath().get()), false);
 
-	File *file = FileSystem::get()->open("home/config.json", FileOpenMode::Write | FileOpenMode::Extra);
+	File *file = FileSystem::get()->open("home/config.json", FileOpenMode::Read | FileOpenMode::Extra);
 	m_config->deserialize(file);
 	FileSystem::get()->close(file);
 

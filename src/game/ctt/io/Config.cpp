@@ -50,7 +50,7 @@ void Config::serialize(File *file)
 
 void Config::deserialize(File* file)
 {
-	if (file->isLoaded() && false)
+	if (file->isLoaded())
 	{
 		DynString data = file->getContent();
 		if (data.getLength() > 0)
@@ -64,6 +64,10 @@ void Config::deserialize(File* file)
 					Config::Entry *newEntry = new Config::Entry(this, names.c_str());
 					newEntry->deserialize(file, root);
 				}
+			}
+			else
+			{
+				Error("config", "Cannot deserialize configuration file. %s", reader.getFormatedErrorMessages().c_str());
 			}
 		}
 	}
@@ -201,31 +205,33 @@ void Config::Entry::serialize(File *file, Json::Value& parent)
 
 void Config::Entry::deserialize(File* file, Json::Value& parent)
 {
-	switch(parent[m_name].type())
+	Json::Value &value = parent[m_name];
+	switch(value.type())
 	{
-	case Json::ValueType::arrayValue:
+	case Json::ValueType::objectValue:
 		{
 			m_type = Config::Entry::ValueType::Array;
-			for (std::string names : parent[m_name].getMemberNames())
+			for (std::string names : value.getMemberNames())
 			{
-				Config::Entry *newEntry = new Config::Entry (m_config, names.c_str());
-				newEntry->deserialize(file, parent[m_name]);
+				Config::Entry *newEntry = new Config::Entry (NULL, names.c_str());
+				newEntry->deserialize(file, value);
+				m_data.arrayData.pushBack(newEntry);
 			}
 		} break;
 	case Json::ValueType::intValue:
 		{ 
 			m_type = Config::Entry::ValueType::Integer;
-			m_data.integerValue = parent[m_name].asInt();
+			m_data.integerValue = value.asInt();
 		} break;
 	case Json::ValueType::realValue:
 		{
 			m_type = Config::Entry::ValueType::Float;
-			m_data.floatValue = parent[m_name].asFloat();
+			m_data.floatValue = value.asFloat();
 		} break;
 	case Json::ValueType::booleanValue:
 		{
 			m_type = Config::Entry::ValueType::Boolean;
-			m_data.booleanData = parent[m_name].asBool();
+			m_data.booleanData = value.asBool();
 		} break;
 	case Json::ValueType::nullValue:
 		{
@@ -234,7 +240,11 @@ void Config::Entry::deserialize(File* file, Json::Value& parent)
 	case Json::ValueType::stringValue:
 		{
 			m_type = Config::Entry::ValueType::String;
-			m_data.stringData = parent[m_name].asCString();
+			m_data.stringData = value.asCString();
+		} break;
+	default:
+		{
+			Error("config", "Cannot deserialize config element '%s'. JSON type: %d", m_name.get(), value.type());
 		} break;
 	}
 }
