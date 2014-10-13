@@ -197,20 +197,19 @@ bool Game::init()
 	m_scene->addEntity(crossroad);
 
 	crossroad = new CrossroadEntity();
-	crossroad->setPosition(Vector3(26, 0, 0));
-	m_scene->addEntity(crossroad);
-
-
-	crossroad = new CrossroadEntity();
-	crossroad->setPosition(Vector3(-26, 0, 0));
+	crossroad->setPosition(Vector3(37.153f, 0, 0));
 	m_scene->addEntity(crossroad);
 
 	crossroad = new CrossroadEntity();
-	crossroad->setPosition(Vector3(0, 0, 26));
+	crossroad->setPosition(Vector3(-37.153f, 0, 0));
 	m_scene->addEntity(crossroad);
 
 	crossroad = new CrossroadEntity();
-	crossroad->setPosition(Vector3(0, 0, -26));
+	crossroad->setPosition(Vector3(0, 0, 37.153f));
+	m_scene->addEntity(crossroad);
+
+	crossroad = new CrossroadEntity();
+	crossroad->setPosition(Vector3(0, 0, -37.153f));
 	m_scene->addEntity(crossroad);
 
 	BoxEntity *testEntity = 0;

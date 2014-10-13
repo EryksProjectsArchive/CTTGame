@@ -62,7 +62,6 @@ CrossroadEntity::CrossroadEntity()
 
 			delete[] data.meshes;
 
-
 			btBvhTriangleMeshShape*physicsShape = new btBvhTriangleMeshShape(triMesh, true);
 
 			btTransform transform(btQuaternion(0, 0, 0, 1), btVector3(0, 0, 0));
