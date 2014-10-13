@@ -54,8 +54,6 @@ bool SoundManager::setup()
 {
 	if (m_al->setup())
 	{
-		Info("SoundMgr", "OpenAL started version %s. (vendor: %s, renderer: %s)", m_al->alcGetString(NULL, AL_VERSION), m_al->alcGetString(NULL, AL_VENDOR), m_al->alcGetString(NULL, AL_RENDERER));
-
 		const char * defaultDevice = m_al->alcGetString(NULL, ALC_DEFAULT_DEVICE_SPECIFIER);
 
 		m_device = m_al->alcOpenDevice(defaultDevice);
@@ -63,6 +61,8 @@ bool SoundManager::setup()
 		{
 			return false;
 		}
+
+		//Info("SoundMgr", "OpenAL started version %s. (vendor: %s, renderer: %s)", m_al->alcGetString(m_device, AL_VERSION), m_al->alcGetString(m_device, AL_VENDOR), m_al->alcGetString(m_device, AL_RENDERER));
 
 		//Create a context
 		m_context = m_al->alcCreateContext(m_device, NULL);

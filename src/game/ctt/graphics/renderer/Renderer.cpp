@@ -639,7 +639,6 @@ void Renderer::renderFont(const DynString& string, const Rect& rect, const Color
 			d = vid;
 			vid++;
 
-
 			indices[iid] = a;
 			iid++;
 			indices[iid] = b;
@@ -658,7 +657,7 @@ void Renderer::renderFont(const DynString& string, const Rect& rect, const Color
 		}
 		else
 		{
-			Info("rr", "Using unknown character. %c", charCode);
+			Info("Font rendering", "Using unknown character. %c", charCode);
 			x += font->m_size;
 		}		
 	}
