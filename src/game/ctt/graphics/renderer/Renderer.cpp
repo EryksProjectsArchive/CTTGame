@@ -580,8 +580,8 @@ void Renderer::renderFont(const DynString& string, const Rect& rect, const Color
 	SimpleVertex2d * vertices = new SimpleVertex2d[string.getLength() * 4];
 	uint16 *indices = new uint16[string.getLength() * 6];
 
-	uint32 vid = 0;
-	uint32 iid = 0;
+	uint32 vertexId = 0;
+	uint32 indexId = 0;
 	float x = rect.x;
 	float y = rect.y + 19.f;
 	for (uint32 i = 0; i < string.getLength(); ++i)
@@ -607,51 +607,51 @@ void Renderer::renderFont(const DynString& string, const Rect& rect, const Color
 		int a, b, c, d;
 		if (data.set)
 		{
-			vertices[vid].x = x;
-			vertices[vid].y = y - data.top;
-			vertices[vid].u = data.x;
-			vertices[vid].v = data.y;
-			vertices[vid].color = xcolor;
-			a = vid;
-			vid++;
+			vertices[vertexId].x = x;
+			vertices[vertexId].y = y - data.top;
+			vertices[vertexId].u = data.x;
+			vertices[vertexId].v = data.y;
+			vertices[vertexId].color = xcolor;
+			a = vertexId;
+			vertexId++;
 
-			vertices[vid].x = x + data.bmw;
-			vertices[vid].y = y - data.top;
-			vertices[vid].u = data.w;
-			vertices[vid].v = data.y;
-			vertices[vid].color = xcolor;
-			b = vid;
-			vid++;
+			vertices[vertexId].x = x + data.bmw;
+			vertices[vertexId].y = y - data.top;
+			vertices[vertexId].u = data.w;
+			vertices[vertexId].v = data.y;
+			vertices[vertexId].color = xcolor;
+			b = vertexId;
+			vertexId++;
 
-			vertices[vid].x = x;
-			vertices[vid].y = y + data.bmh - data.top;
-			vertices[vid].u = data.x;
-			vertices[vid].v = data.h;
-			vertices[vid].color = xcolor;
-			c = vid;
-			vid++;
+			vertices[vertexId].x = x;
+			vertices[vertexId].y = y + data.bmh - data.top;
+			vertices[vertexId].u = data.x;
+			vertices[vertexId].v = data.h;
+			vertices[vertexId].color = xcolor;
+			c = vertexId;
+			vertexId++;
 
-			vertices[vid].x = x + data.bmw;
-			vertices[vid].y = y + data.bmh - data.top;
-			vertices[vid].u = data.w;
-			vertices[vid].v = data.h;
-			vertices[vid].color = xcolor;
-			d = vid;
-			vid++;
+			vertices[vertexId].x = x + data.bmw;
+			vertices[vertexId].y = y + data.bmh - data.top;
+			vertices[vertexId].u = data.w;
+			vertices[vertexId].v = data.h;
+			vertices[vertexId].color = xcolor;
+			d = vertexId;
+			vertexId++;
 
-			indices[iid] = a;
-			iid++;
-			indices[iid] = b;
-			iid++;
-			indices[iid] = c;
-			iid++;
+			indices[indexId] = a;
+			indexId++;
+			indices[indexId] = b;
+			indexId++;
+			indices[indexId] = c;
+			indexId++;
 
-			indices[iid] = b;
-			iid++;
-			indices[iid] = d;
-			iid++;
-			indices[iid] = c;
-			iid++;
+			indices[indexId] = b;
+			indexId++;
+			indices[indexId] = d;
+			indexId++;
+			indices[indexId] = c;
+			indexId++;
 
 			x += data.bmw+2;
 		}
@@ -663,7 +663,7 @@ void Renderer::renderFont(const DynString& string, const Rect& rect, const Color
 	}
 
 	Geometry<SimpleVertex2d> geometry;
-	geometry.fillData(vertices, string.getLength()*4, indices, string.getLength()*2);
+	geometry.fillData(vertices, vertexId, indices, indexId/3);
 	delete[]vertices;
 	delete[]indices;
 
