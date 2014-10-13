@@ -31,8 +31,8 @@ public:
 	void serialize(File *file);
 	void deserialize(File* file);
 
-	Entry& find(DynString name);
-	Entry& operator[](DynString name);
+	Entry find(DynString name);
+	Entry operator[](DynString name);
 
 	static Config& get();
 public:
@@ -63,22 +63,23 @@ public:
 				float floatValue;
 				bool booleanData;
 			};
-			List<Entry *> arrayData;
+			List<Entry> arrayData;
 			DynString stringData;
 		} m_data;
 		Config *m_config;
 	public:
-		Entry(Config *config, DynString name);
+		Entry();
+		Entry(DynString name);
 		~Entry();
 
 		uint32 getInteger(uint32 def = 0);
 		float getFloat(float def = 0);
-		List<Entry *> getArrayData();
+		List<Entry> getArrayData();
 		DynString getString(DynString def = DynString());
 		bool getBool(bool def = false);
 
-		Entry& find(DynString name);
-		Entry& operator[](DynString name);
+		Entry find(DynString name);
+		Entry operator[](DynString name);
 
 		void serialize(File *file, Json::Value& parent);
 		void deserialize(File* file, Json::Value& parent);
@@ -87,6 +88,6 @@ public:
 	};
 
 private:
-	List<Entry *> m_entries;
+	List<Entry> m_entries;
 };
 

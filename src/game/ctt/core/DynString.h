@@ -28,7 +28,8 @@ private:
 public:
 	DynString()
 	{
-		m_buffer = 0;
+		m_buffer = new char[1];
+		m_buffer[0] = '\0';
 		m_size = 0;
 	}
 
