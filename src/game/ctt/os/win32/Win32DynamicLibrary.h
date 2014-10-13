@@ -22,11 +22,11 @@ namespace Win32
 	private:
 		HMODULE m_hModule;
 	public:
-		DynamicLibrary(FilePath fileName);
+		DynamicLibrary(const FilePath& fileName);
 		~DynamicLibrary() override;
 
 		bool isValid() override;
 
-		unsigned long getProcAddress(String<128> procName) override;
+		unsigned long getProcAddress(const String<128>& procName) override;
 	};
 };

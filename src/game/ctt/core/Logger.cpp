@@ -18,7 +18,7 @@
 
 FILE * Logger::s_logFile = 0;
 
-void Logger::init(FilePath file, bool bAppend)
+void Logger::init(const FilePath& file, bool bAppend)
 {
 	if (!s_logFile)
 	{

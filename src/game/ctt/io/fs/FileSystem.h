@@ -33,7 +33,7 @@ public:
 
 	void setHomePath(FilePath homePath);
 
-	virtual File * open(FilePath file, uint32 mode);
+	virtual File * open(const FilePath& file, uint32 mode);
 	
 	void close(File *file);
 	

@@ -25,6 +25,15 @@ private:
 	char * m_buffer;
 	unsigned int m_size;
 
+	void clear()
+	{
+		if (m_buffer)
+		{
+			delete[] m_buffer;
+			m_buffer = 0;
+		}
+		m_size = 0;
+	}
 public:
 	DynString()
 	{
@@ -70,22 +79,11 @@ public:
 		clear();
 	}
 
-	void clear()
-	{
-		if (m_buffer)
-		{
-			delete[] m_buffer;
-			m_buffer = 0;
-		}
-		m_size = 0;
-	}
-
-	const char * get()
+	const char * get() const
 	{
 		return m_buffer;
 	}
 
-	operator const char *() { return m_buffer; }
 	DynString& operator=(const DynString& rhs)
 	{
 		clear();
@@ -101,7 +99,7 @@ public:
 		return !strcmp(m_buffer, rhs.m_buffer);
 	}
 
-	unsigned char operator[](unsigned int index)
+	unsigned char operator[](unsigned int index) const
 	{
 		if (index < 0 || index > m_size)
 			return 0;
@@ -114,7 +112,7 @@ public:
 		return m_size;
 	}
 
-	unsigned int getLength()
+	unsigned int getLength() const
 	{
 		return m_size;
 	}

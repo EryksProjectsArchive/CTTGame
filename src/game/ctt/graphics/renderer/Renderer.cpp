@@ -568,7 +568,7 @@ struct SimpleVertex2d
 	float u, v;
 };
 
-void Renderer::renderFont(DynString string, const Rect& rect, const Color& color, flags32 flags, Font *font)
+void Renderer::renderFont(const DynString& string, const Rect& rect, const Color& color, flags32 flags, Font *font)
 {
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_CULL_FACE);

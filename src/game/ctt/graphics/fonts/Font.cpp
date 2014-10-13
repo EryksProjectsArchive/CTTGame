@@ -26,7 +26,7 @@
 
 #include <io/fs/FileSystem.h>
 
-Font::Font(FilePath fontPath, uint32 size)
+Font::Font(const FilePath& fontPath, uint32 size)
 	: m_textureId(0), m_loaded(false), m_size(size)
 {
 	memset(m_data, 0, sizeof(m_data));
@@ -167,13 +167,13 @@ Font::~Font()
 		m_material->release();
 }
 
-void Font::render(DynString string, const Rect& rect, const Color& color, flags32 flags)
+void Font::render(const DynString& string, const Rect& rect, const Color& color, flags32 flags)
 {
 	if (m_loaded)
 		Renderer::get().renderFont(string, rect, color, flags, this);
 }
 
-Font::GlyphData& Font::getData(unsigned char c)
+Font::GlyphData Font::getData(unsigned char c)
 {
 	return m_data[c];
 }

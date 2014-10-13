@@ -23,6 +23,14 @@ SoundManager::SoundManager()
 
 SoundManager::~SoundManager()
 {
+	for (uint32 i = 0; i < SoundType::COUNT; ++i)
+	{
+		for (Sound * sound : m_sounds[i])
+			delete sound;
+	
+		m_sounds[i].clear();
+	}
+
 	if (m_al)
 	{
 		m_al->alcMakeContextCurrent(0);
@@ -46,8 +54,7 @@ bool SoundManager::setup()
 {
 	if (m_al->setup())
 	{
-
-		//Info("[OpenAL]", "OpenAL started version %s. (vendor: %s, renderer: %s)", mAL->alcGetString(NULL, AL_VERSION), mAL->alcGetString(NULL, AL_VENDOR), mAL->alcGetString(NULL, AL_RENDERER));
+		Info("SoundMgr", "OpenAL started version %s. (vendor: %s, renderer: %s)", m_al->alcGetString(NULL, AL_VERSION), m_al->alcGetString(NULL, AL_VENDOR), m_al->alcGetString(NULL, AL_RENDERER));
 
 		const char * defaultDevice = m_al->alcGetString(NULL, ALC_DEFAULT_DEVICE_SPECIFIER);
 
@@ -72,5 +79,7 @@ bool SoundManager::setup()
 
 Sound * SoundManager::createSound(SoundType::Type type)
 {
-	return new Sound(m_al);
+	Sound *sound = new Sound(m_al);
+	m_sounds[type].pushBack(sound);
+	return sound;
 }

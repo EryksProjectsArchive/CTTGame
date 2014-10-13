@@ -27,13 +27,13 @@ namespace OS
 	FilePath initHomePath(const char *appName);
 
 	// Files
-	bool directoryExists(FilePath path);
-	bool fileExists(FilePath path);
-	bool makeDirectory(FilePath path);
-	bool isFileOSDynLib(FilePath path);
+	bool directoryExists(const FilePath& path);
+	bool fileExists(const FilePath& path);
+	bool makeDirectory(const FilePath& path);
+	bool isFileOSDynLib(const FilePath& path);
 
 	// Dynamic libs
-	DynamicLibrary * openDynamicLibrary(FilePath path);
+	DynamicLibrary * openDynamicLibrary(const FilePath path);
 
 	// Time OS functions
 	unsigned long long getMicrosecondsCount();

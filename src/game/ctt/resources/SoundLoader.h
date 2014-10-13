@@ -26,8 +26,8 @@ public:
 	SoundLoader();
 	virtual ~SoundLoader();
 
-	virtual bool isFileValid(FilePath filePath);
+	virtual bool isFileValid(const FilePath& filePath);
 	virtual void registerLoader(SoundLoader * loader);
 
-	virtual SoundData * load(FilePath filePath);
+	virtual SoundData * load(const FilePath& filePath);
 };

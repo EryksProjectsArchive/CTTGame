@@ -11,7 +11,7 @@
 
 #include "Resource.h"
 
-Resource::Resource(FilePath filePath)
+Resource::Resource(const FilePath& filePath)
 	: m_filePath(filePath), m_isLoaded(false)
 {
 }

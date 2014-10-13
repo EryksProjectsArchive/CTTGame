@@ -31,7 +31,7 @@ private:
 	FilePath m_fragmentShaderName;
 	DynString m_name;
 public:
-	Material(const DynString name, const FilePath file);
+	Material(const DynString& name, const FilePath& file);
 	~Material();
 
 	void destroy() override;

@@ -13,7 +13,7 @@
 
 #include <core/Logger.h>
 
-CacheableResource::CacheableResource(FilePath filePath) : Resource(filePath), m_refCount(0)
+CacheableResource::CacheableResource(const FilePath& filePath) : Resource(filePath), m_refCount(0)
 {
 }
 

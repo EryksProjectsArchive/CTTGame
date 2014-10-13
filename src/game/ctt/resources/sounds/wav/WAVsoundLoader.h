@@ -58,8 +58,8 @@ namespace WAV
 		SoundLoader();
 		~SoundLoader();
 
-		bool isFileValid(FilePath filePath);
-		SoundData * load(FilePath filePath);
+		bool isFileValid(const FilePath& filePath);
+		SoundData * load(const FilePath& filePath);
 	};
 }
 

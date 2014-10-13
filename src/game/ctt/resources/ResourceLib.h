@@ -27,5 +27,5 @@ public:
 
 	}
 
-	virtual Type* findByName(DynString name) = 0;
+	virtual Type* findByName(const DynString& name) = 0;
 };

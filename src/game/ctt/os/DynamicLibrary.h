@@ -16,10 +16,10 @@
 class DynamicLibrary
 {
 public:
-	DynamicLibrary(FilePath fileName);
+	DynamicLibrary(const FilePath& fileName);
 	virtual ~DynamicLibrary();
 
 	virtual bool isValid();
 
-	virtual unsigned long getProcAddress(String<128> procName);
+	virtual unsigned long getProcAddress(const String<128>& procName);
 };

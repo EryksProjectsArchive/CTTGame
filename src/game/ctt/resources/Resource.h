@@ -19,7 +19,7 @@ protected:
 	bool m_isLoaded;
 	FilePath m_filePath;
 public:
-	Resource(FilePath filePath);
+	Resource(const FilePath& filePath);
 	virtual ~Resource();
 	virtual void destroy();
 

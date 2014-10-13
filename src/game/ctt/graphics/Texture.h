@@ -22,7 +22,7 @@ private:
 	unsigned int m_textureID;
 	bool m_mipmaps;
 public:
-	Texture(FilePath filePath, bool mipmaps = false);
+	Texture(const FilePath& filePath, bool mipmaps = false);
 	~Texture();
 
 	void destroy();

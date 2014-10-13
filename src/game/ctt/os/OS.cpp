@@ -87,7 +87,7 @@ namespace OS
 		return g_homePath;
 	}
 
-	bool fileExists(FilePath path)
+	bool fileExists(const FilePath& path)
 	{
 #ifdef _WIN32
 		return GetFileAttributes(path) != INVALID_FILE_ATTRIBUTES;
@@ -97,7 +97,7 @@ namespace OS
 #endif
 	}
 
-	bool directoryExists(FilePath path)
+	bool directoryExists(const FilePath& path)
 	{
 #ifdef _WIN32
 		return GetFileAttributes(path) != INVALID_FILE_ATTRIBUTES;
@@ -107,7 +107,7 @@ namespace OS
 #endif
 	}
 
-	bool makeDirectory(FilePath path)
+	bool makeDirectory(const FilePath& path)
 	{
 #ifdef _WIN32
 		return ::CreateDirectory(path, NULL) == TRUE;
@@ -116,7 +116,7 @@ namespace OS
 #endif
 	}
 
-	bool isFileOSDynLib(FilePath path)
+	bool isFileOSDynLib(const FilePath& path)
 	{
 #ifdef _WIN32
 		char windowsDirectory[256] = { 0 };

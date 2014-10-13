@@ -21,7 +21,7 @@ private:
 	unsigned char * m_refCount;
 	Type *m_object;
 public:
-	CachedItem(FilePath path)
+	CachedItem(const FilePath& path)
 		: m_path(path), m_object(0), m_refCount(new unsigned char)
 	{
 		*m_refCount = 1;

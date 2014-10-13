@@ -16,7 +16,7 @@
 #include <resources/ImageLoader.h>
 #include <graphics/ImageData.h>
 
-Texture::Texture(FilePath filePath, bool mipmaps)
+Texture::Texture(const FilePath& filePath, bool mipmaps)
 	: m_textureID(-1), CacheableResource(filePath), m_mipmaps(mipmaps)
 {
 }

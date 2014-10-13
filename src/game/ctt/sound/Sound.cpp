@@ -75,7 +75,7 @@ bool Sound::isPlaying()
 	return State == AL_PLAYING;
 }
 
-bool Sound::load(FilePath filepath)
+bool Sound::load(const FilePath& filepath)
 {
 	SoundData * data = SoundLoader::get()->load(filepath);
 	if (data)

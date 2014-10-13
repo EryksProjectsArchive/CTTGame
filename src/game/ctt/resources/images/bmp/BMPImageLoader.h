@@ -50,7 +50,7 @@ namespace BMP
 		ImageLoader();
 		~ImageLoader();
 
-		bool isFileValid(FilePath filePath);
-		ImageData * load(FilePath filePath);
+		bool isFileValid(const FilePath& filePath);
+		ImageData * load(const FilePath& filePath);
 	};
 };

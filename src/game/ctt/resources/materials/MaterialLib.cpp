@@ -41,7 +41,7 @@ MaterialLib::~MaterialLib()
 	m_materials.clear();
 }
 
-Material * MaterialLib::findByName(DynString name)
+Material * MaterialLib::findByName(const DynString& name)
 {
 	for (Material* mat : m_materials)
 	{

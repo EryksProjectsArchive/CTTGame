@@ -273,6 +273,7 @@
     <ClInclude Include="math\Rect.h" />
     <ClInclude Include="os\DynamicLibrary.h" />
     <ClInclude Include="os\OS.h" />
+    <ClInclude Include="os\win32\Win32DynamicLibrary.h" />
     <ClInclude Include="physics\PhysicalEntity.h" />
     <ClInclude Include="physics\PhysicsWorld.h" />
     <ClInclude Include="Prerequisites.h" />

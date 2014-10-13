@@ -26,8 +26,8 @@ public:
 	ImageLoader();
 	virtual ~ImageLoader();
 
-	virtual bool isFileValid(FilePath filePath);
+	virtual bool isFileValid(const FilePath& filePath);
 	virtual void registerLoader(ImageLoader * loader);
 
-	virtual ImageData * load(FilePath filePath);
+	virtual ImageData * load(const FilePath& filePath);
 };

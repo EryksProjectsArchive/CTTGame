@@ -24,7 +24,7 @@ ImageLoader::~ImageLoader()
 	m_loaders.clear();
 }
 
-bool ImageLoader::isFileValid(FilePath filePath)
+bool ImageLoader::isFileValid(const FilePath& filePath)
 {
 	return false;
 }
@@ -34,7 +34,7 @@ void ImageLoader::registerLoader(ImageLoader * loader)
 	m_loaders.pushBack(loader);
 }
 
-ImageData * ImageLoader::load(FilePath filePath)
+ImageData * ImageLoader::load(const FilePath& filePath)
 {
 	ImageData * data = 0;
 	for (ImageLoader *loader : m_loaders)

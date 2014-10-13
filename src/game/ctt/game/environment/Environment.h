@@ -15,7 +15,7 @@
 #include <core/Singleton.h>
 
 
-class Environment : public Singleton < Environment >
+class Environment : public Singleton<Environment>
 {
 private:
 	Vector3 m_sunPosition;

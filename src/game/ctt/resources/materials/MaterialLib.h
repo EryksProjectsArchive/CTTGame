@@ -24,5 +24,5 @@ public:
 	MaterialLib();
 	~MaterialLib();
 
-	Material * findByName(DynString name) override;	
+	Material * findByName(const DynString& name) override;	
 };

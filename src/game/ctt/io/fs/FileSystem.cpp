@@ -32,7 +32,7 @@ void FileSystem::setHomePath(FilePath homePath)
 	m_homePath = homePath;
 }
 
-File * FileSystem::open(FilePath filePath, uint32 mode)
+File * FileSystem::open(const FilePath& filePath, uint32 mode)
 {
 	FilePath path = buildPath(filePath);
 	for (FileSystem *fs : m_fileSystems)

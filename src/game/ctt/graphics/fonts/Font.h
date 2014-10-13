@@ -43,12 +43,12 @@ private:
 	GlyphData m_data[256];
 	uint32 m_size;
 public:
-	Font(FilePath fontPath, uint32 size);
+	Font(const FilePath& fontPath, uint32 size);
 	~Font();
 
-	void render(DynString string, const Rect& rect, const Color& color, flags32 flags);
+	void render(const DynString& string, const Rect& rect, const Color& color, flags32 flags);
 
-	Font::GlyphData& getData(unsigned char c);
+	Font::GlyphData getData(unsigned char c);
 public:
 	struct DrawFlags
 	{

@@ -18,7 +18,7 @@
 #include "VertexShader.h"
 #include "FragmentShader.h"
 
-Material::Material(const DynString name, const FilePath file)
+Material::Material(const DynString& name, const FilePath& file)
 	: CacheableResource(file),
 	  m_name(name),
 	  m_texture(0),

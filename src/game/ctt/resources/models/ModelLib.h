@@ -24,5 +24,5 @@ public:
 	ModelLib();
 	~ModelLib();
 
-	Model * findByName(DynString name) override;
+	Model * findByName(const DynString& name) override;
 };

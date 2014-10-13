@@ -30,7 +30,7 @@ namespace WAV
 	}
 
 
-	bool SoundLoader::isFileValid(FilePath filePath)
+	bool SoundLoader::isFileValid(const FilePath& filePath)
 	{
 		bool isValid = false;
 		if (filePath.find(".wav") != -1)
@@ -57,7 +57,7 @@ namespace WAV
 		return isValid;
 	}
 
-	SoundData * SoundLoader::load(FilePath filePath)
+	SoundData * SoundLoader::load(const FilePath& filePath)
 	{
 		// Recursive loading
 		SoundData *data = 0;

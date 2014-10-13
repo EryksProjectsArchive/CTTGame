@@ -11,7 +11,7 @@
 
 #include "DynamicLibrary.h"
 
-DynamicLibrary::DynamicLibrary(FilePath fileName)
+DynamicLibrary::DynamicLibrary(const FilePath& fileName)
 {
 }
 
@@ -24,7 +24,7 @@ bool DynamicLibrary::isValid()
 	return false;
 }
 
-unsigned long DynamicLibrary::getProcAddress(String<128> procName)
+unsigned long DynamicLibrary::getProcAddress(const String<128>& procName)
 {
 	return 0;
 }

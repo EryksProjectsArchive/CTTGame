@@ -121,7 +121,7 @@ public:
 		return m_buffer;
 	}
 
-	const char * String::get()
+	const char * String::get() const
 	{
 		return m_buffer;
 	}
@@ -136,7 +136,7 @@ public:
 		return maxSize;
 	}
 
-	uint16 String::find(const char * key)
+	uint16 String::find(const char * key) const
 	{		
 		uint32 range = strlen(m_buffer);
 		if (range + strlen(key) > maxSize)		

@@ -20,7 +20,7 @@ class CacheableResource : public Resource
 private:
 	unsigned int m_refCount;
 public:
-	CacheableResource(FilePath filePath);
+	CacheableResource(const FilePath& filePath);
 	virtual ~CacheableResource();
 
 	void acquire();

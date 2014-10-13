@@ -13,7 +13,7 @@
 
 namespace Win32
 {
-	DynamicLibrary::DynamicLibrary(FilePath fileName) : ::DynamicLibrary(fileName)
+	DynamicLibrary::DynamicLibrary(const FilePath& fileName) : ::DynamicLibrary(fileName)
 	{
 		m_hModule = LoadLibrary(fileName);
 	}
@@ -32,7 +32,7 @@ namespace Win32
 		return m_hModule != 0;
 	}
 
-	unsigned long DynamicLibrary::getProcAddress(String<128> procName)
+	unsigned long DynamicLibrary::getProcAddress(const String<128>& procName)
 	{
 		if (m_hModule)
 		{

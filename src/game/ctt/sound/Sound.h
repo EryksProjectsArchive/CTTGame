@@ -25,7 +25,7 @@ public:
 	Sound(OpenAL::Impl *al);
 	~Sound();
 
-	bool load(FilePath filepath);
+	bool load(const FilePath& filepath);
 
 	void play(bool loop = false);
 	void pause();

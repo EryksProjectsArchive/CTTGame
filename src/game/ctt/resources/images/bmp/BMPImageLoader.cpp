@@ -28,7 +28,7 @@ namespace BMP
 
 	}
 
-	bool ImageLoader::isFileValid(FilePath filePath)
+	bool ImageLoader::isFileValid(const FilePath& filePath)
 	{
 		bool isValid = false;
 		if (filePath.find(".bmp") != -1)
@@ -46,7 +46,7 @@ namespace BMP
 		return isValid;
 	}
 
-	ImageData * ImageLoader::load(FilePath filePath)
+	ImageData * ImageLoader::load(const FilePath& filePath)
 	{
 		// Recursive loading
 		ImageData *data = 0;

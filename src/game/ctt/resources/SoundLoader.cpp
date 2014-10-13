@@ -24,7 +24,7 @@ SoundLoader::~SoundLoader()
 	m_loaders.clear();
 }
 
-bool SoundLoader::isFileValid(FilePath filePath)
+bool SoundLoader::isFileValid(const FilePath& filePath)
 {
 	return false;
 }
@@ -34,7 +34,7 @@ void SoundLoader::registerLoader(SoundLoader * loader)
 	m_loaders.pushBack(loader);
 }
 
-SoundData * SoundLoader::load(FilePath filePath)
+SoundData * SoundLoader::load(const FilePath& filePath)
 {
 	SoundData * data = 0;
 	for (SoundLoader *loader : m_loaders)

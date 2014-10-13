@@ -31,7 +31,7 @@ ModelLib::~ModelLib()
 	m_models.clear();
 }
 
-Model * ModelLib::findByName(DynString name)
+Model * ModelLib::findByName(const DynString& name)
 {	
 	for (Model *model : m_models)
 	{
