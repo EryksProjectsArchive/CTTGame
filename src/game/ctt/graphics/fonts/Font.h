@@ -48,7 +48,7 @@ public:
 
 	void render(const WDynString& string, const Rect& rect, const Color& color, flags32 flags);
 
-	Font::GlyphData getData(unsigned char c);
+	Font::GlyphData getData(wchar_t c);
 public:
 	struct DrawFlags
 	{

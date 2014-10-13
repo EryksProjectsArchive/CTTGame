@@ -173,7 +173,7 @@ void Font::render(const WDynString& string, const Rect& rect, const Color& color
 		Renderer::get().renderFont(string, rect, color, flags, this);
 }
 
-Font::GlyphData Font::getData(unsigned char c)
+Font::GlyphData Font::getData(wchar_t c)
 {
 	return m_data[c];
 }

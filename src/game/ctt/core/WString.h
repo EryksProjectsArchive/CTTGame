@@ -108,7 +108,7 @@ public:
 		return WString(L"%s%s", m_buffer, buffer);
 	}
 
-	unsigned wchar_t operator[](unsigned int index)
+	wchar_t operator[](unsigned int index)
 	{
 		if (index < 0 || index > maxSize)
 			return 0;
@@ -158,7 +158,7 @@ public:
 		return append(value);
 	}
 
-	WString operator+=(unsigned wchar_t c)
+	WString operator+=(wchar_t c)
 	{
 		wchar_t value[2] = { 0 };
 		value[0] = c;

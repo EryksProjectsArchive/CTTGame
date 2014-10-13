@@ -594,7 +594,7 @@ void Renderer::renderFont(const WDynString& string, const Rect& rect, const Colo
 	float y = rect.y + 19.f;
 	for (uint32 i = 0; i < string.getLength(); ++i)
 	{
-		unsigned char charCode = string[i];
+		wchar_t charCode = string[i];
 		if (charCode == '\0')
 			break;
 

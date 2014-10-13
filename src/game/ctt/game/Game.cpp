@@ -289,8 +289,8 @@ bool Game::pulse()
 
 		if (gFont)
 		{
-			gFont->render(WString<128>(L"Testujemy renderowanie tekstu, jest coraz lepiej :D\nDruga linia :)\nMamy sporo FPS'ów: %.1f", Timer::getFPS()), Rect(21, 21, 10, 10), Color(0.0f, 0.0f, 0.0f, 0.6f), Font::DrawFlags::NoClip);
-			gFont->render(WString<128>(L"Testujemy renderowanie tekstu, jest coraz lepiej :D\nDruga linia :)\nMamy sporo FPS'ów: %.1f", Timer::getFPS()), Rect(20, 20, 10, 10), Color(1.0f, 1.0f, 1.0f, 1.0f), Font::DrawFlags::NoClip);
+			gFont->render(WString<128>(L"Testujemy renderowanie tekstu, jest coraz lepiej :D\nDruga linia :)\nMamy sporo FPS'ów: %.1f łóść чертовски сука шлюха", Timer::getFPS()), Rect(21, 21, 10, 10), Color(0.0f, 0.0f, 0.0f, 0.6f), Font::DrawFlags::NoClip);
+			gFont->render(WString<128>(L"Testujemy renderowanie tekstu, jest coraz lepiej :D\nDruga linia :)\nMamy sporo FPS'ów: %.1f łóść чертовски сука шлюха", Timer::getFPS()), Rect(20, 20, 10, 10), Color(1.0f, 1.0f, 1.0f, 1.0f), Font::DrawFlags::NoClip);
 		}
 
 		m_renderer->postFrame();
