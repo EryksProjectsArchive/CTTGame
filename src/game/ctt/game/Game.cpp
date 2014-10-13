@@ -231,7 +231,7 @@ bool Game::init()
 
 	Environment::get()->setSunPosition(Vector3(30.0f, 10.0f, 0.0f));
 
-	gFont = new Font("fonts/tahoma.ttf", 18);
+	gFont = new Font("fonts/MSMHei.ttf", 18);
 
 	m_isInitialized = true;
 	m_isRunning = true;
@@ -295,8 +295,8 @@ bool Game::pulse()
 
 		if (gFont)
 		{
-			gFont->render(WString<256>(L"Testujemy renderowanie tekstu, jest coraz lepiej :D\nDruga linia :)\nMamy sporo FPS'ów: %.1f łóść чертовски сука шлюха", Timer::getFPS()), Rect(21, 21, 10, 10), Color(0.0f, 0.0f, 0.0f, 0.6f), Font::DrawFlags::NoClip);
-			gFont->render(WString<256>(L"Testujemy renderowanie tekstu, jest coraz lepiej :D\nDruga linia :)\nMamy sporo FPS'ów: %.1f łóść чертовски сука шлюха", Timer::getFPS()), Rect(20, 20, 10, 10), Color(1.0f, 1.0f, 1.0f, 1.0f), Font::DrawFlags::NoClip);
+			gFont->render(WString<256>(L"Testujemy renderowanie tekstu, jest coraz lepiej :D\nDruga linia :)\nMamy sporo FPS'ów: %.1f łóść чертовски сука шлюха こんにちは", Timer::getFPS()), Rect(21, 21, 10, 10), Color(0.0f, 0.0f, 0.0f, 0.6f), Font::DrawFlags::NoClip);
+			gFont->render(WString<256>(L"Testujemy renderowanie tekstu, jest coraz lepiej :D\nDruga linia :)\nMamy sporo FPS'ów: %.1f łóść чертовски сука шлюха こんにちは", Timer::getFPS()), Rect(20, 20, 10, 10), Color(1.0f, 1.0f, 1.0f, 1.0f), Font::DrawFlags::NoClip);
 		}
 
 		m_renderer->postFrame();
