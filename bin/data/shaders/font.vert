@@ -12,7 +12,7 @@ out vec4 outColor;
 // Simple vertex shader
 void main(void)
 {
-	gl_Position = orthoMatrix * vec4(vertexPosition, 1, 1);
+	gl_Position = orthoMatrix * vec4(vertexPosition, 0, 1);
 
 	outColor = vertexColor;
 	outUV = vertexUV;

@@ -218,7 +218,7 @@ bool Game::init()
 
 	Environment::get()->setSunPosition(Vector3(30.0f, 10.0f, 0.0f));
 
-	//gFont = new Font("fonts/tahoma.ttf", 35, Font::CreationFlags::Bold);
+	gFont = new Font("fonts/tahoma.ttf", 25, Font::CreationFlags::Bold);
 
 	m_isInitialized = true;
 	m_isRunning = true;
@@ -281,7 +281,10 @@ bool Game::pulse()
 			m_scene->render();
 
 		if (gFont)
-			gFont->render("Test", Rect(0, 0, 10, 10), Color(0.0f, 0.0f, 0.0f, 1.0f), Font::DrawFlags::NoClip);
+		{
+			gFont->render(String<128>("Testujemy renderowanie tekstu, jest coraz lepiej :D\nDruga linia :)\nMamy sporo FPS'ów: %.1f", Timer::getFPS()), Rect(22, 22, 10, 10), Color(0.0f, 0.0f, 0.0f, 0.5f), Font::DrawFlags::NoClip);
+			gFont->render(String<128>("Testujemy renderowanie tekstu, jest coraz lepiej :D\nDruga linia :)\nMamy sporo FPS'ów: %.1f", Timer::getFPS()), Rect(20, 20, 10, 10), Color(1.0f, 1.0f, 1.0f, 1.0f), Font::DrawFlags::NoClip);
+		}
 
 		m_renderer->postFrame();
 	}

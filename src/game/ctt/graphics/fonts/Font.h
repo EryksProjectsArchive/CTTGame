@@ -16,6 +16,7 @@
 #include <core/String.h>
 #include <core/DynString.h>
 #include <core/SharedPtr.h>
+#include <core/List.h>
 
 class Font
 {
@@ -28,6 +29,15 @@ private:
 		float y;
 		float w;
 		float h;
+		float top;
+		float left;
+		struct
+		{
+			float x;
+			float y;
+		} advance;
+		float bmw;
+		float bmh;
 	};
 
 	uint32 m_textureId;
@@ -36,13 +46,15 @@ private:
 
 	bool m_loaded;
 
-	GlyphData m_data[256];
+	List<GlyphData *> m_data;
+	uint32 m_size;
 public:
 	Font(FilePath fontPath, uint32 size, flags32 flags);
 	~Font();
 
 	void render(DynString string, const Rect& rect, const Color& color, flags32 flags);
 
+	Font::GlyphData& getData(unsigned char c);
 public:
 	struct CreationFlags
 	{

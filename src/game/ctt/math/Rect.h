@@ -40,7 +40,7 @@ public:
 		right = bottom = 1;
 	}
 
-	Rect(float _top, float _left, float _right, float _bottom)
+	Rect(float _left, float _top, float _bottom, float _right)
 	{
 		top = _top;
 		left = _left;

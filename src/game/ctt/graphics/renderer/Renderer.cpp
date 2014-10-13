@@ -569,12 +569,11 @@ void Renderer::renderFont(DynString string, const Rect& rect, const Color& color
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_CULL_FACE);
 
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-	glm::mat4 orthoMatrix = glm::ortho(0.f, (float)m_window->getHeight(), (float)m_window->getHeight(), 0.f);
+	glm::mat4 orthoMatrix = glm::ortho(0.f, (float)m_window->getWidth(), (float)m_window->getHeight(), 0.f, -1.f, 1.f);
 
 	Material* material = font->m_material;
 
-	uint32 xcolor = ((uint8)(color.a * 255) << 24) | ((uint8)(color.r * 255) << 16) | ((uint8)(color.g * 255) << 8) | ((uint8)(color.b * 255));
+	uint32 xcolor = ((uint8)(color.a * 255) << 24) | ((uint8)(color.b * 255) << 16) | ((uint8)(color.g * 255) << 8) | ((uint8)(color.r * 255));
 
 	SimpleVertex2d * vertices = new SimpleVertex2d[string.getLength() * 4];
 	uint16 *indices = new uint16[string.getLength() * 6];
@@ -582,7 +581,7 @@ void Renderer::renderFont(DynString string, const Rect& rect, const Color& color
 	uint32 vid = 0;
 	uint32 iid = 0;
 	float x = rect.x;
-	float y = rect.y;
+	float y = rect.y + 19.f;
 	for (uint32 i = 0; i < string.getLength(); ++i)
 	{
 		unsigned char charCode = string[i];
@@ -591,42 +590,49 @@ void Renderer::renderFont(DynString string, const Rect& rect, const Color& color
 
 		if (charCode == '\n')
 		{
-			y += 33.f;
+			y += font->m_size;
 			x = rect.x;
+			continue;
 		}
 
-		Font::GlyphData data = font->m_data[charCode];
+		if (charCode == ' ')
+		{
+			x += font->m_size/2;
+			continue;
+		}
+
+		Font::GlyphData data = font->getData(charCode);
 		int a, b, c, d;
 		if (data.set)
 		{
 			vertices[vid].x = x;
-			vertices[vid].y = y;
+			vertices[vid].y = y - data.top;
 			vertices[vid].u = data.x;
-			vertices[vid].v = data.h;
+			vertices[vid].v = data.y;
 			vertices[vid].color = xcolor;
 			a = vid;
 			vid++;
 
-			vertices[vid].x = x + 30.f;
-			vertices[vid].y = y;
+			vertices[vid].x = x + data.bmw;
+			vertices[vid].y = y - data.top;
 			vertices[vid].u = data.w;
-			vertices[vid].v = data.h;
+			vertices[vid].v = data.y;
 			vertices[vid].color = xcolor;
 			b = vid;
 			vid++;
 
 			vertices[vid].x = x;
-			vertices[vid].y = y + 30.f;
+			vertices[vid].y = y + data.bmh - data.top;
 			vertices[vid].u = data.x;
-			vertices[vid].v = data.y;
+			vertices[vid].v = data.h;
 			vertices[vid].color = xcolor;
 			c = vid;
 			vid++;
 
-			vertices[vid].x = x + 30.f;
-			vertices[vid].y = y + 30.f;
+			vertices[vid].x = x + data.bmw;
+			vertices[vid].y = y + data.bmh - data.top;
 			vertices[vid].u = data.w;
-			vertices[vid].v = data.y;
+			vertices[vid].v = data.h;
 			vertices[vid].color = xcolor;
 			d = vid;
 			vid++;
@@ -645,16 +651,20 @@ void Renderer::renderFont(DynString string, const Rect& rect, const Color& color
 			iid++;
 			indices[iid] = c;
 			iid++;
+
+			x += data.bmw+2;
 		}
 		else
 		{
 			Info("rr", "Using unknown character. %c", charCode);
-		}
-		x += 33.0f;
+			x += font->m_size;
+		}		
 	}
 
 	Geometry<SimpleVertex2d> geometry;
-	geometry.fillData(vertices, string.getLength()*4, indices, string.getLength()*3);
+	geometry.fillData(vertices, string.getLength()*4, indices, string.getLength()*2);
+	delete[]vertices;
+	delete[]indices;
 
 	// Shaders
 	if (!material)
@@ -684,10 +694,6 @@ void Renderer::renderFont(DynString string, const Rect& rect, const Color& color
 		{
 			glActiveTexture(GL_TEXTURE0);
 			glBindTexture(GL_TEXTURE_2D, font->m_textureId);
-			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 			glUniform1i(textureLocation, 0);
 		}
 	}
@@ -725,9 +731,6 @@ void Renderer::renderFont(DynString string, const Rect& rect, const Color& color
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
-
-	delete []vertices;
-	delete []indices;
 }
 
 
