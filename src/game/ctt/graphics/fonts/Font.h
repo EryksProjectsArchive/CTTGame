@@ -40,13 +40,13 @@ private:
 
 	bool m_loaded;
 
-	GlyphData m_data[256];
+	GlyphData m_data[65535];
 	uint32 m_size;
 public:
 	Font(const FilePath& fontPath, uint32 size);
 	~Font();
 
-	void render(const DynString& string, const Rect& rect, const Color& color, flags32 flags);
+	void render(const WDynString& string, const Rect& rect, const Color& color, flags32 flags);
 
 	Font::GlyphData getData(unsigned char c);
 public:

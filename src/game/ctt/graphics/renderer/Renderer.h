@@ -67,7 +67,7 @@ public:
 	Material * getMaterial();
 
 	void renderGeometry(Geometry<Vertex3d> *geometry, const glm::mat4x4& matrix);
-	void renderFont(const DynString& string, const Rect& rect, const Color& color, flags32 flags, Font *font);
+	void renderFont(const WDynString& string, const Rect& rect, const Color& color, flags32 flags, Font *font);
 
 	static Renderer& get();
 

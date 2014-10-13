@@ -44,6 +44,8 @@
 
 #include <io/Config.h>
 
+#include <core/WDynString.h>
+
 // Extension methods
 PFNGLENABLEIPROC Renderer::glEnablei = 0;
 
@@ -568,8 +570,14 @@ struct SimpleVertex2d
 	float u, v;
 };
 
-void Renderer::renderFont(const DynString& string, const Rect& rect, const Color& color, flags32 flags, Font *font)
+void Renderer::renderFont(const WDynString& string, const Rect& rect, const Color& color, flags32 flags, Font *font)
 {
+	if (!font->getData('?').set)
+	{
+		Error("Font render", "Cannot find '?' character data. It's used as one that doesn't exists.");
+		return;
+	}
+
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_CULL_FACE);
 
@@ -605,61 +613,57 @@ void Renderer::renderFont(const DynString& string, const Rect& rect, const Color
 
 		Font::GlyphData data = font->getData(charCode);
 		int a, b, c, d;
-		if (data.set)
-		{
-			vertices[vertexId].x = x;
-			vertices[vertexId].y = y - data.top;
-			vertices[vertexId].u = data.x;
-			vertices[vertexId].v = data.y;
-			vertices[vertexId].color = xcolor;
-			a = vertexId;
-			vertexId++;
+		if (!data.set)
+			data = font->getData('?'); // use ? for unknown characters
 
-			vertices[vertexId].x = x + data.bmw;
-			vertices[vertexId].y = y - data.top;
-			vertices[vertexId].u = data.w;
-			vertices[vertexId].v = data.y;
-			vertices[vertexId].color = xcolor;
-			b = vertexId;
-			vertexId++;
+		
+		vertices[vertexId].x = x;
+		vertices[vertexId].y = y - data.top;
+		vertices[vertexId].u = data.x;
+		vertices[vertexId].v = data.y;
+		vertices[vertexId].color = xcolor;
+		a = vertexId;
+		vertexId++;
 
-			vertices[vertexId].x = x;
-			vertices[vertexId].y = y + data.bmh - data.top;
-			vertices[vertexId].u = data.x;
-			vertices[vertexId].v = data.h;
-			vertices[vertexId].color = xcolor;
-			c = vertexId;
-			vertexId++;
+		vertices[vertexId].x = x + data.bmw;
+		vertices[vertexId].y = y - data.top;
+		vertices[vertexId].u = data.w;
+		vertices[vertexId].v = data.y;
+		vertices[vertexId].color = xcolor;
+		b = vertexId;
+		vertexId++;
+			
+		vertices[vertexId].x = x;
+		vertices[vertexId].y = y + data.bmh - data.top;
+		vertices[vertexId].u = data.x;
+		vertices[vertexId].v = data.h;
+		vertices[vertexId].color = xcolor;
+		c = vertexId;
+		vertexId++;
 
-			vertices[vertexId].x = x + data.bmw;
-			vertices[vertexId].y = y + data.bmh - data.top;
-			vertices[vertexId].u = data.w;
-			vertices[vertexId].v = data.h;
-			vertices[vertexId].color = xcolor;
-			d = vertexId;
-			vertexId++;
+		vertices[vertexId].x = x + data.bmw;
+		vertices[vertexId].y = y + data.bmh - data.top;
+		vertices[vertexId].u = data.w;
+		vertices[vertexId].v = data.h;
+		vertices[vertexId].color = xcolor;
+		d = vertexId;
+		vertexId++;
 
-			indices[indexId] = a;
-			indexId++;
-			indices[indexId] = b;
-			indexId++;
-			indices[indexId] = c;
-			indexId++;
+		indices[indexId] = a;
+		indexId++;
+		indices[indexId] = b;
+		indexId++;
+		indices[indexId] = c;
+		indexId++;
+		
+		indices[indexId] = b;
+		indexId++;
+		indices[indexId] = d;
+		indexId++;
+		indices[indexId] = c;
+		indexId++;
 
-			indices[indexId] = b;
-			indexId++;
-			indices[indexId] = d;
-			indexId++;
-			indices[indexId] = c;
-			indexId++;
-
-			x += data.bmw+2;
-		}
-		else
-		{
-			Info("Font rendering", "Using unknown character. %c", charCode);
-			x += font->m_size;
-		}		
+		x += data.bmw+2;
 	}
 
 	Geometry<SimpleVertex2d> geometry;

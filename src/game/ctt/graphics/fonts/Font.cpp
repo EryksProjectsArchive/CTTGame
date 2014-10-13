@@ -78,7 +78,7 @@ Font::Font(const FilePath& fontPath, uint32 size)
 	float f_Width = (float)width;
 	float f_Height = (float)height;
 
-	for (uint8 c = 32; c < 255; ++c)
+	for (uint32 c = 0; c < 65535; ++c)
 	{
 		FT_UInt charIndex = FT_Get_Char_Index(face, c);
 		if (!charIndex)
@@ -167,7 +167,7 @@ Font::~Font()
 		m_material->release();
 }
 
-void Font::render(const DynString& string, const Rect& rect, const Color& color, flags32 flags)
+void Font::render(const WDynString& string, const Rect& rect, const Color& color, flags32 flags)
 {
 	if (m_loaded)
 		Renderer::get().renderFont(string, rect, color, flags, this);

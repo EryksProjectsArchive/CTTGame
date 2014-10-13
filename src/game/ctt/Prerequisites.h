@@ -67,14 +67,17 @@ typedef float Scalar;
 class Logger;
 class Timer;
 class DynString;
+class WDynString;
 template <typename T>
 class List;
 template <class Type>
 class ProtectedPtr;
 template <class Type>
 class SharedPtr;
-template <int maxSize = 256>
+template <int maxSize>
 class String;
+template <int maxSize>
+class WString;
 
 // Hashing
 class Hash;

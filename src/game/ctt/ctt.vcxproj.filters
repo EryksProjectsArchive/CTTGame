@@ -557,6 +557,12 @@
     <ClInclude Include="os\win32\Win32DynamicLibrary.h">
       <Filter>Header Files\os\win32</Filter>
     </ClInclude>
+    <ClInclude Include="core\WDynString.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\WString.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="todo.txt">
