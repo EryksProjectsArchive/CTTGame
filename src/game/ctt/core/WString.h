@@ -15,6 +15,7 @@
 
 #include <cstring>
 #include <cstdarg>
+#include <cwchar>
 
 template <int maxSize>
 class WString
@@ -29,7 +30,7 @@ public:
 
 	WString(const WString<maxSize>& string)
 	{
-		memcpy(m_buffer, string.m_buffer, maxSize* sizeof(wchar_t));
+		wcsncpy(m_buffer, string.m_buffer, maxSize);
 	}
 
 	WString(const wchar_t *buffer)
@@ -40,7 +41,7 @@ public:
 		if (size > maxSize)
 			size = maxSize;
 
-		memcpy(m_buffer, buffer, size* sizeof(wchar_t));
+		wcsncpy(m_buffer, buffer, size);
 	}
 
 	WString(wchar_t *buffer)
@@ -51,7 +52,7 @@ public:
 		if (size > maxSize)
 			size = maxSize;
 
-		strcpy(m_buffer, buffer * sizeof(wchar_t));
+		wsccpy(m_buffer, buffer);
 	}
 
 	explicit WString(const wchar_t *buffer, ...)
@@ -61,7 +62,7 @@ public:
 		va_start(args, buffer);
 		vswprintf(tempBuffer, buffer, args);
 		va_end(args);
-		memcpy(m_buffer, tempBuffer, maxSize * sizeof(wchar_t));
+		wcsncpy(m_buffer, tempBuffer, maxSize);
 	}
 
 	WString::~WString()
