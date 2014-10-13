@@ -55,7 +55,7 @@ void FileSystem::close(File *file)
 
 void FileSystem::setBaseDirectory(FilePath baseDirectory)
 {
-	Info("fs", "Base directory: ", baseDirectory.get());
+	Info("fs", "Base directory: %s", baseDirectory.get());
 	m_baseDirectory = baseDirectory;
 }
 

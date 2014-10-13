@@ -51,9 +51,12 @@
 
 #include <io/Config.h>
 
+Game * Game::s_singleton = 0;
+
 Game::Game()
-	: m_isRunning(false), m_isInitialized(false), m_renderer(0), m_window(0), m_scene(0), m_physicsWorld(0)
+	: m_isRunning(false), m_isInitialized(false), m_renderer(0), m_window(0), m_scene(0), m_physicsWorld(0), m_config(0)
 {
+	s_singleton = this;
 }
 
 Game::~Game()
@@ -82,9 +85,17 @@ Game::~Game()
 		m_window = 0;
 	}	
 
-	File *file = FileSystem::get()->open("home/config.json", FileOpenMode::Write | FileOpenMode::Extra);
-	Config::get()->serialize(file);
-	FileSystem::get()->close(file);
+	if (m_config)
+	{
+		File *file = FileSystem::get()->open("home/config.json", FileOpenMode::Write | FileOpenMode::Extra);
+		m_config->serialize(file);
+		FileSystem::get()->close(file);
+
+		delete m_config;
+		m_config = 0;
+	}
+
+	s_singleton = 0;
 }
 
 Font *gFont = 0;
@@ -93,6 +104,9 @@ bool Game::init()
 {
 	if (m_isInitialized)
 		return false;
+
+	// Create config object
+	m_config = new Config();
 
 	// Time
 	OS::initTime();
@@ -107,16 +121,16 @@ bool Game::init()
 	// Setup home directory
 	OS::initHomePath(GAME_NAME);
 
-	// setup logger
-	Logger::init(FilePath("%sgame.log", OS::getHomePath(GAME_NAME).get()), false);
-
 	// Setup file system
-	FileSystem::get()->setHomePath(OS::getHomePath(GAME_NAME));
+	FileSystem::get()->setHomePath(OS::getHomePath());
 	FileSystem::get()->registerFileSystem(new Stdio::FileSystem());
-	FileSystem::get()->setBaseDirectory(FilePath("%s../../data/",OS::getAppPath().get()));
+	FileSystem::get()->setBaseDirectory(FilePath("%s../../data/", OS::getAppPath().get()));
+
+	// setup logger
+	Logger::init(FilePath("%sgame.log", OS::getHomePath().get()), false);
 
 	File *file = FileSystem::get()->open("home/config.json", FileOpenMode::Write | FileOpenMode::Extra);
-	Config::get()->deserialize(file);
+	m_config->deserialize(file);
 	FileSystem::get()->close(file);
 
 	// create image loader
@@ -127,8 +141,7 @@ bool Game::init()
 
 	// Create game window
 	m_window = new Window();
-	//m_window->setup("engine");
-	m_window->setup("Engine", Config::get()->find("resolution")["width"].getInteger(1280), Config::get()->find("resolution")["height"].getInteger(720), Config::get()->find("fullscreen").getBool(false));
+	m_window->setup("Engine", Config::get()["resolution"]["width"].getInteger(1280), Config::get()["resolution"]["height"].getInteger(720), Config::get()["fullscreen"].getBool(false));
 
 	m_renderer = new Renderer();
 	if (!m_renderer->setup(m_window))
@@ -205,7 +218,7 @@ bool Game::init()
 
 	Environment::get()->setSunPosition(Vector3(30.0f, 10.0f, 0.0f));
 
-	gFont = new Font("fonts/tahoma.ttf", 35, Font::CreationFlags::Bold);
+	//gFont = new Font("fonts/tahoma.ttf", 35, Font::CreationFlags::Bold);
 
 	m_isInitialized = true;
 	m_isRunning = true;
@@ -287,6 +300,9 @@ void Game::onKeyEvent(int key, bool state)
 	if (Camera::current)
 		Camera::current->onKeyEvent(key, state);
 
+	if (key == 0x1B)	
+		m_isRunning = false;	
+
 	// Shooting
 	if (key == ' ')
 	{
@@ -327,4 +343,9 @@ void Game::onMouseMove(int x, int y, int relx, int rely)
 PhysicsWorld * Game::getPhysicsWorld()
 {
 	return m_physicsWorld;
+}
+
+Game * Game::get()
+{
+	return s_singleton;
 }

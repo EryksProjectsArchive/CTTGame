@@ -40,7 +40,7 @@ Model * ModelLib::findByName(DynString name)
 	}
 
 	Model *model = 0;
-	FilePath path("models/%s.mdl", *name);
+	FilePath path("models/%s.mdl", name.get());
 	File *file = FileSystem::get()->open(path, FileOpenMode::Read | FileOpenMode::Binary);
 	if (file->isLoaded())
 	{
@@ -53,7 +53,7 @@ Model * ModelLib::findByName(DynString name)
 		}
 		else
 		{			
-			Info("ModelLib", "Cannot load %s. (Version: %X)", *name, m.version);
+			Info("ModelLib", "Cannot load %s. (Version: %X)", name.get(), m.version);
 		}
 	}
 	FileSystem::get()->close(file);

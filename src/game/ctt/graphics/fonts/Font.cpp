@@ -44,7 +44,7 @@ Font::Font(FilePath fontPath, uint32 size, flags32 flags)
 	if (!file->isLoaded())
 	{
 		FileSystem::get()->close(file);
-		Error("font", "Cannot open font file \"%s\".", *fontPath);
+		Error("font", "Cannot open font file \"%s\".", fontPath.get());
 		return;
 	}
 

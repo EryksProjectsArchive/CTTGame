@@ -84,11 +84,11 @@ namespace BMP
 					data->format = EImageFormat::BGR;
 				}
 				else {
-					Error("BMPImageLoader", "Unsupported image. (%s, BIT CNT: %d, COMPRESS: %d)", *filePath, infoHeader.bitCount, infoHeader.compression);
+					Error("BMPImageLoader", "Unsupported image. (%s, BIT CNT: %d, COMPRESS: %d)", filePath.get(), infoHeader.bitCount, infoHeader.compression);
 				}
 			}
 			else {
-				Error("BMPImageLoader", "Cannot load image. Header size is not valid. (%s, %d)", *filePath, header.size);
+				Error("BMPImageLoader", "Cannot load image. Header size is not valid. (%s, %d)", filePath.get(), header.size);
 			}
 
 			fclose(fp);

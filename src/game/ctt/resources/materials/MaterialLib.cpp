@@ -50,7 +50,7 @@ Material * MaterialLib::findByName(DynString name)
 	}
 
 	Material* material = 0;
-	File *file = FileSystem::get()->open(FilePath("materials/%s.json", *name), FileOpenMode::Read);
+	File *file = FileSystem::get()->open(FilePath("materials/%s.json", name.get()), FileOpenMode::Read);
 	if (file->isLoaded())
 	{
 		DynString content = file->getContent();
@@ -59,7 +59,7 @@ Material * MaterialLib::findByName(DynString name)
 
 		if (reader.parse(content.get(), root))
 		{			
-			material = new Material(name, FilePath("materials/%s.json", *name));
+			material = new Material(name, FilePath("materials/%s.json", name.get()));
 
 			if (!root["texture"].empty() && !root["texture"]["name"].empty())
 			{
@@ -68,11 +68,11 @@ Material * MaterialLib::findByName(DynString name)
 				material->m_hasTexture = 1;
 			}
 			else
-				Warning("MatLib", "Material %s has no textures set.", *name);
+				Warning("MatLib", "Material %s has no textures set.", name.get());
 
 			if (root["shaders"].empty())
 			{
-				Warning("MatLib", "Material %s has no shaders set.", *name);
+				Warning("MatLib", "Material %s has no shaders set.", name.get());
 			}
 			else
 			{
@@ -82,7 +82,7 @@ Material * MaterialLib::findByName(DynString name)
 					material->m_vertexShaderName = root["shaders"]["vertex"].asCString();
 				}
 				else
-					Warning("MatLib", "Material %s has no vertex shader set.", *name);
+					Warning("MatLib", "Material %s has no vertex shader set.", name.get());
 
 				if (!root["shaders"]["fragment"].empty())
 				{
@@ -90,20 +90,20 @@ Material * MaterialLib::findByName(DynString name)
 					material->m_fragmentShaderName = root["shaders"]["fragment"].asCString();
 				}
 				else
-					Warning("MatLib", "Material %s has no vertex shader set.", *name);
+					Warning("MatLib", "Material %s has no vertex shader set.", name.get());
 			}
 			
-			Debug("MatLib", "New material loaded %s.", *name);
+			Debug("MatLib", "New material loaded %s.", name.get());
 			m_materials.pushBack(material);
 		}
 		else
 		{
-			Error("MatLib", "Cannot parse material file %s. Error: %s '%s'", *name, reader.getFormattedErrorMessages().c_str(), content.get());
+			Error("MatLib", "Cannot parse material file %s. Error: %s '%s'", name.get(), reader.getFormattedErrorMessages().c_str(), content.get());
 		}
 	}
 	else 
 	{
-		Error("MatLib", "Cannot open file for material %s. Path '%s'.", *name, *FilePath("../data/materials/%s.json", *name));
+		Error("MatLib", "Cannot open file for material %s. Path '%s'.", name.get(), FilePath("../data/materials/%s.json", name.get()).get());
 	}
 	FileSystem::get()->close(file);
 	return material;

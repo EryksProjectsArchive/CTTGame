@@ -35,10 +35,11 @@
 
 namespace OS
 {
+	static FilePath g_homePath;
 	FilePath getAppPath()
 	{
 #ifdef _WIN32
-		char path[MAX_PATH] = { 0 };
+		static char path[MAX_PATH] = { 0 };
 		GetModuleFileName(NULL, path, MAX_PATH);
 		for (size_t i = strlen(path); i > 0; i--)
 		{
@@ -48,7 +49,7 @@ namespace OS
 				break;
 			}
 		}
-		return FilePath(path);
+		return path;
 #elif __linux__ 
 		return FilePath(0);
 #endif
@@ -56,42 +57,34 @@ namespace OS
 
 	FilePath initHomePath(const char *appName)
 	{
-		char homePath[MAX_PATH] = { 0 };
-		strcpy(homePath, getHomePath(appName));
-		if (!directoryExists(homePath))
+		static char myDocuments[MAX_PATH] = { 0 };
+		
+#ifdef _WIN32
+		HRESULT hResult = SHGetFolderPath(NULL, CSIDL_PERSONAL, NULL, SHGFP_TYPE_CURRENT, (LPSTR)myDocuments);
+		if (appName)
 		{
-			if (!makeDirectory(homePath))
+			strcat(myDocuments, "\\");
+			strcat(myDocuments, appName);
+		}
+		strcat(myDocuments, "\\");
+#endif
+		
+		if (!directoryExists(myDocuments))
+		{
+			if (!makeDirectory(myDocuments))
 			{
 				msgBox("Cannot make home directory!", "Error");
+				
 				return FilePath();
 			}
 		}
-		return FilePath(homePath);
+		g_homePath = myDocuments;
+		return g_homePath;
 	}
 
-	FilePath getHomePath(const char *file)
+	FilePath getHomePath()
 	{
-		char myDocuments[MAX_PATH] = { 0 };
-#ifdef _WIN32
-		HRESULT hResult = SHGetFolderPath(NULL, CSIDL_PERSONAL, NULL, SHGFP_TYPE_CURRENT, (LPSTR)myDocuments);
-		if (file)
-		{
-			strcat(myDocuments, "\\");
-			strcat(myDocuments, file);
-		}
-		strcat(myDocuments, "\\");
-		return FilePath(myDocuments);
-#elif __linux__ 
-		struct passwd *pw = getpwuid(getuid());
-		if (file)
-		{
-			strcat(myDocuments, pw->pw_dir);
-			strcat(myDocuments, "/");
-			strcat(myDocuments, file);
-		}
-		strcat(myDocuments, "/");
-		return FilePath(myDocuments);
-#endif
+		return g_homePath;
 	}
 
 	bool fileExists(FilePath path)

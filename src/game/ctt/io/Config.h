@@ -19,8 +19,10 @@
 
 #include <json/json.h>
 
-class Config : public Singleton<Config>
+class Config
 {
+private:
+	static Config *s_singleton;
 public:
 	class Entry;
 	Config();
@@ -29,9 +31,12 @@ public:
 	void serialize(File *file);
 	void deserialize(File* file);
 
-	Entry find(DynString name);
-	Entry operator[](DynString name);
+	Entry* find(DynString name);
+	Entry& operator[](DynString name);
+
+	static Config& get();
 public:
+	friend class Entry;
 	class Entry
 	{
 	private:
@@ -58,29 +63,29 @@ public:
 				float floatValue;
 				bool booleanData;
 			};
-			List<Entry> arrayData;
+			List<Entry *> arrayData;
 			DynString stringData;
 		} m_data;
-
+		Config *m_config;
 	public:
-		Entry();
-		Entry(DynString name);
+		Entry(Config *config, DynString name);
 		~Entry();
 
-		uint32 getInteger(uint32 default = 0);
-		float getFloat(float default = 0);
-		List<Entry>& getArrayData();
-		DynString getString(DynString default = DynString());
-		bool getBool(bool default = false);
+		uint32 getInteger(uint32 def = 0);
+		float getFloat(float def = 0);
+		List<Entry *> getArrayData();
+		DynString getString(DynString def = DynString());
+		bool getBool(bool def = false);
 
-		Entry operator[](DynString name);
+		Entry * find(DynString name);
+		Config::Entry& operator[](DynString name);
 
-		void serialize(File *file, Json::Value parent);
-		void deserialize(File* file, Json::Value parent);
+		void serialize(File *file, Json::Value& parent);
+		void deserialize(File* file, Json::Value& parent);
 
 		friend class Config;
 	};
 
 private:
-	List<Entry> m_entries;
+	List<Entry *> m_entries;
 };

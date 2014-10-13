@@ -51,7 +51,7 @@ public:
 		if (size > maxSize)
 			size = maxSize;
 
-		memcpy(m_buffer, buffer, size);
+		strcpy(m_buffer, buffer);
 	}
 
 	explicit String(const char *buffer, ...)
@@ -77,7 +77,9 @@ public:
 			size = maxSize - length;
 		
 		if (size > 0)
-			memcpy(m_buffer + length, buffer, size);
+		{
+			memcpy(((char *)m_buffer + length), buffer, size);
+		}
 
 		return *this;		
 	}
@@ -134,12 +136,19 @@ public:
 		return maxSize;
 	}
 
-	unsigned short String::find(const char * key)
+	uint16 String::find(const char * key)
 	{		
-		uint32 range = maxSize - strlen(key);
+		uint32 range = strlen(m_buffer);
+		if (range + strlen(key) > maxSize)		
+			range = maxSize;
+		
 		for (uint32 i = 0; i < range; ++i)
-			if (!memcmp(&m_buffer[i], key, strlen(key)))
-				return i;			
+		{
+			if (!memcmp(m_buffer + i, key, strlen(key)))
+			{
+				return i;
+			}
+		}
 		
 		return -1;
 	}
@@ -174,7 +183,6 @@ public:
 
 	String replace(const char *key, const char *value)
 	{
-		printf("replace: %s, %s\n", key, value);
 		String newString;
 		uint16 keyPos = find(key);
 		
@@ -183,10 +191,9 @@ public:
 		
 		strcpy(newString.m_buffer, value);
 		strcat(newString.m_buffer, temp);
-
 		return newString;
 	}
 };
 
 // Default string types
-typedef String<256> FilePath;
+typedef String<260> FilePath;

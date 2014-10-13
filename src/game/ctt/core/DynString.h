@@ -84,11 +84,6 @@ public:
 		return m_buffer;
 	}
 
-	const char * operator*()
-	{
-		return m_buffer;
-	}
-
 	operator const char *() { return m_buffer; }
 	DynString& operator=(const DynString& rhs)
 	{

@@ -15,9 +15,11 @@
 
 #include <core/Singleton.h>
 
-class Game : public Singleton<Game>
+class Game
 {
 private:
+	static Game *s_singleton;
+
 	bool m_isRunning;
 	bool m_isInitialized;
 
@@ -25,6 +27,7 @@ private:
 	Renderer* m_renderer;
 	Scene *m_scene;
 	PhysicsWorld *m_physicsWorld;
+	Config *m_config;
 
 	double m_deltaTime;
 	double m_accumulator;
@@ -42,4 +45,6 @@ public:
 	void onMouseMove(int x, int y, int relx, int rely);
 
 	PhysicsWorld * getPhysicsWorld();
+
+	static Game * get();
 };

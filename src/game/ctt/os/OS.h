@@ -23,7 +23,7 @@ namespace OS
 {
 	// Paths
 	FilePath getAppPath();
-	FilePath getHomePath(const char *file);
+	FilePath getHomePath();
 	FilePath initHomePath(const char *appName);
 
 	// Files
