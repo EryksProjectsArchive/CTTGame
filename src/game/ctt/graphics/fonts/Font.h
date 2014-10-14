@@ -54,12 +54,13 @@ public:
 	{
 		enum Type
 		{
-			None = 0,
-			NoClip = 1,
+			None = 0, // 0
+			NoClip = 1, // 1
+			DisableColorCodding = 2, // 10
 
 			// Separated position enum?
-			VerticalCenter = 2,
-			HorizontalCenter = 3,
+			VerticalCenter = 4, // 100
+			HorizontalCenter = 8, // 1000
 		};
 	};
 

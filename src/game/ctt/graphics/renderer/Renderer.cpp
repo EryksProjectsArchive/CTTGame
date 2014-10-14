@@ -601,6 +601,52 @@ void Renderer::renderFont(const WDynString& string, const Rect& rect, const Colo
 		wchar_t charCode = string[i];
 		if (charCode == '\0')
 			break;
+		
+		if (charCode == '#')
+		{
+			// #RRGGBB (9)
+			if ((i + 7) < string.getLength())
+			{
+				bool isColorCode = true;
+				for (uint32 j = 1; j < 7; ++j)
+				{
+					wchar_t wcs = string[i + j];
+					if (!iswdigit(wcs) && (wcs < 'A' || wcs > 'F') && (wcs < 'a' || wcs > 'f'))
+					{
+						isColorCode = false;
+						break;
+					}
+				}
+
+				if (isColorCode)
+				{				
+					if (flags & Font::DrawFlags::DisableColorCodding)
+					{
+						// Skip color codding
+						i += 6;
+					}
+					else 
+					{
+						i += 1;// skip '#' sign
+						wchar_t color[7] = { 0 };
+						for (uint32 j = 0; j < 7; ++j)
+							color[j] = string[i + j];
+
+						uint32 col = 0xFFFFFFFF;
+						swscanf(color, L"%X", &col);
+						uint8 a = 255;
+						uint8 r = col >> 16 & 0xFF;
+						uint8 g = col >> 8 & 0xFF;
+						uint8 b = col & 0xFF;
+
+						xcolor = (a << 24) | (b << 16) | (g << 8) | r;
+						i += 5; // skip RRGGBB
+					}
+					continue;
+				}
+			}
+		}
+
 
 		if (charCode == '\n')
 		{
@@ -619,7 +665,6 @@ void Renderer::renderFont(const WDynString& string, const Rect& rect, const Colo
 		int a, b, c, d;
 		if (!data.set)
 			data = font->getData('?'); // use ? for unknown characters
-
 		
 		vertices[vertexId].x = x;
 		vertices[vertexId].y = y - data.top;
@@ -741,7 +786,6 @@ void Renderer::renderFont(const WDynString& string, const Rect& rect, const Colo
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 }
-
 
 Renderer& Renderer::get()
 {
