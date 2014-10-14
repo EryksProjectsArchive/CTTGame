@@ -40,7 +40,7 @@ FreeCamera::~FreeCamera()
 
 }
 
-void FreeCamera::onMouseMove(int x, int y, int relx, int rely)
+void FreeCamera::onMouseMove(int32 x, int32 y, int32 relx, int32 rely)
 {
 	float _x = (float)relx * m_sensitivity;
 	float _y = (float)rely * m_sensitivity;
@@ -51,7 +51,7 @@ void FreeCamera::onMouseMove(int x, int y, int relx, int rely)
 	updateMatrix();
 }
 
-void FreeCamera::onKeyEvent(int key, bool state)
+void FreeCamera::onKeyEvent(uint32 key, bool state)
 {
 	if (key == 'w')
 		m_keys[0] = state;

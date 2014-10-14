@@ -15,7 +15,9 @@
 
 #include <core/Singleton.h>
 
-class Game
+#include <input/Input.h>
+
+class Game : public Controllable
 {
 private:
 	static Game *s_singleton;
@@ -40,9 +42,7 @@ public:
 
 	bool pulse();
 
-	void onKeyEvent(int key, bool state);
-	void onMouseScroll(int horizontal, int vertical);
-	void onMouseMove(int x, int y, int relx, int rely);
+	void onKeyEvent(uint32 key, bool state) override;
 
 	PhysicsWorld * getPhysicsWorld();
 

@@ -15,10 +15,12 @@
 
 Controllable::Controllable()
 {
+	registerInput();
 }
 
 Controllable::~Controllable()
 {
+	unregisterInput();
 }
 
 void Controllable::registerInput()

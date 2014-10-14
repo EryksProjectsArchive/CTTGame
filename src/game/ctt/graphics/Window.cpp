@@ -11,6 +11,7 @@
 
 #include "Window.h"
 #include <game/Game.h>
+#include <input/Input.h>
 
 Window::Window()
 	: _window(0)
@@ -53,13 +54,17 @@ bool Window::processMessages()
 		case SDL_KEYDOWN:
 		case SDL_KEYUP:
 			if (!event.key.repeat)
-				Game::get()->onKeyEvent(event.key.keysym.sym, event.type == SDL_KEYDOWN);
+				Input::get()->onKeyEvent(event.key.keysym.sym, event.type == SDL_KEYDOWN);
 			break;
 		case SDL_MOUSEWHEEL:
-			Game::get()->onMouseScroll(event.wheel.x, event.wheel.y);
-			break;
+			Input::get()->onMouseScroll(event.wheel.x, event.wheel.y);
+			break;		
 		case SDL_MOUSEMOTION:
-			Game::get()->onMouseMove(event.motion.x, event.motion.y, event.motion.xrel, event.motion.yrel);
+			Input::get()->onMouseMove(event.motion.x, event.motion.y, event.motion.xrel, event.motion.yrel);
+			break;
+		case SDL_MOUSEBUTTONDOWN:
+		case SDL_MOUSEBUTTONUP:
+			Input::get()->onMouseButtonEvent(event.button.button, event.button.state == SDL_PRESSED, event.button.clicks, event.button.x, event.button.y);
 			break;
 		}
 	}

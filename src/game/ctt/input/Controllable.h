@@ -19,10 +19,12 @@ public:
 	Controllable();
 	virtual ~Controllable();
 
-protected:
-	virtual void registerBinds(Input *input) = 0;
-	virtual void unregisterBinds(Input *input) = 0;
+	virtual void onKeyEvent(uint32 keyCode, bool pressed) {}
+	virtual void onMouseScroll(sint32 horizontal, sint32 vertical) {}
+	virtual void onMouseMove(sint32 x, sint32 y, sint32 relx, sint32 rely) {}
+	virtual void onMouseButtonEvent(uint8 button, bool state, uint8 clicks, sint32 x, sint32 y) {}
 
+protected:
 	void registerInput();
 	void unregisterInput();
 

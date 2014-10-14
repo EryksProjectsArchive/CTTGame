@@ -12,8 +12,9 @@
 #pragma once
 
 #include <Prerequisites.h>
+#include <input/Controllable.h>
 
-class Camera
+class Camera : public Controllable
 {
 protected:
 	glm::mat4x4 m_viewMatrix;
@@ -37,10 +38,6 @@ public:
 
 	virtual void setFov(float fov);
 	virtual float getFov();
-
-	virtual void onKeyEvent(int key, bool state) {};
-	virtual void onMouseScroll(int horizontal, int vertical) {};
-	virtual void onMouseMove(int x, int y, int relx, int rely) {};
 
 	virtual void update(float dt) {};
 	

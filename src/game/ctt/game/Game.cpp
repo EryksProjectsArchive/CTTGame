@@ -309,13 +309,9 @@ bool Game::pulse()
 	return m_isRunning;
 }
 
-// TODO: GameEvent
-uint64 press = 0;
-void Game::onKeyEvent(int key, bool state)
+void Game::onKeyEvent(uint32 key, bool state)
 {
-	if (Camera::current)
-		Camera::current->onKeyEvent(key, state);
-
+	static uint64 press = 0;
 	if (key == 0x1B)	
 		m_isRunning = false;	
 
@@ -342,18 +338,6 @@ void Game::onKeyEvent(int key, bool state)
 			m_scene->addEntity(ball);
 		}
 	}
-}
-
-void Game::onMouseScroll(int horizontal, int vertical)
-{
-	if (Camera::current)
-		Camera::current->onMouseScroll(horizontal, vertical); 
-}
-
-void Game::onMouseMove(int x, int y, int relx, int rely)
-{
-	if (Camera::current)
-		Camera::current->onMouseMove(x, y, relx, rely);
 }
 
 PhysicsWorld * Game::getPhysicsWorld()
