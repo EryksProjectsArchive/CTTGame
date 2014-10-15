@@ -123,8 +123,6 @@ void Console::onKeyEvent(Key::Type key, bool pressed)
 			m_scrollDown = false;
 			m_scroll = 0;
 			m_inputBuffer.reset();
-
-			Info("console", "%s",m_state?"show":"hide");
 		}
 
 		if (key == Key::SCANCODE_PAGEUP && m_state)
@@ -148,7 +146,7 @@ void Console::onKeyEvent(Key::Type key, bool pressed)
 			}
 			else 
 			{
-				output(MessageType::Error, WString<256>(L"Cannot find comand: %s", m_inputBuffer.get()));
+				output(MessageType::Error, WString<256>(L"Cannot find command: %s", m_inputBuffer.get()));
 			}
 			m_inputBuffer.reset();
 		}
