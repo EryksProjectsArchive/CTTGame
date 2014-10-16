@@ -349,7 +349,7 @@ void Game::onMouseButtonEvent(uint8 button, bool state, uint8 clicks, sint32 x, 
 		}
 		else
 		{
-			float force = (OS::getMicrosecondsCount() - press) / 999999.f;
+			float force = (OS::getMicrosecondsCount() - press) / 100000.f;
 			Vector3 a = Camera::current->getPosition();
 			Vector3 b = Camera::current->getTarget();
 
@@ -358,7 +358,7 @@ void Game::onMouseButtonEvent(uint8 button, bool state, uint8 clicks, sint32 x, 
 			velocity *= force * 90;
 
 			BallEntity * ball = new BallEntity();
-			ball->setPosition(a + diff*2.f);
+			ball->setPosition(a + diff*5.f);
 			ball->setLinearVelocity(velocity);
 			m_scene->addEntity(ball);
 		}
