@@ -25,7 +25,7 @@ Scene::Scene()
 {
 	m_camera = new FreeCamera();
 	Camera::setCurrent(m_camera);
-	//m_terrain = new Terrain(200, 200);
+	m_terrain = new Terrain(30000, 30000);
 }
 
 Scene::~Scene()
@@ -41,11 +41,11 @@ Scene::~Scene()
 		m_camera = 0;
 	}
 
-	//if (m_terrain)
-	//{
-	//	delete m_terrain;
-	//	m_terrain = 0;
-	//}
+	if (m_terrain)
+	{
+		delete m_terrain;
+		m_terrain = 0;
+	}
 }
 
 void Scene::render()
@@ -53,8 +53,8 @@ void Scene::render()
 	// Separated render context for entities
 	RenderContext ctx;
 
-	//if (m_terrain)
-	//	m_terrain->render(ctx);
+	if (m_terrain)
+		m_terrain->render(ctx);
 
 	for (auto entity : m_entities)
 		entity->render(ctx);

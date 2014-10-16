@@ -48,6 +48,7 @@ private:
 	uint32 m_hNodes;
 	uint32 m_width;
 	uint32 m_height;
+	uint32 m_nodeSize;
 public:
 	Terrain(uint32 width, uint32 height);
 	~Terrain();

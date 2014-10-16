@@ -48,11 +48,10 @@ protected:
 		}
 	} m_stats;
 
-	unsigned int m_lastTitleUpdate;
-
 	Geometry<Vertex3d> *m_helperLines;
 	Material *m_helperMaterial;
 	Rect m_rect;
+	bool m_wireframe;
 public:
 	Renderer();
 	~Renderer();

@@ -130,7 +130,7 @@ void FreeCamera::update(float dt)
 
 	if (update)
 	{
-		Vector3 end = m_position + (m_position - begin);
+		/*Vector3 end = m_position + (m_position - begin);
 		if (glm::length(end - begin) > 0)
 		{
 			Vector3 point;
@@ -138,7 +138,7 @@ void FreeCamera::update(float dt)
 			{
 				m_position = begin;
 			}
-		}
+		}*/
 		updateMatrix();
 	}
 }

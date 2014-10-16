@@ -202,7 +202,7 @@ bool Game::init()
 
 	// EVERYTHING FROM ENGINE IS INITIALIZED WE CAN SETUP EVERYTHING BELLOW
 
-	Entity *entity = new Entity(EntityType::Dummy);	
+	/*Entity *entity = new Entity(EntityType::Dummy);	
 	m_scene->addEntity(entity);
 
 	CrossroadEntity * crossroad = new CrossroadEntity();
@@ -223,7 +223,7 @@ bool Game::init()
 	crossroad = new CrossroadEntity();
 	crossroad->setPosition(Vector3(0, 0, -37.153f));
 	m_scene->addEntity(crossroad);
-
+	*/
 	BoxEntity *testEntity = 0;
 	for (int i = 0; i < 10; ++i)
 	{

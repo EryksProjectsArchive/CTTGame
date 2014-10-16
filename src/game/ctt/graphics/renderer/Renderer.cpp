@@ -162,15 +162,14 @@ PFNGLCOMPRESSEDTEXIMAGE2DPROC Renderer::glCompressedTexImage2D = 0;
 
 Renderer * Renderer::s_instance = 0;
 
-
 Renderer::Renderer()
 	: m_window(0),
 	  m_glContext(0),
 	  m_projectionMatrix(glm::perspective(45.0f, 800.f / 600.f, 0.1f, 1000.0f)),
 	  m_orthoMatrix(glm::ortho(0.f, 800.f, 600.f, 0.f, -1.f, 1.f)),
-	  m_lastTitleUpdate(0),
 	  m_helperLines(0),
-	  m_helperMaterial(0)
+	  m_helperMaterial(0),
+	  m_wireframe(false)
 {
 	s_instance = this;
 	m_stats.reset();
@@ -402,14 +401,6 @@ void Renderer::preFrame()
 void Renderer::postFrame()
 {	
 	SDL_GL_SwapWindow(m_window->_window);	
-
-	unsigned int now = unsigned int(OS::getMicrosecondsCount() / 1000);
-	if (now - m_lastTitleUpdate >= 500)
-	{
-		SDL_SetWindowTitle(m_window->_window, String<64>("Engine - TD: %d, DC: %d, VD: %d, FPS: %.1f", m_stats.m_trianglesDrawn, m_stats.m_drawCalls, m_stats.m_verticesDrawn, Timer::getFPS()));
-		m_lastTitleUpdate = now;
-	}
-
 	m_stats.reset();
 }
 
@@ -551,9 +542,16 @@ void Renderer::renderGeometry(Geometry<Vertex3d> *geometry, const glm::mat4x4& m
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geometry->m_indexBuffer->m_bufferId);
 
 	unsigned int drawMode = GL_TRIANGLES;
-	if (geometry->m_drawType == EDrawType::LINES) drawMode = GL_LINES;
-	else if (geometry->m_drawType == EDrawType::LINE_STRIP) drawMode = GL_LINE_STRIP;
-
+	if (m_wireframe)
+	{
+		drawMode = GL_LINE_STRIP;
+	}
+	else
+	{
+		if (geometry->m_drawType == EDrawType::LINES) drawMode = GL_LINES;
+		else if (geometry->m_drawType == EDrawType::LINE_STRIP) drawMode = GL_LINE_STRIP;
+	}
+	
 	glDrawElements(drawMode, geometry->m_trianglesCount * 3, GL_UNSIGNED_SHORT, 0);
 	m_stats.m_trianglesDrawn += geometry->m_trianglesCount;
 	m_stats.m_drawCalls++;
@@ -633,7 +631,8 @@ void Renderer::renderGeometry(Geometry<Vertex2d> *geometry)
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geometry->m_indexBuffer->m_bufferId);
 
-	glDrawElements(GL_TRIANGLES, geometry->m_trianglesCount * 3, GL_UNSIGNED_SHORT, 0);
+
+	glDrawElements(m_wireframe ? GL_LINE_STRIP : GL_TRIANGLES, geometry->m_trianglesCount * 3, GL_UNSIGNED_SHORT, 0);
 	m_stats.m_trianglesDrawn += geometry->m_trianglesCount;
 	m_stats.m_drawCalls++;
 	m_stats.m_verticesDrawn += geometry->m_verticesCount;
@@ -693,7 +692,7 @@ void Renderer::renderGeometry(Geometry<SimpleVertex2d> *geometry)
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geometry->m_indexBuffer->m_bufferId);
 
-	glDrawElements(GL_TRIANGLES, geometry->m_trianglesCount * 3, GL_UNSIGNED_SHORT, 0);
+	glDrawElements(m_wireframe ? GL_LINE_STRIP : GL_TRIANGLES, geometry->m_trianglesCount * 3, GL_UNSIGNED_SHORT, 0);
 	m_stats.m_trianglesDrawn += geometry->m_trianglesCount;
 	m_stats.m_drawCalls++;
 	m_stats.m_verticesDrawn += geometry->m_verticesCount;
@@ -906,7 +905,7 @@ void Renderer::renderFont(const WDynString& string, const Rect& rect, const Colo
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geometry.m_indexBuffer->m_bufferId);
 
-	glDrawElements(GL_TRIANGLES, geometry.m_trianglesCount * 3, GL_UNSIGNED_SHORT, 0);
+	glDrawElements(m_wireframe ? GL_LINE_STRIP : GL_TRIANGLES, geometry.m_trianglesCount * 3, GL_UNSIGNED_SHORT, 0);
 	m_stats.m_trianglesDrawn += geometry.m_trianglesCount;
 	m_stats.m_drawCalls++;
 	m_stats.m_verticesDrawn += geometry.m_verticesCount;
