@@ -329,18 +329,25 @@ bool Game::pulse()
 
 void Game::onKeyEvent(Key::Type key, bool state)
 {
-	static uint64 press = 0;
 	if (key == Key::SCANCODE_ESCAPE)	
 		m_isRunning = false;	
+}
 
-	// Shooting
-	if (key == Key::SCANCODE_SPACE)
+void Game::onMouseButtonEvent(uint8 button, bool state, uint8 clicks, sint32 x, sint32 y)
+{
+	static uint64 press = 0;
+
+	if (input()->isLocked())
+		return;
+
+	// Shotting
+	if (button == 1)
 	{
 		if (state)
 		{
 			press = OS::getMicrosecondsCount();
 		}
-		else 
+		else
 		{
 			float force = (OS::getMicrosecondsCount() - press) / 999999.f;
 			Vector3 a = Camera::current->getPosition();

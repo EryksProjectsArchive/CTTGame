@@ -69,8 +69,8 @@ Font::Font(const FilePath& fontPath, uint32 size)
 
 	FT_Set_Pixel_Sizes(face, size, 0);
 
-	uint32 width = 1024;
-	uint32 height = 1024;
+	uint32 width = 2000;
+	uint32 height = 1900;
 
 	uint32 x = 0;
 	uint32 y = 0;
@@ -80,6 +80,7 @@ Font::Font(const FilePath& fontPath, uint32 size)
 	float f_Width = (float)width;
 	float f_Height = (float)height;
 
+	float lineHeight = 0;
 	for (uint32 c = 0; c < 65535; ++c)
 	{
 		FT_UInt charIndex = FT_Get_Char_Index(face, c);
@@ -102,15 +103,8 @@ Font::Font(const FilePath& fontPath, uint32 size)
 		uint8 *image = bitmap_glyph->bitmap.buffer;
 	
 		for (int32 _y = 0; _y < bitmap_glyph->bitmap.rows; ++_y)
-		{
 			for (int32 _x = 0; _x < bitmap_glyph->bitmap.width; ++_x)
-			{
-				int32 xpadding = 0;// bitmap_glyph->left;
-				int32 ypadding = 0;// bitmap_glyph->top;
-				
-				texture[((_x + x + xpadding) + width * (_y + y + ypadding))] = image[_x + bitmap_glyph->bitmap.width * _y];
-			}
-		}
+				texture[((_x + x) + width * (_y + y))] = image[_x + bitmap_glyph->bitmap.width * _y];
 
 		m_data[c].set = 1;
 		m_data[c].x = float(x) / f_Width;
@@ -122,16 +116,20 @@ Font::Font(const FilePath& fontPath, uint32 size)
 		m_data[c].bmw = float(bitmap_glyph->bitmap.width);
 		m_data[c].bmh = float(bitmap_glyph->bitmap.rows);
 
-		x += m_data[c].bmw;
+		if (lineHeight < m_data[c].bmh)
+			lineHeight = m_data[c].bmh;
+
+		x += uint32(m_data[c].bmw);
 		if ((x + size) >= width)
 		{
 			x = 0;
-			y += size + 5;
+			y += uint32(lineHeight);
+			lineHeight = 0;
 		}
 
-		if ((y + size + 5) >= height)
+		if ((y + lineHeight) >= height)
 		{
-			Error("Font", "Height limit of font atlas has been exceeded! (%d)", (y+size+5));
+			Error("Font", "Height limit of '%s' font atlas has been exceeded! (%d)", fontPath.get(), uint32(y+lineHeight));
 			break;
 		}
 	}

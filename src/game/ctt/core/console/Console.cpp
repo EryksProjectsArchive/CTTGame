@@ -105,7 +105,7 @@ void Console::init()
 void Console::output(MessageType::Type type, const WDynString& message)
 {
 	m_lines.pushBack(new Console::Line(type, message));
-}
+}	
 
 void Console::onKeyEvent(Key::Type key, bool pressed)
 {
@@ -140,15 +140,18 @@ void Console::onKeyEvent(Key::Type key, bool pressed)
 		if (key == Key::SCANCODE_RETURN && m_state && pressed)
 		{
 			// TODO: Commands processor and config variables management via conole
-			if (m_inputBuffer == L"quit")
+			if (m_inputBuffer.getLength() > 0)
 			{
-				Game::get()->shutdown();
+				if (m_inputBuffer == L"quit")
+				{
+					Game::get()->shutdown();
+				}
+				else
+				{
+					output(MessageType::Error, WString<256>(L"Cannot find command: %s", m_inputBuffer.get()));
+				}
+				m_inputBuffer.reset();
 			}
-			else 
-			{
-				output(MessageType::Error, WString<256>(L"Cannot find command: %s", m_inputBuffer.get()));
-			}
-			m_inputBuffer.reset();
 		}
 
 		if (key == Key::SCANCODE_BACKSPACE && pressed)

@@ -45,6 +45,7 @@ public:
 	void shutdown();
 
 	void onKeyEvent(Key::Type key, bool state) override;
+	void onMouseButtonEvent(uint8 button, bool state, uint8 clicks, sint32 x, sint32 y) override;
 
 	PhysicsWorld * getPhysicsWorld();
 
