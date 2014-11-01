@@ -69,7 +69,7 @@ CrossroadEntity::CrossroadEntity()
 			btRigidBody::btRigidBodyConstructionInfo groundRigidBodyCI(0, groundMotionState, physicsShape, btVector3(0, 0, 0));
 			m_rigidBody = new btRigidBody(groundRigidBodyCI);
 
-			Game::get()->getPhysicsWorld()->registerRigidBody(m_rigidBody);
+			Game::get()->getPhysicsWorld().registerRigidBody(m_rigidBody);
 		}
 	}
 	else

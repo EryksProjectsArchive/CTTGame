@@ -17,7 +17,7 @@ template <typename type>
 class DynArray
 {
 private:
-	type * m_elements;
+	type* m_elements;
 	unsigned int m_capacity;
 public:
 	DynArray()
@@ -44,9 +44,9 @@ public:
 			capacity = index;
 
 		if (capacity == 1)
-			elements = (type *)malloc(sizeof(type) * capacity);
+			elements = (type*)malloc(sizeof(type) * capacity);
 		else
-			elements = (type *)realloc(elements, sizeof(type) * capacity);
+			elements = (type*)realloc(elements, sizeof(type) * capacity);
 
 		return m_elements[index];
 	}

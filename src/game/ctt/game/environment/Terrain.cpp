@@ -168,7 +168,7 @@ TerrainGrid::TerrainGrid(Vector3 position, uint32 size) : m_left(0), m_right(0),
 	btRigidBody::btRigidBodyConstructionInfo groundRigidBodyCI(0, groundMotionState, physicsShape, btVector3(0, 0, 0));
 	m_rigidBody = new btRigidBody(groundRigidBodyCI);
 
-	Game::get()->getPhysicsWorld()->registerRigidBody(m_rigidBody);
+	Game::get()->getPhysicsWorld().registerRigidBody(m_rigidBody);
 }
 
 TerrainGrid::~TerrainGrid()

@@ -131,6 +131,7 @@ class SoundManager;
 struct SoundData;
 
 // Graphics
+class UIRenderContext;
 class RenderContext;
 class Renderer;
 class ModelFormat;
@@ -151,6 +152,12 @@ class Model;
 class Mesh;
 class Camera;
 class Font;
+namespace UI
+{
+	class Manager;
+	class View;
+	class Control;
+};
 
 struct Vertex2d;
 struct Vertex3d;

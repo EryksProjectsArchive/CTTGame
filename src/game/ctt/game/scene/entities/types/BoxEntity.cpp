@@ -41,7 +41,7 @@ BoxEntity::BoxEntity()
 	fallRigidBodyCI.m_friction = 10.0f;
 	m_rigidBody = new btRigidBody(fallRigidBodyCI);
 	
-	Game::get()->getPhysicsWorld()->registerRigidBody(m_rigidBody);
+	Game::get()->getPhysicsWorld().registerRigidBody(m_rigidBody);
 }
 
 BoxEntity::~BoxEntity()

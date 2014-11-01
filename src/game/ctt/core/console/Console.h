@@ -55,14 +55,14 @@ private:
 
 	List<Line*> m_lines;
 	unsigned char m_state : 1;
-	Font *m_font;
-	Material *m_material;
+	Font* m_font;
+	Material* m_material;
 	float m_scroll;
 	bool m_scrollDown;
 	bool m_scrollUp;
 	Geometry<SimpleVertex2d>* m_background;
 	Geometry<SimpleVertex2d>* m_inputBackground;
-	static Console *s_instance;
+	static Console* s_instance;
 	WDynString m_inputBuffer;
 public:
 	Console();
@@ -77,5 +77,5 @@ public:
 
 	void render(Renderer *renderer);
 
-	static Console * get();
+	static Console* get();
 };

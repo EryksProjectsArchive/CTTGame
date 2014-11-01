@@ -55,10 +55,10 @@ public:
 
 	void clear()
 	{
-		Node *node = m_end;
+		Node* node = m_end;
 		while (node)
 		{
-			Node *nodeToRemove = node;
+			Node* nodeToRemove = node;
 			node = node->m_previous;
 			delete nodeToRemove;
 		}

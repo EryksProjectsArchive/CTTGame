@@ -17,16 +17,16 @@
 PhysicalEntity::PhysicalEntity()
 	: m_rigidBody(0)
 {
-	Game::get()->getPhysicsWorld()->registerEntity(this);
+	Game::get()->getPhysicsWorld().registerEntity(this);
 }
 
 PhysicalEntity::~PhysicalEntity()
 {
-	Game::get()->getPhysicsWorld()->unregisterEntity(this);
+	Game::get()->getPhysicsWorld().unregisterEntity(this);
 
 	if (m_rigidBody)
 	{
-		Game::get()->getPhysicsWorld()->unregisterRigidBody(m_rigidBody);
+		Game::get()->getPhysicsWorld().unregisterRigidBody(m_rigidBody);
 
 		if (m_rigidBody->getCollisionShape())
 			delete m_rigidBody->getCollisionShape();

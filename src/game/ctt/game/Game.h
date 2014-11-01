@@ -26,11 +26,13 @@ private:
 
 	Window* m_window;
 	Renderer* m_renderer;
-	Scene *m_scene;
-	PhysicsWorld *m_physicsWorld;
-	Config *m_config;
-	class Console *m_console;
-	class CrossroadEntity *m_box;
+	Scene* m_scene;
+	PhysicsWorld* m_physicsWorld;
+	Config* m_config;
+	class Console* m_console;
+	class CrossroadEntity* m_box;
+
+	UI::Manager* m_ui;
 
 	double m_deltaTime;
 	double m_accumulator;
@@ -46,7 +48,8 @@ public:
 	void onKeyEvent(Key::Type key, bool state) override;
 	void onMouseButtonEvent(uint8 button, bool state, uint8 clicks, sint32 x, sint32 y) override;
 
-	PhysicsWorld * getPhysicsWorld();
+	PhysicsWorld& getPhysicsWorld();
+	UI::Manager& getUI();
 
-	static Game * get();
+	static Game* get();
 };

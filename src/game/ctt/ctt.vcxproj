@@ -191,9 +191,13 @@
     <ClCompile Include="graphics\ModelFormat.cpp" />
     <ClCompile Include="graphics\renderer\RenderContext.cpp" />
     <ClCompile Include="graphics\renderer\Renderer.cpp" />
+    <ClCompile Include="graphics\renderer\UIRenderContext.cpp" />
     <ClCompile Include="graphics\Shader.cpp" />
     <ClCompile Include="graphics\ShaderProgram.cpp" />
     <ClCompile Include="graphics\Texture.cpp" />
+    <ClCompile Include="graphics\ui\controls\UIControl.cpp" />
+    <ClCompile Include="graphics\ui\UIManager.cpp" />
+    <ClCompile Include="graphics\ui\UIView.cpp" />
     <ClCompile Include="graphics\VertexBuffer.cpp" />
     <ClCompile Include="graphics\VertexShader.cpp" />
     <ClCompile Include="graphics\Window.cpp" />
@@ -267,9 +271,13 @@
     <ClInclude Include="graphics\ModelFormat.h" />
     <ClInclude Include="graphics\renderer\RenderContext.h" />
     <ClInclude Include="graphics\renderer\Renderer.h" />
+    <ClInclude Include="graphics\renderer\UIRenderContext.h" />
     <ClInclude Include="graphics\Shader.h" />
     <ClInclude Include="graphics\ShaderProgram.h" />
     <ClInclude Include="graphics\Texture.h" />
+    <ClInclude Include="graphics\ui\controls\UIControl.h" />
+    <ClInclude Include="graphics\ui\UIManager.h" />
+    <ClInclude Include="graphics\ui\UIView.h" />
     <ClInclude Include="graphics\Vertex2d.h" />
     <ClInclude Include="graphics\Vertex3d.h" />
     <ClInclude Include="graphics\VertexBuffer.h" />

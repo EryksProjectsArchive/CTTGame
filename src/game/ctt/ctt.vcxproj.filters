@@ -211,6 +211,18 @@
     <Filter Include="Source Files\core\application">
       <UniqueIdentifier>{accc743d-567f-4fad-915e-d82e08b42717}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\graphics\ui">
+      <UniqueIdentifier>{6df27b35-7834-40bd-87f9-44671fa5f3ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\graphics\ui">
+      <UniqueIdentifier>{0641999b-59ff-4d96-becc-5604ea37ae07}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\graphics\ui\controls">
+      <UniqueIdentifier>{80446fac-2eeb-4deb-aae3-2990365dfa87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\graphics\ui\controls">
+      <UniqueIdentifier>{57951d55-ad73-47c0-851e-7234dda6b26e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -401,6 +413,18 @@
     </ClCompile>
     <ClCompile Include="core\application\Application.cpp">
       <Filter>Source Files\core\application</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\ui\UIManager.cpp">
+      <Filter>Source Files\graphics\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\renderer\UIRenderContext.cpp">
+      <Filter>Source Files\graphics\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\ui\UIView.cpp">
+      <Filter>Source Files\graphics\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\ui\controls\UIControl.cpp">
+      <Filter>Source Files\graphics\ui\controls</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -655,6 +679,18 @@
     </ClInclude>
     <ClInclude Include="core\application\Application.h">
       <Filter>Header Files\core\application</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\ui\UIManager.h">
+      <Filter>Header Files\graphics\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\renderer\UIRenderContext.h">
+      <Filter>Header Files\graphics\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\ui\UIView.h">
+      <Filter>Header Files\graphics\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\ui\controls\UIControl.h">
+      <Filter>Header Files\graphics\ui\controls</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

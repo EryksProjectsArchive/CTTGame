@@ -26,7 +26,7 @@ public:
 
 	}
 
-	unsigned int encode(const char *data, size_t len) const override
+	unsigned int encode(const char* data, size_t len) const override
 	{
 		unsigned int hash, i;
 		for (hash = i = 0; i < len; ++i)

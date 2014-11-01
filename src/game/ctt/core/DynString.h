@@ -22,7 +22,7 @@
 class DynString
 {
 private:
-	char * m_buffer;
+	char* m_buffer;
 	unsigned int m_size;
 
 	void clear()
@@ -51,7 +51,7 @@ public:
 		m_size = size;
 	}
 
-	DynString(const char *buffer)
+	DynString(const char* buffer)
 	{
 		size_t size = strlen(buffer);
 		m_buffer = new char[size+1];
@@ -79,7 +79,7 @@ public:
 		clear();
 	}
 
-	const char * get() const
+	const char* get() const
 	{
 		return m_buffer;
 	}

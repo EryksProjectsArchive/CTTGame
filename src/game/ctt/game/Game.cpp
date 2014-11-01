@@ -50,6 +50,7 @@
 #include <game/scene/entities/types/BallEntity.h>
 
 #include <graphics/fonts/Font.h>
+#include <graphics/renderer/UIRenderContext.h>
 
 #include "Game.h"
 #include "environment/Environment.h"
@@ -59,13 +60,17 @@
 #include <core/WDynString.h>
 #include <core/WString.h>
 
-#include <core/console/Console.h>
+#include <core/console/Console.h>\
+
+#include <graphics/ui/UIManager.h>
+#include <graphics/ui/UIView.h>
+#include <graphics/ui/controls/UIControl.h>
 
 Game * Game::s_instance = 0;
 Font *gFont = 0;
 
 Game::Game()
-	: Controllable(ControllableType::Engine), m_renderer(0), m_window(0), m_scene(0), m_physicsWorld(0), m_config(0), m_console(new Console())
+	: Controllable(ControllableType::Engine), m_renderer(0), m_window(0), m_scene(0), m_physicsWorld(0), m_config(0), m_console(new Console()), m_ui(0)
 {
 	s_instance = this;
 }
@@ -88,6 +93,12 @@ Game::~Game()
 	{
 		delete m_physicsWorld;
 		m_physicsWorld = 0;
+	}
+
+	if (m_ui)
+	{
+		delete m_ui;
+		m_ui = 0;
 	}
 
 	if (m_renderer)
@@ -174,6 +185,17 @@ bool Game::init()
 		Error("game", "Cannot setup renderer.");
 		return false;
 	}
+
+	// Create main menu
+	m_ui = new UI::Manager();
+
+	UI::View* view = m_ui->createView("game.main_menu");
+
+	UI::Control* button = new UI::Control("button1", Vector2(0.0f, 0.0f), Vector2(100.0f, 50.0f));
+
+	view->attach(button);
+
+	m_ui->setCurrentView("game.main_menu");
 
 	// create game sound mgr
 
@@ -337,9 +359,17 @@ bool Game::pulse()
 		}
 
 		// Draw UI
+		if (m_ui)
+		{
+			UIRenderContext context;
+			m_ui->render(context);
+		}
 
 		// Draw console
-		m_console->render(m_renderer);
+		if (m_console) 
+		{
+			m_console->render(m_renderer);
+		}
 
 		m_renderer->postFrame();
 	}
@@ -389,9 +419,14 @@ void Game::onMouseButtonEvent(uint8 button, bool state, uint8 clicks, sint32 x, 
 	}
 }
 
-PhysicsWorld * Game::getPhysicsWorld()
+PhysicsWorld& Game::getPhysicsWorld()
 {
-	return m_physicsWorld;
+	return *m_physicsWorld;
+}
+
+UI::Manager& Game::getUI()
+{
+	return *m_ui;
 }
 
 Game * Game::get()

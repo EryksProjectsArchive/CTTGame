@@ -47,7 +47,7 @@ BallEntity::BallEntity()
 	fallRigidBodyCI.m_friction = 6.0f; 
 	m_rigidBody = new btRigidBody(fallRigidBodyCI);
 
-	Game::get()->getPhysicsWorld()->registerRigidBody(m_rigidBody);
+	Game::get()->getPhysicsWorld().registerRigidBody(m_rigidBody);
 }
 
 BallEntity::~BallEntity()
