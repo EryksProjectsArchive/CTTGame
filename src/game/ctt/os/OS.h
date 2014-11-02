@@ -35,7 +35,7 @@ namespace OS
 	DynamicLibrary * openDynamicLibrary(const FilePath path);
 
 	// Time OS functions
-	unsigned long long getMicrosecondsCount();
+	uint64 getMicrosecondsCount();
 	void initTime();
 
 	// Message box

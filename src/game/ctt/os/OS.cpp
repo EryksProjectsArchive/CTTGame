@@ -157,9 +157,9 @@ namespace OS
 	uint64 g_startLargeInt = 0;
 	double g_frequency = 0.0;
 
-	unsigned long long getMicrosecondsCount()
+	uint64 getMicrosecondsCount()
 	{
-		unsigned long long result = 0ull;
+		uint64 result = 0ull;
 #ifdef _WIN32
 		LARGE_INTEGER largeInt;
 		QueryPerformanceCounter(&largeInt);
