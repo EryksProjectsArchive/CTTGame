@@ -20,18 +20,18 @@ class TerrainGrid
 {
 private:
 	Geometry<Vertex3d> m_geometry;
-	Texture *m_texture;
-	Material *m_material;
+	Texture* m_texture;
+	Material* m_material;
 
 	Matrix4x4 m_world;
 
 	// Next nodes in projected onto 2d plane
-	TerrainGrid *m_right;
-	TerrainGrid *m_left;
-	TerrainGrid *m_top;
-	TerrainGrid *m_bottom;
+	TerrainGrid* m_right;
+	TerrainGrid* m_left;
+	TerrainGrid* m_top;
+	TerrainGrid* m_bottom;
 
-	btRigidBody *m_rigidBody;
+	btRigidBody* m_rigidBody;
 public:
 	TerrainGrid(Vector3 position, uint32 size);
 	~TerrainGrid();

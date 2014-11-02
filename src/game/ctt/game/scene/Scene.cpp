@@ -25,7 +25,7 @@ Scene::Scene()
 {
 	m_camera = new EditorFreeCamera();
 	Camera::setCurrent(m_camera);
-	m_terrain = new Terrain(30000, 30000);
+	m_terrain = new Terrain(10000, 10000);
 }
 
 Scene::~Scene()

@@ -19,9 +19,11 @@
 
 #include <graphics/Camera.h>
 
+#include <Windows.h>
+
 Terrain::Terrain(uint32 width, uint32 height)
 {
-	m_nodeSize = 250;
+	m_nodeSize = 300;
 	m_width = width;
 	m_height = height;
 	m_wNodes = width / m_nodeSize;
@@ -39,7 +41,7 @@ Terrain::Terrain(uint32 width, uint32 height)
 	for (uint32 y = 0; y < m_hNodes; ++y)
 	{
 		for (uint32 x = 0; x < m_wNodes; ++x)
-		{
+		{			
 			m_node[x][y] = new TerrainGrid(point, m_nodeSize);
 			point.x += m_nodeSize;
 		}
@@ -59,7 +61,8 @@ Terrain::~Terrain()
 	}
 
 	for (uint32 x = 0; x < m_wNodes; ++x)
-		delete[]m_node[x];
+		delete [] m_node[x];
+
 	delete[]m_node;
 }
 
@@ -67,7 +70,7 @@ void Terrain::render(RenderContext& context)
 {
 	int32 x = 0;
 	int32 y = 0;
-
+	
 	Vector3 cameraRelative = Camera::current->getPosition() - Vector3(-(float)(m_width / 2), 0, -(float)(m_height / 2));
 
 	x = (int32)(cameraRelative.x / m_nodeSize);
@@ -134,7 +137,6 @@ void Terrain::render(RenderContext& context)
 				m_node[x-1][y - 1]->render(context);
 		}
 	}
-
 }
 
 TerrainGrid::TerrainGrid(Vector3 position, uint32 size) : m_left(0), m_right(0), m_top(0), m_bottom(0)
@@ -157,14 +159,14 @@ TerrainGrid::TerrainGrid(Vector3 position, uint32 size) : m_left(0), m_right(0),
 
 	m_geometry.fillData(vertices, 4, indices, 2);
 	
-	btTriangleMesh *triMesh = new btTriangleMesh();
+	btTriangleMesh* triMesh = new btTriangleMesh();
 	triMesh->addTriangle(btVector3(0, 0, 0), btVector3(float(size), 0, 0), btVector3(float(size), 0, float(size)));
 	triMesh->addTriangle(btVector3(0, 0, 0), btVector3(float(size), 0, float(size)), btVector3(0, 0, float(size)));
 
-	btBvhTriangleMeshShape*physicsShape = new btBvhTriangleMeshShape(triMesh, true);
+	btBvhTriangleMeshShape* physicsShape = new btBvhTriangleMeshShape(triMesh, true);
 
 	btTransform transform(btQuaternion(0, 0, 0, 1), btVector3(position.x, position.y, position.z));
-	btDefaultMotionState *groundMotionState = new btDefaultMotionState(transform);
+	btDefaultMotionState* groundMotionState = new btDefaultMotionState(transform);
 	btRigidBody::btRigidBodyConstructionInfo groundRigidBodyCI(0, groundMotionState, physicsShape, btVector3(0, 0, 0));
 	m_rigidBody = new btRigidBody(groundRigidBodyCI);
 

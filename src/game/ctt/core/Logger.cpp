@@ -100,7 +100,9 @@ void Logger::log(const char *tag, LogType type, const char *msg, ...)
 		break;		
 	}
 
-	Console::get()->output(consoleMessageType, wcMessage);
+	if (Console *console = Console::get())
+		console->output(consoleMessageType, wcMessage);
+
 	delete []wcMessage;
 
 	printf(prefix);

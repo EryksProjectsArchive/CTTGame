@@ -34,15 +34,6 @@ Console::Console()
 
 Console::~Console()
 {
-	s_instance = 0;
-
-	for (Console::Line * line : m_lines)
-	{
-		delete line;
-	}
-
-	m_lines.clear();
-
 	if (m_material)
 		m_material->release();
 
@@ -63,6 +54,14 @@ Console::~Console()
 		delete m_inputBackground;
 		m_inputBackground = 0;
 	}
+
+	for (Console::Line * line : m_lines)
+	{
+		delete line;
+	}
+
+	m_lines.clear();
+	s_instance = 0;
 }
 
 void Console::init()
