@@ -17,12 +17,12 @@ struct Vertex2d
 	float y;
 	float u;
 	float v;
-	unsigned int color;
+	uint32 color;
 };
 
 struct SimpleVertex2d
 {
 	float x;
 	float y;
-	unsigned int color;
+	uint32 color;
 };

@@ -23,8 +23,8 @@ private:
 	Vector3 m_sunLightColor;
 	Vector3 m_sunAmbientColor;
 
-	unsigned int m_time;	
-	unsigned int m_timeScale;
+	uint32 m_time;	
+	uint32 m_timeScale;
 	float m_deltaUpdate;
 public:
 	Environment();
@@ -35,9 +35,9 @@ public:
 
 	bool isNight();
 
-	void setTime(unsigned char hour, unsigned char minute);
-	unsigned char getHour();
-	unsigned char getMinute();
+	void setTime(uint8 hour, uint8 minute);
+	uint8 getHour();
+	uint8 getMinute();
 
 	void pulse();
 

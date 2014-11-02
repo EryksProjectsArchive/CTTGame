@@ -16,9 +16,12 @@ struct ControllableType
 	enum Type
 	{
 		// Highest priority - unable to "freeze etc etc"
-		Engine = 0, 
+		Engine = 0,
+
+		// Mid priority - no special behavior
+		UI = 1,
 		
 		// Lowest priority - gameplay controllables
-		Gameplay = 1
+		Gameplay = 2
 	};
 };

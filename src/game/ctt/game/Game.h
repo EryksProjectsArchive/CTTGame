@@ -33,17 +33,15 @@ private:
 	class CrossroadEntity* m_box;
 
 	UI::Manager* m_ui;
-
-	double m_deltaTime;
-	double m_accumulator;
-	double m_time;
 public:
 	Game();
 	~Game();
 
-	bool init() override;
+	bool init();
 
-	bool pulse() override;
+	void updateWindow() override;
+	void render() override;
+	void update(double deltaTime) override;
 
 	void onKeyEvent(Key::Type key, bool state) override;
 	void onMouseButtonEvent(uint8 button, bool state, uint8 clicks, sint32 x, sint32 y) override;

@@ -12,43 +12,62 @@
 #pragma once
 
 #include <Prerequisites.h>
-#include <stdio.h>
 
-template <class Type>
+template <class type>
 class SharedPtr
 {
 private:
-	Type * m_value;
-	unsigned int * m_refCount;
+	type * m_value;
+	uint32 * m_refCount;
 
 public:
 	SharedPtr() : m_refCount(0), m_value(0) {}
 
-	explicit SharedPtr(Type * value) : m_refCount(value?new unsigned int(1):NULL), m_value(value) {}
+	explicit SharedPtr(type * value) 
+		: m_refCount(value ? new uint32(1) : NULL), m_value(value) 
+	{
+	}
 
 	SharedPtr(const SharedPtr& sharedPtr)
 		: m_refCount(sharedPtr.m_refCount), m_value(sharedPtr.m_value)
 	{
 		if (m_value)
-			++refCount();
+		{
+			++(*m_refCount);
+		}
 	}
-
-	unsigned int & refCount() { return *m_refCount;  }
 
 	~SharedPtr()
 	{		
-		if (isNull())return;
-		if (--refCount() <= 0)
+		if (isNull())
+		{
+			return;
+		}
+
+		if (--(*m_refCount) <= 0)
 		{
 			delete m_value;
 			delete m_refCount;
 		}
+
 		m_value = 0;
 		m_refCount = 0;
 	}
 
-	Type * operator->() { return m_value; }
-	Type & operator*() { return *m_value;  }
+	type * operator->() 
+	{ 
+		return m_value; 
+	}
+
+	type & operator*() 
+	{ 
+		return *m_value;  
+	}
+
+	operator type()
+	{
+		return m_value;
+	}
 
 	bool isNull() { return m_value == NULL; }
 
@@ -59,14 +78,28 @@ public:
 
 	SharedPtr& operator=(const SharedPtr& sharedPtr)
 	{
-		if (sharedPtr == *this) return *this;
+		if (sharedPtr == *this)
+		{
+			return *this;
+		}
+
+		if (m_refCount)
+		{
+			delete m_refCount;
+		}
+
 		m_refCount = sharedPtr.m_refCount;
 		m_value = sharedPtr.m_value;
-		if (m_value) refCount()++;
+
+		if (m_value)
+		{
+			(*m_refCount)++;
+		}
 		return *this;
 	}
 };
 
+// Global operator overload
 template <class A, class B> 
 inline bool operator==(const SharedPtr<A> a, const SharedPtr<B> b)
 {

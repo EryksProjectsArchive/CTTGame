@@ -241,7 +241,6 @@
     <ClInclude Include="core\hashing\JenkinsHash.h" />
     <ClInclude Include="core\List.h" />
     <ClInclude Include="core\Logger.h" />
-    <ClInclude Include="core\ProtectedPtr.h" />
     <ClInclude Include="core\SharedPtr.h" />
     <ClInclude Include="core\Singleton.h" />
     <ClInclude Include="core\String.h" />
@@ -287,7 +286,6 @@
     <ClInclude Include="input\ControllableType.h" />
     <ClInclude Include="input\Input.h" />
     <ClInclude Include="input\KeyEnum.h" />
-    <ClInclude Include="io\CachedItem.h" />
     <ClInclude Include="io\Config.h" />
     <ClInclude Include="io\fs\File.h" />
     <ClInclude Include="io\fs\FileOpenMode.h" />

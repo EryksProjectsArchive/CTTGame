@@ -70,15 +70,13 @@ class Logger;
 class Timer;
 class DynString;
 class WDynString;
-template <typename T>
+template <typename type>
 class List;
-template <class Type>
-class ProtectedPtr;
-template <class Type>
+template <class type>
 class SharedPtr;
-template <int maxSize>
+template <uint32 size>
 class String;
-template <int maxSize>
+template <uint32 size>
 class WString;
 
 // Hashing

@@ -15,18 +15,18 @@
 
 #include <core/Logger.h>
 
-template <typename T>
+template <typename type>
 class List
 {
 private:
 	class Node
 	{
 	private:
-		T m_value;
+		type m_value;
 		Node * m_next;
 		Node * m_previous;
 	public:
-		Node(T value)
+		Node(type value)
 		{
 			m_next = m_previous = 0;
 			m_value = value;
@@ -38,7 +38,7 @@ private:
 	Node * m_begin;
 	Node * m_end;
 
-	unsigned int m_size;
+	uint32 m_size;
 public:
 	class Iterator;
 
@@ -62,12 +62,17 @@ public:
 			node = node->m_previous;
 			delete nodeToRemove;
 		}
+		m_begin = 0;
+		m_end = 0;
 	}
 
-	void insert(T Value)
+	/**
+	 * This functions push value in front of list
+	 */
+	void pushFront(type value)
 	{
-		Node *newNode = new Node(Value);
-
+		Node *newNode = new Node(value);
+		
 		if (!m_begin)
 		{
 			m_begin = newNode;
@@ -83,10 +88,12 @@ public:
 		m_size++;
 	}
 
-	void pushBack(T Value)
-	{
-		// Is that first element
-		Node *newNode = new Node(Value);
+	/**
+	 * This function push value on back of list
+	 */
+	void pushBack(type value)
+	{	
+		Node *newNode = new Node(value);
 		if (!m_begin)
 		{
 			m_begin = newNode;
@@ -98,41 +105,54 @@ public:
 			newNode->m_previous = m_end;
 			m_end = newNode;
 		}
-
 		m_size++;
 	}
 
-	void remove(T Value)
+	uint32 remove(type value)
 	{
 		Node *node = m_begin;
+		uint32 removedElements = 0;
 		while (node)
 		{
-			if (node->m_value == Value)
+			Node * next = node->m_next;
+			if (node->m_value == value)
 			{
 				if (node->m_next)
+				{
 					node->m_next->m_previous = node->m_previous;
+				}
 
 				if (node->m_previous)
+				{
 					node->m_previous->m_next = node->m_next;
+				}
 
 				if (node == m_begin)
+				{
 					m_begin = node->m_next;
+				}
 
 				if (node == m_end)
+				{
 					m_end = node->m_previous;
+				}
 
-				Node *toRemove = node;
-				node = node->m_next;
-				delete toRemove;
-
-				m_size--;
+				delete node;
+				m_size --;
+				removedElements++;
 			}
-			else
-				node = node->m_next;
+
+			node = next;
 		}
+		return removedElements;
 	}
 
-	unsigned int size()
+	uint32 remove(Iterator iter)
+	{
+		return remove(*iter);
+	}
+
+	uint32 size() const
 	{
 		return m_size;
 	}
@@ -149,6 +169,21 @@ public:
 		return Iterator();
 	}
 
+	/**
+	 * Remember! Use --operator for it. 
+	 */
+	Iterator rbegin()
+	{
+		Iterator iter;
+		iter.m_current = m_end;
+		return iter;
+	}
+
+	Iterator rend()
+	{
+		return Iterator();
+	}
+
 	class Iterator
 	{
 	private:
@@ -159,11 +194,19 @@ public:
 			m_current = 0;
 		}
 
-		T operator*()
+		type operator*()
 		{
-			if (!m_current)
+			if (!m_current) {
 				Error("List", "Null current pointer at %s:%d", __FILE__, __LINE__);
+			}
+			return m_current->m_value;
+		}
 
+		type get_value()
+		{
+			if (!m_current) {
+				Error("List", "Null current pointer at %s:%d", __FILE__, __LINE__);
+			}
 			return m_current->m_value;
 		}
 
@@ -204,5 +247,5 @@ public:
 		}
 
 		friend class List;
-	};
+	};	
 };

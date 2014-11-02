@@ -11,6 +11,8 @@
 
 #pragma once
 
+#include <Prerequisites.h>
+
 #include <core/String.h>
 
 class DynamicLibrary

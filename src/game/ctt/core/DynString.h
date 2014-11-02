@@ -23,7 +23,7 @@ class DynString
 {
 private:
 	char* m_buffer;
-	unsigned int m_size;
+	uint32 m_size;
 
 	void clear()
 	{
@@ -94,7 +94,7 @@ public:
 		return *this;
 	}
 
-	bool operator==(const DynString& rhs)
+	bool operator==(const DynString& rhs) const
 	{
 		return !strcmp(m_buffer, rhs.m_buffer);
 	}
@@ -107,12 +107,12 @@ public:
 		return m_buffer[index];
 	}
 
-	unsigned int getSize()
+	uint32 getSize() const
 	{
 		return m_size;
 	}
 
-	unsigned int getLength() const
+	uint32 getLength() const
 	{
 		return m_size;
 	}

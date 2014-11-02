@@ -45,7 +45,7 @@ private:
 	ALCcontext* m_context;
 	ALCdevice* m_device;
 
-	List<Sound *> m_sounds[SoundType::COUNT];
+	List<Sound*> m_sounds[SoundType::COUNT];
 
 public:
 	SoundManager();

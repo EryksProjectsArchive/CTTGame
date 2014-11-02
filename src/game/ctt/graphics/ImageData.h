@@ -31,6 +31,7 @@ struct EImageCompreesion
 		DXT5
 	};
 };
+
 struct ImageData
 {
 	uint8 *pixels;

@@ -19,12 +19,12 @@
 #include <core/List.h>
 #include <core/SharedPtr.h>
 
-class Vertex2d;
+struct Vertex2d;
 class UIRenderTask
 {
 public:
-	Geometry<Vertex2d> * m_geometry;
-	Material * m_material;
+	Geometry<Vertex2d>* m_geometry;
+	Material* m_material;
 
 	UIRenderTask()
 	{
@@ -37,10 +37,10 @@ class ShaderProgram;
 class UIRenderContext
 {
 private:
-	List<UIRenderTask *> m_renderTasks;
+	List<UIRenderTask*> m_renderTasks;
 public:
 	UIRenderContext();
 	~UIRenderContext();
 
-	UIRenderTask * newTask();
+	UIRenderTask* newTask();
 };

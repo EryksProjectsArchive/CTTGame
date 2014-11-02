@@ -21,7 +21,7 @@
 class FileSystem : public Singleton<FileSystem>
 {
 private:
-	List<FileSystem *> m_fileSystems;
+	List<FileSystem*> m_fileSystems;
 
 	FilePath buildPath(FilePath file);
 protected:

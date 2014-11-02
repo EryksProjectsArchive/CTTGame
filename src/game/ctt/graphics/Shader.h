@@ -16,7 +16,7 @@
 class Shader
 {
 protected:
-	unsigned int m_shaderId;
+	uint32 m_shaderId;
 public:
 	Shader(const char *source);
 	virtual ~Shader();

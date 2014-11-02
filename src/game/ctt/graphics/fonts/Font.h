@@ -23,7 +23,7 @@ class Font
 private:	
 	struct GlyphData
 	{
-		unsigned char set;
+		uint8 set;
 		float x;
 		float y;
 		float w;

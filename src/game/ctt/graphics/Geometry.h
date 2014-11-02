@@ -35,8 +35,8 @@ private:
 	VertexBuffer* m_vertexBuffer;
 	IndexBuffer* m_indexBuffer;
 
-	unsigned short m_trianglesCount;
-	unsigned short m_verticesCount;
+	uint16 m_trianglesCount;
+	uint16 m_verticesCount;
 
 	EDrawType::Type m_drawType;
 public:

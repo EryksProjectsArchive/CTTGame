@@ -26,13 +26,13 @@ class BufferBase
 {
 protected:
 	bool m_isDynamic;
-	unsigned int m_bufferId;
-	unsigned int m_size;
+	uint32 m_bufferId;
+	uint32 m_size;
 public:
 	BufferBase();
 	virtual ~BufferBase();
 
-	virtual void allocate(unsigned int size, bool dynamic);
+	virtual void allocate(uint32 size, bool dynamic);
 
 	virtual void fillData(void * data);
 

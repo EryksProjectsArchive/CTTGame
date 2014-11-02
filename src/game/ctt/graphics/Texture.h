@@ -19,7 +19,7 @@
 class Texture : public CacheableResource
 {
 private:
-	unsigned int m_textureID;
+	uint32 m_textureID;
 	bool m_mipmaps;
 public:
 	Texture(const FilePath& filePath, bool mipmaps = false);

@@ -105,12 +105,12 @@ namespace Stdio
 	}
 
 
-	long File::tell()
+	int32 File::tell()
 	{
 		return m_isLoaded ? ftell(m_filePtr) : -1;
 	}
 
-	void File::seek(int position, SeekOrigin::Type origin)
+	void File::seek(int32 position, SeekOrigin::Type origin)
 	{
 		if (m_isLoaded)
 		{

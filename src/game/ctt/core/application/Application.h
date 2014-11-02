@@ -16,6 +16,14 @@ class Application
 protected:
 	bool m_isRunning;
 	bool m_isInitialized;
+
+	double m_deltaTime;
+	double m_accumulator;
+	double m_time;
+
+	virtual void render();
+	virtual void update(double deltaTime);
+	virtual void updateWindow();
 public:
 	Application();
 	virtual ~Application();

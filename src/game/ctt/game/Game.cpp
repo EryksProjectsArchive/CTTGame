@@ -134,18 +134,11 @@ Game::~Game()
 
 bool Game::init()
 {
-	if (m_isInitialized)
+	if (!Application::init())
 		return false;
 
 	// Create config object
 	m_config = new Config();
-
-	// Time
-	OS::initTime();
-	
-	m_time = double(OS::getMicrosecondsCount() / 1000000);
-	m_accumulator = 0.0;
-	m_deltaTime = 1 / 60.0f;
 
 	// Initialize SDL
 	SDL_Init(SDL_INIT_VIDEO);
@@ -280,13 +273,8 @@ bool Game::init()
 	return true;
 }
 
-//#define PROFILER
-
-bool Game::pulse()
+void Game::updateWindow()
 {
-	Timer::frameStart();
-
-	// Main loop - whole magic is done here \o/
 	if (m_window)
 	{
 		if (!m_window->processMessages())
@@ -294,62 +282,41 @@ bool Game::pulse()
 			m_isRunning = false;
 		}
 	}
+}
 
-	double time = double(OS::getMicrosecondsCount() / 1000000.f);
-	double frameTime = time - m_time;
-	if (frameTime > 0.25)
-		frameTime = 0.25;
-	m_time = time;
-
-	m_accumulator += frameTime;
-
-#ifdef PROFILER
-	uint64 start = OS::getMicrosecondsCount();
-#endif
-
-	while (m_accumulator >= m_deltaTime)
+void Game::update(double deltaTime)
+{
+	if (Camera::current)
 	{
-		if (Camera::current)
+		Camera::current->update(float(deltaTime));
+
+		if (!((EditorFreeCamera *)Camera::current)->isMoving())
 		{
-			Camera::current->update(float(m_deltaTime));
+			int32 x, y;
+			SDL_GetMouseState(&x, &y);
 
-			
-			if (!((EditorFreeCamera *)Camera::current)->isMoving())
-			{
-				int32 x, y;
-				SDL_GetMouseState(&x, &y);
+			Vector3 pos = glm::unProject(glm::vec3(x, m_renderer->getViewportAsVector().w - y, 1), glm::mat4() * Camera::current->getViewMatrix(), m_renderer->getProjectionMatrix(), m_renderer->getViewportAsVector());
 
-				Vector3 pos = glm::unProject(glm::vec3(x, m_renderer->getViewportAsVector().w - y, 1), glm::mat4() * Camera::current->getViewMatrix(), m_renderer->getProjectionMatrix(), m_renderer->getViewportAsVector());
-				m_console->output(Console::MessageType::Info, WString<64>(L"%f, %f, %f", pos.x, pos.y, pos.z));
-				
-				Vector3 res;
-				m_physicsWorld->rayTest(Camera::current->getPosition(), pos, &res);
+			Vector3 res;
+			m_physicsWorld->rayTest(Camera::current->getPosition(), pos, &res);
 
-				m_box->setPosition(res);
-			}
+			m_box->setPosition(res);
 		}
-
-		if (m_physicsWorld)
-			m_physicsWorld->pulse(float(m_deltaTime));
-
-#ifdef PROFILER
-		Info("profiler", "Physics: %fs", (OS::getMicrosecondsCount() - start) / 1000000.f);
-#endif
-		Environment::get()->pulse();
-
-		m_accumulator -= m_deltaTime;
 	}
 
+	if (m_physicsWorld)
+		m_physicsWorld->pulse(float(deltaTime));
 
+	Environment::get()->pulse();
+}
 
-#ifdef PROFILER	
-	start = OS::getMicrosecondsCount();
-#endif
+void Game::render()
+{
 	if (m_renderer)
 	{
 		m_renderer->preFrame();
 
-		if(m_scene)
+		if (m_scene)
 			m_scene->render();
 
 		if (gFont)
@@ -366,19 +333,13 @@ bool Game::pulse()
 		}
 
 		// Draw console
-		if (m_console) 
+		if (m_console)
 		{
 			m_console->render(m_renderer);
 		}
 
 		m_renderer->postFrame();
 	}
-
-#ifdef PROFILER
-	Info("profiler", "GFX: %fs", (OS::getMicrosecondsCount() - start) / 1000000.f);
-#endif
-	Timer::frameEnd();
-	return m_isRunning;
 }
 
 void Game::onKeyEvent(Key::Type key, bool state)

@@ -28,15 +28,15 @@ namespace Stdio
 		File();
 		~File();
 
-		unsigned int write(const void *data, unsigned int count, unsigned int size);
-		unsigned int read(void * data, unsigned int count, unsigned int size);
+		uint32 write(const void *data, uint32 count, uint32 size);
+		uint32 read(void * data, uint32 count, uint32 size);
 
 		void flush();
 
 		DynString getContent();
 
-		long tell();
-		void seek(int position, SeekOrigin::Type origin);
+		int32 tell();
+		void seek(int32 position, SeekOrigin::Type origin);
 		void rewind();
 
 		friend class FileSystem;

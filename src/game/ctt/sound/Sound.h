@@ -19,10 +19,10 @@ class Sound
 private:
 	OpenAL::Impl* m_al;
 
-	unsigned int m_bufferID;
-	unsigned int m_sourceID;
+	uint32 m_bufferID;
+	uint32 m_sourceID;
 public:
-	Sound(OpenAL::Impl *al);
+	Sound(OpenAL::Impl* al);
 	~Sound();
 
 	bool load(const FilePath& filepath);

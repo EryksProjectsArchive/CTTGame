@@ -11,9 +11,11 @@
 
 #pragma once
 
+#include <Prerequisites.h>
+
 struct string
 {
-	unsigned int len;
+	uint32 len;
 	char *value;
 };
 
@@ -34,9 +36,9 @@ struct quaternion
 
 struct triangle
 {
-	unsigned short a;
-	unsigned short b;
-	unsigned short c;
+	uint16 a;
+	uint16 b;
+	uint16 c;
 };
 
 struct vertex
@@ -49,7 +51,7 @@ struct vertex
 	float nz;
 	float u;
 	float v;
-	unsigned int color;
+	uint32 color;
 	float tanw;
 	float tanx;
 	float tany;
@@ -72,12 +74,12 @@ struct aabb
 struct mesh
 {
 	struct string name;
-	unsigned char flags;
+	uint8 flags;
 	aabb simpleColBox;
 	struct placement worldPlacement;
 	struct string material;
-	unsigned short verticesCount;
-	unsigned short trianglesCount;
+	uint16 verticesCount;
+	uint16 trianglesCount;
 	struct Vertex3d *vertices;
 	struct triangle *triangles;
 };
@@ -85,8 +87,8 @@ struct mesh
 struct mdl
 {
 	char id[6];
-	unsigned char version;
-	unsigned char meshCount;
+	uint8 version;
+	uint8 meshCount;
 	struct mesh * meshes;
 };
 

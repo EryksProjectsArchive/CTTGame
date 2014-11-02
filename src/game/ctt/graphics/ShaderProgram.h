@@ -20,23 +20,24 @@ private:
 	struct UniformData
 	{
 		char name[32];
-		unsigned int location;
+		uint32 location;
 	};
 
 	struct AttributeData
 	{
 		char name[32];
-		unsigned int location;
+		uint32 location;
 	};
 
 protected:
 	unsigned int m_programId;
 
+	// TODO: replace it with dynarray
 	UniformData * m_uniforms;
-	unsigned int m_uniformsCount;
+	uint32 m_uniformsCount;
 
 	AttributeData * m_attributes;
-	unsigned int m_attributesCount;
+	uint32 m_attributesCount;
 
 	List<Shader *> m_shaders;
 public:
@@ -46,8 +47,8 @@ public:
 	void attachShader(Shader * shader);
 	void link();
 
-	unsigned int getUniformLocation(const char *name);
-	unsigned int getAttributeLocation(const char *name);
+	uint32 getUniformLocation(const char *name);
+	uint32 getAttributeLocation(const char *name);
 
 	friend class Renderer;
 };

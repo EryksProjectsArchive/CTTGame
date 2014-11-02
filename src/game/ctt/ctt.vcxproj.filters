@@ -461,14 +461,8 @@
     <ClInclude Include="core\SharedPtr.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
-    <ClInclude Include="core\ProtectedPtr.h">
-      <Filter>Header Files\core</Filter>
-    </ClInclude>
     <ClInclude Include="os\DynamicLibrary.h">
       <Filter>Header Files\os</Filter>
-    </ClInclude>
-    <ClInclude Include="io\CachedItem.h">
-      <Filter>Header Files\io</Filter>
     </ClInclude>
     <ClInclude Include="resources\Resource.h">
       <Filter>Header Files\resources</Filter>

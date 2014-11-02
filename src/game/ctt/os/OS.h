@@ -11,13 +11,9 @@
 
 #pragma once
 
+#include <Prerequisites.h>
+
 #include <core/String.h>
-
-#include "DynamicLibrary.h"
-
-#ifndef MAX_PATH
-#define MAX_PATH 260
-#endif
 
 namespace OS
 {

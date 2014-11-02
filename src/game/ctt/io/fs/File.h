@@ -41,15 +41,15 @@ public:
 
 	virtual bool isLoaded();
 
-	virtual unsigned int write(const void *data, unsigned int count, unsigned int size);
-	virtual unsigned int read(void * data, unsigned int count, unsigned int size);
+	virtual uint32 write(const void *data, uint32 count, uint32 size);
+	virtual uint32 read(void * data, uint32 count, uint32 size);
 
 	virtual void flush();
 
 	virtual DynString getContent();
 
-	virtual long tell();
-	virtual void seek(int position, SeekOrigin::Type origin);
+	virtual int32 tell();
+	virtual void seek(int32 position, SeekOrigin::Type origin);
 	virtual void rewind();
 
 	friend class FileSystem;

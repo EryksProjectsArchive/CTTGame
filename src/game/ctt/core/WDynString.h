@@ -23,7 +23,7 @@ class WDynString
 {
 private:
 	wchar * m_buffer;
-	unsigned int m_size;
+	uint32 m_size;
 
 	void clear()
 	{
@@ -69,7 +69,7 @@ public:
 		m_size = size;
 	}
 
-	template <int sizeOfString>
+	template <uint32 sizeOfString>
 	WDynString(WString<sizeOfString> buffer)
 	{
 		size_t size = wcslen(buffer.get());
@@ -125,7 +125,7 @@ public:
 		return !wcscmp(m_buffer, rhs.m_buffer);
 	}
 
-	wchar operator[](unsigned int index) const
+	wchar operator[](uint32 index) const
 	{
 		if (index < 0 || index > m_size)
 			return 0;
@@ -133,12 +133,12 @@ public:
 		return m_buffer[index];
 	}
 
-	unsigned int getSize()
+	uint32 getSize()
 	{
 		return m_size;
 	}
 
-	unsigned int getLength() const
+	uint32 getLength() const
 	{
 		return m_size;
 	}

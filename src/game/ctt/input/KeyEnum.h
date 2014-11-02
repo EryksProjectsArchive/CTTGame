@@ -8,11 +8,14 @@
 // Author	: Eryk Dwornicki
 //
 //////////////////////////////////////////////
+
 #pragma once
+
+#include <Prerequisites.h>
 
 struct Key
 {
-    enum Type
+    enum Type : uint16
     {
         SCANCODE_UNKNOWN = 0,
 

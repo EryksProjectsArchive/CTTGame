@@ -17,7 +17,7 @@
 #include <cstdarg>
 #include <cwchar>
 
-template <int maxSize>
+template <uint32 maxSize>
 class WString
 {
 private:
@@ -87,7 +87,7 @@ public:
 
 	WString& operator=(WString& string)
 	{
-		unsigned int size = wcslen(string.m_buffer);
+		size_t size = wcslen(string.m_buffer);
 		memcpy(m_buffer, string.m_buffer, (size > maxSize ? maxSize : size) * sizeof(wchar));
 		return *this;
 	}
@@ -109,7 +109,7 @@ public:
 		return WString(L"%s%s", m_buffer, buffer);
 	}
 
-	wchar operator[](unsigned int index)
+	wchar operator[](uint32 index)
 	{
 		if (index < 0 || index > maxSize)
 			return 0;

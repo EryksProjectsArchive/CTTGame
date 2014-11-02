@@ -11,6 +11,7 @@
 
 #pragma once
 
+#include <Prerequisites.h>
 #include <malloc.h>
 
 template <typename type>
@@ -18,11 +19,11 @@ class DynArray
 {
 private:
 	type* m_elements;
-	unsigned int m_capacity;
+	uint32 m_capacity;
 public:
 	DynArray()
 	{
-		m_capacity = -1;
+		m_capacity = 0;
 		m_elements = 0;
 	}
 
@@ -33,10 +34,10 @@ public:
 			free(m_elements);
 			m_elements = 0;
 		}
-		m_capacity = -1;
+		m_capacity = 0;
 	}
 
-	type& operator[](unsigned int index)
+	type& operator[](uint32 index)
 	{
 		if (capacity == -1)
 			capacity = 1;
@@ -51,7 +52,16 @@ public:
 		return m_elements[index];
 	}
 
-	unsigned int capacity()
+	uint32 indexOf(type element)
+	{
+		if (m_capacity > 0)
+			for (uint32 i = 0; i < m_capacity; ++i)
+				return i;
+
+		return -1;
+	}
+
+	uint32 capacity()
 	{
 		return m_capacity;
 	}

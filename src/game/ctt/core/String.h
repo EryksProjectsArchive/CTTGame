@@ -16,7 +16,7 @@
 #include <cstring>
 #include <cstdarg>
 
-template <int maxSize>
+template <uint32 maxSize>
 class String
 {
 private:
@@ -86,14 +86,14 @@ public:
 
 	String& operator=(String& string)
 	{
-		unsigned int size = strlen(string.m_buffer);
+		size_t size = strlen(string.m_buffer);
 		memcpy(m_buffer, string.m_buffer, size > maxSize ? maxSize : size);
 		return *this;
 	}
 
 	String& operator=(const char *buffer)
 	{
-		uint32 size = strlen(buffer);
+		size_t size = strlen(buffer);
 		memcpy(m_buffer, buffer, size > maxSize ? maxSize : size);
 		return *this;
 	}
@@ -108,7 +108,7 @@ public:
 		return String("%s%s", m_buffer, buffer);
 	}
 
-	unsigned char operator[](unsigned int index)
+	unsigned char operator[](uint32 index)
 	{
 		if (index < 0 || index > maxSize)
 			return 0;
@@ -131,14 +131,14 @@ public:
 		return strlen(m_buffer);
 	}
 
-	unsigned short String::getMaxSize()
+	uint32 String::getSize()
 	{
 		return maxSize;
 	}
 
 	uint16 String::find(const char * key) const
 	{		
-		uint32 range = strlen(m_buffer);
+		size_t range = strlen(m_buffer);
 		if (range + strlen(key) > maxSize)		
 			range = maxSize;
 		

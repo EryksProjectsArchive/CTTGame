@@ -56,7 +56,7 @@ DynString File::getContent()
 	return DynString();
 }
 
-long File::tell()
+int32 File::tell()
 {
 	return -1;
 }

@@ -21,7 +21,7 @@
 class Model : public CacheableResource
 {
 private:
-	unsigned char m_meshesCount;
+	uint16 m_meshesCount;
 	Mesh** m_meshes;
 
 	AABB m_aabb;

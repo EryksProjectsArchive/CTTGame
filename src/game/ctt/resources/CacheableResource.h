@@ -18,7 +18,7 @@
 class CacheableResource : public Resource
 {
 private:
-	unsigned int m_refCount;
+	uint32 m_refCount;
 public:
 	CacheableResource(const FilePath& filePath);
 	virtual ~CacheableResource();
