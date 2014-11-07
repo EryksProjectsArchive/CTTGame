@@ -96,6 +96,7 @@ namespace Stdio
 
 			char *buffer = new char[size + 1];
 			read(buffer, size, sizeof(char));
+			buffer[size] = '\0';
 
 			DynString string(buffer);
 			delete[]buffer;
