@@ -64,13 +64,13 @@ unsigned char Environment::getMinute()
 void Environment::pulse()
 {
 	int timeElapsed = 0;
-	double timeScaleD = (double)m_timeScale / 100.0;
+	float timeScale = (float)m_timeScale / 100.0f;
 
 	m_deltaUpdate += Timer::getDeltaTime();
-	while(m_deltaUpdate >= timeScaleD)
+	while(m_deltaUpdate >= timeScale)
 	{
 		timeElapsed++;
-		m_deltaUpdate -= timeScaleD;
+		m_deltaUpdate -= timeScale;
 	}
 
 	
