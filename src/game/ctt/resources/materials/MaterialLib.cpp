@@ -18,7 +18,6 @@
 
 #include <json/json.h>
 
-
 #include <graphics/Texture.h>
 #include <graphics/Shader.h>
 #include <graphics/VertexShader.h>

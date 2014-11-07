@@ -40,7 +40,7 @@ File * FileSystem::open(const FilePath& filePath, uint32 mode)
 		if (File * file = fs->open(path, mode))
 			return file;			
 	}
-	return 0;
+	return new File();
 }
 
 void FileSystem::close(File *file)
