@@ -147,6 +147,31 @@ public:
 		return removedElements;
 	}
 
+	void erase(Iterator& iter)
+	{
+		Node *currentNode = iter.m_current;
+		if (currentNode)
+		{
+			Node *nextNode = currentNode->m_next;
+			Node *previousNode = currentNode->m_previous;
+
+			if (nextNode)
+			{
+				nextNode->m_previous = previousNode;
+			}
+
+			if (previousNode)
+			{
+				previousNode->m_next = nextNode;
+			}
+
+			delete currentNode;
+			currentNode = 0;
+
+			--m_size;
+		}
+	}
+
 	uint32 remove(Iterator iter)
 	{
 		return remove(*iter);
