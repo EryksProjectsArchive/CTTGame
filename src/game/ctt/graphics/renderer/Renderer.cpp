@@ -213,6 +213,9 @@ Renderer::~Renderer()
 	glDeleteRenderbuffers(1, &m_normalRenderBuffer);
 	glDeleteRenderbuffers(1, &m_depthRenderBuffer);
 
+	if (m_deferredResultMaterial)
+		m_deferredResultMaterial->release();
+
 	if (m_helperMaterial)
 		m_helperMaterial->release();
 
@@ -233,10 +236,12 @@ bool Renderer::setup(Window * window)
 	m_window = window;
 
 	m_projectionMatrix = glm::perspective(45.0f, window->getAspectRatio(), 0.1f, 1000.0f);
-	m_orthoMatrix = glm::ortho(0.f, (float)m_window->getWidth(), (float)m_window->getHeight(), 0.f, -1.f, 1.f);
+
 	m_rect.bottom = float(m_window->getHeight());
 	m_rect.right = float(m_window->getWidth());
-	m_viewport = glm::vec4(0, 0, float(m_window->getWidth()), float(m_window->getHeight()));
+
+	m_orthoMatrix = glm::ortho(0.f, m_rect.right, m_rect.bottom, 0.f, -1.f, 1.f);
+	m_viewport = glm::vec4(0, 0, m_rect.right, m_rect.bottom);
 
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
@@ -408,8 +413,8 @@ bool Renderer::setup(Window * window)
 	m_helperMaterial = MaterialLib::get()->findByName("primitive");
 	m_helperMaterial->acquire();
 
-	m_defferedResultMaterial = MaterialLib::get()->findByName("defferedResult");
-	m_defferedResultMaterial->acquire();
+	m_deferredResultMaterial = MaterialLib::get()->findByName("deferredResult");
+	m_deferredResultMaterial->acquire();
 
 	unsigned int HackVAO;
 	glGenVertexArrays(1, &HackVAO);
@@ -440,7 +445,7 @@ bool Renderer::setup(Window * window)
 
 	m_helperLines->fillData(vertices, 4, indices, 2);	
 
-	// Setup deffered rendering
+	// Setup deferred rendering
 	uint32 width = m_rect.right;
 	uint32 height = m_rect.bottom;
 
@@ -525,7 +530,7 @@ bool Renderer::setup(Window * window)
 	GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 	if (status != GL_FRAMEBUFFER_COMPLETE_EXT)
 	{
-		Error("renderer", "Cannot initialize deffered rendering frame buffer object!");
+		Error("renderer", "Cannot initialize deferred rendering frame buffer object!");
 		return false;
 	}
 
@@ -591,27 +596,27 @@ void Renderer::endSceneRender()
 
 	geometry.fillData(vertices, 4, triangles, 2);
 
-	if (!m_defferedResultMaterial)
+	if (!m_deferredResultMaterial)
 	{
-		Error("renderer", "Cannot render deffered final plan e. No material found!");
+		Error("renderer", "Cannot render deferred final plan e. No material found!");
 		return;
 	}
 
-	if (!m_defferedResultMaterial->m_program || !glIsProgram(m_defferedResultMaterial->m_program->m_programId))
+	if (!m_deferredResultMaterial->m_program || !glIsProgram(m_deferredResultMaterial->m_program->m_programId))
 	{
-		Error("renderer", "Cannot render deffered final plane. No shader program assigned for material.");
+		Error("renderer", "Cannot render deferred final plane. No shader program assigned for material.");
 		return;
 	}
 
-	glUseProgram(m_defferedResultMaterial->m_program->m_programId);
+	glUseProgram(m_deferredResultMaterial->m_program->m_programId);
 
-	unsigned int orthoMatrixLocation = m_defferedResultMaterial->m_program->getUniformLocation("orthoMatrix");
+	unsigned int orthoMatrixLocation = m_deferredResultMaterial->m_program->getUniformLocation("orthoMatrix");
 	if (orthoMatrixLocation != -1)
 	{
 		glUniformMatrix4fv(orthoMatrixLocation, 1, GL_FALSE, glm::value_ptr(m_orthoMatrix));
 	}
 
-	unsigned int textureLocation = m_defferedResultMaterial->m_program->getUniformLocation("diffuseTexture");
+	unsigned int textureLocation = m_deferredResultMaterial->m_program->getUniformLocation("diffuseTexture");
 	if (textureLocation != -1)
 	{
 		glActiveTexture(GL_TEXTURE0);
@@ -620,7 +625,7 @@ void Renderer::endSceneRender()
 		glUniform1i(textureLocation, 0);
 	}
 
-	textureLocation = m_defferedResultMaterial->m_program->getUniformLocation("normalTexture");
+	textureLocation = m_deferredResultMaterial->m_program->getUniformLocation("normalTexture");
 	if (textureLocation != -1)
 	{
 		glActiveTexture(GL_TEXTURE1);
@@ -629,7 +634,7 @@ void Renderer::endSceneRender()
 		glUniform1i(textureLocation, 1);
 	}
 
-	textureLocation = m_defferedResultMaterial->m_program->getUniformLocation("positionTexture");
+	textureLocation = m_deferredResultMaterial->m_program->getUniformLocation("positionTexture");
 	if (textureLocation != -1)
 	{
 		glActiveTexture(GL_TEXTURE2);
@@ -638,22 +643,22 @@ void Renderer::endSceneRender()
 		glUniform1i(textureLocation, 2);
 	}
 
-	unsigned int projectionMatrixLocation = m_defferedResultMaterial->m_program->getUniformLocation("projectionMatrix");
+	unsigned int projectionMatrixLocation = m_deferredResultMaterial->m_program->getUniformLocation("projectionMatrix");
 	if (projectionMatrixLocation != -1)
 	{
 		glUniformMatrix4fv(projectionMatrixLocation, 1, GL_FALSE, glm::value_ptr(m_projectionMatrix));
 	}
 
 	glm::mat4x4 viewMatrix = Camera::current->getViewMatrix();
-	unsigned int viewMatrixLocation = m_defferedResultMaterial->m_program->getUniformLocation("viewMatrix");
+	unsigned int viewMatrixLocation = m_deferredResultMaterial->m_program->getUniformLocation("viewMatrix");
 	if (viewMatrixLocation != -1)
 	{
 		glUniformMatrix4fv(viewMatrixLocation, 1, GL_FALSE, glm::value_ptr(viewMatrix));
 	}
 
-	unsigned int attributePosition = m_defferedResultMaterial->m_program->getAttributeLocation("vertexPosition");
-	unsigned int attributeUV = m_defferedResultMaterial->m_program->getAttributeLocation("vertexUV");
-	unsigned int attributeColor = m_defferedResultMaterial->m_program->getAttributeLocation("vertexColor");
+	unsigned int attributePosition = m_deferredResultMaterial->m_program->getAttributeLocation("vertexPosition");
+	unsigned int attributeUV = m_deferredResultMaterial->m_program->getAttributeLocation("vertexUV");
+	unsigned int attributeColor = m_deferredResultMaterial->m_program->getAttributeLocation("vertexColor");
 
 	glEnableVertexAttribArray(attributePosition);
 	if (attributeColor != -1)

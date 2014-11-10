@@ -1,6 +1,6 @@
 {	
 	"texture": {
-        "name": "dictator.bmp", "mipMaps": true
+        "name": "box.bmp", "mipMaps": true
     },
 	"shaders": {
         "vertex": "simple",

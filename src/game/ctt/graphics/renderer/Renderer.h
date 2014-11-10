@@ -34,7 +34,7 @@ protected:
 
 	Material* m_currentMaterial;
 	Material* m_defaultMaterial;
-	Material* m_defferedResultMaterial;
+	Material* m_deferredResultMaterial;
 
 	uint32 m_fbo;
 	uint32 m_diffuseTexture;

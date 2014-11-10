@@ -20,28 +20,31 @@
 
 
 BoxEntity::BoxEntity()
-	: Entity(EntityType::Box)
+	: Entity(EntityType::Box), m_model(0)
 {
-	m_model = ModelLib::get()->findByName("simpleBox");
-	m_model->acquire();
+	m_model = ModelLib::get()->findByName("box");
+	if (m_model)
+	{
+		m_model->acquire();
 
-	AABB * aabb = m_model->getAABB();
+		AABB * aabb = m_model->getAABB();
 
-	btBoxShape *physicsShape = new btBoxShape(btVector3((aabb->getMax().x - aabb->getMin().x) / 2, (aabb->getMax().y - aabb->getMin().y) / 2, (aabb->getMax().z - aabb->getMin().z) / 2));
+		btBoxShape *physicsShape = new btBoxShape(btVector3((aabb->getMax().x - aabb->getMin().x) / 2, (aabb->getMax().y - aabb->getMin().y) / 2, (aabb->getMax().z - aabb->getMin().z) / 2));
 
-	btTransform transform(btQuaternion(0, 0, 0, 1), btVector3(0, 0, 0));
+		btTransform transform(btQuaternion(0, 0, 0, 1), btVector3(0, 0, 0));
 
-	btDefaultMotionState *fallMotionState = new btDefaultMotionState(transform);
+		btDefaultMotionState *fallMotionState = new btDefaultMotionState(transform);
 
-	btScalar mass = 0.5f;
-	btVector3 fallInertia(0, 0, 0);
-	physicsShape->calculateLocalInertia(mass, fallInertia);
+		btScalar mass = 0.5f;
+		btVector3 fallInertia(0, 0, 0);
+		physicsShape->calculateLocalInertia(mass, fallInertia);
 
-	btRigidBody::btRigidBodyConstructionInfo fallRigidBodyCI(mass, fallMotionState, physicsShape, fallInertia);
-	fallRigidBodyCI.m_friction = 10.0f;
-	m_rigidBody = new btRigidBody(fallRigidBodyCI);
-	
-	Game::get()->getPhysicsWorld().registerRigidBody(m_rigidBody);
+		btRigidBody::btRigidBodyConstructionInfo fallRigidBodyCI(mass, fallMotionState, physicsShape, fallInertia);
+		fallRigidBodyCI.m_friction = 10.0f;
+		m_rigidBody = new btRigidBody(fallRigidBodyCI);
+
+		Game::get()->getPhysicsWorld().registerRigidBody(m_rigidBody);
+	}
 }
 
 BoxEntity::~BoxEntity()

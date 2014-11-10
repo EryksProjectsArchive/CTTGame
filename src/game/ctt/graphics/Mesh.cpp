@@ -36,7 +36,8 @@ Mesh::Mesh(mesh * meshData)
 	m_meshName[meshData->name.len] = '\0';
 
 	m_material = MaterialLib::get()->findByName(meshData->material.value);
-	m_material->acquire();
+	if (m_material)
+		m_material->acquire();
 
 	// Setup aabb collisions
 	m_aabb.set(Vector3(meshData->simpleColBox.min.x, meshData->simpleColBox.min.y, meshData->simpleColBox.min.z), Vector3(meshData->simpleColBox.max.x, meshData->simpleColBox.max.y, meshData->simpleColBox.max.z));
