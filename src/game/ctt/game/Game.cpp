@@ -327,7 +327,7 @@ void Game::render()
 			{
 				wcscpy(color, L"#FF0000");
 			}
-			else if (fps >= 25.f && fps <= 60)
+			else if (fps >= 25.f && fps < 60)
 			{
 				wcscpy(color, L"#FF8000");
 			}
@@ -336,7 +336,6 @@ void Game::render()
 				wcscpy(color, L"#00FF00");
 			}
 			
-
 			gFont->render(WString<256>(L"#FFFFFFFPS: %s%.1f", color, fps), Rect(21, 21, 10, 10), Color(0.0f, 0.0f, 0.0f, 0.6f), Font::DrawFlags::NoClip | Font::DrawFlags::DisableColorCodding);
 			gFont->render(WString<256>(L"#FFFFFFFPS: %s%.1f", color, fps), Rect(20, 20, 10, 10), Color(1.0f, 1.0f, 1.0f, 1.0f), Font::DrawFlags::NoClip);
 		}
