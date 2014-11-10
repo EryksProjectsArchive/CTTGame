@@ -320,8 +320,25 @@ void Game::render()
 
 		if (gFont)
 		{
-			gFont->render(WString<256>(L"#64A5F2Testujemy renderowanie tekstu, jest coraz lepiej :D\n#00FF00Druga linia :)\n#216422Mamy sporo FPS'ów: #FF0000%.1f\n#FF8000łóść чертовски сука шлюха こんにちは", Timer::getFPS()), Rect(21, 21, 10, 10), Color(0.0f, 0.0f, 0.0f, 0.6f), Font::DrawFlags::NoClip | Font::DrawFlags::DisableColorCodding);
-			gFont->render(WString<256>(L"#64A5F2Testujemy renderowanie tekstu, jest coraz lepiej :D\n#00FF00Druga linia :)\n#216422Mamy sporo FPS'ów: #FF0000%.1f\n#FF8000łóść чертовски сука шлюха こんにちは", Timer::getFPS()), Rect(20, 20, 10, 10), Color(1.0f, 1.0f, 1.0f, 1.0f), Font::DrawFlags::NoClip);
+			float fps = Timer::getFPS();
+			wchar color[10] = { 0 };
+
+			if (fps < 25.f)
+			{
+				wcscpy(color, L"#FF0000");
+			}
+			else if (fps >= 25.f && fps <= 60)
+			{
+				wcscpy(color, L"#FF8000");
+			}
+			else
+			{
+				wcscpy(color, L"#00FF00");
+			}
+			
+
+			gFont->render(WString<256>(L"#FFFFFFFPS: %s%.1f", color, fps), Rect(21, 21, 10, 10), Color(0.0f, 0.0f, 0.0f, 0.6f), Font::DrawFlags::NoClip | Font::DrawFlags::DisableColorCodding);
+			gFont->render(WString<256>(L"#FFFFFFFPS: %s%.1f", color, fps), Rect(20, 20, 10, 10), Color(1.0f, 1.0f, 1.0f, 1.0f), Font::DrawFlags::NoClip);
 		}
 
 		// Draw UI
