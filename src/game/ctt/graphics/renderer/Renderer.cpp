@@ -897,6 +897,9 @@ void Renderer::renderGeometry(Geometry<Vertex3d> *geometry, const glm::mat4x4& m
 
 void Renderer::renderGeometry(Geometry<Vertex2d> *geometry)
 {
+	glDisable(GL_DEPTH_TEST);
+	glDisable(GL_CULL_FACE);
+
 	Material* material = m_currentMaterial;
 	if (!material)
 		material = m_defaultMaterial;
@@ -1054,8 +1057,21 @@ void Renderer::renderFont(const WDynString& string, const Rect& rect, const Colo
 
 	uint32 vertexId = 0;
 	uint32 indexId = 0;
-	float x = rect.x;
-	float y = rect.y + 19.f;
+	float startX = rect.x;
+	float startY = rect.y + font->m_size;
+
+	if (flags & Font::DrawFlags::HorizontalCenter)
+	{
+		startX = rect.x + (rect.x2 - rect.x) / 2 - font->calculateWidth(string) / 2;
+	}
+
+	if (flags & Font::DrawFlags::VerticalCenter)
+	{
+		startY = rect.y + (rect.y2 - rect.y) / 2 + font->calculateHeight(string) / 2;
+	}
+
+	float x = startX;
+	float y = startY;
 	for (uint32 i = 0; i < string.getLength(); ++i)
 	{
 		wchar_t charCode = string[i];
@@ -1110,7 +1126,7 @@ void Renderer::renderFont(const WDynString& string, const Rect& rect, const Colo
 		if (charCode == '\n')
 		{
 			y += font->m_size;
-			x = rect.x;
+			x = startX;
 			continue;
 		}
 

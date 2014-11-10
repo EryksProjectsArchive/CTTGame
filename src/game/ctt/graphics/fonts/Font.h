@@ -50,7 +50,11 @@ public:
 
 	Font::GlyphData getData(wchar_t c);
 
+	// NOTE: It does not handle multi-line text!
 	float calculateWidth(const WDynString& string);
+
+	// NOTE: It does not handle multi-line text!
+	float calculateHeight(const WDynString& string);
 public:
 	struct DrawFlags
 	{

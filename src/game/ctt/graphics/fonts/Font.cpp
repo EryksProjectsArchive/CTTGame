@@ -194,3 +194,16 @@ float Font::calculateWidth(const WDynString& string)
 	}
 	return w;
 }
+
+float Font::calculateHeight(const WDynString& string)
+{
+	float h = 0;
+	for (uint32 i = 0; i < string.getLength(); ++i)
+	{		
+		wchar_t c = string[i];
+		float _h = m_data[c].bmh + 2;
+		if (_h > h)
+			h = _h;
+	}
+	return h;
+}

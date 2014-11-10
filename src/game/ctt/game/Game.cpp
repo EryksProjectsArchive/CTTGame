@@ -65,6 +65,7 @@
 #include <graphics/ui/UIManager.h>
 #include <graphics/ui/UIView.h>
 #include <graphics/ui/controls/UIControl.h>
+#include <graphics/ui/controls/UIButton.h>
 
 Game * Game::s_instance = 0;
 Font *gFont = 0;
@@ -184,7 +185,8 @@ bool Game::init()
 
 	UI::View* view = m_ui->createView("game.main_menu");
 
-	UI::Control* button = new UI::Control("button1", Vector2(0.0f, 0.0f), Vector2(100.0f, 50.0f));
+	UI::Button* button = new UI::Button("button1", Vector2(100.0f, 100.0f), Vector2(200.0f, 50.0f));
+	button->setText(L"Start Editor");
 
 	view->attach(button);
 

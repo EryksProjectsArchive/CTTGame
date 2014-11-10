@@ -426,6 +426,9 @@
     <ClCompile Include="graphics\ui\controls\UIControl.cpp">
       <Filter>Source Files\graphics\ui\controls</Filter>
     </ClCompile>
+    <ClCompile Include="graphics\ui\controls\UIButton.cpp">
+      <Filter>Source Files\graphics\ui\controls</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="os\OS.h">
@@ -684,6 +687,9 @@
       <Filter>Header Files\graphics\ui</Filter>
     </ClInclude>
     <ClInclude Include="graphics\ui\controls\UIControl.h">
+      <Filter>Header Files\graphics\ui\controls</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\ui\controls\UIButton.h">
       <Filter>Header Files\graphics\ui\controls</Filter>
     </ClInclude>
   </ItemGroup>

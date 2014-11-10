@@ -196,6 +196,7 @@
     <ClCompile Include="graphics\Shader.cpp" />
     <ClCompile Include="graphics\ShaderProgram.cpp" />
     <ClCompile Include="graphics\Texture.cpp" />
+    <ClCompile Include="graphics\ui\controls\UIButton.cpp" />
     <ClCompile Include="graphics\ui\controls\UIControl.cpp" />
     <ClCompile Include="graphics\ui\UIManager.cpp" />
     <ClCompile Include="graphics\ui\UIView.cpp" />
@@ -275,6 +276,7 @@
     <ClInclude Include="graphics\Shader.h" />
     <ClInclude Include="graphics\ShaderProgram.h" />
     <ClInclude Include="graphics\Texture.h" />
+    <ClInclude Include="graphics\ui\controls\UIButton.h" />
     <ClInclude Include="graphics\ui\controls\UIControl.h" />
     <ClInclude Include="graphics\ui\UIManager.h" />
     <ClInclude Include="graphics\ui\UIView.h" />
