@@ -50,7 +50,23 @@ VertexShader::VertexShader(const char * source) : Shader(source)
 			Renderer::glGetShaderInfoLog(m_shaderId, maxLength, &maxLength, errorLog);
 			errorLog[maxLength] = '\0';
 
-			Debug("shader", "Compilation error (%s): %s", source, errorLog);
+			Debug("shader", "Compilation error (%s):", source);
+
+			char *lineBuffer = errorLog;
+			uint32 startIndex = 0;
+			for (uint32 i = 0; i < strlen(errorLog); ++i)
+			{
+				if (errorLog[i] == '\n' || errorLog[i] == '\0')
+				{
+					uint32 length = (i - startIndex);
+					char *line = new char[length];
+					memcpy(line, lineBuffer + startIndex, length - 1);
+					line[length - 1] = '\0';
+					Debug("shader", line);
+					startIndex = i + 1;
+					delete[]line;
+				}
+			}
 
 			delete[]errorLog;
 
