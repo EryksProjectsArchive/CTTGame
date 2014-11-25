@@ -29,10 +29,10 @@ FragmentShader::FragmentShader(const char * source) : Shader(source)
 		fseek(shaderFile, 0, SEEK_END);
 		shaderLength = ftell(shaderFile);
 		rewind(shaderFile);		
-		shaderSource = new char[shaderLength];
+		shaderSource = new char[shaderLength+1];
 		memset(shaderSource, 0, shaderLength);
 		fread(shaderSource, sizeof(char), shaderLength, shaderFile);
-		shaderSource[shaderLength-1] = '\0';
+		shaderSource[shaderLength] = '\0';
 
 		Renderer::glShaderSource(m_shaderId, 1, (const GLchar **)&shaderSource, (const GLint *)&shaderLength);
 		Renderer::glCompileShader(m_shaderId);
@@ -48,8 +48,25 @@ FragmentShader::FragmentShader(const char * source) : Shader(source)
 			char *errorLog = new char[maxLength + 1];
 
 			Renderer::glGetShaderInfoLog(m_shaderId, maxLength, &maxLength, errorLog);
+			errorLog[maxLength] = '\0';
 
-			Debug("shader", "Compilation error (%s): %s", source, errorLog);
+			Debug("shader", "Compilation error (%s):", source);
+
+			char *lineBuffer = errorLog;
+			uint32 startIndex = 0;
+			for (uint32 i = 0; i < strlen(errorLog); ++i)
+			{
+				if (errorLog[i] == '\n' || errorLog[i] == '\0')
+				{
+					uint32 length = (i - startIndex);
+					char *line = new char[length];
+					memcpy(line, lineBuffer + startIndex, length - 1);
+					line[length - 1] = '\0';
+					Debug("shader", line);
+					startIndex = i + 1;
+					delete[]line;
+				}
+			}
 
 			delete[]errorLog;
 

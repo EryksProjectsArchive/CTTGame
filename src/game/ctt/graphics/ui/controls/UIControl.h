@@ -24,6 +24,7 @@ namespace UI
 	protected:
 		Vector2 m_position;
 		Vector2 m_size;
+		bool m_focus;
 
 		List<Control *> m_children;
 		Control *m_parent;

@@ -1,6 +1,9 @@
 #version 330 core
 
 uniform mat4 mvpMatrix;
+uniform mat3 normalMatrix;
+uniform mat4 modelMatrix;
+uniform mat4 viewMatrix;
 
 attribute vec3 vertexPosition;
 attribute vec3 vertexNormal;
@@ -15,10 +18,12 @@ out vec3 vNormal;
 // Simple vertex shader
 void main(void)
 {
+ 	mat3 worldRotationInverse = transpose(mat3(modelMatrix * viewMatrix));
+
 	gl_Position = mvpMatrix * vec4(vertexPosition, 1.0);
 
 	vUV = vertexUV;
 	vPos = gl_Position;
 	vColor = vertexColor;
-	vNormal = vertexNormal;
+	vNormal = normalize(modelMatrix * viewMatrix * vec4(vertexNormal, 0)).xyz;
 }

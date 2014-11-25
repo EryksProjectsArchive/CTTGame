@@ -446,8 +446,8 @@ bool Renderer::setup(Window * window)
 	m_helperLines->fillData(vertices, 4, indices, 2);	
 
 	// Setup deferred rendering
-	uint32 width = m_rect.right;
-	uint32 height = m_rect.bottom;
+	uint32 width = (uint32)m_rect.right;
+	uint32 height = (uint32)m_rect.bottom;
 
 	glGenFramebuffers(1, &m_fbo);
 	glGenRenderbuffers(1, &m_diffuseRenderBuffer);
@@ -470,7 +470,7 @@ bool Renderer::setup(Window * window)
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_RENDERBUFFER, m_normalRenderBuffer);
 
 	glBindRenderbuffer(GL_RENDERBUFFER, m_depthRenderBuffer);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, width, height);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT32, width, height);
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_depthRenderBuffer);
 
 
@@ -522,9 +522,10 @@ bool Renderer::setup(Window * window)
 	GLenum buffers[] = {
 		GL_COLOR_ATTACHMENT0,
 		GL_COLOR_ATTACHMENT1,
-		GL_COLOR_ATTACHMENT2	
+		GL_COLOR_ATTACHMENT2,
+		GL_DEPTH_ATTACHMENT
 	};
-	glDrawBuffers(3, buffers);
+	glDrawBuffers(4, buffers);
 
 	// Check if all worked fine and unbind the FBO
 	GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
@@ -598,7 +599,7 @@ void Renderer::endSceneRender()
 
 	if (!m_deferredResultMaterial)
 	{
-		Error("renderer", "Cannot render deferred final plan e. No material found!");
+		Error("renderer", "Cannot render deferred final plane. No material found!");
 		return;
 	}
 
@@ -643,6 +644,15 @@ void Renderer::endSceneRender()
 		glUniform1i(textureLocation, 2);
 	}
 
+	textureLocation = m_deferredResultMaterial->m_program->getUniformLocation("depthTexture");
+	if (textureLocation != -1)
+	{
+		glActiveTexture(GL_TEXTURE3);
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, m_depthTexture);
+		glUniform1i(textureLocation, 3);
+	}
+
 	unsigned int projectionMatrixLocation = m_deferredResultMaterial->m_program->getUniformLocation("projectionMatrix");
 	if (projectionMatrixLocation != -1)
 	{
@@ -654,6 +664,20 @@ void Renderer::endSceneRender()
 	if (viewMatrixLocation != -1)
 	{
 		glUniformMatrix4fv(viewMatrixLocation, 1, GL_FALSE, glm::value_ptr(viewMatrix));
+	}
+
+	unsigned int cameraPositionLocation = m_deferredResultMaterial->m_program->getUniformLocation("cameraPosition");
+	if (cameraPositionLocation != -1)
+	{
+		glUniform3f(cameraPositionLocation, Camera::current->getPosition().x, Camera::current->getPosition().y, Camera::current->getPosition().z);
+	}
+
+	glm::mat4 unProjectMatrix = glm::inverse(m_projectionMatrix * viewMatrix);
+
+	unsigned int unProjectMatrixLocation = m_deferredResultMaterial->m_program->getUniformLocation("unProjectMatrix");
+	if (unProjectMatrixLocation != -1)
+	{
+		glUniformMatrix4fv(unProjectMatrixLocation, 1, GL_FALSE, glm::value_ptr(unProjectMatrix));
 	}
 
 	unsigned int attributePosition = m_deferredResultMaterial->m_program->getAttributeLocation("vertexPosition");
@@ -692,17 +716,6 @@ void Renderer::endSceneRender()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
-
-#ifdef DEBUG_VIEWPORTS
-	glReadBuffer(GL_COLOR_ATTACHMENT0);
-	glBlitFramebuffer(0, 0, 1920, 1080, 0, 0, 800, 600, GL_COLOR_BUFFER_BIT, GL_LINEAR);
-
-	glReadBuffer(GL_COLOR_ATTACHMENT0+1);
-	glBlitFramebuffer(0, 0, 1920, 1080, 800, 0, 800+800, 600, GL_COLOR_BUFFER_BIT, GL_LINEAR);
-
-	glReadBuffer(GL_COLOR_ATTACHMENT0 + 2);
-	glBlitFramebuffer(0, 0, 1920, 1080, 0, 600, 800, 600+600, GL_COLOR_BUFFER_BIT, GL_LINEAR);
-#endif
 
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
 }
@@ -780,8 +793,14 @@ void Renderer::renderGeometry(Geometry<Vertex3d> *geometry, const glm::mat4x4& m
 	
 	glUseProgram(material->m_program->m_programId);
 
-	glm::mat4x4 viewMatrix = Camera::current->getViewMatrix();
-#if 0
+	glm::mat4 viewMatrix = Camera::current->getViewMatrix();
+
+	unsigned int normalMatrixLocation = material->m_program->getUniformLocation("normalMatrix");
+	if (normalMatrixLocation != -1)
+	{
+		glUniformMatrix3fv(normalMatrixLocation, 1, GL_TRUE, glm::value_ptr(glm::inverse(matrix * viewMatrix)));
+	}
+
 	unsigned int modelMatrixLocation = material->m_program->getUniformLocation("modelMatrix");
 	if (modelMatrixLocation != -1)
 	{
@@ -799,7 +818,6 @@ void Renderer::renderGeometry(Geometry<Vertex3d> *geometry, const glm::mat4x4& m
 	{
 		glUniformMatrix4fv(viewMatrixLocation, 1, GL_FALSE, glm::value_ptr(viewMatrix));
 	}
-#endif
 
 	glm::mat4x4 mvp = m_projectionMatrix * viewMatrix * matrix;
 
