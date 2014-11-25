@@ -31,19 +31,36 @@ void main(void)
 	// Get world position from depth  buffer
 	vec3 vecPosition = getWorldPosition();
 
-	float power = 3.0f;	
-	vec3 lightColor = vec3(0.2,0.5,0.2);
-	vec3 lightPosition = vec3(0,5,0);
+	float power = 2.8f;	
+	vec3 lightColor = vec3(0.05,0.4,0.48);
+	vec3 lightPosition = vec3(0,1,0);
 
-	float mp = clamp(1 - distance(lightPosition, vecPosition) / 20, 0, 1);
+	float mp = clamp(1 - distance(lightPosition, vecPosition) / 8, 0, 1);
 
 	color += vec4(lightColor * (power * mp), 1);
 	color /= 2;
 
 	lightColor = vec3(0.5,0.2,0);
-	lightPosition = vec3(10,5,30);
+	lightPosition = vec3(10,1,10);
 	
-	mp = clamp(1 - distance(lightPosition, vecPosition) / 20, 0, 1);
+	mp = clamp(1 - distance(lightPosition, vecPosition) / 8, 0, 1);
 
-	color = (color + (texture2D(diffuseTexture, vUV)+vec4(lightColor * (power * mp), 1))/2)/2;	
+	color += vec4(lightColor * (power * mp), 1);
+	color /= 2;
+
+	lightColor = vec3(0.3,0.0,0.5);
+	lightPosition = vec3(10,1,0);
+	
+	mp = clamp(1 - distance(lightPosition, vecPosition) / 8, 0, 1);
+
+	color += vec4(lightColor * (power * mp), 1);
+	color /= 2;
+
+	lightColor = vec3(0.01,0.03,0.08);
+	lightPosition = vec3(0,1,10);
+	
+	mp = clamp(1 - distance(lightPosition, vecPosition) / 8, 0, 1);
+
+	color += vec4(lightColor * (power * mp), 1);
+	color /= 2;
 }

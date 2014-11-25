@@ -18,8 +18,6 @@ out vec3 vNormal;
 // Simple vertex shader
 void main(void)
 {
- 	mat3 worldRotationInverse = transpose(mat3(modelMatrix * viewMatrix));
-
 	gl_Position = mvpMatrix * vec4(vertexPosition, 1.0);
 
 	vUV = vertexUV;
