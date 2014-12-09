@@ -221,16 +221,13 @@ public:
 
 		type operator*()
 		{
-			if (!m_current) {
-				Error("List", "Null current pointer at %s:%d", __FILE__, __LINE__);
-			}
-			return m_current->m_value;
+			return get_value();
 		}
 
 		type get_value()
 		{
 			if (!m_current) {
-				Error("List", "Null current pointer at %s:%d", __FILE__, __LINE__);
+				Error("List", "Null current pointer at %s (%s:%d).", __FUNCTION__, __FILE__, __LINE__);
 			}
 			return m_current->m_value;
 		}

@@ -39,7 +39,7 @@ BallEntity::BallEntity()
 
 	btDefaultMotionState *fallMotionState = new btDefaultMotionState(transform);
 
-	btScalar mass = 20;
+	btScalar mass = 5;
 	btVector3 fallInertia(0, 0, 0);
 	physicsShape->calculateLocalInertia(mass, fallInertia);
 
