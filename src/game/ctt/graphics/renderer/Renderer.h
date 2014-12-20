@@ -37,12 +37,12 @@ protected:
 	Material* m_deferredResultMaterial;
 
 	uint32 m_fbo;
+
 	uint32 m_diffuseTexture;
-	uint32 m_positionTexture; 
 	uint32 m_normalTexture;
 	uint32 m_depthTexture;
+
 	uint32 m_diffuseRenderBuffer;
-	uint32 m_positionRenderBuffer;
 	uint32 m_normalRenderBuffer;
 	uint32 m_depthRenderBuffer;
 

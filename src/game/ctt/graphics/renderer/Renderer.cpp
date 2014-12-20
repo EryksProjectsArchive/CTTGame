@@ -205,11 +205,9 @@ Renderer::~Renderer()
 	}
 
 	glDeleteTextures(1, &m_normalTexture);
-	glDeleteTextures(1, &m_positionTexture);
 	glDeleteTextures(1, &m_diffuseTexture);
 	glDeleteFramebuffers(1, &m_fbo);
 	glDeleteRenderbuffers(1, &m_diffuseRenderBuffer);
-	glDeleteRenderbuffers(1, &m_positionRenderBuffer);
 	glDeleteRenderbuffers(1, &m_normalRenderBuffer);
 	glDeleteRenderbuffers(1, &m_depthRenderBuffer);
 
@@ -451,7 +449,6 @@ bool Renderer::setup(Window * window)
 
 	glGenFramebuffers(1, &m_fbo);
 	glGenRenderbuffers(1, &m_diffuseRenderBuffer);
-	glGenRenderbuffers(1, &m_positionRenderBuffer);
 	glGenRenderbuffers(1, &m_normalRenderBuffer);
 	glGenRenderbuffers(1, &m_depthRenderBuffer);
 
@@ -461,13 +458,9 @@ bool Renderer::setup(Window * window)
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA, width, height);
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, m_diffuseRenderBuffer);
 
-	glBindRenderbuffer(GL_RENDERBUFFER, m_positionRenderBuffer);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA32F_ARB, width, height);
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_RENDERBUFFER, m_positionRenderBuffer);
-
 	glBindRenderbuffer(GL_RENDERBUFFER, m_normalRenderBuffer);
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA16F_ARB, width, height);
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_RENDERBUFFER, m_normalRenderBuffer);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_RENDERBUFFER, m_normalRenderBuffer);
 
 	glBindRenderbuffer(GL_RENDERBUFFER, m_depthRenderBuffer);
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT32, width, height);
@@ -486,18 +479,6 @@ bool Renderer::setup(Window * window)
 	// Attach texture to frame buffer
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_diffuseTexture, 0);
 
-	// Create position texture
-	glGenTextures(1, &m_positionTexture);
-	glBindTexture(GL_TEXTURE_2D, m_positionTexture);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB32F_ARB, width, height, 0, GL_RGB, GL_FLOAT, NULL);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-	// Attach texture to frame buffer
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, m_positionTexture, 0);
-
 	glGenTextures(1, &m_normalTexture);
 	glBindTexture(GL_TEXTURE_2D, m_normalTexture);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F_ARB, width, height, 0, GL_RGB, GL_FLOAT, NULL);
@@ -507,7 +488,7 @@ bool Renderer::setup(Window * window)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
 	// Attach the texture to the FBO
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, m_normalTexture, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, m_normalTexture, 0);
 
 	glGenTextures(1, &m_depthTexture);
 	glBindTexture(GL_TEXTURE_2D, m_depthTexture);
@@ -522,7 +503,6 @@ bool Renderer::setup(Window * window)
 	GLenum buffers[] = {
 		GL_COLOR_ATTACHMENT0,
 		GL_COLOR_ATTACHMENT1,
-		GL_COLOR_ATTACHMENT2,
 		GL_DEPTH_ATTACHMENT
 	};
 	glDrawBuffers(4, buffers);
@@ -555,7 +535,7 @@ void Renderer::beginSceneRender()
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_fbo);
 	glPushAttrib(GL_VIEWPORT_BIT);
 
-	glViewport(0, 0, m_rect.right, m_rect.bottom);
+	glViewport(0, 0, (GLsizei)m_rect.right, (GLsizei)m_rect.bottom);
 
 	// Clear the render targets
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -635,22 +615,13 @@ void Renderer::endSceneRender()
 		glUniform1i(textureLocation, 1);
 	}
 
-	textureLocation = m_deferredResultMaterial->m_program->getUniformLocation("positionTexture");
+	textureLocation = m_deferredResultMaterial->m_program->getUniformLocation("depthTexture");
 	if (textureLocation != -1)
 	{
 		glActiveTexture(GL_TEXTURE2);
 		glEnable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, m_positionTexture);
-		glUniform1i(textureLocation, 2);
-	}
-
-	textureLocation = m_deferredResultMaterial->m_program->getUniformLocation("depthTexture");
-	if (textureLocation != -1)
-	{
-		glActiveTexture(GL_TEXTURE3);
-		glEnable(GL_TEXTURE_2D);
 		glBindTexture(GL_TEXTURE_2D, m_depthTexture);
-		glUniform1i(textureLocation, 3);
+		glUniform1i(textureLocation, 2);
 	}
 
 	unsigned int projectionMatrixLocation = m_deferredResultMaterial->m_program->getUniformLocation("projectionMatrix");
