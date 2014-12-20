@@ -15,8 +15,32 @@
 
 #include <core/String.h>
 
+#ifdef _WIN32
+#include <Windows.h>
+#endif
+
 namespace OS
 {
+#ifdef _WIN32
+	typedef HANDLE ThreadHandle;
+#else
+	// TODO
+#endif
+	// Threads
+	typedef void(*pfnThreadCallback)(void * data);
+
+	struct ThreadRunData
+	{
+		pfnThreadCallback m_callback;
+		void* m_userData;
+	};
+
+	
+	ThreadHandle createThread(ThreadRunData *data);
+	bool terminateThread(ThreadHandle handle, uint32 exitCode);
+	uint32 waitForThread(ThreadHandle handle, uint32 interval);
+	bool closeThread(ThreadHandle handle);
+
 	// Paths
 	FilePath getAppPath();
 	FilePath getHomePath();

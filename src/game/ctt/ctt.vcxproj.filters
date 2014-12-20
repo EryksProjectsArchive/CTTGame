@@ -229,6 +229,12 @@
     <Filter Include="Header Files\resources\sounds\ogg">
       <UniqueIdentifier>{993b3956-b610-43fb-9589-9cfb90b112d9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\core\threading">
+      <UniqueIdentifier>{6401510b-c889-4561-aec1-5fb9291cca13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\core\threading">
+      <UniqueIdentifier>{3b0a6aa0-0816-4c39-a899-76ef431939b3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -437,6 +443,9 @@
     </ClCompile>
     <ClCompile Include="resources\sounds\ogg\OGGSoundLoader.cpp">
       <Filter>Source Files\resources\sounds\ogg</Filter>
+    </ClCompile>
+    <ClCompile Include="core\threading\Thread.cpp">
+      <Filter>Source Files\core\threading</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -706,6 +715,9 @@
     </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="core\threading\Thread.h">
+      <Filter>Header Files\core\threading</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

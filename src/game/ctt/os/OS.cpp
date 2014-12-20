@@ -35,6 +35,63 @@
 
 namespace OS
 {
+	static void runThread(void *data)
+	{
+		ThreadRunData *runData = (ThreadRunData *)data;
+		if (runData)
+		{
+			if (runData->m_callback)
+				runData->m_callback(runData->m_userData);
+		}
+	}
+
+	ThreadHandle createThread(ThreadRunData * data)
+	{
+#ifdef _WIN32
+		return CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)runThread, data, NULL, NULL);
+#else
+		// TODO
+#endif		
+	}
+
+	bool terminateThread(ThreadHandle handle, uint32 exitCode)
+	{
+		
+#ifdef _WIN32
+		if (handle)
+		{
+			if(TerminateThread(handle, exitCode))
+				return true;			
+		}
+		return false;
+#else
+		// TODO
+		return false;
+#endif
+	}
+
+	uint32 waitForThread(ThreadHandle handle, uint32 interval)
+	{
+#ifdef _WIN32
+		if (handle)
+		{
+			return WaitForSingleObject(handle, interval);
+		}
+#endif
+		return -1;
+	}
+
+	bool closeThread(ThreadHandle handle)
+	{
+#ifdef _WIN32
+		if (handle)
+		{
+			return CloseHandle(handle) != FALSE;
+		}
+#endif
+		return false;
+	}
+
 	static FilePath g_homePath;
 	FilePath getAppPath()
 	{

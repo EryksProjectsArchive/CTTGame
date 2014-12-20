@@ -170,6 +170,7 @@
     <ClCompile Include="core\console\Console.cpp" />
     <ClCompile Include="core\ExceptionHandler.cpp" />
     <ClCompile Include="core\Logger.cpp" />
+    <ClCompile Include="core\threading\Thread.cpp" />
     <ClCompile Include="core\Timer.cpp" />
     <ClCompile Include="game\environment\Environment.cpp" />
     <ClCompile Include="game\environment\Terrain.cpp" />
@@ -246,6 +247,7 @@
     <ClInclude Include="core\SharedPtr.h" />
     <ClInclude Include="core\Singleton.h" />
     <ClInclude Include="core\String.h" />
+    <ClInclude Include="core\threading\Thread.h" />
     <ClInclude Include="core\Timer.h" />
     <ClInclude Include="core\WDynString.h" />
     <ClInclude Include="core\WString.h" />
