@@ -32,11 +32,13 @@ namespace OpenAL
 	{
 	private:
 		DynamicLibrary * m_openALDynLib;
+		bool m_isValid;
 	public:
 		Impl();
 		~Impl();
 
 		bool setup();
+		bool isValid();
 
 		ALCdevice	*(__cdecl *alcOpenDevice)(const ALCchar *devicename);
 		ALCboolean	(__cdecl *alcCloseDevice)(ALCdevice *device);

@@ -31,7 +31,7 @@ SoundManager::~SoundManager()
 		m_sounds[i].clear();
 	}
 
-	if (m_al)
+	if (m_al && m_al->isValid())
 	{
 		m_al->alcMakeContextCurrent(0);
 		if (m_context)

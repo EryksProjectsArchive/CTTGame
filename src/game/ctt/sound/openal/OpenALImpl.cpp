@@ -18,7 +18,7 @@
 namespace OpenAL
 {
 	Impl::Impl()
-		: m_openALDynLib(0)
+		: m_openALDynLib(0), m_isValid(false)
 	{
 	}
 
@@ -151,6 +151,7 @@ namespace OpenAL
 			METHOD(alDopplerVelocity);
 			METHOD(alSpeedOfSound);
 			METHOD(alDistanceModel);
+			m_isValid = true;
 			return true;
 		}
 		else
@@ -159,4 +160,9 @@ namespace OpenAL
         }
 		return false;
     }
+
+	bool Impl::isValid()
+	{
+		return m_isValid;
+	}
 };
