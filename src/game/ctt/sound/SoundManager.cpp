@@ -62,13 +62,14 @@ bool SoundManager::setup()
 			return false;
 		}
 
-		//Info("SoundMgr", "OpenAL started version %s. (vendor: %s, renderer: %s)", m_al->alcGetString(m_device, AL_VERSION), m_al->alcGetString(m_device, AL_VENDOR), m_al->alcGetString(m_device, AL_RENDERER));
-
 		//Create a context
 		m_context = m_al->alcCreateContext(m_device, NULL);
 
 		//Set active context
 		m_al->alcMakeContextCurrent(m_context);
+
+		// Print informations about OpenAL
+		Info("SoundMgr", "OpenAL started version %s. [vendor: %s, renderer: %s]", m_al->alGetString(AL_VERSION), m_al->alGetString(AL_VENDOR), m_al->alGetString(AL_RENDERER));
 
 		// Clear Error Code
 		m_al->alGetError();

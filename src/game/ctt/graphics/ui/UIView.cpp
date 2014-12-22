@@ -20,6 +20,10 @@ namespace UI
 	
 	View::~View()
 	{
+		for (Control * control : m_controls)
+		{
+			delete control;
+		}
 		m_controls.clear();
 	}
 
