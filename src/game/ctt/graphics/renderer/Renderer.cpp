@@ -459,13 +459,12 @@ bool Renderer::setup(Window * window)
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, m_diffuseRenderBuffer);
 
 	glBindRenderbuffer(GL_RENDERBUFFER, m_normalRenderBuffer);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA16F_ARB, width, height);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_RGB16F_ARB, width, height);
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_RENDERBUFFER, m_normalRenderBuffer);
 
 	glBindRenderbuffer(GL_RENDERBUFFER, m_depthRenderBuffer);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT32, width, height);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT32F, width, height);
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_depthRenderBuffer);
-
 
 	// Create diffuse texture
 	glGenTextures(1, &m_diffuseTexture);
@@ -498,14 +497,7 @@ bool Renderer::setup(Window * window)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-	glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, m_depthTexture, 0);
-
-	GLenum buffers[] = {
-		GL_COLOR_ATTACHMENT0,
-		GL_COLOR_ATTACHMENT1,
-		GL_DEPTH_ATTACHMENT
-	};
-	glDrawBuffers(4, buffers);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, m_depthTexture, 0);
 
 	// Check if all worked fine and unbind the FBO
 	GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
@@ -545,7 +537,8 @@ void Renderer::beginSceneRender()
 	glActiveTexture(GL_TEXTURE0);
 	glEnable(GL_TEXTURE_2D);
 
-
+	GLenum buffers[] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
+	glDrawBuffers(2, buffers);
 }
 
 void Renderer::endSceneRender()
@@ -596,7 +589,7 @@ void Renderer::endSceneRender()
 	{
 		glUniformMatrix4fv(orthoMatrixLocation, 1, GL_FALSE, glm::value_ptr(m_orthoMatrix));
 	}
-
+	
 	unsigned int textureLocation = m_deferredResultMaterial->m_program->getUniformLocation("diffuseTexture");
 	if (textureLocation != -1)
 	{
@@ -769,7 +762,7 @@ void Renderer::renderGeometry(Geometry<Vertex3d> *geometry, const glm::mat4x4& m
 	unsigned int normalMatrixLocation = material->m_program->getUniformLocation("normalMatrix");
 	if (normalMatrixLocation != -1)
 	{
-		glUniformMatrix3fv(normalMatrixLocation, 1, GL_TRUE, glm::value_ptr(glm::inverse(matrix * viewMatrix)));
+		glUniformMatrix3fv(normalMatrixLocation, 1, GL_TRUE, glm::value_ptr(glm::inverse(viewMatrix * matrix)));
 	}
 
 	unsigned int modelMatrixLocation = material->m_program->getUniformLocation("modelMatrix");

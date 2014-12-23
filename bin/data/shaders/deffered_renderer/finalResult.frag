@@ -21,46 +21,86 @@ vec3 getWorldPosition()
     return (screenPosition.xyz / screenPosition.w);
 }
 
-
-// Simple fragment shader
 void main(void)
 {	
-	// 	base color of texture
+	// Base color of texture
 	color = texture2D(diffuseTexture, vUV);
 
-	// Get world position from depth  buffer
+	// Get world position from depth buffer
 	vec3 vecPosition = getWorldPosition();
+	vec3 vecNormal = texture2D(normalTexture, vUV).xyz;
 
-	float power = 2.8f;	
+	//color = vec4(1,1,1,1);
+	//color = vec4(vecNormal, 1);
+
+	float power = 10.f;	
+	float size = 10.0f;
 	vec3 lightColor = vec3(0.05,0.4,0.48);
-	vec3 lightPosition = vec3(0,1,0);
+	vec3 lightPosition = vec3(0,5,0);
 
-	float mp = clamp(1 - distance(lightPosition, vecPosition) / 8, 0, 1);
+	float mp = 0;
+	float _dot = dot(normalize(lightPosition-vecPosition), vecNormal);
+	if(_dot > 0)
+	{
+		mp = clamp(1 - distance(lightPosition, vecPosition) / size, 0, 1) * _dot;
+	}	
+	else
+	{
+		mp = 0;
+	}
 
 	color += vec4(lightColor * (power * mp), 1);
-	color /= 2;
+	//color /= 2;
 
 	lightColor = vec3(0.5,0.2,0);
-	lightPosition = vec3(10,1,10);
+	lightPosition = vec3(10,2,10);
 	
-	mp = clamp(1 - distance(lightPosition, vecPosition) / 8, 0, 1);
+	_dot = dot(normalize(lightPosition-vecPosition), vecNormal);
+	if(_dot > 0)
+	{
+		mp = clamp(1 - distance(lightPosition, vecPosition) / 8, 0, 1) * _dot;
+	}	
+	else
+	{
+		mp = 0;
+	}
 
 	color += vec4(lightColor * (power * mp), 1);
-	color /= 2;
+	//color /= 2;
 
 	lightColor = vec3(0.3,0.0,0.5);
 	lightPosition = vec3(10,1,0);
 	
-	mp = clamp(1 - distance(lightPosition, vecPosition) / 8, 0, 1);
+	_dot = dot(normalize(lightPosition-vecPosition), vecNormal);
+	if(_dot > 0)
+	{
+		mp = clamp(1 - distance(lightPosition, vecPosition) / 8, 0, 1) * _dot;
+	}	
+	else
+	{
+		mp = 0;
+	}
 
 	color += vec4(lightColor * (power * mp), 1);
-	color /= 2;
+	//color /= 2;
 
 	lightColor = vec3(0.01,0.03,0.08);
 	lightPosition = vec3(0,1,10);
 	
-	mp = clamp(1 - distance(lightPosition, vecPosition) / 8, 0, 1);
+	_dot = dot(normalize(lightPosition-vecPosition), vecNormal);
+	if(_dot > 0)
+	{
+		mp = clamp(1 - distance(lightPosition, vecPosition) / 8, 0, 1) * _dot;
+	}	
+	else
+	{
+		mp = 0;
+	}
 
 	color += vec4(lightColor * (power * mp), 1);
-	color /= 2;
+	//color /= 2;
+
+	//color += vec4(0.1,0.1,0.1,1);
+	//color *= 2;
+	color = normalize(color);
 }
