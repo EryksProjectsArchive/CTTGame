@@ -39,9 +39,9 @@ void main(void)
 	vec3 lighting;
 
 	float power = 1.f;	
-	float size = 10.0f;
-	vec3 lightColor = vec3(0.05,0.4,0.48);
-	vec3 lightPosition = vec3(0,5,0);
+	float size = 1000.0f;
+	vec3 lightColor = vec3(0.8, 0.8, 0.8);
+	vec3 lightPosition = vec3(20,100,0);
 
 	float mp = 0;
 	float _dot = dot(normalize(lightPosition-vecPosition), vecNormal);
@@ -58,13 +58,15 @@ void main(void)
 		numLights++;
 	lighting += vec3(lightColor * (power * mp));
 
+	power = 5.f;
+	size = 20.0f;
 	lightColor = vec3(0.5,0.2,0);
 	lightPosition = vec3(10,2,10);
 	
 	_dot = dot(normalize(lightPosition-vecPosition), vecNormal);
 	if(_dot > 0)
 	{
-		mp = clamp(1 - distance(lightPosition, vecPosition) / 8, 0, 1) * _dot;
+		mp = clamp(1 - distance(lightPosition, vecPosition) / size, 0, 1) * _dot;
 	}	
 	else
 	{
@@ -111,8 +113,8 @@ void main(void)
 		numLights++;
 	color *= vec4(lightColor * (power * mp), 1);*/
 
-	color += vec4(lighting * ambient, 1);
-	color /= 2;
+	color *= vec4(lighting /* ambient*/, 1);
+//	color /= 2;
 
 	/*if(numLights > 0)
 		color /= numLights;*/

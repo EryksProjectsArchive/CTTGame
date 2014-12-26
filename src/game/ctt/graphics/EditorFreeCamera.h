@@ -24,6 +24,7 @@ private:
 	Quaternion m_rotationY;
 
 	Vector3 m_facing;
+	Vector3 m_velocity;
 	bool m_move;
 
 	void updateMatrix();

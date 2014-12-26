@@ -237,14 +237,14 @@ bool Game::init()
 	// Create main menu
 	m_ui = new UI::Manager();
 
-	UI::View* view = m_ui->createView("game.main_menu");
+	/*UI::View* view = m_ui->createView("game.main_menu");
 
 	UI::Button* button = new UI::Button("button1", Vector2(100.0f, 100.0f), Vector2(200.0f, 50.0f));
 	button->setText(L"Start Editor");
 
 	view->attach(button);
 
-	m_ui->setCurrentView("game.main_menu");
+	m_ui->setCurrentView("game.main_menu");*/
 
 	// create game sound mgr
 
@@ -396,7 +396,7 @@ void Game::render()
 			gFont->render(WString<256>(L"#FFFFFFFPS: %s%.1f", color, fps), Rect(20, 20, 10, 10), Color(1.0f, 1.0f, 1.0f, 1.0f), Font::DrawFlags::NoClip);
 
 
-			glm::vec3 pos = glm::project(glm::vec3(0, 5, 0), glm::mat4()* Camera::current->getViewMatrix(), m_renderer->getProjectionMatrix(), m_renderer->getViewportAsVector());
+			/*glm::vec3 pos = glm::project(glm::vec3(0, 5, 0), glm::mat4()* Camera::current->getViewMatrix(), m_renderer->getProjectionMatrix(), m_renderer->getViewportAsVector());
 			pos.y = m_renderer->getViewportAsVector().w - pos.y;
 
 			gFont->render(WString<256>(L"%.f, %.f, %.f", pos.x, pos.y, pos.z), Rect(pos.x + 1, pos.y + 1, 10, 10), Color(0.0f, 0.0f, 0.0f, 0.6f), Font::DrawFlags::NoClip);
@@ -417,7 +417,7 @@ void Game::render()
 			pos = glm::project(glm::vec3(0, 1, 10), glm::mat4()* Camera::current->getViewMatrix(), m_renderer->getProjectionMatrix(), m_renderer->getViewportAsVector());
 			pos.y = m_renderer->getViewportAsVector().w - pos.y;
 			gFont->render(WString<256>(L"%.f, %.f, %.f", pos.x, pos.y, pos.z), Rect(pos.x + 1, pos.y + 1, 10, 10), Color(0.0f, 0.0f, 0.0f, 0.6f), Font::DrawFlags::NoClip);
-			gFont->render(WString<256>(L"%.f, %.f, %.f", pos.x, pos.y, pos.z), Rect(pos.x, pos.y, 10, 10), Color(1.0f, 1.0f, 1.0f, 1.0f), Font::DrawFlags::NoClip);
+			gFont->render(WString<256>(L"%.f, %.f, %.f", pos.x, pos.y, pos.z), Rect(pos.x, pos.y, 10, 10), Color(1.0f, 1.0f, 1.0f, 1.0f), Font::DrawFlags::NoClip);*/
 
 		}
 

@@ -116,58 +116,54 @@ void EditorFreeCamera::update(float dt)
 	}
 
 	Vector3 begin = m_position;
+	Vector3 forwardVelocity;
+	Vector3 sideVelocity;
 
 	bool update = false;
 	if (m_keys[0])
-	{
-		m_position += (m_target - begin) * m_speed * dt;
+	{		
+		forwardVelocity = glm::normalize(m_target - begin);
 		update = true;
 	}
 
 	if (m_keys[1])
 	{
-		m_position -= (m_target - begin) * m_speed * dt;
+		forwardVelocity = -glm::normalize(m_target - begin);
 		update = true;
 	}
 
 	if (m_keys[2])
 	{
 		Vector3 direction = glm::cross(m_facing - begin, Vector3(0, 1, 0));
-		m_position -= direction * m_speed * dt;
+		sideVelocity = -glm::normalize(direction);
 		update = true;
 	}
 
 	if (m_keys[3])
 	{
 		Vector3 direction = glm::cross(m_facing - begin, Vector3(0, 1, 0));
-		m_position += direction * m_speed * dt;
-		update = true;
-	}
-
-	if (m_keys[4])
-	{
-		m_position += Vector3(0, 1, 0) * m_speed * dt;
-		update = true;
-	}
-
-	if (m_keys[5])
-	{
-		m_position -= Vector3(0, 1, 0) * m_speed * dt;
+		sideVelocity = glm::normalize(direction);
 		update = true;
 	}
 
 	if (update)
 	{
-		/*Vector3 end = m_position + (m_position - begin);
-		if (glm::length(end - begin) > 0)
-		{
-		Vector3 point;
-		if (Game::get()->getPhysicsWorld()->rayTest(begin, end, &point))
-		{
-		m_position = begin;
-		}
-		}*/
+		m_velocity += (forwardVelocity + sideVelocity);
+		m_velocity = glm::normalize(m_velocity);
+	}
+
+	if (m_keys[4])
+		m_velocity.y = 1.f;
+
+	if (m_keys[5])
+		m_velocity.y = -1.f;
+		
+	if (m_velocity.length() > 0)
+	{
+		m_position += m_velocity * m_speed * dt;
 		updateMatrix();
+
+		m_velocity /= Vector3(1.08f);
 	}
 }
 
