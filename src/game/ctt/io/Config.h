@@ -39,7 +39,7 @@ public:
 	friend class Entry;
 	class Entry
 	{
-	private:
+	public:
 		struct ValueType
 		{
 			enum Type
@@ -47,12 +47,12 @@ public:
 				Integer,
 				String,
 				Float,
-				Boolean,				
+				Boolean,
 				Array,
 				Empty
 			};
 		};
-
+	private:
 		DynString m_name;
 		ValueType::Type m_type;
 		struct
@@ -77,6 +77,13 @@ public:
 		List<Entry *> getArrayData();
 		DynString getString(const DynString& def = DynString());
 		bool getBool(bool def = false);
+
+		ValueType::Type type();
+
+		Entry& operator=(uint32 v);
+		Entry& operator=(float v);
+		Entry& operator=(const DynString& v);
+		Entry& operator=(bool v);
 
 		Entry& find(const DynString& name);
 		Entry& operator[](const DynString& name);

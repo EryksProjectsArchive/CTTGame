@@ -250,6 +250,7 @@
     <ClInclude Include="core\SharedPtr.h" />
     <ClInclude Include="core\Singleton.h" />
     <ClInclude Include="core\String.h" />
+    <ClInclude Include="core\StringUtilities.h" />
     <ClInclude Include="core\threading\Thread.h" />
     <ClInclude Include="core\Timer.h" />
     <ClInclude Include="core\WDynString.h" />

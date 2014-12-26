@@ -20,6 +20,7 @@
 
 #include <input/Input.h>
 #include <core/Timer.h>
+#include <core/StringUtilities.h>
 
 #include <os/OS.h>
 #include <game/Game.h>
@@ -129,7 +130,97 @@ void Console::onKeyEvent(Key::Type key, bool pressed)
 				}
 				else
 				{
-					output(MessageType::Error, WString<256>(L"Cannot find command: %s", m_inputBuffer.get()));
+					bool isConfigVar = false;
+					if (m_inputBuffer.contains('=') || m_inputBuffer.contains('.'))
+					{
+						bool hasCategory = false;
+						bool isValue = false;
+						WDynString category;
+						WDynString name;
+						WDynString value;
+						WDynString *currentBuffer = &category;
+						WDynString fullName;
+
+						Config::Entry* entry = 0;
+						for (uint32 i = 0; i < m_inputBuffer.getLength(); ++i)
+						{
+							if (m_inputBuffer[i] == '.' && category.getLength() > 0 && !hasCategory && !isValue)
+							{
+								currentBuffer = &name;
+								entry = &Config::get().find(StringUtilities::toMultiByte(category));
+								fullName += category;
+								hasCategory = true;								
+								continue;
+							}
+
+							if ((m_inputBuffer[i] == '.' || m_inputBuffer[i] == '=') && name.getLength() > 0 && !isValue && hasCategory)
+							{								
+								entry = &(*entry)[StringUtilities::toMultiByte(name)];
+								if (m_inputBuffer[i] == '.')
+									fullName += '.';
+								fullName += name;
+									
+								
+								if (m_inputBuffer[i] == '=')
+								{
+									currentBuffer = &value;
+									isValue = true;
+								}
+								
+								name.reset();																	
+								continue;
+							}
+
+							(*currentBuffer) += m_inputBuffer[i];
+						}
+
+						if (name.getLength() > 0)
+						{
+							entry = &(*entry)[StringUtilities::toMultiByte(name)];
+							fullName += '.';
+							fullName += name;
+						}
+
+						if (category.getLength() > 0)
+						{
+							if (value.getLength() > 0)
+							{
+								output(MessageType::Info, WString<256>(L"Config var %s set to %s", fullName.get(), value.get()));								
+								(*entry) = StringUtilities::toMultiByte(value);
+							}
+							else 
+							{
+								Config::Entry::ValueType::Type type = entry->type();
+								switch (type)
+								{
+								case Config::Entry::ValueType::Array:
+									output(MessageType::Info, WString<256>(L"Config var %s is array of sub vars.", fullName.get()));
+									break;
+								case Config::Entry::ValueType::Integer:
+									output(MessageType::Info, WString<256>(L"Config var %s is equal %d.", fullName.get(), entry->getInteger()));
+									break;
+								case Config::Entry::ValueType::String:
+									output(MessageType::Info, WString<256>(L"Config var %s is equal %s.", fullName.get(), StringUtilities::toWideChar(entry->getString()).get()));
+									break;
+								case Config::Entry::ValueType::Float:
+									output(MessageType::Info, WString<256>(L"Config var %s is equal %f.", fullName.get(), entry->getFloat()));
+									break;
+								case Config::Entry::ValueType::Boolean:
+									output(MessageType::Info, WString<256>(L"Config var %s is equal %s.", fullName.get(),entry->getBool()?L"true":L"false"));
+									break;
+								default: // Empty
+									output(MessageType::Info, WString<256>(L"Config var %s is empty.", fullName.get()));
+									break;
+								}						
+							}
+							isConfigVar = true;
+						}
+					}
+
+					if (!isConfigVar)
+					{
+						output(MessageType::Error, WString<256>(L"Cannot find command: %s", m_inputBuffer.get()));
+					}
 				}
 				m_inputBuffer.reset();
 			}

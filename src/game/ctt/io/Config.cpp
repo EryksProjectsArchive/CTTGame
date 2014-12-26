@@ -17,6 +17,8 @@
 
 #include <time.h>
 
+#include <core/StringUtilities.h>
+
 Config * Config::s_singleton = 0;
 
 Config::Config()
@@ -166,6 +168,58 @@ bool Config::Entry::getBool(bool def)
 	m_type = Config::Entry::ValueType::Boolean;
 	m_data.booleanData = def;
 	return def;
+}
+
+Config::Entry::ValueType::Type Config::Entry::type()
+{
+	return m_type;
+}
+
+Config::Entry& Config::Entry::operator=(uint32 v)
+{
+	m_type = Config::Entry::ValueType::Integer;
+	m_data.integerValue = v;
+	return *this;
+}
+
+Config::Entry& Config::Entry::operator=(float v)
+{
+	m_type = Config::Entry::ValueType::Float;
+	m_data.floatValue = v;
+	return *this;
+}
+
+Config::Entry& Config::Entry::operator=(const DynString& v)
+{
+	if (StringUtilities::isBoolean(v))
+	{
+		m_type = Config::Entry::ValueType::Boolean;
+		m_data.booleanData = StringUtilities::toBoolean(v);
+	}
+	else if (StringUtilities::isFloat(v))
+	{
+		m_type = Config::Entry::ValueType::Float;
+		m_data.floatValue = StringUtilities::toFloat(v);
+	} 
+	else if (StringUtilities::isInteger(v))
+	{
+		m_type = Config::Entry::ValueType::Integer;
+		m_data.integerValue = StringUtilities::toUInt32(v);
+	}
+
+	else
+	{
+		m_type = Config::Entry::ValueType::String;
+		m_data.stringData = v;
+	}
+	return *this;
+}
+
+Config::Entry& Config::Entry::operator=(bool v)
+{
+	m_type = Config::Entry::ValueType::Boolean;
+	m_data.booleanData = v;
+	return *this;
 }
 
 Config::Entry& Config::Entry::find(const DynString& name)

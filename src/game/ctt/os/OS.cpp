@@ -192,7 +192,21 @@ namespace OS
 		::MultiByteToWideChar(CP_UTF8, NULL, mb, mbLen, *wc, *wcLen);
 		(*wc)[*wcLen] = '\0';
 	}
-	
+
+	void wideCharToMultiByte(const wchar_t *utf8, uint32 utf8Len, char **ansi, uint32 *ansiLen)
+	{
+		*ansiLen = utf8Len;
+		*ansi = new char[utf8Len+1];
+		wcstombs(*ansi, utf8, utf8Len);
+		(*ansi)[*ansiLen] = '\0';
+
+		/**ansiLen = ::WideCharToMultiByte(CP_UTF8, NULL, utf8, utf8Len, NULL, 0, 0, 0);
+		*ansi = new char[*ansiLen + 1];
+
+		::WideCharToMultiByte(CP_UTF8, NULL, utf8, utf8Len, *ansi, *ansiLen, 0, 0);
+		(*ansi)[*ansiLen] = '\0';*/
+	}
+
 	DynamicLibrary * openDynamicLibrary(FilePath path)
 	{
 #ifdef _WIN32

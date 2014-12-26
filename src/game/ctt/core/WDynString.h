@@ -14,6 +14,9 @@
 #include <Prerequisites.h>
 
 #include <core/Logger.h>
+#include <os/OS.h>
+
+#include "DynString.h"
 
 /**
 * WDynString class is used to store dynamically allocated string. May be used to save memory.
@@ -126,15 +129,20 @@ public:
 	}
 
 
-	WDynString& operator+=(const wchar_t c)
+	WDynString& operator+=(const wchar c)
 	{		
 		wchar_t s[2] = { c, 0 };
 		return append(s);
 	}
 
-	bool operator==(const WDynString& rhs)
+	bool operator==(const WDynString& rhs) const
 	{
 		return !wcscmp(m_buffer, rhs.m_buffer);
+	}
+
+	bool operator==(const wchar *rhs) const
+	{
+		return !wcscmp(m_buffer, rhs);
 	}
 
 	wchar operator[](uint32 index) const
@@ -160,6 +168,20 @@ public:
 		m_buffer = new wchar[1];
 		m_buffer[0] = '\0';
 		m_size = 0;
+	}
+
+	bool contains(wchar c)
+	{
+		return find(c) != -1;
+	}
+
+	int32 find(wchar c)
+	{
+		for (uint32 i = 0; i < m_size; ++i)
+			if (m_buffer[i] == c)
+				return i;
+
+		return -1;
 	}
 
 	WDynString substr(uint32 start, uint32 end)

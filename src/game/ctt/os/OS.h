@@ -54,6 +54,7 @@ namespace OS
 
 	// Strings
 	void multiByteToWideChar(const char *ansi, uint32 ansiLen, wchar_t **utf8, uint32 *utf8Len);
+	void wideCharToMultiByte(const wchar_t *utf8, uint32 utf8Len, char **ansi, uint32 *ansiLen);
 
 	// Dynamic libs
 	DynamicLibrary * openDynamicLibrary(const FilePath path);
