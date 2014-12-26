@@ -48,6 +48,7 @@ public:
 
 	PhysicsWorld& getPhysicsWorld();
 	UI::Manager& getUI();
+	Scene& getScene();
 
 	static Game* get();
 };

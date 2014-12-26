@@ -165,6 +165,7 @@ public:
 
 	void reset()
 	{
+		clear();
 		m_buffer = new wchar[1];
 		m_buffer[0] = '\0';
 		m_size = 0;

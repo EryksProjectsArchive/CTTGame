@@ -30,11 +30,16 @@ Console * Console::s_instance = 0;
 Console::Console()
 	: Controllable(ControllableType::Engine), m_font(0), m_material(0), m_background(0), m_inputBackground(0), m_height(CONSOLE_LINES * 20.0f + 10.0f), m_isInitialized(false)
 {
+	m_history.reset();
 	s_instance = this;
 }
 
 Console::~Console()
 {
+	for (ICommand *command : m_commands)
+		delete command;
+	m_commands.clear();
+
 	if (m_material)
 		m_material->release();
 
@@ -121,14 +126,23 @@ void Console::onKeyEvent(Key::Type key, bool pressed)
 		
 		if (key == Key::SCANCODE_RETURN && m_state && pressed)
 		{
-			// TODO: Commands processor and config variables management via conole
 			if (m_inputBuffer.getLength() > 0)
 			{
-				if (m_inputBuffer == L"quit")
+				bool commandExecuted = false;
+				
+				int32 space = m_inputBuffer.find(' ');
+				WDynString commandName = m_inputBuffer.substr(0, space!=-1?space:m_inputBuffer.getLength());
+				WDynString params = m_inputBuffer.substr(space+1, m_inputBuffer.getLength());
+				for (ICommand *command : m_commands)
 				{
-					Game::get()->shutdown();
+					if (command->m_name == commandName)
+					{
+						command->onExecute(params);
+						commandExecuted = true;
+					}
 				}
-				else
+				
+				if (!commandExecuted)
 				{
 					bool isConfigVar = false;
 					if (m_inputBuffer.contains('=') || m_inputBuffer.contains('.'))
@@ -224,13 +238,42 @@ void Console::onKeyEvent(Key::Type key, bool pressed)
 					if (!isConfigVar)
 						output(MessageType::Error, WString<256>(L"Invalid command: %s", m_inputBuffer.get()));
 				}
-				m_inputBuffer.reset();
+				m_history.add(m_inputBuffer);
+				m_inputBuffer.reset();				
 			}
 		}
 
 		if (key == Key::SCANCODE_BACKSPACE && pressed)
 		{
 			m_inputBuffer = m_inputBuffer.substr(0, m_inputBuffer.getLength() - 1);
+		}
+
+		if (key == Key::SCANCODE_UP && pressed)
+		{
+			if (m_history.m_current == -1)			
+				m_history.m_current = 0;			
+			else
+			{
+				m_history.m_current++;
+				if (!m_history.m_entry[m_history.m_current].m_used || m_history.m_current >= CONSOLE_HISTORY - 1)
+					m_history.m_current = -1;
+			}
+
+			m_inputBuffer = (m_history.m_current != -1) ? m_history.m_entry[m_history.m_current].m_value : WDynString();
+		}
+
+		if (key == Key::SCANCODE_DOWN && pressed)
+		{
+			if (m_history.m_current == -1)
+				m_history.m_current = CONSOLE_HISTORY-1;
+			else
+			{
+				m_history.m_current--;
+				if (!m_history.m_entry[m_history.m_current].m_used || m_history.m_current < 0)
+					m_history.m_current = -1;
+			}
+
+			m_inputBuffer = (m_history.m_current != -1) ? m_history.m_entry[m_history.m_current].m_value : WDynString();
 		}
 	}
 }
@@ -312,4 +355,38 @@ Console::Line& Console::Line::operator=(const Console::Line& line)
 Console * Console::get()
 {
 	return s_instance;
+}
+
+void Console::addCommand(ICommand * command)
+{
+	m_commands.pushBack(command);
+	command->m_console = this;
+}
+
+void Console::removeCommand(const WDynString& name)
+{
+	for (ICommand *command : m_commands)
+	{
+		if (command->m_name == name)
+		{
+			m_commands.remove(command);
+			break;
+		}
+	}
+}
+
+Console::ICommand::ICommand(const WDynString& name)
+{
+	m_console = 0;
+	m_name = name;
+}
+
+Console::ICommand::ICommand(const Console::ICommand& command) 
+{
+	m_console = command.m_console;
+	m_name = command.m_name;
+}
+
+Console::ICommand::~ICommand()
+{
 }

@@ -30,10 +30,15 @@ class Entity
 {
 private:
 	EntityType::Type m_type;
+
+	uint64 m_uid;
+	static uint64 ms_uid;
 public:
 	Entity(EntityType::Type type);
 
 	virtual ~Entity();
 	virtual EntityType::Type getType();
 	virtual void render(RenderContext & ctx);
+
+	virtual uint64 getUID();
 };

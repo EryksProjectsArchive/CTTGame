@@ -26,6 +26,7 @@
 #include <graphics/Geometry.h>
 
 #define CONSOLE_LINES 10
+#define CONSOLE_HISTORY 10
 
 class Console : public Controllable
 {
@@ -39,6 +40,22 @@ public:
 			Error,
 			Warning
 		};
+	};
+
+	class ICommand
+	{
+	protected:
+		WDynString m_name;
+		Console *m_console;
+	public:
+		ICommand() : m_console(0) {}
+		ICommand(const WDynString& name);
+		ICommand(const ICommand& command);
+		virtual ~ICommand();
+
+		virtual void onExecute(const WDynString& params) {};
+
+		friend class Console;
 	};
 private:
 	class Line
@@ -67,11 +84,51 @@ private:
 	static Console* s_instance;
 	WDynString m_inputBuffer;
 	float m_height;
+
+	struct
+	{
+		struct
+		{
+			uint8 m_used;
+			WDynString m_value;
+		} m_entry[CONSOLE_HISTORY];
+
+		void reset()
+		{
+			for (uint32 i = 0; i < CONSOLE_HISTORY; ++i)
+			{
+				m_entry[i].m_used = 0;
+				m_entry[i].m_value.reset();
+			}
+			m_current = -1;
+		}
+
+		void add(const WDynString& value)
+		{
+			for (uint32 i = CONSOLE_HISTORY-1; i >= 1; --i)
+			{
+				m_entry[i].m_used = m_entry[i - 1].m_used;
+				m_entry[i].m_value = m_entry[i - 1].m_value;
+			}
+
+			m_entry[0].m_used = 1;
+			m_entry[0].m_value = value;
+
+			m_current = -1;
+		}
+
+		int32 m_current;
+	} m_history;
+
+	List<ICommand *> m_commands;
 public:
 	Console();
 	~Console();
 
 	void init();
+
+	void addCommand(ICommand* command);
+	void removeCommand(const WDynString& name);
 
 	void output(MessageType::Type type, const WDynString& message);
 

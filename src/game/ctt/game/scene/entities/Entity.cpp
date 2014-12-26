@@ -15,8 +15,10 @@
 
 #include "Entity.h"
 
+uint64 Entity::ms_uid = 0;
+
 Entity::Entity(EntityType::Type type)
-	: m_type(type)
+	: m_type(type), m_uid(ms_uid++)
 {
 }
 
@@ -32,4 +34,9 @@ EntityType::Type Entity::getType()
 
 void Entity::render(RenderContext& ctx)
 {
+}
+
+uint64 Entity::getUID()
+{
+	return m_uid;
 }

@@ -70,9 +70,63 @@
 Game * Game::s_instance = 0;
 Font *gFont = 0;
 
+class ConsoleQuitCommand : public Console::ICommand
+{
+public:
+	ConsoleQuitCommand() : Console::ICommand(L"quit")
+	{
+
+	}
+
+	void onExecute(const WDynString& params)
+	{
+		wprintf(L"Parameters: %s\n", params.get());
+		Game::get()->shutdown();
+	}
+};
+
+class SpawnCommand : public Console::ICommand
+{
+public:
+	SpawnCommand() : Console::ICommand(L"spawn")
+	{
+
+	}
+
+	void onExecute(const WDynString& params)
+	{
+		if (params.getLength() > 0)
+		{
+			if (params == L"box")
+			{
+				BoxEntity * box = new BoxEntity();
+				box->setPosition(Vector3(0, 10, 0));
+				Game::get()->getScene().addEntity(box);
+
+				if (m_console)
+					m_console->output(Console::MessageType::Info, WString<128>(L"Spawned box (%d)!", box->getUID()));
+			}
+			else 
+			{
+				if (m_console)
+					m_console->output(Console::MessageType::Warning, L"Invalid item name");
+			}
+		}
+		else 
+		{
+			if (m_console)
+				m_console->output(Console::MessageType::Info, L"Type: spawn [item_name]");
+		}
+	}
+};
+
+
 Game::Game()
 	: Controllable(ControllableType::Engine), m_renderer(0), m_window(0), m_scene(0), m_physicsWorld(0), m_config(0), m_console(new Console()), m_ui(0)
 {
+	m_console->addCommand(new ConsoleQuitCommand());
+	m_console->addCommand(new SpawnCommand());
+
 	s_instance = this;
 }
 
@@ -430,6 +484,11 @@ PhysicsWorld& Game::getPhysicsWorld()
 UI::Manager& Game::getUI()
 {
 	return *m_ui;
+}
+
+Scene& Game::getScene()
+{
+	return *m_scene;
 }
 
 Game * Game::get()

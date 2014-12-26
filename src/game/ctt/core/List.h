@@ -115,7 +115,7 @@ public:
 		while (node)
 		{
 			Node * next = node->m_next;
-			if (node->m_value == value)
+			if ((void *)&node->m_value == (void *)&value)
 			{
 				if (node->m_next)
 				{
