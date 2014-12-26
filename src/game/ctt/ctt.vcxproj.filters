@@ -731,6 +731,9 @@
     <ClInclude Include="physics\DynamicPhysicalEntity.h">
       <Filter>Header Files\physics</Filter>
     </ClInclude>
+    <ClInclude Include="core\Instance.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="todo.txt">

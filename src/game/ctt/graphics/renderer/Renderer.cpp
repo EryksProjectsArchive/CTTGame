@@ -180,7 +180,7 @@ PFNGLBLITFRAMEBUFFERPROC Renderer::glBlitFramebuffer = 0;
 PFNGLRENDERBUFFERSTORAGEMULTISAMPLEPROC Renderer::glRenderbufferStorageMultisample = 0;
 PFNGLFRAMEBUFFERTEXTURELAYERPROC Renderer::glFramebufferTextureLayer = 0;
 
-Renderer * Renderer::s_instance = 0;
+SETUP_INSTANCE(Renderer);
 
 Renderer::Renderer()
 	: m_window(0),
@@ -191,7 +191,6 @@ Renderer::Renderer()
 	  m_helperMaterial(0),
 	  m_wireframe(false)
 {
-	s_instance = this;
 	m_stats.reset();
 	m_rect.bottom = m_rect.top = m_rect.right = m_rect.left = 0;
 }
@@ -571,16 +570,10 @@ void Renderer::endSceneRender()
 	geometry.fillData(vertices, 4, triangles, 2);
 
 	if (!m_deferredResultMaterial)
-	{
-		Error("renderer", "Cannot render deferred final plane. No material found!");
 		return;
-	}
 
 	if (!m_deferredResultMaterial->m_program || !glIsProgram(m_deferredResultMaterial->m_program->m_programId))
-	{
-		Error("renderer", "Cannot render deferred final plane. No shader program assigned for material.");
 		return;
-	}
 
 	glUseProgram(m_deferredResultMaterial->m_program->m_programId);
 
@@ -1245,11 +1238,6 @@ void Renderer::renderFont(const WDynString& string, const Rect& rect, const Colo
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
-}
-
-Renderer& Renderer::get()
-{
-	return *s_instance;
 }
 
 Rect Renderer::getRect()

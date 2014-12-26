@@ -170,7 +170,7 @@ Font::~Font()
 void Font::render(const WDynString& string, const Rect& rect, const Color& color, flags32 flags)
 {
 	if (m_loaded)
-		Renderer::get().renderFont(string, rect, color, flags, this);
+		Renderer::get()->renderFont(string, rect, color, flags, this);
 }
 
 Font::GlyphData Font::getData(wchar_t c)

@@ -43,7 +43,7 @@ PhysicalEntity::~PhysicalEntity()
 
 void PhysicalEntity::setLinearVelocity(Vector3 velocity)
 {
-	Error("Physics", "%s: Setting linear velocity is not possible for static entity. (%s:%d)", __FUNCDNAME__, __FILE__, __LINE__);
+	Warning("Physics", "%s: Setting linear velocity is not possible for static entity. (%s:%d)", __FUNCDNAME__, __FILE__, __LINE__);
 }
 
 Vector3 PhysicalEntity::getLinearVelocity()
@@ -53,7 +53,7 @@ Vector3 PhysicalEntity::getLinearVelocity()
 
 void PhysicalEntity::setAngularVelocity(Vector3 velocity)
 {
-	Error("Physics", "%s: Setting angular velocity is not possible for static entity. (%s:%d)", __FUNCDNAME__, __FILE__, __LINE__);
+	Warning("Physics", "%s: Setting angular velocity is not possible for static entity. (%s:%d)", __FUNCDNAME__, __FILE__, __LINE__);
 }
 
 Vector3 PhysicalEntity::getAngularVelocity()
@@ -130,12 +130,12 @@ bool PhysicalEntity::isDynamic()
 
 void PhysicalEntity::setMass(float mass)
 {
-	Error("Physics", "%s: Setting mass is not possible for static entities. (%s:%d)", __FUNCDNAME__, __FILE__, __LINE__);
+	Warning("Physics", "%s: Setting mass is not possible for static entities. (%s:%d)", __FUNCDNAME__, __FILE__, __LINE__);
 }
 
 void PhysicalEntity::setFriction(float friction)
 {
-	Error("Physics", "%s: Setting friction is not possible for static entities. (%s:%d)", __FUNCDNAME__, __FILE__, __LINE__);
+	Warning("Physics", "%s: Setting friction is not possible for static entities. (%s:%d)", __FUNCDNAME__, __FILE__, __LINE__);
 }
 
 void PhysicalEntity::setupPhysics(btCollisionShape * shape)

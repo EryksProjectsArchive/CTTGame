@@ -244,6 +244,7 @@
     <ClInclude Include="core\ExceptionHandler.h" />
     <ClInclude Include="core\hashing\Hash.h" />
     <ClInclude Include="core\hashing\JenkinsHash.h" />
+    <ClInclude Include="core\Instance.h" />
     <ClInclude Include="core\List.h" />
     <ClInclude Include="core\Logger.h" />
     <ClInclude Include="core\SharedPtr.h" />

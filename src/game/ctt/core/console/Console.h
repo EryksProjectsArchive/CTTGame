@@ -25,6 +25,8 @@
 #include <graphics/Vertex2d.h>
 #include <graphics/Geometry.h>
 
+#define CONSOLE_LINES 10
+
 class Console : public Controllable
 {
 public:
@@ -43,27 +45,28 @@ private:
 	{
 	private:
 		WString<600> m_message;
-	public:
-		Line(MessageType::Type type, const WDynString& m_message);
+	public:	
 		Line(const Line& rhs);
 		Line();
 		~Line();
 
-		friend class Console;
-	
+		void Set(MessageType::Type type, const WDynString& m_message);
+		Line& operator=(const Line& line);
+
+		friend class Console;	
 	};
 
-	List<Line*> m_lines;
-	unsigned char m_state : 1;
+
+	bool m_isInitialized;
+	Line m_lines[CONSOLE_LINES];
+	bool m_state;
 	Font* m_font;
 	Material* m_material;
-	float m_scroll;
-	bool m_scrollDown;
-	bool m_scrollUp;
 	Geometry<SimpleVertex2d>* m_background;
 	Geometry<SimpleVertex2d>* m_inputBackground;
 	static Console* s_instance;
 	WDynString m_inputBuffer;
+	float m_height;
 public:
 	Console();
 	~Console();

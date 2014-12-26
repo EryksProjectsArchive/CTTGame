@@ -74,8 +74,8 @@ namespace UI
 
 	void Button::render(UIRenderContext& context)
 	{			
-		Renderer::get().setMaterial(m_material);
-		Renderer::get().renderGeometry(m_geometry);
+		Renderer::get()->setMaterial(m_material);
+		Renderer::get()->renderGeometry(m_geometry);
 
 		m_font->render(m_text, Rect(m_position.x, m_position.y, m_position.x + m_size.x, m_position.y + m_size.y), Color(1,1,1,1), Font::DrawFlags::HorizontalCenter | Font::DrawFlags::VerticalCenter);
 	}

@@ -42,8 +42,8 @@ private:
 public:
 	Geometry()
 	{
-		m_vertexBuffer = (VertexBuffer *)Renderer::get().createBuffer(BufferType::VERTEX);
-		m_indexBuffer = (IndexBuffer *)Renderer::get().createBuffer(BufferType::INDEX);
+		m_vertexBuffer = (VertexBuffer *)Renderer::get()->createBuffer(BufferType::VERTEX);
+		m_indexBuffer = (IndexBuffer *)Renderer::get()->createBuffer(BufferType::INDEX);
 
 		m_trianglesCount = 0;
 		m_verticesCount = 0;

@@ -50,7 +50,7 @@ Scene::~Scene()
 
 void Scene::render()
 {
-	Renderer::get().beginSceneRender();
+	Renderer::get()->beginSceneRender();
 	{
 		// Separated render context for entities
 		RenderContext ctx;
@@ -61,7 +61,7 @@ void Scene::render()
 		for (auto entity : m_entities)
 			entity->render(ctx);
 	}
-	Renderer::get().endSceneRender();
+	Renderer::get()->endSceneRender();
 }
 
 void Scene::addEntity(Entity *entity)

@@ -81,7 +81,7 @@ void DynamicPhysicalEntity::setMass(float mass)
 	{
 		if (!mass)
 		{
-			Error("Physics", "%s (%s:%d): Requested zero mass on dynamic physical entity. Aborting!", __FUNCDNAME__, __FILE__, __LINE__);
+			Warning("Physics", "%s (%s:%d): Requested zero mass on dynamic physical entity. Aborting this change.", __FUNCDNAME__, __FILE__, __LINE__);
 			return;
 		}
 		

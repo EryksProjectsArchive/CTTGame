@@ -60,7 +60,7 @@
 #include <core/WDynString.h>
 #include <core/WString.h>
 
-#include <core/console/Console.h>\
+#include <core/console/Console.h>
 
 #include <graphics/ui/UIManager.h>
 #include <graphics/ui/UIView.h>

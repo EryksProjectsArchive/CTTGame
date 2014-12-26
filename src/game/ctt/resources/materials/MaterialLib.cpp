@@ -105,5 +105,11 @@ Material * MaterialLib::findByName(const DynString& name)
 		Error("MatLib", "Cannot open file for material %s. Path '%s'.", name.get(), FilePath("../data/materials/%s.json", name.get()).get());
 	}
 	FileSystem::get()->close(file);
+
+	if (!material)
+	{
+		Error("MatLib", "Unable to find material '%s'.", name.get());
+	}
+
 	return material;
 }

@@ -103,11 +103,11 @@ public:
 		return *this;
 	}
 
-	WDynString& operator+=(const WDynString& rhs)
-	{		
+	WDynString& append(const WDynString& rhs)
+	{
 		wchar *temp = new wchar[m_size + 1];
 		wcscpy(temp, m_buffer);
-		
+
 		m_size += rhs.m_size;
 
 		delete[]m_buffer;
@@ -118,6 +118,18 @@ public:
 
 		delete[]temp;
 		return *this;
+	}
+
+	WDynString& operator+=(const WDynString& rhs)
+	{		
+		return append(rhs);
+	}
+
+
+	WDynString& operator+=(const wchar_t c)
+	{		
+		wchar_t s[2] = { c, 0 };
+		return append(s);
 	}
 
 	bool operator==(const WDynString& rhs)

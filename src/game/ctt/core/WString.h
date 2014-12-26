@@ -94,6 +94,7 @@ public:
 
 	WString& operator=(const wchar *buffer)
 	{
+		clear();
 		uint32 size = wcslen(buffer);
 		memcpy(m_buffer, buffer, (size > maxSize ? maxSize : size) * sizeof(wchar));
 		return *this;
@@ -193,5 +194,10 @@ public:
 		wcscpy(newWString.m_buffer, value);
 		wcscat(newWString.m_buffer, temp);
 		return newWString;
+	}
+
+	void clear()
+	{
+		memset(m_buffer, 0, maxSize * sizeof(wchar));
 	}
 };

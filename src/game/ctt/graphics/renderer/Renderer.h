@@ -20,7 +20,9 @@
 #include <graphics/Vertex2d.h>
 #include <math/Rect.h>
 
-class Renderer
+#include <core/Instance.h>
+
+class Renderer : public Instance<Renderer>
 {
 protected:
 	Window* m_window;
@@ -30,7 +32,6 @@ protected:
 	glm::vec4 m_viewport;
 	
 	SDL_GLContext m_glContext;
-	static Renderer* s_instance;
 
 	Material* m_currentMaterial;
 	Material* m_defaultMaterial;
@@ -92,8 +93,6 @@ public:
 	void renderFont(const WDynString& string, const Rect& rect, const Color& color, flags32 flags, Font *font);
 
 	Rect getRect();
-
-	static Renderer& get();
 
 	// Extension methods
 	static PFNGLENABLEIPROC glEnablei;

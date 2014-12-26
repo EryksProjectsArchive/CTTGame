@@ -20,8 +20,8 @@ UIRenderContext::~UIRenderContext()
 {
 	for (UIRenderTask* task : m_renderTasks)
 	{
-		Renderer::get().setMaterial(task->m_material);
-		Renderer::get().renderGeometry(task->m_geometry);
+		Renderer::get()->setMaterial(task->m_material);
+		Renderer::get()->renderGeometry(task->m_geometry);
 		delete task;
 	}
 	m_renderTasks.clear();
