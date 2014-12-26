@@ -23,17 +23,22 @@ vec3 getWorldPosition()
 
 void main(void)
 {	
+	vec3 ambient = vec3(1, 1, 1);
+	int numLights = 0;
+
 	// Base color of texture
 	color = texture2D(diffuseTexture, vUV);
 
 	// Get world position from depth buffer
 	vec3 vecPosition = getWorldPosition();
-	vec3 vecNormal = texture2D(normalTexture, vUV).xyz;
+	vec3 vecNormal = normalize(texture2D(normalTexture, vUV).xyz);
 
 	//color = vec4(1,1,1,1);
 	//color = vec4(vecNormal, 1);
 
-	float power = 10.f;	
+	vec3 lighting;
+
+	float power = 1.f;	
 	float size = 10.0f;
 	vec3 lightColor = vec3(0.05,0.4,0.48);
 	vec3 lightPosition = vec3(0,5,0);
@@ -49,8 +54,9 @@ void main(void)
 		mp = 0;
 	}
 
-	color += vec4(lightColor * (power * mp), 1);
-	//color /= 2;
+	if(mp > 0)	
+		numLights++;
+	lighting += vec3(lightColor * (power * mp));
 
 	lightColor = vec3(0.5,0.2,0);
 	lightPosition = vec3(10,2,10);
@@ -65,10 +71,11 @@ void main(void)
 		mp = 0;
 	}
 
-	color += vec4(lightColor * (power * mp), 1);
-	//color /= 2;
+	if(mp > 0)	
+		numLights++;
+	lighting += vec3(lightColor * (power * mp));
 
-	lightColor = vec3(0.3,0.0,0.5);
+	/*lightColor = vec3(0.3,0.0,0.5);
 	lightPosition = vec3(10,1,0);
 	
 	_dot = dot(normalize(lightPosition-vecPosition), vecNormal);
@@ -81,8 +88,10 @@ void main(void)
 		mp = 0;
 	}
 
-	color += vec4(lightColor * (power * mp), 1);
-	//color /= 2;
+
+	if(mp > 0)	
+		numLights++;
+	color *= vec4(lightColor * (power * mp), 1);
 
 	lightColor = vec3(0.01,0.03,0.08);
 	lightPosition = vec3(0,1,10);
@@ -97,10 +106,14 @@ void main(void)
 		mp = 0;
 	}
 
-	color += vec4(lightColor * (power * mp), 1);
-	//color /= 2;
 
-	//color += vec4(0.1,0.1,0.1,1);
-	//color *= 2;
-	color = normalize(color);
+	if(mp > 0)	
+		numLights++;
+	color *= vec4(lightColor * (power * mp), 1);*/
+
+	color += vec4(lighting * ambient, 1);
+	color /= 2;
+
+	/*if(numLights > 0)
+		color /= numLights;*/
 }

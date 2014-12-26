@@ -447,6 +447,12 @@
     <ClCompile Include="core\threading\Thread.cpp">
       <Filter>Source Files\core\threading</Filter>
     </ClCompile>
+    <ClCompile Include="physics\StaticPhysicalEntity.cpp">
+      <Filter>Source Files\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="physics\DynamicPhysicalEntity.cpp">
+      <Filter>Source Files\physics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="os\OS.h">
@@ -718,6 +724,12 @@
     </ClInclude>
     <ClInclude Include="core\threading\Thread.h">
       <Filter>Header Files\core\threading</Filter>
+    </ClInclude>
+    <ClInclude Include="physics\StaticPhysicalEntity.h">
+      <Filter>Header Files\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="physics\DynamicPhysicalEntity.h">
+      <Filter>Header Files\physics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

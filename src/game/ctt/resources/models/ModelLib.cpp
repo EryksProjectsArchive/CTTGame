@@ -57,5 +57,11 @@ Model * ModelLib::findByName(const DynString& name)
 		}
 	}
 	FileSystem::get()->close(file);
+
+	if (!model)
+	{
+		Error("ModelLib", "Unable to find model '%s'!.", name.get());
+	}
+
 	return model;
 }

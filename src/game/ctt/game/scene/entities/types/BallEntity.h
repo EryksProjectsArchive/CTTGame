@@ -13,10 +13,9 @@
 
 #include <Prerequisites.h>
 
-#include <physics/PhysicsWorld.h>
-#include <physics/PhysicalEntity.h>
+#include <physics/DynamicPhysicalEntity.h>
 
-class BallEntity : public Entity, public PhysicalEntity
+class BallEntity : public Entity, public DynamicPhysicalEntity
 {
 private:
 	Model *m_model;
@@ -25,7 +24,4 @@ public:
 	~BallEntity();
 
 	void render(RenderContext & ctx);
-
-	void prePhysicsUpdate() override;
-	void postPhysicsUpdate() override;
 };

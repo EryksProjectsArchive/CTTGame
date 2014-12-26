@@ -26,8 +26,6 @@ private:
 
 	AABB m_aabb;
 
-	Matrix4x4 m_matrix;
-
 	DynString m_name;
 public:
 	Model(const DynString name, FilePath file);
@@ -36,9 +34,7 @@ public:
 	void destroy() override;
 	bool load() override;
 
-	void render(RenderContext& renderContext);
-
-	void setMatrix(const Matrix4x4 matrix);
+	void render(RenderContext& renderContext, const Matrix4x4 matrix);
 
 	AABB * getAABB();
 

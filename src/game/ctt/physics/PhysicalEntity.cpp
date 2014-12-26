@@ -12,6 +12,8 @@
 #include "PhysicsWorld.h"
 #include "PhysicalEntity.h"
 
+#include <core/Logger.h>
+
 #include <game/Game.h>
 
 PhysicalEntity::PhysicalEntity()
@@ -41,44 +43,26 @@ PhysicalEntity::~PhysicalEntity()
 
 void PhysicalEntity::setLinearVelocity(Vector3 velocity)
 {
-	if (m_rigidBody)
-	{
-		m_rigidBody->setLinearVelocity(btVector3(velocity.x, velocity.y, velocity.z));
-	}
+	Error("Physics", "%s: Setting linear velocity is not possible for static entity. (%s:%d)", __FUNCDNAME__, __FILE__, __LINE__);
 }
 
 Vector3 PhysicalEntity::getLinearVelocity()
 {
-	if (m_rigidBody)
-	{
-		btVector3 vec = m_rigidBody->getLinearVelocity();
-		return Vector3(vec.x(), vec.y(), vec.z());
-	}
-
 	return Vector3();
 }
 
 void PhysicalEntity::setAngularVelocity(Vector3 velocity)
 {
-	if (m_rigidBody)
-	{
-		m_rigidBody->setAngularVelocity(btVector3(velocity.x, velocity.y, velocity.z));
-	}
+	Error("Physics", "%s: Setting angular velocity is not possible for static entity. (%s:%d)", __FUNCDNAME__, __FILE__, __LINE__);
 }
 
 Vector3 PhysicalEntity::getAngularVelocity()
 {
-	if (m_rigidBody)
-	{
-		btVector3 vec = m_rigidBody->getAngularVelocity();
-		return Vector3(vec.x(), vec.y(), vec.z());
-	}
-
 	return Vector3();
 }
 
 void PhysicalEntity::setPosition(Vector3 position)
-{
+{	
 	if (m_rigidBody)
 	{
 		btTransform transform = m_rigidBody->getWorldTransform();
@@ -117,7 +101,6 @@ Quaternion PhysicalEntity::getRotation()
 	return Quaternion();
 }
 
-
 float PhysicalEntity::getHeight()
 {
 	if (m_rigidBody)
@@ -138,4 +121,28 @@ float PhysicalEntity::getWidth()
 		return max.x() - min.x();
 	}
 	return 0;
+}
+
+bool PhysicalEntity::isDynamic()
+{
+	return false;
+}
+
+void PhysicalEntity::setMass(float mass)
+{
+	Error("Physics", "%s: Setting mass is not possible for static entities. (%s:%d)", __FUNCDNAME__, __FILE__, __LINE__);
+}
+
+void PhysicalEntity::setFriction(float friction)
+{
+	Error("Physics", "%s: Setting friction is not possible for static entities. (%s:%d)", __FUNCDNAME__, __FILE__, __LINE__);
+}
+
+void PhysicalEntity::setupPhysics(btCollisionShape * shape)
+{
+	m_collisionShape = shape;
+	if (m_rigidBody)
+	{
+		Game::get()->getPhysicsWorld().registerRigidBody(m_rigidBody);
+	}
 }

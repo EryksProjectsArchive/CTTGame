@@ -215,8 +215,10 @@
     <ClCompile Include="os\DynamicLibrary.cpp" />
     <ClCompile Include="os\OS.cpp" />
     <ClCompile Include="os\win32\Win32DynamicLibrary.cpp" />
+    <ClCompile Include="physics\DynamicPhysicalEntity.cpp" />
     <ClCompile Include="physics\PhysicalEntity.cpp" />
     <ClCompile Include="physics\PhysicsWorld.cpp" />
+    <ClCompile Include="physics\StaticPhysicalEntity.cpp" />
     <ClCompile Include="resources\CacheableResource.cpp" />
     <ClCompile Include="resources\ImageLoader.cpp" />
     <ClCompile Include="resources\images\bmp\BMPImageLoader.cpp" />
@@ -302,8 +304,10 @@
     <ClInclude Include="os\DynamicLibrary.h" />
     <ClInclude Include="os\OS.h" />
     <ClInclude Include="os\win32\Win32DynamicLibrary.h" />
+    <ClInclude Include="physics\DynamicPhysicalEntity.h" />
     <ClInclude Include="physics\PhysicalEntity.h" />
     <ClInclude Include="physics\PhysicsWorld.h" />
+    <ClInclude Include="physics\StaticPhysicalEntity.h" />
     <ClInclude Include="Prerequisites.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="resources\CacheableResource.h" />

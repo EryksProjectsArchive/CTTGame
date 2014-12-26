@@ -120,15 +120,10 @@ bool Model::load()
 	return false;
 }
 
-void Model::setMatrix(const Matrix4x4 matrix)
-{
-	m_matrix = matrix;
-}
-
-void Model::render(RenderContext & renderContext)
+void Model::render(RenderContext & renderContext, const Matrix4x4 matrix)
 {
 	for (unsigned char i = 0; i < m_meshesCount; ++i)
-		m_meshes[i]->render(renderContext, m_matrix);	
+		m_meshes[i]->render(renderContext, matrix);	
 }
 
 AABB * Model::getAABB()

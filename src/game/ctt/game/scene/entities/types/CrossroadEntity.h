@@ -13,10 +13,9 @@
 
 #include <Prerequisites.h>
 
-#include <physics/PhysicsWorld.h>
-#include <physics/PhysicalEntity.h>
+#include <physics/StaticPhysicalEntity.h>
 
-class CrossroadEntity : public Entity, public PhysicalEntity
+class CrossroadEntity : public Entity, public StaticPhysicalEntity
 {
 private:
 	Model *m_model;
@@ -25,7 +24,4 @@ public:
 	~CrossroadEntity();
 
 	void render(RenderContext & ctx);
-
-	void prePhysicsUpdate() override;
-	void postPhysicsUpdate() override;
 };

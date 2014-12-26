@@ -36,6 +36,10 @@
 
 #define GAME_VERSION_INT MAKE_GAME_VERSION(GAME_VERSION_MAJOR, GAME_VERSION_MINOR, GAME_VERSION_REVISION)
 
+#if !defined(__FUNCDNAME__) && defined(__GNUC__)
+#define __FUNCDNAME__ __PRETTY_FUNCTION__
+#endif
+
 // Types
 typedef signed char sint8;
 typedef char int8;
@@ -96,6 +100,8 @@ class Entity;
 // Physics
 class PhysicsWorld;
 class PhysicalEntity;
+class DynamicPhysicalEntity;
+class StaticPhysicalEntity;
 
 // IO
 template <typename Type>
