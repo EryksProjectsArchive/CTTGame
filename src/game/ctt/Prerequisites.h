@@ -26,18 +26,29 @@
 #include <glm/glm.hpp>
 
 // Versioning
+#define MAKE_VERSION(major, minor, revision)\
+	(unsigned char)((major<<6)|(minor<<3)|revision)
+
+#define WC_GAME_NAME L"City Transport Tycoon"
 #define GAME_NAME "City Transport Tycoon"
 #define GAME_VERSION_MAJOR 1
 #define GAME_VERSION_MINOR 0
 #define GAME_VERSION_REVISION 0
 
-#define MAKE_GAME_VERSION(major, minor, revision)\
-	(unsigned char)((major<<6)|(minor<<3)|revision)
+#define GAME_VERSION_INT MAKE_VERSION(GAME_VERSION_MAJOR, GAME_VERSION_MINOR, GAME_VERSION_REVISION)
 
-#define GAME_VERSION_INT MAKE_GAME_VERSION(GAME_VERSION_MAJOR, GAME_VERSION_MINOR, GAME_VERSION_REVISION)
+#define WC_ENGINE_NAME L"BIM3D"
+#define ENGINE_NAME "BIM3D"
+#define ENGINE_VERSION_MAJOR 1
+#define ENGINE_VERSION_MINOR 0
+#define ENGINE_VERSION_REVISION 0
 
-#if !defined(__FUNCDNAME__) && defined(__GNUC__)
-#define __FUNCDNAME__ __PRETTY_FUNCTION__
+#define ENGINE_VERSION_INT MAKE_VERSION(ENGINE_VERSION_MAJOR, ENGINE_VERSION_MINOR, ENGINE_VERSION_REVISION)
+
+#if defined(__GNUC__)
+#define FUNCTION_NAME __PRETTY_FUNCTION__
+#else
+#define FUNCTION_NAME __FUNCSIG__
 #endif
 
 // Types

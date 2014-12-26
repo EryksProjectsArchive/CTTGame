@@ -196,17 +196,16 @@ Config::Entry& Config::Entry::operator=(const DynString& v)
 		m_type = Config::Entry::ValueType::Boolean;
 		m_data.booleanData = StringUtilities::toBoolean(v);
 	}
-	else if (StringUtilities::isFloat(v))
-	{
-		m_type = Config::Entry::ValueType::Float;
-		m_data.floatValue = StringUtilities::toFloat(v);
-	} 
 	else if (StringUtilities::isInteger(v))
 	{
 		m_type = Config::Entry::ValueType::Integer;
 		m_data.integerValue = StringUtilities::toUInt32(v);
 	}
-
+	else if (StringUtilities::isFloat(v))
+	{
+		m_type = Config::Entry::ValueType::Float;
+		m_data.floatValue = StringUtilities::toFloat(v);
+	} 
 	else
 	{
 		m_type = Config::Entry::ValueType::String;

@@ -16,6 +16,8 @@
 #include "DynString.h"
 #include "WDynString.h"
 
+#define WIDE_CHAR(s) L##s
+
 class StringUtilities
 {
 public:
@@ -50,7 +52,7 @@ public:
 		if (!str.getLength()) return false;
 
 		for (uint32 i = 0; i < str.getLength(); ++i)
-			if ((str[i] != '-') || (str[i] < '0' || str[i] > '9') || (str[i] != '.') || (str[i] != 'e'))
+			if ((str[i] != '-') && (str[i] < '0' || str[i] > '9') && (str[i] != '.') && (str[i] != 'e'))
 				return false;
 
 		return true;
@@ -62,8 +64,8 @@ public:
 
 		for (uint32 i = 0; i < str.getLength(); ++i)
 		{
-			if ((str[i] != '-') || (str[i] < '0' || str[i] > '9'))
-				return true;
+			if ((str[i] != '-') && (str[i] < '0' || str[i] > '9'))
+				return false;
 		}
 		return true;
 	}
@@ -80,7 +82,7 @@ public:
 
 		for (uint32 i = 0; i < str.getLength(); ++i)
 		{
-			if ((str[i] != L'-') || (str[i] < L'0' && str[i] > L'9') || (str[i] != L'.') || (str[i] != L'e'))
+			if ((str[i] != L'-') && (str[i] < L'0' || str[i] > L'9') && (str[i] != L'.') && (str[i] != L'e'))
 				return true;
 		}
 		return true;
@@ -92,8 +94,8 @@ public:
 
 		for (uint32 i = 0; i < str.getLength(); ++i)
 		{
-			if ((str[i] != L'-') || (str[i] < L'0' && str[i] > L'9'))
-				return true;
+			if ((str[i] != L'-') && (str[i] < L'0' || str[i] > L'9'))
+				return false;
 		}
 		return true;
 	}

@@ -82,7 +82,7 @@ public:
 	{
 		if (index >= m_size)
 		{
-			Error("DynArray", "Out of range (%s, %s:%d)!", __FUNCDNAME__, __FILE__, __LINE__);
+			Error("DynArray", "%s: Out of range (%s:%d)!", FUNCTION_NAME, __FILE__, __LINE__);
 		}
 		return m_data[index];
 	}

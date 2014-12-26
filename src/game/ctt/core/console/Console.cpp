@@ -144,6 +144,7 @@ void Console::onKeyEvent(Key::Type key, bool pressed)
 						Config::Entry* entry = 0;
 						for (uint32 i = 0; i < m_inputBuffer.getLength(); ++i)
 						{
+							// Handle category.
 							if (m_inputBuffer[i] == '.' && category.getLength() > 0 && !hasCategory && !isValue)
 							{
 								currentBuffer = &name;
@@ -153,35 +154,38 @@ void Console::onKeyEvent(Key::Type key, bool pressed)
 								continue;
 							}
 
-							if ((m_inputBuffer[i] == '.' || m_inputBuffer[i] == '=') && name.getLength() > 0 && !isValue && hasCategory)
+							// Handle name.
+							if ((m_inputBuffer[i] == '.' || m_inputBuffer[i] == '=' || i == m_inputBuffer.getLength()-1) && name.getLength() > 0 && !isValue && hasCategory)
 							{								
+								// If it's last character of given input and it's not . or = sign we add it to our current buffer.
+								if (i == m_inputBuffer.getLength() - 1 && m_inputBuffer[i] != '.' && m_inputBuffer[i] != '=')								
+									(*currentBuffer) += m_inputBuffer[i];								
+
+								// Grab our node
 								entry = &(*entry)[StringUtilities::toMultiByte(name)];
-								if (m_inputBuffer[i] == '.')
-									fullName += '.';
+
+								// Compose full name
+								fullName += '.';
 								fullName += name;
-									
 								
+								// If its equal sign we are now going to take care about the value.								
 								if (m_inputBuffer[i] == '=')
 								{
 									currentBuffer = &value;
 									isValue = true;
 								}
-								
-								name.reset();																	
+
+								// Reset name variable.
+								name.reset();																
 								continue;
 							}
 
+							// Add sign to current buffer.
 							(*currentBuffer) += m_inputBuffer[i];
 						}
 
-						if (name.getLength() > 0)
-						{
-							entry = &(*entry)[StringUtilities::toMultiByte(name)];
-							fullName += '.';
-							fullName += name;
-						}
 
-						if (category.getLength() > 0)
+						if (category.getLength() > 0 && hasCategory)
 						{
 							if (value.getLength() > 0)
 							{
@@ -206,7 +210,7 @@ void Console::onKeyEvent(Key::Type key, bool pressed)
 									output(MessageType::Info, WString<256>(L"Config var %s is equal %f.", fullName.get(), entry->getFloat()));
 									break;
 								case Config::Entry::ValueType::Boolean:
-									output(MessageType::Info, WString<256>(L"Config var %s is equal %s.", fullName.get(),entry->getBool()?L"true":L"false"));
+									output(MessageType::Info, WString<256>(L"Config var %s is equal %s.", fullName.get(), entry->getBool()? L"true": L"false"));
 									break;
 								default: // Empty
 									output(MessageType::Info, WString<256>(L"Config var %s is empty.", fullName.get()));
@@ -218,9 +222,7 @@ void Console::onKeyEvent(Key::Type key, bool pressed)
 					}
 
 					if (!isConfigVar)
-					{
-						output(MessageType::Error, WString<256>(L"Cannot find command: %s", m_inputBuffer.get()));
-					}
+						output(MessageType::Error, WString<256>(L"Invalid command: %s", m_inputBuffer.get()));
 				}
 				m_inputBuffer.reset();
 			}
@@ -237,7 +239,8 @@ void Console::onTextInput(const WDynString& string)
 {	
 	if (m_state)
 	{
-		if (string[0]!='`')// hardcoded hotfix for doubled keys
+		// hardcoded hotfix for doubled keys
+		if (string[0]!='`')
 			m_inputBuffer += string;
 	}
 }
@@ -256,7 +259,10 @@ void Console::render(Renderer *renderer)
 
 		renderer->setMaterial(0);
 
-		m_font->render(L"#00A0D4BIM3D #FF00001.0", Rect(width-80, m_height-20.0f, 0, 0), Color(1, 1, 1, 0.2), 0);
+		WString<64> versionString(L"%s %d.%d.%d-%d", WC_ENGINE_NAME, ENGINE_VERSION_MAJOR, ENGINE_VERSION_MINOR, ENGINE_VERSION_REVISION, ENGINE_VERSION_INT);
+
+		float versionW = m_font->calculateWidth(versionString);
+		m_font->render(versionString, Rect(width-versionW-10, m_height-20.0f, 0, 0), Color(1, 1, 1, 0.2), 0);
 
 		m_font->render(m_inputBuffer, Rect(5, m_height, 0, 0), Color(1, 1, 1, 1), 0);
 		
