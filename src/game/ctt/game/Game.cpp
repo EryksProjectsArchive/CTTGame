@@ -208,7 +208,6 @@ bool Game::init()
 
 	// setup logger
 	Logger::init(FilePath("%sgame.log", OS::getHomePath().get()), false);
-
 	File *file = FileSystem::get()->open("home/config.json", FileOpenMode::Read | FileOpenMode::Extra);
 	m_config->deserialize(file);
 	FileSystem::get()->close(file);
@@ -263,7 +262,7 @@ bool Game::init()
 	}
 
 	// Create scene
-	m_scene = new Scene(); // (Scene *)0xDEADBEEF;
+	m_scene = new Scene();
 	if (!m_scene)
 	{
 		Error("game", "Cannot initialize scene!");

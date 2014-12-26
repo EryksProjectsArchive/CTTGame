@@ -737,6 +737,9 @@
     <ClInclude Include="core\StringUtilities.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
+    <ClInclude Include="Debugging.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="todo.txt">

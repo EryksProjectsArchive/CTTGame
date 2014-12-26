@@ -19,6 +19,8 @@
 
 #include <core/StringUtilities.h>
 
+#include <Debugging.h>
+
 Config * Config::s_singleton = 0;
 
 Config::Config()
@@ -58,6 +60,8 @@ void Config::serialize(File *file)
 
 void Config::deserialize(File* file)
 {
+	BIM_ASSERT(file, "Null file pointer.");
+
 	if (file->isLoaded())
 	{
 		DynString data = file->getContent();

@@ -68,6 +68,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <TargetName>$(ProjectName)</TargetName>
     <OutDir>..\..\..\bin\$(Configuration)\win32\</OutDir>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir);</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <TargetName>$(ProjectName)</TargetName>
@@ -255,6 +256,7 @@
     <ClInclude Include="core\Timer.h" />
     <ClInclude Include="core\WDynString.h" />
     <ClInclude Include="core\WString.h" />
+    <ClInclude Include="Debugging.h" />
     <ClInclude Include="game\environment\Environment.h" />
     <ClInclude Include="game\environment\Terrain.h" />
     <ClInclude Include="game\Game.h" />

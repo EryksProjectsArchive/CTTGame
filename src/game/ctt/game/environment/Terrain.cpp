@@ -165,11 +165,12 @@ TerrainGrid::TerrainGrid(Vector3 position, uint32 size) : m_left(0), m_right(0),
 
 	btBvhTriangleMeshShape* physicsShape = new btBvhTriangleMeshShape(triMesh, true);
 
-	btTransform transform(btQuaternion(0, 0, 0, 1), btVector3(position.x, position.y, position.z));
-	btDefaultMotionState* groundMotionState = new btDefaultMotionState(transform);
-	btRigidBody::btRigidBodyConstructionInfo groundRigidBodyCI(0, groundMotionState, physicsShape, btVector3(0, 0, 0));
-	m_rigidBody = new btRigidBody(groundRigidBodyCI);
-
+	m_rigidBody = new btRigidBody(0, NULL, physicsShape);
+	m_rigidBody->setRestitution(0.5f);
+	m_rigidBody->setFriction(2.0f);
+	btTransform transform = m_rigidBody->getWorldTransform();
+	transform.setOrigin(btVector3(position.x, position.y, position.z));
+	m_rigidBody->setWorldTransform(transform);
 	Game::get()->getPhysicsWorld().registerRigidBody(m_rigidBody);
 }
 

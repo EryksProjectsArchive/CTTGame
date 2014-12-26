@@ -93,12 +93,6 @@ void DynamicPhysicalEntity::setMass(float mass)
 	}
 }
 
-void DynamicPhysicalEntity::setFriction(float friction)
-{
-	if (m_rigidBody)
-		m_rigidBody->setFriction(friction);
-}
-
 void DynamicPhysicalEntity::setupPhysics(btCollisionShape * shape)
 {
 	btDefaultMotionState *fallMotionState = new btDefaultMotionState();

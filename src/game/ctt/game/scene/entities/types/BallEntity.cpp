@@ -32,6 +32,7 @@ BallEntity::BallEntity() : Entity(EntityType::Ball)
 	setupPhysics(new btSphereShape(radius));
 	setMass(50);
 	setFriction(6);
+	setRestitution(1.0f);
 }
 
 BallEntity::~BallEntity()

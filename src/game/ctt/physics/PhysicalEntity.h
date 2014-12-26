@@ -45,6 +45,7 @@ public:
 
 	virtual void setMass(float mass);
 	virtual void setFriction(float friction);
+	virtual void setRestitution(float restitution);
 
 protected:
 	// ---- Methods for all class that inherits from physical entity -----

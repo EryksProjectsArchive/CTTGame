@@ -32,7 +32,6 @@ public:
 	virtual void postPhysicsUpdate();
 
 	virtual void setMass(float mass);
-	virtual void setFriction(float friction);
 
 protected:
 	void setupPhysics(btCollisionShape * shape);

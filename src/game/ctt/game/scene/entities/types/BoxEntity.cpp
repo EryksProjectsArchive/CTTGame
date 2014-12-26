@@ -30,6 +30,7 @@ BoxEntity::BoxEntity()
 		setupPhysics(new btBoxShape(btVector3((aabb->getMax().x - aabb->getMin().x) / 2, (aabb->getMax().y - aabb->getMin().y) / 2, (aabb->getMax().z - aabb->getMin().z) / 2)));
 		setMass(5.0f);
 		setFriction(100.0f);
+		setRestitution(0.0f);
 	}
 }
 

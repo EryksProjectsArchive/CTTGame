@@ -135,7 +135,14 @@ void PhysicalEntity::setMass(float mass)
 
 void PhysicalEntity::setFriction(float friction)
 {
-	Warning("Physics", "%s: Setting friction is not possible for static entities. (%s:%d)", FUNCTION_NAME, __FILE__, __LINE__);
+	if (m_rigidBody)
+		m_rigidBody->setFriction(friction);
+}
+
+void PhysicalEntity::setRestitution(float restitution)
+{
+	if (m_rigidBody)
+		m_rigidBody->setRestitution(restitution);
 }
 
 void PhysicalEntity::setupPhysics(btCollisionShape * shape)
