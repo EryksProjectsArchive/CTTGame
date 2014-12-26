@@ -133,11 +133,11 @@ namespace OGG
 		return data;
 	}
 
-	uint32 SoundLoader::fileRead(void* buffer, uint32 size, uint32 n, void* datasource)
+	size_t SoundLoader::fileRead(void* buffer, size_t size, size_t n, void* datasource)
 	{
-		auto file = (File *)datasource;
+		File* file = (File *)datasource;
 
-		uint32 bytes = size * n;
+		size_t bytes = size * n;
 		file->read(buffer, 1, bytes);
 
 		return n;
