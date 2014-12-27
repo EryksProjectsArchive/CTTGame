@@ -45,6 +45,29 @@
 
 #define ENGINE_VERSION_INT MAKE_VERSION(ENGINE_VERSION_MAJOR, ENGINE_VERSION_MINOR, ENGINE_VERSION_REVISION)
 
+#ifdef _WIN32
+#define PLATFORM_NAME "WINDOWS"
+#define WC_PLATFORM_NAME L"WINDOWS"
+#elif __LINXU__
+#define PLATFORM_NAME "LINUX"
+#define WC_PLATFORM_NAME L"LINUX"
+#else
+#define PLATFORM_NAME "UNKNOWN"
+#define WC_PLATFORM_NAME L"UNKNOWN"
+#endif
+
+#if defined(_WIN32)
+#ifdef _WIN64
+#define ARCH_NAME "X64"
+#define WC_ARCH_NAME L"X64"
+#else
+#define ARCH_NAME "X86"
+#define WC_ARCH_NAME L"X86"
+#endif
+#else
+#define ARCH_NAME "UNKNOWN"
+#define WC_ARCH_NAME L"UNKNOWN"
+#endif
 
 #if defined(__GNUC__)
 #define FUNCTION_NAME __PRETTY_FUNCTION__
@@ -71,6 +94,12 @@ typedef long long int64;
 typedef unsigned long long uint64;
 
 typedef unsigned int flags32;
+
+#if defined(_WIN64)
+typedef uint64 mem_addr_t;
+#else
+typedef uint32 mem_addr_t;
+#endif
 
 #ifdef DOUBLE_SCALAR_PRECISION
 typedef double Scalar;

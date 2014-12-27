@@ -129,6 +129,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <CallingConvention>Cdecl</CallingConvention>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
     </ClCompile>
     <Lib>
       <OutputFile>$(OutDir)$(ProjectName)_static.lib</OutputFile>
@@ -147,6 +148,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <CallingConvention>Cdecl</CallingConvention>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
     </ClCompile>
     <Lib>
       <OutputFile>$(OutDir)$(ProjectName)_static.lib</OutputFile>

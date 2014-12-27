@@ -226,8 +226,6 @@ Renderer::~Renderer()
 		m_defaultMaterial->release();
 }
 
-#define ASSERT_FUNCTION(name) if(!(name)) { Error("gl","Function %s is not available.", #name); }
-
 bool Renderer::setup(Window * window)
 {
 	m_window = window;
@@ -253,141 +251,160 @@ bool Renderer::setup(Window * window)
 		return false;
 	}
 
-	ASSERT_FUNCTION(glEnablei = (PFNGLENABLEIPROC)SDL_GL_GetProcAddress("glEnablei"))
+#ifdef DEBUG
+#define MISSING_FUNCTION(name)\
+	Error("Renderer", "%s: Cannot find %s function. (%s:%d)", FUNCTION_NAME, name, __FILE__, __LINE__)
+#else
+#define MISSING_FUNCTION(name)\
+	Error("Renderer", "Cannot find %s function.", name)	
+#endif
+
+
+#define GL_FUNCTION(name)\
+	*(mem_addr_t *)&name = (mem_addr_t)SDL_GL_GetProcAddress(#name);\
+	if(!name) {\
+		MISSING_FUNCTION(#name);\
+	}
+
+	GL_FUNCTION(glEnablei);
 
 	// Buffers (OpenGL 1.5)
-	ASSERT_FUNCTION(glGenBuffers = (PFNGLGENBUFFERSPROC)SDL_GL_GetProcAddress("glGenBuffers"));
-	ASSERT_FUNCTION(glBindBuffer = (PFNGLBINDBUFFERPROC)SDL_GL_GetProcAddress("glBindBuffer"));
-	ASSERT_FUNCTION(glBufferData = (PFNGLBUFFERDATAPROC)SDL_GL_GetProcAddress("glBufferData"));
-	ASSERT_FUNCTION(glDeleteBuffers = (PFNGLDELETEBUFFERSPROC)SDL_GL_GetProcAddress("glDeleteBuffers"));
-	ASSERT_FUNCTION(glMapBuffer = (PFNGLMAPBUFFERPROC)SDL_GL_GetProcAddress("glMapBuffer"));
-	ASSERT_FUNCTION(glUnmapBuffer = (PFNGLUNMAPBUFFERPROC)SDL_GL_GetProcAddress("glUnmapBuffer"));
-	ASSERT_FUNCTION(glBindVertexArray = (PFNGLBINDVERTEXARRAYPROC)SDL_GL_GetProcAddress("glBindVertexArray"));
-	ASSERT_FUNCTION(glGetBufferParameteriv = (PFNGLGETBUFFERPARAMETERIVPROC)SDL_GL_GetProcAddress("glGetBufferParameteriv"));
+	GL_FUNCTION(glGenBuffers);
+	GL_FUNCTION(glBindBuffer);
+	GL_FUNCTION(glBufferData);
+	GL_FUNCTION(glDeleteBuffers);
+	GL_FUNCTION(glMapBuffer);
+	GL_FUNCTION(glUnmapBuffer);
+	GL_FUNCTION(glBindVertexArray);
+	GL_FUNCTION(glGetBufferParameteriv);
 
 	// (OpenGL 2.0)
-	ASSERT_FUNCTION(glActiveTexture = (PFNGLACTIVETEXTUREPROC)SDL_GL_GetProcAddress("glActiveTexture"));
+	GL_FUNCTION(glActiveTexture);
 
 	// Shaders (OpenGL 2.0)
-	ASSERT_FUNCTION(glBlendEquationSeparate = (PFNGLBLENDEQUATIONSEPARATEPROC)SDL_GL_GetProcAddress("glBlendEquationSeparate"));
-	ASSERT_FUNCTION(glDrawBuffers = (PFNGLDRAWBUFFERSPROC)SDL_GL_GetProcAddress("glDrawBuffers"));
-	ASSERT_FUNCTION(glStencilOpSeparate = (PFNGLSTENCILOPSEPARATEPROC)SDL_GL_GetProcAddress("glStencilOpSeparate"));
-	ASSERT_FUNCTION(glStencilFuncSeparate = (PFNGLSTENCILFUNCSEPARATEPROC)SDL_GL_GetProcAddress("glStencilFuncSeparate"));
-	ASSERT_FUNCTION(glStencilMaskSeparate = (PFNGLSTENCILMASKSEPARATEPROC)SDL_GL_GetProcAddress("glStencilMaskSeparate"));
-	ASSERT_FUNCTION(glAttachShader = (PFNGLATTACHSHADERPROC)SDL_GL_GetProcAddress("glAttachShader"));
-	ASSERT_FUNCTION(glBindAttribLocation = (PFNGLBINDATTRIBLOCATIONPROC)SDL_GL_GetProcAddress("glBindAttribLocation"));
-	ASSERT_FUNCTION(glCompileShader = (PFNGLCOMPILESHADERPROC)SDL_GL_GetProcAddress("glCompileShader"));
-	ASSERT_FUNCTION(glCreateProgram = (PFNGLCREATEPROGRAMPROC)SDL_GL_GetProcAddress("glCreateProgram"));
-	ASSERT_FUNCTION(glCreateShader = (PFNGLCREATESHADERPROC)SDL_GL_GetProcAddress("glCreateShader"));
-	ASSERT_FUNCTION(glDeleteProgram = (PFNGLDELETEPROGRAMPROC)SDL_GL_GetProcAddress("glDeleteProgram"));
-	ASSERT_FUNCTION(glDeleteShader = (PFNGLDELETESHADERPROC)SDL_GL_GetProcAddress("glDeleteShader"));
-	ASSERT_FUNCTION(glDetachShader = (PFNGLDETACHSHADERPROC)SDL_GL_GetProcAddress("glDetachShader"));
-	ASSERT_FUNCTION(glDisableVertexAttribArray = (PFNGLDISABLEVERTEXATTRIBARRAYPROC)SDL_GL_GetProcAddress("glDisableVertexAttribArray"));
-	ASSERT_FUNCTION(glEnableVertexAttribArray = (PFNGLENABLEVERTEXATTRIBARRAYPROC)SDL_GL_GetProcAddress("glEnableVertexAttribArray"));
-	ASSERT_FUNCTION(glGetActiveAttrib = (PFNGLGETACTIVEATTRIBPROC)SDL_GL_GetProcAddress("glGetActiveAttrib"));
-	ASSERT_FUNCTION(glGetActiveUniform = (PFNGLGETACTIVEUNIFORMPROC)SDL_GL_GetProcAddress("glGetActiveUniform"));
-	ASSERT_FUNCTION(glGetAttachedShaders = (PFNGLGETATTACHEDSHADERSPROC)SDL_GL_GetProcAddress("glGetAttachedShaders"));
-	ASSERT_FUNCTION(glGetAttribLocation = (PFNGLGETATTRIBLOCATIONPROC)SDL_GL_GetProcAddress("glGetAttribLocation"));
-	ASSERT_FUNCTION(glGetProgramiv = (PFNGLGETPROGRAMIVPROC)SDL_GL_GetProcAddress("glGetProgramiv"));
-	ASSERT_FUNCTION(glGetProgramInfoLog = (PFNGLGETPROGRAMINFOLOGPROC)SDL_GL_GetProcAddress("glGetProgramInfoLog"));
-	ASSERT_FUNCTION(glGetShaderiv = (PFNGLGETSHADERIVPROC)SDL_GL_GetProcAddress("glGetShaderiv"));
-	ASSERT_FUNCTION(glGetShaderInfoLog = (PFNGLGETSHADERINFOLOGPROC)SDL_GL_GetProcAddress("glGetShaderInfoLog"));
-	ASSERT_FUNCTION(glGetShaderSource = (PFNGLGETSHADERSOURCEPROC)SDL_GL_GetProcAddress("glGetShaderSource"));
-	ASSERT_FUNCTION(glGetUniformLocation = (PFNGLGETUNIFORMLOCATIONPROC)SDL_GL_GetProcAddress("glGetUniformLocation"));
-	ASSERT_FUNCTION(glGetUniformfv = (PFNGLGETUNIFORMFVPROC)SDL_GL_GetProcAddress("glGetUniformfv"));
-	ASSERT_FUNCTION(glGetUniformiv = (PFNGLGETUNIFORMIVPROC)SDL_GL_GetProcAddress("glGetUniformiv"));
-	ASSERT_FUNCTION(glGetVertexAttribdv = (PFNGLGETVERTEXATTRIBDVPROC)SDL_GL_GetProcAddress("glGetVertexAttribdv"));
-	ASSERT_FUNCTION(glGetVertexAttribfv = (PFNGLGETVERTEXATTRIBFVPROC)SDL_GL_GetProcAddress("glGetVertexAttribfv"));
-	ASSERT_FUNCTION(glGetVertexAttribiv = (PFNGLGETVERTEXATTRIBIVPROC)SDL_GL_GetProcAddress("glGetVertexAttribiv"));
-	ASSERT_FUNCTION(glGetVertexAttribPointerv = (PFNGLGETVERTEXATTRIBPOINTERVPROC)SDL_GL_GetProcAddress("glGetVertexAttribPointerv"));
-	ASSERT_FUNCTION(glIsProgram = (PFNGLISPROGRAMPROC)SDL_GL_GetProcAddress("glIsProgram"));
-	ASSERT_FUNCTION(glIsShader = (PFNGLISSHADERPROC)SDL_GL_GetProcAddress("glIsShader"));
-	ASSERT_FUNCTION(glLinkProgram = (PFNGLLINKPROGRAMPROC)SDL_GL_GetProcAddress("glLinkProgram"));
-	ASSERT_FUNCTION(glShaderSource = (PFNGLSHADERSOURCEPROC)SDL_GL_GetProcAddress("glShaderSource"));
-	ASSERT_FUNCTION(glUseProgram = (PFNGLUSEPROGRAMPROC)SDL_GL_GetProcAddress("glUseProgram"));
-	ASSERT_FUNCTION(glUniform1f = (PFNGLUNIFORM1FPROC)SDL_GL_GetProcAddress("glUniform1f"));
-	ASSERT_FUNCTION(glUniform2f = (PFNGLUNIFORM2FPROC)SDL_GL_GetProcAddress("glUniform2f"));
-	ASSERT_FUNCTION(glUniform3f = (PFNGLUNIFORM3FPROC)SDL_GL_GetProcAddress("glUniform3f"));
-	ASSERT_FUNCTION(glUniform4f = (PFNGLUNIFORM4FPROC)SDL_GL_GetProcAddress("glUniform4f"));
-	ASSERT_FUNCTION(glUniform1i = (PFNGLUNIFORM1IPROC)SDL_GL_GetProcAddress("glUniform1i"));
-	ASSERT_FUNCTION(glUniform2i = (PFNGLUNIFORM2IPROC)SDL_GL_GetProcAddress("glUniform2i"));
-	ASSERT_FUNCTION(glUniform3i = (PFNGLUNIFORM3IPROC)SDL_GL_GetProcAddress("glUniform3i"));
-	ASSERT_FUNCTION(glUniform4i = (PFNGLUNIFORM4IPROC)SDL_GL_GetProcAddress("glUniform4i"));
-	ASSERT_FUNCTION(glUniform1fv = (PFNGLUNIFORM1FVPROC)SDL_GL_GetProcAddress("glUniform1fv"));
-	ASSERT_FUNCTION(glUniform2fv = (PFNGLUNIFORM2FVPROC)SDL_GL_GetProcAddress("glUniform2fv"));
-	ASSERT_FUNCTION(glUniform3fv = (PFNGLUNIFORM3FVPROC)SDL_GL_GetProcAddress("glUniform3fv"));
-	ASSERT_FUNCTION(glUniform4fv = (PFNGLUNIFORM4FVPROC)SDL_GL_GetProcAddress("glUniform4fv"));
-	ASSERT_FUNCTION(glUniform1iv = (PFNGLUNIFORM1IVPROC)SDL_GL_GetProcAddress("glUniform1iv"));
-	ASSERT_FUNCTION(glUniform2iv = (PFNGLUNIFORM2IVPROC)SDL_GL_GetProcAddress("glUniform2iv"));
-	ASSERT_FUNCTION(glUniform3iv = (PFNGLUNIFORM3IVPROC)SDL_GL_GetProcAddress("glUniform3iv"));
-	ASSERT_FUNCTION(glUniform4iv = (PFNGLUNIFORM4IVPROC)SDL_GL_GetProcAddress("glUniform4iv"));
-	ASSERT_FUNCTION(glUniformMatrix2fv = (PFNGLUNIFORMMATRIX2FVPROC)SDL_GL_GetProcAddress("glUniformMatrix2fv"));
-	ASSERT_FUNCTION(glUniformMatrix3fv = (PFNGLUNIFORMMATRIX3FVPROC)SDL_GL_GetProcAddress("glUniformMatrix3fv"));
-	ASSERT_FUNCTION(glUniformMatrix4fv = (PFNGLUNIFORMMATRIX4FVPROC)SDL_GL_GetProcAddress("glUniformMatrix4fv"));
-	ASSERT_FUNCTION(glValidateProgram = (PFNGLVALIDATEPROGRAMPROC)SDL_GL_GetProcAddress("glValidateProgram"));
-	ASSERT_FUNCTION(glVertexAttrib1d = (PFNGLVERTEXATTRIB1DPROC)SDL_GL_GetProcAddress("glVertexAttrib1d"));
-	ASSERT_FUNCTION(glVertexAttrib1dv = (PFNGLVERTEXATTRIB1DVPROC)SDL_GL_GetProcAddress("glVertexAttrib1dv"));
-	ASSERT_FUNCTION(glVertexAttrib1f = (PFNGLVERTEXATTRIB1FPROC)SDL_GL_GetProcAddress("glVertexAttrib1f"));
-	ASSERT_FUNCTION(glVertexAttrib1fv = (PFNGLVERTEXATTRIB1FVPROC)SDL_GL_GetProcAddress("glVertexAttrib1fv"));
-	ASSERT_FUNCTION(glVertexAttrib1s = (PFNGLVERTEXATTRIB1SPROC)SDL_GL_GetProcAddress("glVertexAttrib1s"));
-	ASSERT_FUNCTION(glVertexAttrib1sv = (PFNGLVERTEXATTRIB1SVPROC)SDL_GL_GetProcAddress("glVertexAttrib1sv"));
-	ASSERT_FUNCTION(glVertexAttrib2d = (PFNGLVERTEXATTRIB2DPROC)SDL_GL_GetProcAddress("glVertexAttrib2d"));
-	ASSERT_FUNCTION(glVertexAttrib2dv = (PFNGLVERTEXATTRIB2DVPROC)SDL_GL_GetProcAddress("glVertexAttrib2dv"));
-	ASSERT_FUNCTION(glVertexAttrib2f = (PFNGLVERTEXATTRIB2FPROC)SDL_GL_GetProcAddress("glVertexAttrib2f"));
-	ASSERT_FUNCTION(glVertexAttrib2fv = (PFNGLVERTEXATTRIB2FVPROC)SDL_GL_GetProcAddress("glVertexAttrib2fv"));
-	ASSERT_FUNCTION(glVertexAttrib2s = (PFNGLVERTEXATTRIB2SPROC)SDL_GL_GetProcAddress("glVertexAttrib2s"));
-	ASSERT_FUNCTION(glVertexAttrib2sv = (PFNGLVERTEXATTRIB2SVPROC)SDL_GL_GetProcAddress("glVertexAttrib2sv"));
-	ASSERT_FUNCTION(glVertexAttrib3d = (PFNGLVERTEXATTRIB3DPROC)SDL_GL_GetProcAddress("glVertexAttrib3d"));
-	ASSERT_FUNCTION(glVertexAttrib3dv = (PFNGLVERTEXATTRIB3DVPROC)SDL_GL_GetProcAddress("glVertexAttrib3dv"));
-	ASSERT_FUNCTION(glVertexAttrib3f = (PFNGLVERTEXATTRIB3FPROC)SDL_GL_GetProcAddress("glVertexAttrib3f"));
-	ASSERT_FUNCTION(glVertexAttrib3fv = (PFNGLVERTEXATTRIB3FVPROC)SDL_GL_GetProcAddress("glVertexAttrib3fv"));
-	ASSERT_FUNCTION(glVertexAttrib3s = (PFNGLVERTEXATTRIB3SPROC)SDL_GL_GetProcAddress("glVertexAttrib3s"));
-	ASSERT_FUNCTION(glVertexAttrib3sv = (PFNGLVERTEXATTRIB3SVPROC)SDL_GL_GetProcAddress("glVertexAttrib3sv"));
-	ASSERT_FUNCTION(glVertexAttrib4Nbv = (PFNGLVERTEXATTRIB4NBVPROC)SDL_GL_GetProcAddress("glVertexAttrib4Nbv"));
-	ASSERT_FUNCTION(glVertexAttrib4Niv = (PFNGLVERTEXATTRIB4NIVPROC)SDL_GL_GetProcAddress("glVertexAttrib4Niv"));
-	ASSERT_FUNCTION(glVertexAttrib4Nsv = (PFNGLVERTEXATTRIB4NSVPROC)SDL_GL_GetProcAddress("glVertexAttrib4Nsv"));
-	ASSERT_FUNCTION(glVertexAttrib4Nub = (PFNGLVERTEXATTRIB4NUBPROC)SDL_GL_GetProcAddress("glVertexAttrib4Nub"));
-	ASSERT_FUNCTION(glVertexAttrib4Nubv = (PFNGLVERTEXATTRIB4NUBVPROC)SDL_GL_GetProcAddress("glVertexAttrib4Nubv"));
-	ASSERT_FUNCTION(glVertexAttrib4Nuiv = (PFNGLVERTEXATTRIB4NUIVPROC)SDL_GL_GetProcAddress("glVertexAttrib4Nuiv"));
-	ASSERT_FUNCTION(glVertexAttrib4Nusv = (PFNGLVERTEXATTRIB4NUSVPROC)SDL_GL_GetProcAddress("glVertexAttrib4Nusv"));
-	ASSERT_FUNCTION(glVertexAttrib4bv = (PFNGLVERTEXATTRIB4BVPROC)SDL_GL_GetProcAddress("glVertexAttrib4bv"));
-	ASSERT_FUNCTION(glVertexAttrib4d = (PFNGLVERTEXATTRIB4DPROC)SDL_GL_GetProcAddress("glVertexAttrib4d"));
-	ASSERT_FUNCTION(glVertexAttrib4dv = (PFNGLVERTEXATTRIB4DVPROC)SDL_GL_GetProcAddress("glVertexAttrib4dv"));
-	ASSERT_FUNCTION(glVertexAttrib4f = (PFNGLVERTEXATTRIB4FPROC)SDL_GL_GetProcAddress("glVertexAttrib4f"));
-	ASSERT_FUNCTION(glVertexAttrib4fv = (PFNGLVERTEXATTRIB4FVPROC)SDL_GL_GetProcAddress("glVertexAttrib4fv"));
-	ASSERT_FUNCTION(glVertexAttrib4iv = (PFNGLVERTEXATTRIB4IVPROC)SDL_GL_GetProcAddress("glVertexAttrib4iv"));
-	ASSERT_FUNCTION(glVertexAttrib4s = (PFNGLVERTEXATTRIB4SPROC)SDL_GL_GetProcAddress("glVertexAttrib4s"));
-	ASSERT_FUNCTION(glVertexAttrib4sv = (PFNGLVERTEXATTRIB4SVPROC)SDL_GL_GetProcAddress("glVertexAttrib4sv"));
-	ASSERT_FUNCTION(glVertexAttrib4ubv = (PFNGLVERTEXATTRIB4UBVPROC)SDL_GL_GetProcAddress("glVertexAttrib4ubv"));
-	ASSERT_FUNCTION(glVertexAttrib4uiv = (PFNGLVERTEXATTRIB4UIVPROC)SDL_GL_GetProcAddress("glVertexAttrib4uiv"));
-	ASSERT_FUNCTION(glVertexAttrib4usv = (PFNGLVERTEXATTRIB4USVPROC)SDL_GL_GetProcAddress("glVertexAttrib4usv"));
-	ASSERT_FUNCTION(glVertexAttribPointer = (PFNGLVERTEXATTRIBPOINTERPROC)SDL_GL_GetProcAddress("glVertexAttribPointer"));
+	GL_FUNCTION(glBlendEquationSeparate);
+	GL_FUNCTION(glDrawBuffers);
+	GL_FUNCTION(glStencilOpSeparate);
+	GL_FUNCTION(glStencilFuncSeparate);
+	GL_FUNCTION(glStencilMaskSeparate);
+	GL_FUNCTION(glAttachShader);
+	GL_FUNCTION(glBindAttribLocation);
+	GL_FUNCTION(glCompileShader);
+	GL_FUNCTION(glCreateProgram);
+	GL_FUNCTION(glCreateShader);
+	GL_FUNCTION(glDeleteProgram);
+	GL_FUNCTION(glDeleteShader);
+	GL_FUNCTION(glDetachShader);
+	GL_FUNCTION(glDisableVertexAttribArray);
+	GL_FUNCTION(glEnableVertexAttribArray);
+	GL_FUNCTION(glGetActiveAttrib);
+	GL_FUNCTION(glGetActiveUniform);
+	GL_FUNCTION(glGetAttachedShaders);
+	GL_FUNCTION(glGetAttribLocation);
+	GL_FUNCTION(glGetProgramiv);
+	GL_FUNCTION(glGetProgramInfoLog);
+	GL_FUNCTION(glGetShaderiv);
+	GL_FUNCTION(glGetShaderInfoLog);
+	GL_FUNCTION(glGetShaderSource);
+	GL_FUNCTION(glGetUniformLocation);
+	GL_FUNCTION(glGetUniformfv);
+	GL_FUNCTION(glGetUniformiv);
+	GL_FUNCTION(glGetVertexAttribdv);
+	GL_FUNCTION(glGetVertexAttribfv);
+	GL_FUNCTION(glGetVertexAttribiv);
+	GL_FUNCTION(glGetVertexAttribPointerv);
+	GL_FUNCTION(glIsProgram);
+	GL_FUNCTION(glIsShader);
+	GL_FUNCTION(glLinkProgram);
+	GL_FUNCTION(glShaderSource);
+	GL_FUNCTION(glUseProgram);
+	GL_FUNCTION(glUniform1f);
+	GL_FUNCTION(glUniform2f);
+	GL_FUNCTION(glUniform3f);
+	GL_FUNCTION(glUniform4f);
+	GL_FUNCTION(glUniform1i);
+	GL_FUNCTION(glUniform2i);
+	GL_FUNCTION(glUniform3i);
+	GL_FUNCTION(glUniform4i);
+	GL_FUNCTION(glUniform1fv);
+	GL_FUNCTION(glUniform2fv);
+	GL_FUNCTION(glUniform3fv);
+	GL_FUNCTION(glUniform4fv);
+	GL_FUNCTION(glUniform1iv);
+	GL_FUNCTION(glUniform2iv);
+	GL_FUNCTION(glUniform3iv);
+	GL_FUNCTION(glUniform4iv);
+	GL_FUNCTION(glUniformMatrix2fv);
+	GL_FUNCTION(glUniformMatrix3fv);
+	GL_FUNCTION(glUniformMatrix4fv);
+	GL_FUNCTION(glValidateProgram);
+	GL_FUNCTION(glVertexAttrib1d);
+	GL_FUNCTION(glVertexAttrib1dv);
+	GL_FUNCTION(glVertexAttrib1f);
+	GL_FUNCTION(glVertexAttrib1fv);
+	GL_FUNCTION(glVertexAttrib1s);
+	GL_FUNCTION(glVertexAttrib1sv);
+	GL_FUNCTION(glVertexAttrib2d);
+	GL_FUNCTION(glVertexAttrib2dv);
+	GL_FUNCTION(glVertexAttrib2f);
+	GL_FUNCTION(glVertexAttrib2fv);
+	GL_FUNCTION(glVertexAttrib2s);
+	GL_FUNCTION(glVertexAttrib2sv);
+	GL_FUNCTION(glVertexAttrib3d);
+	GL_FUNCTION(glVertexAttrib3dv);
+	GL_FUNCTION(glVertexAttrib3f);
+	GL_FUNCTION(glVertexAttrib3fv);
+	GL_FUNCTION(glVertexAttrib3s);
+	GL_FUNCTION(glVertexAttrib3sv);
+	GL_FUNCTION(glVertexAttrib4Nbv);
+	GL_FUNCTION(glVertexAttrib4Niv);
+	GL_FUNCTION(glVertexAttrib4Nsv);
+	GL_FUNCTION(glVertexAttrib4Nub);
+	GL_FUNCTION(glVertexAttrib4Nubv);
+	GL_FUNCTION(glVertexAttrib4Nuiv);
+	GL_FUNCTION(glVertexAttrib4Nusv);
+	GL_FUNCTION(glVertexAttrib4bv);
+	GL_FUNCTION(glVertexAttrib4d);
+	GL_FUNCTION(glVertexAttrib4dv);
+	GL_FUNCTION(glVertexAttrib4f);
+	GL_FUNCTION(glVertexAttrib4fv);
+	GL_FUNCTION(glVertexAttrib4iv);
+	GL_FUNCTION(glVertexAttrib4s);
+	GL_FUNCTION(glVertexAttrib4sv);
+	GL_FUNCTION(glVertexAttrib4ubv);
+	GL_FUNCTION(glVertexAttrib4uiv);
+	GL_FUNCTION(glVertexAttrib4usv);
+	GL_FUNCTION(glVertexAttribPointer);
 
-	ASSERT_FUNCTION(glGenVertexArrays = (PFNGLGENVERTEXARRAYSPROC)SDL_GL_GetProcAddress("glGenVertexArrays"));
+	GL_FUNCTION(glGenVertexArrays);
 
-	ASSERT_FUNCTION(glCompressedTexImage2D = (PFNGLCOMPRESSEDTEXIMAGE2DPROC)SDL_GL_GetProcAddress("glCompressedTexImage2D"));
+	GL_FUNCTION(glCompressedTexImage2D);
 
 	// Textures and framebuffers OpenGL 3.0
-	ASSERT_FUNCTION(glIsRenderbuffer = (PFNGLISRENDERBUFFERPROC)SDL_GL_GetProcAddress("glIsRenderbuffer"));
-	ASSERT_FUNCTION(glBindRenderbuffer = (PFNGLBINDRENDERBUFFERPROC)SDL_GL_GetProcAddress("glBindRenderbuffer"));
-	ASSERT_FUNCTION(glDeleteRenderbuffers = (PFNGLDELETERENDERBUFFERSPROC)SDL_GL_GetProcAddress("glDeleteRenderbuffers"));
-	ASSERT_FUNCTION(glGenRenderbuffers = (PFNGLGENRENDERBUFFERSPROC)SDL_GL_GetProcAddress("glGenRenderbuffers"));
-	ASSERT_FUNCTION(glRenderbufferStorage = (PFNGLRENDERBUFFERSTORAGEPROC)SDL_GL_GetProcAddress("glRenderbufferStorage"));
-	ASSERT_FUNCTION(glGetRenderbufferParameteriv = (PFNGLGETRENDERBUFFERPARAMETERIVPROC)SDL_GL_GetProcAddress("glGetRenderbufferParameteriv"));
-	ASSERT_FUNCTION(glIsFramebuffer = (PFNGLISFRAMEBUFFERPROC)SDL_GL_GetProcAddress("glIsFramebuffer"));
-	ASSERT_FUNCTION(glBindFramebuffer = (PFNGLBINDFRAMEBUFFERPROC)SDL_GL_GetProcAddress("glBindFramebuffer"));
-	ASSERT_FUNCTION(glDeleteFramebuffers = (PFNGLDELETEFRAMEBUFFERSPROC)SDL_GL_GetProcAddress("glDeleteFramebuffers"));
-	ASSERT_FUNCTION(glGenFramebuffers = (PFNGLGENFRAMEBUFFERSPROC)SDL_GL_GetProcAddress("glGenFramebuffers"));
-	ASSERT_FUNCTION(glCheckFramebufferStatus = (PFNGLCHECKFRAMEBUFFERSTATUSPROC)SDL_GL_GetProcAddress("glCheckFramebufferStatus"));
-	ASSERT_FUNCTION(glFramebufferTexture1D = (PFNGLFRAMEBUFFERTEXTURE1DPROC)SDL_GL_GetProcAddress("glFramebufferTexture1D"));
-	ASSERT_FUNCTION(glFramebufferTexture2D = (PFNGLFRAMEBUFFERTEXTURE2DPROC)SDL_GL_GetProcAddress("glFramebufferTexture2D"));
-	ASSERT_FUNCTION(glFramebufferTexture3D = (PFNGLFRAMEBUFFERTEXTURE3DPROC)SDL_GL_GetProcAddress("glFramebufferTexture3D"));
-	ASSERT_FUNCTION(glFramebufferRenderbuffer = (PFNGLFRAMEBUFFERRENDERBUFFERPROC)SDL_GL_GetProcAddress("glFramebufferRenderbuffer"));
-	ASSERT_FUNCTION(glGetFramebufferAttachmentParameteriv = (PFNGLGETFRAMEBUFFERATTACHMENTPARAMETERIVPROC)SDL_GL_GetProcAddress("glGetFramebufferAttachmentParameteriv"));
-	ASSERT_FUNCTION(glGenerateMipmap = (PFNGLGENERATEMIPMAPPROC)SDL_GL_GetProcAddress("glGenerateMipmap"));
-	ASSERT_FUNCTION(glBlitFramebuffer = (PFNGLBLITFRAMEBUFFERPROC)SDL_GL_GetProcAddress("glBlitFramebuffer"));
-	ASSERT_FUNCTION(glRenderbufferStorageMultisample = (PFNGLRENDERBUFFERSTORAGEMULTISAMPLEPROC)SDL_GL_GetProcAddress("glRenderbufferStorageMultisample"));
-	ASSERT_FUNCTION(glFramebufferTextureLayer = (PFNGLFRAMEBUFFERTEXTURELAYERPROC)SDL_GL_GetProcAddress("glFramebufferTextureLayer"));
+	GL_FUNCTION(glIsRenderbuffer);
+	GL_FUNCTION(glBindRenderbuffer);
+	GL_FUNCTION(glDeleteRenderbuffers);
+	GL_FUNCTION(glGenRenderbuffers);
+	GL_FUNCTION(glRenderbufferStorage);
+	GL_FUNCTION(glGetRenderbufferParameteriv);
+	GL_FUNCTION(glIsFramebuffer);
+	GL_FUNCTION(glBindFramebuffer);
+	GL_FUNCTION(glDeleteFramebuffers);
+	GL_FUNCTION(glGenFramebuffers);
+	GL_FUNCTION(glCheckFramebufferStatus);
+	GL_FUNCTION(glFramebufferTexture1D);
+	GL_FUNCTION(glFramebufferTexture2D);
+	GL_FUNCTION(glFramebufferTexture3D);
+	GL_FUNCTION(glFramebufferRenderbuffer);
+	GL_FUNCTION(glGetFramebufferAttachmentParameteriv);
+	GL_FUNCTION(glGenerateMipmap);
+	GL_FUNCTION(glBlitFramebuffer);
+	GL_FUNCTION(glRenderbufferStorageMultisample);
+	GL_FUNCTION(glFramebufferTextureLayer);
+
+// Undef helpers
+#undef GL_FUNCTION
+#undef MISSING_FUNCTION
 
 	SDL_GL_SetSwapInterval(Config::get()["graphics"]["vsync"].getBool(false) ? 1 : 0); // set 0 to disable vsync	
 	glViewport(0, 0, window->getWidth(), window->getHeight());

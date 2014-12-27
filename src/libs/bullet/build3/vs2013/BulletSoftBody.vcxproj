@@ -97,6 +97,7 @@
       <FloatingPointModel>Fast</FloatingPointModel>
       <DebugInformationFormat>
       </DebugInformationFormat>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>
@@ -132,6 +133,7 @@
       <FloatingPointModel>Fast</FloatingPointModel>
       <DebugInformationFormat>
       </DebugInformationFormat>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>

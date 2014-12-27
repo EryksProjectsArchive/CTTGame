@@ -16,12 +16,11 @@
 #include <stdio.h>
 #include <cstring>
 
-/*#ifdef _WIN32
-#include <Windows.h>
-int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
-#else*/
+#ifdef _WIN32
+int __stdcall WinMain(HINSTANCE, HINSTANCE, char*, int)
+#else
 int main()
-/*#endif*/
+#endif
 {
 	ExceptionHandler::init();
 	{

@@ -302,7 +302,7 @@ void Console::render(Renderer *renderer)
 
 		renderer->setMaterial(0);
 
-		WString<64> versionString(L"%s %d.%d.%d-%d", WC_ENGINE_NAME, ENGINE_VERSION_MAJOR, ENGINE_VERSION_MINOR, ENGINE_VERSION_REVISION, ENGINE_VERSION_INT);
+		WString<128> versionString(L"%s %d.%d.%d-%d %s (%s)", WC_ENGINE_NAME, ENGINE_VERSION_MAJOR, ENGINE_VERSION_MINOR, ENGINE_VERSION_REVISION, ENGINE_VERSION_INT, WC_PLATFORM_NAME, WC_ARCH_NAME);
 
 		float versionW = m_font->calculateWidth(versionString);
 		m_font->render(versionString, Rect(width-versionW-10, m_height-20.0f, 0, 0), Color(1, 1, 1, 0.2), 0);
