@@ -120,6 +120,9 @@ private:
 		int32 m_current;
 	} m_history;
 
+
+	float m_timeToCursorBlink;
+	wchar_t m_cursor;
 	List<ICommand *> m_commands;
 public:
 	Console();

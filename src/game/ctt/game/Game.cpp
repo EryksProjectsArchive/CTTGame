@@ -122,7 +122,7 @@ public:
 
 
 Game::Game()
-	: Controllable(ControllableType::Engine), m_renderer(0), m_window(0), m_scene(0), m_physicsWorld(0), m_config(0), m_console(new Console()), m_ui(0)
+	: Controllable(ControllableType::Engine), m_renderer(0), m_window(0), m_scene(0), m_physicsWorld(0), m_config(0), m_console(new Console()), m_ui(0), m_box(0)
 {
 	m_console->addCommand(new ConsoleQuitCommand());
 	m_console->addCommand(new SpawnCommand());
@@ -132,6 +132,7 @@ Game::Game()
 
 Game::~Game()
 {
+	m_box = 0;
 	if (gFont)
 	{
 		delete gFont;
@@ -305,9 +306,9 @@ bool Game::init()
 		m_scene->addEntity(testEntity);
 	}
 
-	m_box = new CrossroadEntity();
+	/*m_box = new CrossroadEntity();
 	m_box->setPosition(Vector3(0,0,0));
-	m_scene->addEntity(m_box);
+	m_scene->addEntity(m_box);*/
 
 	Environment::get()->setSunPosition(Vector3(30.0f, 10.0f, 0.0f));
 
@@ -345,7 +346,7 @@ void Game::update(double deltaTime)
 	{
 		Camera::current->update(float(deltaTime));
 
-		if (!((EditorFreeCamera *)Camera::current)->isMoving())
+		/*if (!((EditorFreeCamera *)Camera::current)->isMoving())
 		{
 			int32 x, y;
 			SDL_GetMouseState(&x, &y);
@@ -356,7 +357,7 @@ void Game::update(double deltaTime)
 			m_physicsWorld->rayTest(Camera::current->getPosition(), pos, &res);
 
 			m_box->setPosition(res);
-		}
+		}*/
 	}
 
 	m_physicsWorld->pulse(float(deltaTime));

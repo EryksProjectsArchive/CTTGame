@@ -28,7 +28,7 @@
 Console * Console::s_instance = 0;
 
 Console::Console()
-	: Controllable(ControllableType::Engine), m_font(0), m_material(0), m_background(0), m_inputBackground(0), m_height(CONSOLE_LINES * 20.0f + 10.0f), m_isInitialized(false)
+	: Controllable(ControllableType::Engine), m_font(0), m_material(0), m_background(0), m_inputBackground(0), m_height(CONSOLE_LINES * 20.0f + 10.0f), m_isInitialized(false), m_cursor(' '), m_timeToCursorBlink(0)
 {
 	m_history.reset();
 	s_instance = this;
@@ -292,6 +292,13 @@ void Console::render(Renderer *renderer)
 {
 	if (m_state)
 	{
+		m_timeToCursorBlink -= Timer::getDeltaTime();
+		if (m_timeToCursorBlink <= 0.0f)
+		{
+			m_cursor = m_cursor == '|' ? ' ' : '|';
+			m_timeToCursorBlink = 0.35f;
+		}
+		
 		Rect rect = renderer->getRect();
 		float width = rect.right;
 		
@@ -307,7 +314,7 @@ void Console::render(Renderer *renderer)
 		float versionW = m_font->calculateWidth(versionString);
 		m_font->render(versionString, Rect(width-versionW-10, m_height-20.0f, 0, 0), Color(1, 1, 1, 0.2), 0);
 
-		m_font->render(m_inputBuffer, Rect(5, m_height, 0, 0), Color(1, 1, 1, 1), 0);
+		m_font->render(WString<512> (L"> %s%c", m_inputBuffer.get(), m_cursor), Rect(10, m_height + 5.0f, 0, 0), Color(1, 1, 1, 1), 0);
 		
 		float y = 5.0f;
 		for (uint32 i = 0; i < CONSOLE_LINES; ++i)
