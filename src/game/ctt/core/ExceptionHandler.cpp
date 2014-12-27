@@ -172,7 +172,7 @@ void __forceinline initWin32ExceptionHandler()
 
 void ExceptionHandler::init()
 {
-#ifdef _WIN32
+#if defined(_WIN32) && !defined(_WIN64)
 	initWin32ExceptionHandler();
 #endif
 }
