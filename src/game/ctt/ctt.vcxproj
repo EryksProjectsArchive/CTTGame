@@ -339,13 +339,13 @@
     <Text Include="todo.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\libs\bullet\build3\vs2010\BulletCollision.vcxproj">
+    <ProjectReference Include="..\..\libs\bullet\build3\vs2013\BulletCollision.vcxproj">
       <Project>{018046a5-4dc9-e545-922c-8de3390856c4}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\libs\bullet\build3\vs2010\BulletDynamics.vcxproj">
+    <ProjectReference Include="..\..\libs\bullet\build3\vs2013\BulletDynamics.vcxproj">
       <Project>{0e76368c-1b29-5b42-be24-81e49e26ca3d}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\libs\bullet\build3\vs2010\LinearMath.vcxproj">
+    <ProjectReference Include="..\..\libs\bullet\build3\vs2013\LinearMath.vcxproj">
       <Project>{05bc36b2-4d46-cb45-8382-50cd84c09783}</Project>
     </ProjectReference>
     <ProjectReference Include="..\..\libs\freetype-2.5.3\builds\windows\vc2013_ctt\freetype.vcxproj">
