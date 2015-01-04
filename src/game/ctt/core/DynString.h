@@ -19,12 +19,11 @@
  * DynString class is used to store dynamically allocated string. May be used to save memory.
  * String stored in this class is null terminated so can be used in any standard c methods.
  */
-class WDynString;
 class DynString
 {
 private:
 	char* m_buffer;
-	uint32 m_size;
+	size_t m_size;
 
 	void clear()
 	{
@@ -108,12 +107,12 @@ public:
 		return m_buffer[index];
 	}
 
-	uint32 getSize() const
+	size_t getSize() const
 	{
 		return m_size;
 	}
 
-	uint32 getLength() const
+	size_t getLength() const
 	{
 		return m_size;
 	}

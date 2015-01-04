@@ -185,26 +185,20 @@ namespace OS
 		return false;
 	}
 
-	void multiByteToWideChar(const char *mb, uint32 mbLen, wchar_t **wc, uint32 *wcLen)
+	void multiByteToWideChar(const char *mb, size_t mbLen, wchar_t **wc, size_t *wcLen)
 	{
-		*wcLen = ::MultiByteToWideChar(CP_UTF8, NULL, mb, mbLen, NULL, 0);
+		*wcLen = ::MultiByteToWideChar(CP_UTF8, NULL, mb, (int32)mbLen, NULL, 0);
 		*wc = new wchar_t[*wcLen + 1];
-		::MultiByteToWideChar(CP_UTF8, NULL, mb, mbLen, *wc, *wcLen);
+		::MultiByteToWideChar(CP_UTF8, NULL, mb, (int32)mbLen, *wc, (int32)(*wcLen));
 		(*wc)[*wcLen] = '\0';
 	}
 
-	void wideCharToMultiByte(const wchar_t *utf8, uint32 utf8Len, char **ansi, uint32 *ansiLen)
+	void wideCharToMultiByte(const wchar_t *utf8, size_t utf8Len, char **ansi, size_t *ansiLen)
 	{
 		*ansiLen = utf8Len;
 		*ansi = new char[utf8Len+1];
 		wcstombs(*ansi, utf8, utf8Len);
 		(*ansi)[*ansiLen] = '\0';
-
-		/**ansiLen = ::WideCharToMultiByte(CP_UTF8, NULL, utf8, utf8Len, NULL, 0, 0, 0);
-		*ansi = new char[*ansiLen + 1];
-
-		::WideCharToMultiByte(CP_UTF8, NULL, utf8, utf8Len, *ansi, *ansiLen, 0, 0);
-		(*ansi)[*ansiLen] = '\0';*/
 	}
 
 	DynamicLibrary * openDynamicLibrary(FilePath path)

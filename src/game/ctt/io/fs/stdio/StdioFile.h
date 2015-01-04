@@ -28,8 +28,8 @@ namespace Stdio
 		File();
 		~File();
 
-		uint32 write(const void *data, uint32 count, uint32 size);
-		uint32 read(void * data, uint32 count, uint32 size);
+		size_t write(const void *data, size_t count, size_t size);
+		size_t read(void * data, size_t count, size_t size);
 
 		void flush();
 

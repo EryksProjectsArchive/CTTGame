@@ -63,7 +63,7 @@ namespace PNG
 		File_Struct *file = (File_Struct*)png_get_io_ptr(png_ptr);
 
 		file->file->read((int8*)data, length, 1);
-	}  
+	}
 
 	ImageData * ImageLoader::load(const FilePath& filePath)
 	{
@@ -108,7 +108,7 @@ namespace PNG
 								data->format = EImageFormat::RGBA;
 								break;
 							}
-							int rowbytes = png_get_rowbytes(pngPtr, infoPtr);
+							size_t rowbytes = png_get_rowbytes(pngPtr, infoPtr);
 
 							data->pixels = new uint8[rowbytes * data->height];
 

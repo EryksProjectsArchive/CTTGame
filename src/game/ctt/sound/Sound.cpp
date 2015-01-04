@@ -81,7 +81,7 @@ bool Sound::load(const FilePath& filepath)
 	if (data)
 	{
 		m_al->alGenBuffers(1, &m_bufferID);
-		m_al->alBufferData(m_bufferID, data->format, data->data, data->size, data->sampleRate);
+		m_al->alBufferData(m_bufferID, data->format, data->data, (ALsizei)data->size, data->sampleRate);
 		m_al->alGenSources(1, &m_sourceID);
 		m_al->alSourcei(m_sourceID, AL_BUFFER, m_bufferID);
 		delete data;

@@ -70,22 +70,25 @@ void Terrain::render(RenderContext& context)
 {
 	int32 x = 0;
 	int32 y = 0;
-	
+
+	int32 wNodes = (int32) m_wNodes;
+	int32 hNodes = (int32) m_hNodes;
+
 	Vector3 cameraRelative = Camera::current->getPosition() - Vector3(-(float)(m_width / 2), 0, -(float)(m_height / 2));
 
 	x = (int32)(cameraRelative.x / m_nodeSize);
 	y = (int32)(cameraRelative.z / m_nodeSize);
 
 	{
-		bool yInRange = (y >= 0 && y < m_hNodes);
-		bool xInRange = (x >= 0 && x < m_wNodes);
+		bool yInRange = (y >= 0 && y < hNodes);
+		bool xInRange = (x >= 0 && x < wNodes);
 		if (xInRange && yInRange)
 		{
 			if (m_node[x][y])
 				m_node[x][y]->render(context);
 		}
 	
-		if (xInRange && (y + 1) < m_hNodes)
+		if (xInRange && (y + 1) < hNodes)
 		{
 			if (m_node[x][y + 1])
 				m_node[x][y + 1]->render(context);
@@ -98,28 +101,28 @@ void Terrain::render(RenderContext& context)
 		}
 
 		// X Y
-		if ((x + 1) < m_wNodes && (y + 1) < m_hNodes)
+		if ((x + 1) < wNodes && (y + 1) < hNodes)
 		{
 			if (m_node[x + 1][y + 1])
 				m_node[x + 1][y + 1]->render(context);
 		}
 
 		// X
-		if ((x + 1) < m_wNodes && (y - 1) >= 0)
+		if ((x + 1) < wNodes && (y - 1) >= 0)
 		{
 			if (m_node[x + 1][y - 1])
 				m_node[x + 1][y - 1]->render(context);
 		}
 
 		// Y
-		if ((x - 1) >= 0 && (y + 1) < m_hNodes)
+		if ((x - 1) >= 0 && (y + 1) < hNodes)
 		{
 			if (m_node[x - 1][y + 1])
 				m_node[x - 1][y + 1]->render(context);
 		}
 
 		// Y
-		if (yInRange && (x+1) < m_wNodes)
+		if (yInRange && (x+1) < wNodes)
 		{
 			if (m_node[x + 1][y])
 				m_node[x + 1][y]->render(context);

@@ -15,7 +15,7 @@ struct SoundData
 {
 	uint8 *data;
 	uint32 format;
-	uint32 size;
+	uint64 size;
 	uint32 sampleRate;
 
 	SoundData()

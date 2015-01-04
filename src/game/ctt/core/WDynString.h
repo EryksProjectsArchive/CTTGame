@@ -26,7 +26,7 @@ class WDynString
 {
 private:
 	wchar * m_buffer;
-	uint32 m_size;
+	size_t m_size;
 
 	void clear()
 	{
@@ -145,7 +145,7 @@ public:
 		return !wcscmp(m_buffer, rhs);
 	}
 
-	wchar operator[](uint32 index) const
+	wchar operator[](size_t index) const
 	{
 		if (index < 0 || index > m_size)
 			return 0;
@@ -153,12 +153,12 @@ public:
 		return m_buffer[index];
 	}
 
-	uint32 getSize()
+	size_t getSize()
 	{
 		return m_size;
 	}
 
-	uint32 getLength() const
+	size_t getLength() const
 	{
 		return m_size;
 	}
@@ -176,16 +176,16 @@ public:
 		return find(c) != -1;
 	}
 
-	int32 find(wchar c)
+	size_t find(wchar c)
 	{
-		for (uint32 i = 0; i < m_size; ++i)
+		for (size_t i = 0; i < m_size; ++i)
 			if (m_buffer[i] == c)
 				return i;
 
 		return -1;
 	}
 
-	WDynString substr(uint32 start, uint32 end)
+	WDynString substr(size_t start, size_t end)
 	{
 		if (!m_size)
 			return *this;
@@ -194,7 +194,7 @@ public:
 		if (sub.m_buffer)
 			delete[]sub.m_buffer;
 
-		uint32 len = end - start;
+		size_t len = end - start;
 		sub.m_buffer = new wchar[len+1];
 		memset(sub.m_buffer, 0, len*sizeof(wchar));
 		wcsncpy(sub.m_buffer, m_buffer + start, end > m_size ? m_size : len);

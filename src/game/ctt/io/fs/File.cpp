@@ -36,12 +36,12 @@ bool File::isLoaded()
 	return m_isLoaded;
 }
 
-unsigned int File::write(const void *data, unsigned int count, unsigned int size)
+size_t File::write(const void *data, size_t count, size_t size)
 {
 	return -1;
 }
 
-unsigned int File::read(void * data, unsigned int count, unsigned int size)
+size_t File::read(void * data, size_t count, size_t size)
 {
 	return -1;
 }

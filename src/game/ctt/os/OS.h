@@ -53,8 +53,8 @@ namespace OS
 	bool isFileOSDynLib(const FilePath& path);
 
 	// Strings
-	void multiByteToWideChar(const char *ansi, uint32 ansiLen, wchar_t **utf8, uint32 *utf8Len);
-	void wideCharToMultiByte(const wchar_t *utf8, uint32 utf8Len, char **ansi, uint32 *ansiLen);
+	void multiByteToWideChar(const char *ansi, size_t ansiLen, wchar_t **utf8, size_t *utf8Len);
+	void wideCharToMultiByte(const wchar_t *utf8, size_t utf8Len, char **ansi, size_t *ansiLen);
 
 	// Dynamic libs
 	DynamicLibrary * openDynamicLibrary(const FilePath path);

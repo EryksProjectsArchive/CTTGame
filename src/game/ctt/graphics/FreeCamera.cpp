@@ -79,56 +79,60 @@ void FreeCamera::onKeyEvent(Key::Type key, bool state)
 
 void FreeCamera::update(float dt)
 {
+	bool processKeys = true;
 	if (input()->isLocked())
 	{
 		for (unsigned int i = 0; i < 6; ++i)
 			m_keys[i] = false;
 
-		return;
+		processKeys = false;
 	}
 
-	Vector3 begin = m_position;
-	Vector3 forwardVelocity;
-	Vector3 sideVelocity;
-
-	bool update = false;
-	if (m_keys[0])
+	if (processKeys)
 	{
-		forwardVelocity = glm::normalize(m_target - begin);
-		update = true;
+		Vector3 begin = m_position;
+		Vector3 forwardVelocity;
+		Vector3 sideVelocity;
+
+		bool update = false;
+		if (m_keys[0])
+		{
+			forwardVelocity = glm::normalize(m_target - begin);
+			update = true;
+		}
+
+		if (m_keys[1])
+		{
+			forwardVelocity = -glm::normalize(m_target - begin);
+			update = true;
+		}
+
+		if (m_keys[2])
+		{
+			Vector3 direction = glm::cross(m_facing - begin, Vector3(0, 1, 0));
+			sideVelocity = -glm::normalize(direction);
+			update = true;
+		}
+
+		if (m_keys[3])
+		{
+			Vector3 direction = glm::cross(m_facing - begin, Vector3(0, 1, 0));
+			sideVelocity = glm::normalize(direction);
+			update = true;
+		}
+
+		if (update)
+		{
+			m_velocity += (forwardVelocity + sideVelocity);
+			m_velocity = glm::normalize(m_velocity);
+		}
+
+		if (m_keys[4])
+			m_velocity.y = 1.f;
+
+		if (m_keys[5])
+			m_velocity.y = -1.f;
 	}
-
-	if (m_keys[1])
-	{
-		forwardVelocity = -glm::normalize(m_target - begin);
-		update = true;
-	}
-
-	if (m_keys[2])
-	{
-		Vector3 direction = glm::cross(m_facing - begin, Vector3(0, 1, 0));
-		sideVelocity = -glm::normalize(direction);
-		update = true;
-	}
-
-	if (m_keys[3])
-	{
-		Vector3 direction = glm::cross(m_facing - begin, Vector3(0, 1, 0));
-		sideVelocity = glm::normalize(direction);
-		update = true;
-	}
-
-	if (update)
-	{
-		m_velocity += (forwardVelocity + sideVelocity);
-		m_velocity = glm::normalize(m_velocity);
-	}
-
-	if (m_keys[4])
-		m_velocity.y = 1.f;
-
-	if (m_keys[5])
-		m_velocity.y = -1.f;
 
 	if (m_velocity.length() > 0)
 	{

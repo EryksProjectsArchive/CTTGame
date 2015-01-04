@@ -108,7 +108,7 @@ public:
 		return String("%s%s", m_buffer, buffer);
 	}
 
-	unsigned char operator[](uint32 index)
+	uint8 operator[](size_t index)
 	{
 		if (index < 0 || index > maxSize)
 			return 0;
@@ -131,18 +131,18 @@ public:
 		return strlen(m_buffer);
 	}
 
-	uint32 String::getSize()
+	size_t String::getSize()
 	{
 		return maxSize;
 	}
 
-	uint16 String::find(const char * key) const
+	size_t String::find(const char * key) const
 	{		
 		size_t range = strlen(m_buffer);
 		if (range + strlen(key) > maxSize)		
 			range = maxSize;
 		
-		for (uint32 i = 0; i < range; ++i)
+		for (size_t i = 0; i < range; ++i)
 		{
 			if (!memcmp(m_buffer + i, key, strlen(key)))
 			{
@@ -165,15 +165,15 @@ public:
 		return append(value);
 	}
 
-	String substr(uint16 begin, uint16 length)
+	String substr(size_t begin, size_t length)
 	{
 		String newString;
 		if (begin < maxSize)
 		{
-			uint16 end = begin + length;
+			size_t end = begin + length;
 			if (end > maxSize)
 				end = maxSize;
-			for (uint16 i = begin; i < end; ++i)
+			for (size_t i = begin; i < end; ++i)
 			{
 				newString += m_buffer[i];
 			}
@@ -184,7 +184,7 @@ public:
 	String replace(const char *key, const char *value)
 	{
 		String newString;
-		uint16 keyPos = find(key);
+		size_t keyPos = find(key);
 		
 		char temp[maxSize] = { 0 };
 		strcpy(temp, keyPos < strlen(key) ? substr(strlen(key), strlen(m_buffer)) : substr(keyPos + strlen(key), strlen(m_buffer)));

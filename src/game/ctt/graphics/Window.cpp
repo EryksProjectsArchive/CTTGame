@@ -72,7 +72,7 @@ bool Window::processMessages()
 			{
 				char *text = event.text.text;
 				wchar_t *wcText = 0;
-				uint32 wcLen = 0;
+				size_t wcLen = 0;
 				OS::multiByteToWideChar(text, strlen(text), &wcText, &wcLen);
 				Input::get()->onTextInput(wcText);
 				delete[]wcText;

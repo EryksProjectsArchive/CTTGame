@@ -130,7 +130,7 @@ void Console::onKeyEvent(Key::Type key, bool pressed)
 			{
 				bool commandExecuted = false;
 				
-				int32 space = m_inputBuffer.find(' ');
+				size_t space = m_inputBuffer.find(' ');
 				WDynString commandName = m_inputBuffer.substr(0, space!=-1?space:m_inputBuffer.getLength());
 				WDynString params = m_inputBuffer.substr(space+1, m_inputBuffer.getLength());
 				for (ICommand *command : m_commands)

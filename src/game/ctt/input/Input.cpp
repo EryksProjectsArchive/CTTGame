@@ -84,7 +84,10 @@ void Input::unlock()
 {
 	m_inputState--;
 	if (m_inputState < 0)
+	{
+		Warning("Input", "Input state reached bellow zero.");
 		m_inputState = 0;
+	}
 }
 
 bool Input::isLocked()

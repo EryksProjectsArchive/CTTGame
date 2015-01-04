@@ -41,8 +41,8 @@ public:
 
 	virtual bool isLoaded();
 
-	virtual uint32 write(const void *data, uint32 count, uint32 size);
-	virtual uint32 read(void * data, uint32 count, uint32 size);
+	virtual size_t write(const void *data, size_t count, size_t size);
+	virtual size_t read(void * data, size_t count, size_t size);
 
 	virtual void flush();
 

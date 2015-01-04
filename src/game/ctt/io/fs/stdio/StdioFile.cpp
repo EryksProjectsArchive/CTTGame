@@ -62,7 +62,7 @@ namespace Stdio
 		return false;
 	}
 
-	unsigned int File::write(const void *data, unsigned int count, unsigned int size)
+	size_t File::write(const void *data, size_t count, size_t size)
 	{
 		if (m_isLoaded)
 			return fwrite(data, size, count, m_filePtr);
@@ -70,7 +70,7 @@ namespace Stdio
 		return -1;
 	}
 
-	unsigned int File::read(void * data, unsigned int count, unsigned int size)
+	size_t File::read(void * data, size_t count, size_t size)
 	{
 		if (m_isLoaded)
 			return fread(data, size, count, m_filePtr);

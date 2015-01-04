@@ -79,8 +79,8 @@ namespace OGG
 			};
 			OggVorbis_File vorbis_file;
 			vorbis_info* vi;
-			uint32 data_size;
-			uint32 size = 0;
+			uint64 data_size;
+			uint64 size = 0;
 			int32 bitstream;
 			
 			if (ov_open_callbacks(file, &vorbis_file, NULL, 0, callbacks) == 0)
@@ -108,7 +108,7 @@ namespace OGG
 
 					while (size < data_size)
 					{
-						int32 result = ov_read(&vorbis_file, (int8*)data->data + size, data_size - size, 0, 2, 1, &bitstream);
+						int32 result = ov_read(&vorbis_file, (int8*)data->data + size, (uint32)(data_size - size), 0, 2, 1, &bitstream);
 
 						if (result > 0)
 						{

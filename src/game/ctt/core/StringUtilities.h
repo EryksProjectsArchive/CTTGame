@@ -27,7 +27,7 @@ public:
 	{
 		WDynString string;
 		wchar_t *wc = 0;
-		uint32 len;
+		size_t len;
 		OS::multiByteToWideChar(multiByte.get(), multiByte.getLength(), &wc, &len);
 		string = WDynString(wc);
 		delete[]wc;
@@ -38,7 +38,7 @@ public:
 	{
 		DynString string;
 		char *multiByte = 0;
-		uint32 len;
+		size_t len;
 		OS::wideCharToMultiByte(wideChar.get(), wideChar.getLength(), &multiByte, &len);
 		string = DynString(multiByte);
 		delete[]multiByte;
