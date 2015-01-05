@@ -12,7 +12,11 @@ uniform mat4 projectionMatrix;
 
 out vec4 color;
 
-vec3 ambientColor = vec3(0.2, 0.2, 0.4);
+// Day
+vec3 ambientColor = vec3(0.9, 0.8, 0.7); 
+// Night
+//vec3 ambientColor = vec3(0.2, 0.2, 0.4);
+
 vec3 specularColor = vec3(0.5,0.5,0.5);
 
 vec3 getWorldPosition()

@@ -58,7 +58,7 @@ FragmentShader::FragmentShader(const char * source) : Shader(source)
 			{
 				if (errorLog[i] == '\n' || errorLog[i] == '\0')
 				{
-					uint32 length = (i - startIndex);
+					uint32 length = (i - startIndex) + 1;
 					char *line = new char[length];
 					memcpy(line, lineBuffer + startIndex, length - 1);
 					line[length - 1] = '\0';

@@ -302,7 +302,7 @@ bool Game::init()
 	for (int i = 0; i < 10; ++i)
 	{
 		testEntity = new BoxEntity();		
-		testEntity->setPosition(Vector3(0, i * (testEntity->getHeight()+0.5f), 0));
+		testEntity->setPosition(Vector3(0, testEntity->getHeight() + (i * (testEntity->getHeight() + 0.5f)), 0));
 		m_scene->addEntity(testEntity);
 	}
 
