@@ -27,9 +27,11 @@
 
 #include <io/fs/FileSystem.h>
 
+#include <core/StringUtilities.h>
+
 MaterialLib::MaterialLib()
 {
-
+	Console::get()->addCommand(new MaterialLib::MaterialsCommand(this));
 }
 
 MaterialLib::~MaterialLib()
@@ -114,4 +116,19 @@ Material * MaterialLib::findByName(const DynString& name)
 	}
 
 	return material;
+}
+
+MaterialLib::MaterialsCommand::MaterialsCommand(MaterialLib * matLib)
+	: Console::ICommand(L"materials")
+{
+	m_matLib = matLib;
+}
+	
+void MaterialLib::MaterialsCommand::onExecute(const WDynString& params)
+{
+	m_console->output(Console::MessageType::Info, WString<64>(L"Currently loaded materials (%d):", m_matLib->m_materials.size()));
+	for (Material * mat : m_matLib->m_materials)
+	{
+		m_console->output(Console::MessageType::Info, WString<64>(L"%s", StringUtilities::toWideChar(mat->m_name)));
+	}
 }
