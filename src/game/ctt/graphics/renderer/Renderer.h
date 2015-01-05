@@ -54,10 +54,7 @@ protected:
 		}
 	} m_stats;
 
-	Geometry<Vertex3d>* m_helperLines;
-	Material* m_helperMaterial;
 	Rect m_rect;
-	bool m_wireframe;
 public:
 	Renderer();
 	~Renderer();

@@ -186,13 +186,9 @@ Renderer::Renderer()
 	: m_window(0),
 	  m_glContext(0),
 	  m_projectionMatrix(glm::perspective(glm::radians(45.0f), 800.f / 600.f, 0.1f, 1000.0f)),
-	  m_orthoMatrix(glm::ortho(0.f, 800.f, 600.f, 0.f, -1.f, 1.f)),
-	  m_helperLines(0),
-	  m_helperMaterial(0),
-	  m_wireframe(false)
+	  m_orthoMatrix(glm::ortho(0.f, 800.f, 600.f, 0.f, -1.f, 1.f))
 {
 	m_stats.reset();
-	m_rect.bottom = m_rect.top = m_rect.right = m_rect.left = 0;
 }
 
 Renderer::~Renderer()
@@ -204,15 +200,6 @@ Renderer::~Renderer()
 	}
 
 	m_deferredRenderer.destroy();
-
-	if (m_helperMaterial)
-		m_helperMaterial->release();
-
-	if (m_helperLines)
-	{
-		delete m_helperLines;
-		m_helperLines = 0;
-	}
 
 	if (m_defaultMaterial)
 		m_defaultMaterial->release();
@@ -412,42 +399,17 @@ bool Renderer::setup(Window * window)
 	glEnable(GL_CULL_FACE);
 	glFrontFace(GL_CW);
 	glCullFace(GL_BACK);
+		
+	glClearColor(0, 0, 0, 1.0f);
+	glClearDepth(1.0f);
 	
 	m_defaultMaterial = MaterialLib::get()->findByName("default");
 	m_defaultMaterial->acquire();
-
-	m_helperMaterial = MaterialLib::get()->findByName("primitive");
-	m_helperMaterial->acquire();
 
 	unsigned int HackVAO;
 	glGenVertexArrays(1, &HackVAO);
 	glBindVertexArray(HackVAO);
 	
-	m_helperLines = new Geometry<Vertex3d>(EDrawType::LINES);
-
-	Vertex3d vertices[6] = { 0 };
-
-	// Format: 0xAABBGGRR bcz of endian
-	vertices[0].color = 0xFF0000FF;
-
-	vertices[1].x = 8;
-	vertices[1].color = 0xFF0000FF;
-
-	vertices[2].y = 8;
-	vertices[2].color = 0xFF00FF00;
-
-	vertices[3].z = 8;
-	vertices[3].color = 0xFFFF0000;
-
-	vertices[4].color = 0xFF00FF00;
-	vertices[5].color = 0xFFFF0000;
-
-	unsigned short indices[6] = {
-		0, 1, 2, 4, 3, 5
-	};
-
-	m_helperLines->fillData(vertices, 4, indices, 2);	
-
 	// Initialize deferred rendering
 	if (!m_deferredRenderer.initialize(this, (uint32)m_rect.right, (uint32)m_rect.bottom))
 	{
@@ -460,12 +422,6 @@ bool Renderer::setup(Window * window)
 void Renderer::preFrame()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClearColor(0.9f, 0.9f, 0.9f, 1.0f);	
-	glClearDepth(1.0f);
-
-	/*setMaterial(m_helperMaterial);
-	renderGeometry(m_helperLines, glm::mat4x4());
-	setMaterial(m_defaultMaterial);*/
 }
 
 void Renderer::beginSceneRender()
@@ -639,19 +595,8 @@ void Renderer::renderGeometry(Geometry<Vertex3d> *geometry, const glm::mat4x4& m
 		glVertexAttribPointer(attributeColor, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(Vertex3d), (void *)offsetof(Vertex3d, color));
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geometry->m_indexBuffer->m_bufferId);
-
-	unsigned int drawMode = GL_TRIANGLES;
-	if (m_wireframe)
-	{
-		drawMode = GL_LINE_STRIP;
-	}
-	else
-	{
-		if (geometry->m_drawType == EDrawType::LINES) drawMode = GL_LINES;
-		else if (geometry->m_drawType == EDrawType::LINE_STRIP) drawMode = GL_LINE_STRIP;
-	}
 	
-	glDrawElements(drawMode, geometry->m_trianglesCount * 3, GL_UNSIGNED_SHORT, 0);
+	glDrawElements(material->m_wireframe ? GL_LINE_STRIP : GL_TRIANGLES, geometry->m_trianglesCount * 3, GL_UNSIGNED_SHORT, 0);
 	m_stats.m_trianglesDrawn += geometry->m_trianglesCount;
 	m_stats.m_drawCalls++;
 	m_stats.m_verticesDrawn += geometry->m_verticesCount;
@@ -733,8 +678,7 @@ void Renderer::renderGeometry(Geometry<Vertex2d> *geometry)
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geometry->m_indexBuffer->m_bufferId);
 
-
-	glDrawElements(m_wireframe ? GL_LINE_STRIP : GL_TRIANGLES, geometry->m_trianglesCount * 3, GL_UNSIGNED_SHORT, 0);
+	glDrawElements(material->m_wireframe ? GL_LINE_STRIP : GL_TRIANGLES, geometry->m_trianglesCount * 3, GL_UNSIGNED_SHORT, 0);
 	m_stats.m_trianglesDrawn += geometry->m_trianglesCount;
 	m_stats.m_drawCalls++;
 	m_stats.m_verticesDrawn += geometry->m_verticesCount;
@@ -794,7 +738,7 @@ void Renderer::renderGeometry(Geometry<SimpleVertex2d> *geometry)
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geometry->m_indexBuffer->m_bufferId);
 
-	glDrawElements(m_wireframe ? GL_LINE_STRIP : GL_TRIANGLES, geometry->m_trianglesCount * 3, GL_UNSIGNED_SHORT, 0);
+	glDrawElements(material->m_wireframe ? GL_LINE_STRIP : GL_TRIANGLES, geometry->m_trianglesCount * 3, GL_UNSIGNED_SHORT, 0);
 	m_stats.m_trianglesDrawn += geometry->m_trianglesCount;
 	m_stats.m_drawCalls++;
 	m_stats.m_verticesDrawn += geometry->m_verticesCount;
@@ -1021,7 +965,7 @@ void Renderer::renderFont(const WDynString& string, const Rect& rect, const Colo
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geometry.m_indexBuffer->m_bufferId);
 
-	glDrawElements(m_wireframe ? GL_LINE_STRIP : GL_TRIANGLES, geometry.m_trianglesCount * 3, GL_UNSIGNED_SHORT, 0);
+	glDrawElements(material->m_wireframe ? GL_LINE_STRIP : GL_TRIANGLES, geometry.m_trianglesCount * 3, GL_UNSIGNED_SHORT, 0);
 	m_stats.m_trianglesDrawn += geometry.m_trianglesCount;
 	m_stats.m_drawCalls++;
 	m_stats.m_verticesDrawn += geometry.m_verticesCount;

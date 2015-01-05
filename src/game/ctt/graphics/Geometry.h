@@ -18,15 +18,6 @@
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
 
-struct EDrawType
-{
-	enum Type
-	{
-		TRIANGLES,
-		LINES,
-		LINE_STRIP
-	};
-};
 
 template <class VertexType>
 class Geometry
@@ -37,8 +28,6 @@ private:
 
 	uint16 m_trianglesCount;
 	uint16 m_verticesCount;
-
-	EDrawType::Type m_drawType;
 public:
 	Geometry()
 	{
@@ -47,12 +36,6 @@ public:
 
 		m_trianglesCount = 0;
 		m_verticesCount = 0;
-		m_drawType = EDrawType::TRIANGLES;
-	}
-
-	Geometry(EDrawType::Type type) : Geometry()
-	{
-		m_drawType = type;
 	}
 
 	~Geometry()

@@ -60,6 +60,8 @@ Material * MaterialLib::findByName(const DynString& name)
 		{			
 			material = new Material(name, FilePath("materials/%s.json", name.get()));
 
+			material->m_wireframe = root.get("wireframe", false).asBool();
+
 			if (!root["texture"].empty() && !root["texture"]["name"].empty())
 			{
 				material->m_textureName = root["texture"]["name"].asCString();

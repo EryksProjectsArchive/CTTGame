@@ -157,8 +157,6 @@ void DeferredRendering::begin()
 
 	// Clear the render targets
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClearColor(0.6f, 0.6f, 1.0f, 1.0f);
-	glClearDepth(1.0f);
 
 	Renderer::glActiveTexture(GL_TEXTURE0);
 	glEnable(GL_TEXTURE_2D);
@@ -289,7 +287,7 @@ void DeferredRendering::end()
 
 	Renderer::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geometry.m_indexBuffer->m_bufferId);
 
-	glDrawElements(GL_TRIANGLES, geometry.m_trianglesCount * 3, GL_UNSIGNED_SHORT, 0);
+	glDrawElements(m_deferredResultMaterial->m_wireframe ? GL_LINE_STRIP : GL_TRIANGLES, geometry.m_trianglesCount * 3, GL_UNSIGNED_SHORT, 0);
 
 	Renderer::glDisableVertexAttribArray(attributePosition);
 	if (attributeColor != -1)

@@ -25,7 +25,8 @@ private:
 	uint8 m_hasVertexShader : 1;
 	uint8 m_hasFragmentShader : 1;
 	uint8 m_isLoaded : 1;
-	uint8 m_mipmaps;
+	uint8 m_wireframe : 1;
+	uint8 m_mipmaps : 1;
 	FilePath m_textureName;
 	FilePath m_vertexShaderName;
 	FilePath m_fragmentShaderName;
