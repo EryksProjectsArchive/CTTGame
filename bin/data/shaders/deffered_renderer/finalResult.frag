@@ -12,6 +12,9 @@ uniform mat4 projectionMatrix;
 
 out vec4 color;
 
+vec3 ambientColor = vec3(0.2, 0.2, 0.4);
+vec3 specularColor = vec3(0.5,0.5,0.5);
+
 vec3 getWorldPosition()
 {
     float z = texture(depthTexture, vUV).r* 2.0 - 1.0;
@@ -21,101 +24,64 @@ vec3 getWorldPosition()
     return (screenPosition.xyz / screenPosition.w);
 }
 
-void main(void)
+vec4 calculatePointLight(vec3 position, vec3 normal, vec3 lightColor, vec3 lightPosition, float size, float power)
 {	
-	vec3 ambient = vec3(1, 1, 1);
-	int numLights = 0;
+	vec3 lightDirection = normalize(lightPosition - position);
+	float multiplier = 0;
+	float dir = dot(lightDirection, normal);
+	if(dir >= -0.5)
+	{
+		multiplier = (1-clamp(distance(position, lightPosition)/size, 0, 1)) * (0.5+dir);
+	}
+
+	return vec4(lightColor * multiplier * power, 1);;
+}
+
+vec4 calculatePointLight_BlinnPhong(vec3 position, vec3 normal, vec3 lightColor, vec3 lightPosition, float size, float powe)
+{
+	vec3 lightDirection = normalize(lightPosition - position);
+	float lambertian = max(dot(lightDirection, normal), 0.0);
+	float specular = 0.0;
+
+	if(lambertian > 0.0)
+	{
+		vec3 viewDirection = normalize(-position);
+		vec3 halfDirection = normalize(lightDirection + viewDirection);
+		float specularAngle = max(dot(halfDirection, normal), 0.0);
+		specular = pow(specularAngle, 16.0);
+	}
+
+	float multiplier = (1-clamp(distance(position, lightPosition)/size, 0, 1));
+
+	return vec4(ambientColor + (lambertian * lightColor + specular * specularColor)  * multiplier, 1);
+}
+
+void main(void)
+{		
+	vec4 lighting;
 
 	// Base color of texture
 	color = texture2D(diffuseTexture, vUV);
 
 	// Get world position from depth buffer
-	vec3 vecPosition = getWorldPosition();
-	vec3 vecNormal = normalize(texture2D(normalTexture, vUV).xyz);
+	vec3 vecPosition = vec3(viewMatrix * vec4(getWorldPosition(), 1));
+	vec3 vecNormal = texture2D(normalTexture, vUV).xyz;
 
-	//color = vec4(1,1,1,1);
-	//color = vec4(vecNormal, 1);
-
-	vec3 lighting;
-
+	/*
+	SUN LIGHT - no longer needed
 	float power = 1.f;	
 	float size = 1000.0f;
 	vec3 lightColor = vec3(0.8, 0.8, 0.8);
-	vec3 lightPosition = vec3(20,100,0);
+	vec3 lightPosition = vec3(viewMatrix * vec4(20,100,0,1));
 
-	float mp = 0;
-	float _dot = dot(normalize(lightPosition-vecPosition), vecNormal);
-	if(_dot > 0)
-	{
-		mp = clamp(1 - distance(lightPosition, vecPosition) / size, 0, 1) * _dot;
-	}	
-	else
-	{
-		mp = 0;
-	}
+	lighting += calculatePointLight(vecPosition, vecNormal, lightColor, lightPosition, size, power);*/
 
-	if(mp > 0)	
-		numLights++;
-	lighting += vec3(lightColor * (power * mp));
+	float power = 2.0f;
+	float size = 20.0f;
+	vec3 lightColor = vec3(1, 0.5, 0);
+	vec3 lightPosition = vec3(viewMatrix * vec4(0.8,2,0.8,1));
 
-	power = 5.f;
-	size = 20.0f;
-	lightColor = vec3(0.5,0.2,0);
-	lightPosition = vec3(10,2,10);
-	
-	_dot = dot(normalize(lightPosition-vecPosition), vecNormal);
-	if(_dot > 0)
-	{
-		mp = clamp(1 - distance(lightPosition, vecPosition) / size, 0, 1) * _dot;
-	}	
-	else
-	{
-		mp = 0;
-	}
+	lighting += calculatePointLight_BlinnPhong(vecPosition, vecNormal, lightColor, lightPosition, size, power);
 
-	if(mp > 0)	
-		numLights++;
-	lighting += vec3(lightColor * (power * mp));
-
-	/*lightColor = vec3(0.3,0.0,0.5);
-	lightPosition = vec3(10,1,0);
-	
-	_dot = dot(normalize(lightPosition-vecPosition), vecNormal);
-	if(_dot > 0)
-	{
-		mp = clamp(1 - distance(lightPosition, vecPosition) / 8, 0, 1) * _dot;
-	}	
-	else
-	{
-		mp = 0;
-	}
-
-
-	if(mp > 0)	
-		numLights++;
-	color *= vec4(lightColor * (power * mp), 1);
-
-	lightColor = vec3(0.01,0.03,0.08);
-	lightPosition = vec3(0,1,10);
-	
-	_dot = dot(normalize(lightPosition-vecPosition), vecNormal);
-	if(_dot > 0)
-	{
-		mp = clamp(1 - distance(lightPosition, vecPosition) / 8, 0, 1) * _dot;
-	}	
-	else
-	{
-		mp = 0;
-	}
-
-
-	if(mp > 0)	
-		numLights++;
-	color *= vec4(lightColor * (power * mp), 1);*/
-
-	color *= vec4(lighting /* ambient*/, 1);
-//	color /= 2;
-
-	/*if(numLights > 0)
-		color /= numLights;*/
+	color *= lighting;
 }

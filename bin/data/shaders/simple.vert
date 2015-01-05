@@ -22,5 +22,5 @@ void main(void)
 
 	vUV = vertexUV;
 	vColor = vertexColor;
-	vNormal = normalize(modelMatrix * vec4(vertexNormal, 0)).xyz;
+	vNormal = normalize(mat3(viewMatrix * modelMatrix) * vertexNormal).xyz;
 }
