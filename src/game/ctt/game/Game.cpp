@@ -73,7 +73,7 @@ Font *gFont = 0;
 class ConsoleQuitCommand : public Console::ICommand
 {
 public:
-	ConsoleQuitCommand() : Console::ICommand(L"quit")
+	ConsoleQuitCommand() : Console::ICommand(L"quit", L"Quits game")
 	{
 
 	}
@@ -88,7 +88,7 @@ public:
 class SpawnCommand : public Console::ICommand
 {
 public:
-	SpawnCommand() : Console::ICommand(L"spawn")
+	SpawnCommand() : Console::ICommand(L"spawn", L"Spawns an entity")
 	{
 
 	}

@@ -46,10 +46,11 @@ public:
 	{
 	protected:
 		WDynString m_name;
+		WDynString m_description;
 		Console *m_console;
 	public:
-		ICommand() : m_console(0) {}
-		ICommand(const WDynString& name);
+		ICommand() : m_console(0), m_description(L"No description") {}
+		ICommand(const WDynString& name, const WDynString& description = L"No description");
 		ICommand(const ICommand& command);
 		virtual ~ICommand();
 
@@ -141,4 +142,11 @@ public:
 	void render(Renderer *renderer);
 
 	static Console* get();
+
+	class HelpCommand : public ICommand
+	{
+	public:
+		HelpCommand();
+		void onExecute(const WDynString& params);
+	};
 };

@@ -119,7 +119,7 @@ Material * MaterialLib::findByName(const DynString& name)
 }
 
 MaterialLib::MaterialsCommand::MaterialsCommand(MaterialLib * matLib)
-	: Console::ICommand(L"materials")
+	: Console::ICommand(L"materials", L"Shows list of currently used materials")
 {
 	m_matLib = matLib;
 }
@@ -129,6 +129,6 @@ void MaterialLib::MaterialsCommand::onExecute(const WDynString& params)
 	m_console->output(Console::MessageType::Info, WString<64>(L"Currently loaded materials (%d):", m_matLib->m_materials.size()));
 	for (Material * mat : m_matLib->m_materials)
 	{
-		m_console->output(Console::MessageType::Info, WString<64>(L"%s", StringUtilities::toWideChar(mat->m_name)));
+		m_console->output(Console::MessageType::Info, WString<256>(L"%s Refs:%d", StringUtilities::toWideChar(mat->m_name).get(), mat->getRefCount()));
 	}
 }

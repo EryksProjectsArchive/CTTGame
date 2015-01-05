@@ -25,4 +25,6 @@ public:
 
 	void acquire();
 	void release();
+
+	uint32 getRefCount();
 };

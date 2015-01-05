@@ -72,7 +72,7 @@ void Scene::addEntity(Entity *entity)
 }
 
 Scene::SceneInfoCommand::SceneInfoCommand(Scene * scene)
-	: Console::ICommand(L"sceneinfo")
+	: Console::ICommand(L"sceneinfo", L"Prints informations about scene")
 {
 	m_scene = scene;
 }

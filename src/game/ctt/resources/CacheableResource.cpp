@@ -48,3 +48,8 @@ void CacheableResource::release()
 		Debug("cacheable resource", "Destroyed cacheable resource memory because ref count amount reached bellow 1. '%s'", m_filePath.get());
 	}
 }
+
+uint32 CacheableResource::getRefCount()
+{
+	return m_refCount;
+}

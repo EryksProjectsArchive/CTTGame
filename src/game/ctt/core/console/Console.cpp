@@ -32,6 +32,8 @@ Console::Console()
 {
 	m_history.reset();
 	s_instance = this;
+
+	addCommand(new HelpCommand());
 }
 
 Console::~Console()
@@ -382,18 +384,36 @@ void Console::removeCommand(const WDynString& name)
 	}
 }
 
-Console::ICommand::ICommand(const WDynString& name)
+Console::ICommand::ICommand(const WDynString& name, const WDynString& description)
 {
 	m_console = 0;
 	m_name = name;
+	m_description = description;
 }
 
 Console::ICommand::ICommand(const Console::ICommand& command) 
 {
 	m_console = command.m_console;
 	m_name = command.m_name;
+	m_description = command.m_description;
 }
 
 Console::ICommand::~ICommand()
 {
+}
+
+Console::HelpCommand::HelpCommand()
+	: ICommand(L"help", L"Prints list of commands")
+{
+
+}
+
+void Console::HelpCommand::onExecute(const WDynString& params)
+{
+	m_console->output(Console::MessageType::Info, L"Available commands:");
+
+	for (ICommand *cmd : m_console->m_commands)
+	{
+		m_console->output(Console::MessageType::Info, WString<512>(L"%s %s", cmd->m_name.get(), cmd->m_description.get()));
+	}
 }
