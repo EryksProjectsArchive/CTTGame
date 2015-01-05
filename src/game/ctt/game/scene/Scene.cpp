@@ -26,6 +26,8 @@ Scene::Scene()
 	m_camera = new EditorFreeCamera();
 	Camera::setCurrent(m_camera);
 	m_terrain = new Terrain(10000, 10000);
+
+	Console::get()->addCommand(new SceneInfoCommand(this));
 }
 
 Scene::~Scene()
@@ -67,4 +69,18 @@ void Scene::render()
 void Scene::addEntity(Entity *entity)
 {
 	m_entities.pushBack(entity);
+}
+
+Scene::SceneInfoCommand::SceneInfoCommand(Scene * scene)
+	: Console::ICommand(L"sceneinfo")
+{
+	m_scene = scene;
+}
+
+void Scene::SceneInfoCommand::onExecute(const WDynString& params)
+{
+	m_console->output(Console::MessageType::Info, L"Scene info:");
+	m_console->output(Console::MessageType::Info, WString<64>(L"There are %d spawned entities", m_scene->m_entities.size()));
+	Vector3 camPos = m_scene->m_camera->getPosition();
+	m_console->output(Console::MessageType::Info, WString<128>(L"Current cam pos: %f, %f, %f", camPos.x, camPos.y, camPos.z));
 }

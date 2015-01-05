@@ -16,6 +16,8 @@
 #include <core/List.h>
 #include <core/Singleton.h>
 
+#include <core/console/Console.h>
+
 class Scene
 {
 private:
@@ -31,4 +33,13 @@ public:
 	void addEntity(Entity *entity);
 
 	void render();
+
+	class SceneInfoCommand : public Console::ICommand
+	{
+	private:
+		Scene * m_scene;
+	public:
+		SceneInfoCommand(Scene * scene);
+		void onExecute(const WDynString& params);
+	};
 };
