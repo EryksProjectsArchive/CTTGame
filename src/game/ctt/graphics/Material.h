@@ -38,5 +38,6 @@ public:
 	bool load() override;
 
 	friend class Renderer;
+	friend class DeferredRendering;
 	friend class MaterialLib;
 };

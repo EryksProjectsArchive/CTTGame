@@ -51,4 +51,5 @@ public:
 	uint32 getAttributeLocation(const char *name);
 
 	friend class Renderer;
+	friend class DeferredRendering;
 };

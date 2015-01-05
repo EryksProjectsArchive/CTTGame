@@ -185,7 +185,7 @@ SETUP_INSTANCE(Renderer);
 Renderer::Renderer()
 	: m_window(0),
 	  m_glContext(0),
-	  m_projectionMatrix(glm::perspective(45.0f, 800.f / 600.f, 0.1f, 1000.0f)),
+	  m_projectionMatrix(glm::perspective(glm::radians(45.0f), 800.f / 600.f, 0.1f, 1000.0f)),
 	  m_orthoMatrix(glm::ortho(0.f, 800.f, 600.f, 0.f, -1.f, 1.f)),
 	  m_helperLines(0),
 	  m_helperMaterial(0),
@@ -203,15 +203,7 @@ Renderer::~Renderer()
 		m_glContext = 0;
 	}
 
-	glDeleteTextures(1, &m_normalTexture);
-	glDeleteTextures(1, &m_diffuseTexture);
-	glDeleteFramebuffers(1, &m_fbo);
-	glDeleteRenderbuffers(1, &m_diffuseRenderBuffer);
-	glDeleteRenderbuffers(1, &m_normalRenderBuffer);
-	glDeleteRenderbuffers(1, &m_depthRenderBuffer);
-
-	if (m_deferredResultMaterial)
-		m_deferredResultMaterial->release();
+	m_deferredRenderer.destroy();
 
 	if (m_helperMaterial)
 		m_helperMaterial->release();
@@ -230,7 +222,7 @@ bool Renderer::setup(Window * window)
 {
 	m_window = window;
 
-	m_projectionMatrix = glm::perspective(45.0f, window->getAspectRatio(), 0.1f, 1000.0f);
+	m_projectionMatrix = glm::perspective(glm::radians(45.0f), window->getAspectRatio(), 0.1f, 1000.0f);
 
 	m_rect.bottom = float(m_window->getHeight());
 	m_rect.right = float(m_window->getWidth());
@@ -427,9 +419,6 @@ bool Renderer::setup(Window * window)
 	m_helperMaterial = MaterialLib::get()->findByName("primitive");
 	m_helperMaterial->acquire();
 
-	m_deferredResultMaterial = MaterialLib::get()->findByName("deferredResult");
-	m_deferredResultMaterial->acquire();
-
 	unsigned int HackVAO;
 	glGenVertexArrays(1, &HackVAO);
 	glBindVertexArray(HackVAO);
@@ -459,71 +448,12 @@ bool Renderer::setup(Window * window)
 
 	m_helperLines->fillData(vertices, 4, indices, 2);	
 
-	// Setup deferred rendering
-	uint32 width = (uint32)m_rect.right;
-	uint32 height = (uint32)m_rect.bottom;
-
-	glGenFramebuffers(1, &m_fbo);
-	glGenRenderbuffers(1, &m_diffuseRenderBuffer);
-	glGenRenderbuffers(1, &m_normalRenderBuffer);
-	glGenRenderbuffers(1, &m_depthRenderBuffer);
-
-	glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
-
-	glBindRenderbuffer(GL_RENDERBUFFER, m_diffuseRenderBuffer);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA, width, height);
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, m_diffuseRenderBuffer);
-
-	glBindRenderbuffer(GL_RENDERBUFFER, m_normalRenderBuffer);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_RGB16F_ARB, width, height);
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_RENDERBUFFER, m_normalRenderBuffer);
-
-	glBindRenderbuffer(GL_RENDERBUFFER, m_depthRenderBuffer);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT32F, width, height);
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_depthRenderBuffer);
-
-	// Create diffuse texture
-	glGenTextures(1, &m_diffuseTexture);
-	glBindTexture(GL_TEXTURE_2D, m_diffuseTexture);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_FLOAT, NULL);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-	// Attach texture to frame buffer
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_diffuseTexture, 0);
-
-	glGenTextures(1, &m_normalTexture);
-	glBindTexture(GL_TEXTURE_2D, m_normalTexture);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F_ARB, width, height, 0, GL_RGB, GL_FLOAT, NULL);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-	// Attach the texture to the FBO
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, m_normalTexture, 0);
-
-	glGenTextures(1, &m_depthTexture);
-	glBindTexture(GL_TEXTURE_2D, m_depthTexture);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32F, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, m_depthTexture, 0);
-
-	// Check if all worked fine and unbind the FBO
-	GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-	if (status != GL_FRAMEBUFFER_COMPLETE_EXT)
+	// Initialize deferred rendering
+	if (!m_deferredRenderer.initialize(this, (uint32)m_rect.right, (uint32)m_rect.bottom))
 	{
-		Error("renderer", "Cannot initialize deferred rendering frame buffer object!");
+		Error("Renderer", "Unable to initialize deferred renderer.");
 		return false;
 	}
-
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 	return true;
 }
 
@@ -540,158 +470,12 @@ void Renderer::preFrame()
 
 void Renderer::beginSceneRender()
 {
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_fbo);
-	glPushAttrib(GL_VIEWPORT_BIT);
-
-	glViewport(0, 0, (GLsizei)m_rect.right, (GLsizei)m_rect.bottom);
-
-	// Clear the render targets
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClearColor(0.6f, 0.6f, 1.0f, 1.0f);
-	glClearDepth(1.0f);
-
-	glActiveTexture(GL_TEXTURE0);
-	glEnable(GL_TEXTURE_2D);
-
-	GLenum buffers[] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
-	glDrawBuffers(2, buffers);
+	m_deferredRenderer.begin();
 }
 
 void Renderer::endSceneRender()
 {
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-	glPopAttrib();
-
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glBindFramebuffer(GL_READ_FRAMEBUFFER, m_fbo);
-
-	// Render final result
-	glDisable(GL_DEPTH_TEST);
-	glDisable(GL_CULL_FACE);
-	glDisable(GL_BLEND);
-
-	Geometry<Vertex2d> geometry;
-
-	Vertex2d vertices[4] = {
-		{ 0, 0, 0, 1, 0xFFFFFFFF },
-		{ m_rect.right, 0, 1, 1, 0xFFFFFFFF },
-		{ m_rect.right, m_rect.bottom, 1, 0, 0xFFFFFFFF },
-		{ 0, m_rect.bottom, 0, 0, 0xFFFFFFFF }
-	};
-
-	uint16 triangles[] = {
-		0, 1, 2,
-		0, 2, 3
-	};
-
-	geometry.fillData(vertices, 4, triangles, 2);
-
-	if (!m_deferredResultMaterial)
-		return;
-
-	if (!m_deferredResultMaterial->m_program || !glIsProgram(m_deferredResultMaterial->m_program->m_programId))
-		return;
-
-	glUseProgram(m_deferredResultMaterial->m_program->m_programId);
-
-	unsigned int orthoMatrixLocation = m_deferredResultMaterial->m_program->getUniformLocation("orthoMatrix");
-	if (orthoMatrixLocation != -1)
-	{
-		glUniformMatrix4fv(orthoMatrixLocation, 1, GL_FALSE, glm::value_ptr(m_orthoMatrix));
-	}
-	
-	unsigned int textureLocation = m_deferredResultMaterial->m_program->getUniformLocation("diffuseTexture");
-	if (textureLocation != -1)
-	{
-		glActiveTexture(GL_TEXTURE0);
-		glEnable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, m_diffuseTexture);
-		glUniform1i(textureLocation, 0);
-	}
-
-	textureLocation = m_deferredResultMaterial->m_program->getUniformLocation("normalTexture");
-	if (textureLocation != -1)
-	{
-		glActiveTexture(GL_TEXTURE1);
-		glEnable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, m_normalTexture);
-		glUniform1i(textureLocation, 1);
-	}
-
-	textureLocation = m_deferredResultMaterial->m_program->getUniformLocation("depthTexture");
-	if (textureLocation != -1)
-	{
-		glActiveTexture(GL_TEXTURE2);
-		glEnable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, m_depthTexture);
-		glUniform1i(textureLocation, 2);
-	}
-
-	unsigned int projectionMatrixLocation = m_deferredResultMaterial->m_program->getUniformLocation("projectionMatrix");
-	if (projectionMatrixLocation != -1)
-	{
-		glUniformMatrix4fv(projectionMatrixLocation, 1, GL_FALSE, glm::value_ptr(m_projectionMatrix));
-	}
-
-	glm::mat4x4 viewMatrix = Camera::current->getViewMatrix();
-	unsigned int viewMatrixLocation = m_deferredResultMaterial->m_program->getUniformLocation("viewMatrix");
-	if (viewMatrixLocation != -1)
-	{
-		glUniformMatrix4fv(viewMatrixLocation, 1, GL_FALSE, glm::value_ptr(viewMatrix));
-	}
-
-	unsigned int cameraPositionLocation = m_deferredResultMaterial->m_program->getUniformLocation("cameraPosition");
-	if (cameraPositionLocation != -1)
-	{
-		glUniform3f(cameraPositionLocation, Camera::current->getPosition().x, Camera::current->getPosition().y, Camera::current->getPosition().z);
-	}
-
-	glm::mat4 unProjectMatrix = glm::inverse(m_projectionMatrix * viewMatrix);
-
-	unsigned int unProjectMatrixLocation = m_deferredResultMaterial->m_program->getUniformLocation("unProjectMatrix");
-	if (unProjectMatrixLocation != -1)
-	{
-		glUniformMatrix4fv(unProjectMatrixLocation, 1, GL_FALSE, glm::value_ptr(unProjectMatrix));
-	}
-
-	unsigned int attributePosition = m_deferredResultMaterial->m_program->getAttributeLocation("vertexPosition");
-	unsigned int attributeUV = m_deferredResultMaterial->m_program->getAttributeLocation("vertexUV");
-	unsigned int attributeColor = m_deferredResultMaterial->m_program->getAttributeLocation("vertexColor");
-
-	glEnableVertexAttribArray(attributePosition);
-	if (attributeColor != -1)
-		glEnableVertexAttribArray(attributeColor);
-	if (attributeUV != -1)
-		glEnableVertexAttribArray(attributeUV);
-
-	glBindBuffer(GL_ARRAY_BUFFER, geometry.m_vertexBuffer->m_bufferId);
-
-	glVertexAttribPointer(attributePosition, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex2d), 0);
-	if (attributeColor != -1)
-		glVertexAttribPointer(attributeColor, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(Vertex2d), (void *)offsetof(Vertex2d, color));
-	if (attributeUV != -1)
-		glVertexAttribPointer(attributeUV, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex2d), (void *)offsetof(Vertex2d, u));
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geometry.m_indexBuffer->m_bufferId);
-
-	glDrawElements(GL_TRIANGLES, geometry.m_trianglesCount * 3, GL_UNSIGNED_SHORT, 0);
-	m_stats.m_trianglesDrawn += geometry.m_trianglesCount;
-	m_stats.m_drawCalls++;
-	m_stats.m_verticesDrawn += geometry.m_verticesCount;
-
-	glDisableVertexAttribArray(attributePosition);
-	if (attributeColor != -1)
-		glDisableVertexAttribArray(attributeColor);
-	if (attributeUV != -1)
-		glDisableVertexAttribArray(attributeUV);
-
-	glUseProgram(0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_CULL_FACE);
-
-	glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
+	m_deferredRenderer.end();	
 }
 
 void Renderer::postFrame()
@@ -749,8 +533,6 @@ void Renderer::renderGeometry(Geometry<Vertex3d> *geometry, const glm::mat4x4& m
 	if (!material)
 		material = m_defaultMaterial;
 
-	// TODO: Renderer update matrices function
-	//m_projectionMatrix = glm::perspective(Camera::current->getFov(), m_window->getAspectRatio(), 0.1f, 1000.0f);
 
 	// Shaders
 	if (!material)

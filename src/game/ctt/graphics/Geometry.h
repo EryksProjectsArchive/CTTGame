@@ -28,7 +28,7 @@ struct EDrawType
 	};
 };
 
-template <class T>
+template <class VertexType>
 class Geometry
 {
 private:
@@ -70,14 +70,14 @@ public:
 		}
 	}
 	
-	void fillData(T *vertices, uint16 verticesCount, void *triangles, uint16 trianglesCount)
+	void fillData(VertexType *vertices, uint16 verticesCount, void *triangles, uint16 trianglesCount)
 	{
 		m_trianglesCount = trianglesCount;
 		m_verticesCount = verticesCount;
 
 		if (m_vertexBuffer)
 		{
-			m_vertexBuffer->allocate(sizeof(T) * verticesCount, false);
+			m_vertexBuffer->allocate(sizeof(VertexType) * verticesCount, false);
 			m_vertexBuffer->fillData(vertices);
 		}
 
@@ -90,4 +90,5 @@ public:
 
 
 	friend class Renderer;
+	friend class DeferredRendering;
 };

@@ -93,7 +93,7 @@
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <AdditionalIncludeDirectories>./;../../libs/OpenAL1.1/include/;../../libs/SDL2-2.0.3/include/;../../libs/glm-0.9.5.4/glm/;../../libs/jsoncpp/include/;../../libs/freetype-2.5.3/include/;../../libs/bullet/src/;../../libs/jpeg-9a/;../../libs/lpng1612/;../../libs/zlib-1.2.8/;../../libs/libogg-1.3.2/include/;../../libs/libvorbis-1.3.4/include/</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4996;</DisableSpecificWarnings>
-      <PreprocessorDefinitions>DEBUG;</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DEBUG;;GLM_FORCE_RADIANS;GLM_FORCE_RADIANS</PreprocessorDefinitions>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
     </ClCompile>
     <Link>
@@ -111,7 +111,7 @@
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <AdditionalIncludeDirectories>./;../../libs/OpenAL1.1/include/;../../libs/SDL2-2.0.3/include/;../../libs/glm-0.9.5.4/glm/;../../libs/jsoncpp/include/;../../libs/freetype-2.5.3/include/;../../libs/bullet/src/;../../libs/jpeg-9a/;../../libs/lpng1612/;../../libs/zlib-1.2.8/;../../libs/libogg-1.3.2/include/;../../libs/libvorbis-1.3.4/include/</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4996;</DisableSpecificWarnings>
-      <PreprocessorDefinitions>DEBUG;</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DEBUG;;GLM_FORCE_RADIANS;GLM_FORCE_RADIANS</PreprocessorDefinitions>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
     </ClCompile>
     <Link>
@@ -133,8 +133,7 @@
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
-      <PreprocessorDefinitions>
-      </PreprocessorDefinitions>
+      <PreprocessorDefinitions>;GLM_FORCE_RADIANS;GLM_FORCE_RADIANS</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -157,8 +156,7 @@
       <DisableSpecificWarnings>4996;</DisableSpecificWarnings>
       <DisableLanguageExtensions>false</DisableLanguageExtensions>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
-      <PreprocessorDefinitions>
-      </PreprocessorDefinitions>
+      <PreprocessorDefinitions>;GLM_FORCE_RADIANS;GLM_FORCE_RADIANS</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -195,6 +193,7 @@
     <ClCompile Include="graphics\Mesh.cpp" />
     <ClCompile Include="graphics\Model.cpp" />
     <ClCompile Include="graphics\ModelFormat.cpp" />
+    <ClCompile Include="graphics\renderer\DeferredRendering.cpp" />
     <ClCompile Include="graphics\renderer\RenderContext.cpp" />
     <ClCompile Include="graphics\renderer\Renderer.cpp" />
     <ClCompile Include="graphics\renderer\UIRenderContext.cpp" />
@@ -281,6 +280,7 @@
     <ClInclude Include="graphics\Mesh.h" />
     <ClInclude Include="graphics\Model.h" />
     <ClInclude Include="graphics\ModelFormat.h" />
+    <ClInclude Include="graphics\renderer\DeferredRendering.h" />
     <ClInclude Include="graphics\renderer\RenderContext.h" />
     <ClInclude Include="graphics\renderer\Renderer.h" />
     <ClInclude Include="graphics\renderer\UIRenderContext.h" />

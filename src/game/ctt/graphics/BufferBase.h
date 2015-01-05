@@ -37,4 +37,5 @@ public:
 	virtual void fillData(void * data);
 
 	friend class Renderer;
+	friend class DeferredRendering;
 };

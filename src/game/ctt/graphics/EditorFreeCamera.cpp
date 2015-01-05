@@ -47,8 +47,8 @@ void EditorFreeCamera::onMouseMove(int32 x, int32 y, int32 relx, int32 rely)
 	float _x = (float)relx * m_sensitivity;
 	float _y = (float)rely * m_sensitivity;
 
-	m_rotationX = glm::rotate(m_rotationX, _x, Vector3(0, 1, 0));
-	m_rotationY = glm::rotate(m_rotationY, _y, Vector3(1, 0, 0));
+	m_rotationX = glm::rotate(m_rotationX, glm::radians(_x), Vector3(0, 1, 0));
+	m_rotationY = glm::rotate(m_rotationY, glm::radians(_y), Vector3(1, 0, 0));
 
 	updateMatrix();
 }

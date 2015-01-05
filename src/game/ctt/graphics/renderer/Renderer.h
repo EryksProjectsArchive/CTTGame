@@ -22,6 +22,8 @@
 
 #include <core/Instance.h>
 
+#include "DeferredRendering.h"
+
 class Renderer : public Instance<Renderer>
 {
 protected:
@@ -35,17 +37,8 @@ protected:
 
 	Material* m_currentMaterial;
 	Material* m_defaultMaterial;
-	Material* m_deferredResultMaterial;
 
-	uint32 m_fbo;
-
-	uint32 m_diffuseTexture;
-	uint32 m_normalTexture;
-	uint32 m_depthTexture;
-
-	uint32 m_diffuseRenderBuffer;
-	uint32 m_normalRenderBuffer;
-	uint32 m_depthRenderBuffer;
+	DeferredRendering m_deferredRenderer;
 
 	struct
 	{
@@ -226,4 +219,5 @@ public:
 	static PFNGLRENDERBUFFERSTORAGEMULTISAMPLEPROC glRenderbufferStorageMultisample;
 	static PFNGLFRAMEBUFFERTEXTURELAYERPROC glFramebufferTextureLayer;
 
+	friend class DeferredRendering;
 };
