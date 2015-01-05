@@ -25,7 +25,7 @@ vec3 getWorldPosition()
     vec4 screenPosition = vec4(vUV * 2.0 - 1.0, z, 1.0);
     screenPosition = unProjectMatrix * screenPosition;
 
-    return (screenPosition.xyz / screenPosition.w);
+    return vec3(viewMatrix * vec4(screenPosition.xyz / screenPosition.w, 1));
 }
 
 vec4 calculatePointLight(vec3 position, vec3 normal, vec3 lightColor, vec3 lightPosition, float size, float power)
@@ -68,18 +68,10 @@ void main(void)
 	color = texture2D(diffuseTexture, vUV);
 
 	// Get world position from depth buffer
-	vec3 vecPosition = vec3(viewMatrix * vec4(getWorldPosition(), 1));
+	vec3 vecPosition = getWorldPosition();
 	vec3 vecNormal = texture2D(normalTexture, vUV).xyz;
 
-	/*
-	SUN LIGHT - no longer needed
-	float power = 1.f;	
-	float size = 1000.0f;
-	vec3 lightColor = vec3(0.8, 0.8, 0.8);
-	vec3 lightPosition = vec3(viewMatrix * vec4(20,100,0,1));
-
-	lighting += calculatePointLight(vecPosition, vecNormal, lightColor, lightPosition, size, power);*/
-
+	// Light
 	float power = 2.0f;
 	float size = 20.0f;
 	vec3 lightColor = vec3(1, 0.5, 0);
