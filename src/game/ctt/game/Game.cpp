@@ -239,8 +239,9 @@ bool Game::init()
 
 	UI::View* view = m_ui->createView("game.main_menu");
 
-	UI::Button* button = new UI::Button("button1", Vector2(100.0f, 100.0f), Vector2(200.0f, 50.0f));
-	button->setText(L"Start Editor");
+	UI::Button* button = new UI::Button("spawn_box_button", Vector2(100.0f, 100.0f), Vector2(200.0f, 50.0f));
+	button->setText(L"Spawn box");
+	button->onPressSubscribe(this, &Game::spawnBox);
 
 	view->attach(button);
 
@@ -338,6 +339,16 @@ void Game::updateWindow()
 			m_isRunning = false;
 		}
 	}
+}
+
+void Game::spawnBox()
+{
+	BoxEntity * box = new BoxEntity();
+	box->setPosition(Vector3(0, 10, 0));
+	Game::get()->getScene().addEntity(box);
+
+	if (m_console)
+		m_console->output(Console::MessageType::Info, WString<128>(L"Spawned box (%d)!", box->getUID()));
 }
 
 void Game::update(double deltaTime)
@@ -442,7 +453,7 @@ void Game::onMouseButtonEvent(uint8 button, bool state, uint8 clicks, sint32 x, 
 		return;
 
 	// Shotting
-	if (button == 1)
+	if (button == 1 && ((EditorFreeCamera *)Camera::current)->isMoving())
 	{
 		if (state)
 		{

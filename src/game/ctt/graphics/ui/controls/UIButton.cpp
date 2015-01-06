@@ -100,7 +100,9 @@ namespace UI
 			bool leftButtonState = Input::get()->isMouseBtnPressed(MouseButton::Left);
 			if (!m_pressed && leftButtonState)
 			{
-				Info("Button", "Press");
+				//Info("Button", "Press");
+				for (OnPressData data : m_onPressData)
+					data.call();
 				m_pressed = true;
 			}
 			else if (m_pressed && !leftButtonState)
@@ -110,4 +112,13 @@ namespace UI
 			}
 		}
 	}
+
+	void Button::onPressInternal(EventHandler * handler, EventHandler::eventCallback fn)
+	{
+		OnPressData data;
+		data.handler = handler;
+		data.callback = fn;
+		m_onPressData.pushBack(data);
+	}
+		
 };

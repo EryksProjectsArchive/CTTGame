@@ -18,6 +18,7 @@
 #include <graphics/fonts/Font.h>
 
 #include "UIControl.h"
+#include "../UIEventHandler.h"
 
 #include <graphics/Geometry.h>
 
@@ -32,6 +33,32 @@ namespace UI
 
 		Font *m_font;
 		bool m_pressed;
+
+		struct OnPressData
+		{
+			EventHandler * handler;
+			EventHandler::eventCallback callback;
+
+			OnPressData()
+			{
+				handler = 0;
+				callback = 0;
+			}
+
+			OnPressData(const OnPressData& data)
+			{
+				handler = data.handler;
+				callback = data.callback;
+			}
+
+			void call()
+			{
+				(handler->*callback)();
+			}
+		};
+		List<OnPressData> m_onPressData;
+
+		void onPressInternal(EventHandler * handler, EventHandler::eventCallback fn);
 	public:
 		Button(const DynString& name, Vector2 position = Vector2(), Vector2 size = Vector2());
 		virtual ~Button();
@@ -40,5 +67,8 @@ namespace UI
 		virtual WDynString getText();
 
 		virtual void render(UIRenderContext& context);
+
+		template <typename T>
+		void onPressSubscribe(EventHandler * handler, T fn) { onPressInternal(handler, static_cast<EventHandler::eventCallback>(fn)); }		
 	};
 }

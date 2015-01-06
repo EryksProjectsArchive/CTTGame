@@ -19,7 +19,9 @@
 
 #include <core/application/Application.h>
 
-class Game : public Application, public Controllable
+#include <graphics/ui/UIEventHandler.h>
+
+class Game : public Application, public Controllable, public UI::EventHandler
 {
 private:
 	static Game *s_instance;
@@ -42,6 +44,8 @@ public:
 	void updateWindow() override;
 	void render() override;
 	void update(double deltaTime) override;
+
+	void spawnBox();
 
 	void onKeyEvent(Key::Type key, bool state) override;
 	void onMouseButtonEvent(uint8 button, bool state, uint8 clicks, sint32 x, sint32 y) override;

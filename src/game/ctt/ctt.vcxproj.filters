@@ -746,6 +746,9 @@
     <ClInclude Include="graphics\renderer\DeferredRendering.h">
       <Filter>Header Files\graphics\renderer</Filter>
     </ClInclude>
+    <ClInclude Include="graphics\ui\UIEventHandler.h">
+      <Filter>Header Files\graphics\ui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="todo.txt">
