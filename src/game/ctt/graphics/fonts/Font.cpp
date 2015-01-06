@@ -184,7 +184,7 @@ void Font::render(const WDynString& string, const Rect& rect, const Color& color
 	}
 }
 
-Font::GlyphData Font::getData(wchar_t c)
+Font::GlyphData Font::getData(widechar c)
 {
 	return m_data[c];
 }
@@ -194,7 +194,7 @@ float Font::calculateWidth(const WDynString& string)
 	float w = 0;
 	for (uint32 i = 0; i < string.getLength()-1; ++i)
 	{
-		wchar_t c = string[i];
+		widechar c = string[i];
 		if (c == ' ')
 		{
 			w += m_size / 2;
@@ -211,7 +211,7 @@ float Font::calculateHeight(const WDynString& string)
 	float h = 0;
 	for (uint32 i = 0; i < string.getLength(); ++i)
 	{		
-		wchar_t c = string[i];
+		widechar c = string[i];
 		float _h = m_data[c].bmh + 2;
 		if (_h > h)
 			h = _h;

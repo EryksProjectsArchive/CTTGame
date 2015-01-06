@@ -26,7 +26,7 @@ public:
 	static WDynString toWideChar(const DynString& multiByte)
 	{
 		WDynString string;
-		wchar_t *wc = 0;
+		widechar *wc = 0;
 		size_t len;
 		OS::multiByteToWideChar(multiByte.get(), multiByte.getLength(), &wc, &len);
 		string = WDynString(wc);

@@ -181,7 +181,7 @@ public:
 		return newString;
 	}
 
-	String replace(const char *key, const char *value)
+	String replaceOnce(const char *key, const char *value)
 	{
 		String newString;
 		size_t keyPos = find(key);

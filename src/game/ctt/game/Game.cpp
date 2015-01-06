@@ -379,7 +379,7 @@ void Game::render()
 			if (Config::get()["engine"]["fpsCounter"].getBool(false))
 			{
 				float fps = Timer::getFPS();
-				wchar color[10] = { 0 };
+				widechar color[10] = { 0 };
 
 				if (fps < 25.f)
 				{

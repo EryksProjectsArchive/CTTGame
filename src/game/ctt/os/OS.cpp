@@ -185,15 +185,15 @@ namespace OS
 		return false;
 	}
 
-	void multiByteToWideChar(const char *mb, size_t mbLen, wchar_t **wc, size_t *wcLen)
+	void multiByteToWideChar(const char *mb, size_t mbLen, widechar **wc, size_t *wcLen)
 	{
 		*wcLen = ::MultiByteToWideChar(CP_UTF8, NULL, mb, (int32)mbLen, NULL, 0);
-		*wc = new wchar_t[*wcLen + 1];
+		*wc = new widechar[*wcLen + 1];
 		::MultiByteToWideChar(CP_UTF8, NULL, mb, (int32)mbLen, *wc, (int32)(*wcLen));
 		(*wc)[*wcLen] = '\0';
 	}
 
-	void wideCharToMultiByte(const wchar_t *utf8, size_t utf8Len, char **ansi, size_t *ansiLen)
+	void wideCharToMultiByte(const widechar *utf8, size_t utf8Len, char **ansi, size_t *ansiLen)
 	{
 		*ansiLen = utf8Len;
 		*ansi = new char[utf8Len+1];

@@ -21,11 +21,11 @@ template <uint32 maxSize>
 class WString
 {
 private:
-	wchar m_buffer[maxSize];
+	widechar m_buffer[maxSize];
 public:
 	WString()
 	{
-		memset(m_buffer, 0, maxSize * sizeof(wchar));
+		memset(m_buffer, 0, maxSize * sizeof(widechar));
 	}
 
 	WString(const WString& string) : WString()
@@ -33,7 +33,7 @@ public:
 		wcscpy(m_buffer, string.m_buffer);
 	}
 
-	WString(const wchar *buffer) : WString()
+	WString(const widechar *buffer) : WString()
 	{
 		size_t size = wcslen(buffer);
 		if (size > maxSize)
@@ -44,7 +44,7 @@ public:
 		m_buffer[len] = '\0';
 	}
 
-	WString(wchar *buffer) : WString()
+	WString(widechar *buffer) : WString()
 	{
 		size_t size = wcslen(buffer);
 		if (size > maxSize)
@@ -55,9 +55,9 @@ public:
 		m_buffer[len] = '\0';
 	}
 
-	explicit WString(const wchar *buffer, ...)
+	explicit WString(const widechar *buffer, ...)
 	{
-		wchar tempBuffer[maxSize] = { 0 };
+		widechar tempBuffer[maxSize] = { 0 };
 		va_list args;
 		va_start(args, buffer);
 		vswprintf(tempBuffer, buffer, args);
@@ -69,7 +69,7 @@ public:
 	{
 	}
 
-	WString& append(const wchar *buffer)
+	WString& append(const widechar *buffer)
 	{
 		size_t size = wcslen(buffer);
 		size_t length = getLength();
@@ -79,7 +79,7 @@ public:
 
 		if (size > 0)
 		{
-			memcpy(((wchar *)m_buffer + length), buffer, size * sizeof(wchar));
+			memcpy(((widechar *)m_buffer + length), buffer, size * sizeof(widechar));
 		}
 
 		return *this;
@@ -88,15 +88,15 @@ public:
 	WString& operator=(WString& string)
 	{
 		size_t size = wcslen(string.m_buffer);
-		memcpy(m_buffer, string.m_buffer, (size > maxSize ? maxSize : size) * sizeof(wchar));
+		memcpy(m_buffer, string.m_buffer, (size > maxSize ? maxSize : size) * sizeof(widechar));
 		return *this;
 	}
 
-	WString& operator=(const wchar *buffer)
+	WString& operator=(const widechar *buffer)
 	{
 		clear();
 		size_t size = wcslen(buffer);
-		memcpy(m_buffer, buffer, (size > maxSize ? maxSize : size) * sizeof(wchar));
+		memcpy(m_buffer, buffer, (size > maxSize ? maxSize : size) * sizeof(widechar));
 		return *this;
 	}
 
@@ -105,12 +105,12 @@ public:
 		return WString(L"%s%s", m_buffer, string.m_buffer);
 	}
 
-	WString operator+(const wchar *buffer) const
+	WString operator+(const widechar *buffer) const
 	{
 		return WString(L"%s%s", m_buffer, buffer);
 	}
 
-	wchar operator[](uint32 index)
+	widechar operator[](uint32 index)
 	{
 		if (index < 0 || index > maxSize)
 			return 0;
@@ -118,12 +118,12 @@ public:
 		return m_buffer[index];
 	}
 
-	operator const wchar*() const
+	operator const widechar*() const
 	{
 		return m_buffer;
 	}
 
-	const wchar * WString::get() const
+	const widechar * WString::get() const
 	{
 		return m_buffer;
 	}
@@ -138,31 +138,29 @@ public:
 		return maxSize;
 	}
 
-	uint16 WString::find(const wchar * key) const
+	size_t WString::find(const widechar * key) const
 	{
-		uint32 range = wcslen(m_buffer);
-		if (range + wcslen(key) > maxSize)
-			range = maxSize;
-
-		for (uint32 i = 0; i < range; ++i)
+		widechar *buffer = m_buffer;
+		size_t index = 0;
+		while (*buffer)
 		{
-			if (!memcmp(m_buffer + i, key, wcslen(key)*  sizeof(wchar)))
-			{
-				return i;
-			}
-		}
+			if (!wcscmp(buffer, key))
+				return index;
 
+			*buffer++;
+			index++;
+		}	
 		return -1;
 	}
 
-	WString operator+=(const wchar *value)
+	WString operator+=(const widechar *value)
 	{
 		return append(value);
 	}
 
-	WString operator+=(wchar c)
+	WString operator+=(widechar c)
 	{
-		wchar value[2] = { 0 };
+		widechar value[2] = { 0 };
 		value[0] = c;
 		return append(value);
 	}
@@ -183,12 +181,12 @@ public:
 		return newWString;
 	}
 
-	WString replace(const wchar *key, const wchar *value)
+	WString replaceOnce(const widechar *key, const widechar *value)
 	{
 		WString newWString;
 		uint16 keyPos = find(key);
 
-		wchar temp[maxSize] = { 0 };
+		widechar temp[maxSize] = { 0 };
 		wcscpy(temp, keyPos < wcslen(key) ? substr(wcslen(key), wcslen(m_buffer)) : substr(keyPos + wcslen(key), wcslen(m_buffer)));
 
 		wcscpy(newWString.m_buffer, value);
@@ -198,6 +196,6 @@ public:
 
 	void clear()
 	{
-		memset(m_buffer, 0, maxSize * sizeof(wchar));
+		memset(m_buffer, 0, maxSize * sizeof(widechar));
 	}
 };

@@ -25,7 +25,7 @@
 class WDynString
 {
 private:
-	wchar * m_buffer;
+	widechar * m_buffer;
 	size_t m_size;
 
 	void clear()
@@ -40,7 +40,7 @@ private:
 public:
 	WDynString()
 	{
-		m_buffer = new wchar[1];
+		m_buffer = new widechar[1];
 		m_buffer[0] = '\0';
 		m_size = 0;
 	}
@@ -48,25 +48,25 @@ public:
 	WDynString(const WDynString& string)
 	{
 		size_t size = string.m_size;
-		m_buffer = new wchar[size + 1];
+		m_buffer = new widechar[size + 1];
 		wcscpy(m_buffer, string.m_buffer);
 		m_buffer[size] = '\0';
 		m_size = size;
 	}
 
-	WDynString(const wchar *buffer)
+	WDynString(const widechar *buffer)
 	{
 		size_t size = wcslen(buffer);
-		m_buffer = new wchar[size + 1];
+		m_buffer = new widechar[size + 1];
 		wcscpy(m_buffer, buffer);
 		m_buffer[size] = '\0';
 		m_size = size;
 	}
 
-	WDynString(wchar *buffer)
+	WDynString(widechar *buffer)
 	{
 		size_t size = wcslen(buffer);
-		m_buffer = new wchar[size + 1];
+		m_buffer = new widechar[size + 1];
 		wcscpy(m_buffer, buffer);
 		m_buffer[size] = '\0';
 		m_size = size;
@@ -76,7 +76,7 @@ public:
 	WDynString(WString<sizeOfString> buffer)
 	{
 		size_t size = wcslen(buffer.get());
-		m_buffer = new wchar[size + 1];
+		m_buffer = new widechar[size + 1];
 		wcscpy(m_buffer, buffer.get());
 		m_buffer[size] = L'\0';
 		m_size = size;
@@ -91,7 +91,7 @@ public:
 		clear();
 	}
 
-	const wchar * get() const
+	const widechar * get() const
 	{
 		return m_buffer;
 	}
@@ -99,7 +99,7 @@ public:
 	WDynString& operator=(const WDynString& rhs)
 	{
 		clear();
-		m_buffer = new wchar[rhs.m_size + 1];
+		m_buffer = new widechar[rhs.m_size + 1];
 		wcscpy(m_buffer, rhs.m_buffer);
 		m_buffer[rhs.m_size] = '\0';
 		m_size = rhs.m_size;
@@ -108,13 +108,13 @@ public:
 
 	WDynString& append(const WDynString& rhs)
 	{
-		wchar *temp = new wchar[m_size + 1];
+		widechar *temp = new widechar[m_size + 1];
 		wcscpy(temp, m_buffer);
 
 		m_size += rhs.m_size;
 
 		delete[]m_buffer;
-		m_buffer = new wchar[m_size + 1];
+		m_buffer = new widechar[m_size + 1];
 		wcscpy(m_buffer, temp);
 		wcscat(m_buffer, rhs.m_buffer);
 		m_buffer[m_size] = '\0';
@@ -129,9 +129,9 @@ public:
 	}
 
 
-	WDynString& operator+=(const wchar c)
+	WDynString& operator+=(const widechar c)
 	{		
-		wchar_t s[2] = { c, 0 };
+		widechar s[2] = { c, 0 };
 		return append(s);
 	}
 
@@ -140,12 +140,12 @@ public:
 		return !wcscmp(m_buffer, rhs.m_buffer);
 	}
 
-	bool operator==(const wchar *rhs) const
+	bool operator==(const widechar *rhs) const
 	{
 		return !wcscmp(m_buffer, rhs);
 	}
 
-	wchar operator[](size_t index) const
+	widechar operator[](size_t index) const
 	{
 		if (index < 0 || index > m_size)
 			return 0;
@@ -166,35 +166,43 @@ public:
 	void reset()
 	{
 		clear();
-		m_buffer = new wchar[1];
+		m_buffer = new widechar[1];
 		m_buffer[0] = '\0';
 		m_size = 0;
 	}
 
-	bool contains(wchar c)
+	bool contains(widechar c)
 	{
 		return find(c) != -1;
 	}
 
-	size_t find(wchar c)
+	size_t find(widechar c)
 	{
-		for (size_t i = 0; i < m_size; ++i)
-			if (m_buffer[i] == c)
-				return i;
+		widechar *buffer = m_buffer;
+		size_t index = 0;
+		while (*buffer)
+		{
+			if (*buffer == c)
+				return index;
 
+			*buffer++;
+			index++;
+		}
 		return -1;
 	}
 
 	size_t find(const WDynString& string)
 	{
-		for (size_t i = 0; i < m_size; ++i)
+		widechar *buffer = m_buffer;
+		size_t index = 0;
+		while (*buffer)
 		{
-			if (!wcsncmp(m_buffer+i, string.get(), string.getLength()))
-			{
-				return i;
-			}
-		}
+			if (!wcsncmp(buffer, string.get(), string.getLength()))
+				return index;
 
+			*buffer++;
+			index++;
+		}
 		return -1;
 	}
 
@@ -208,8 +216,8 @@ public:
 			delete[]sub.m_buffer;
 
 		size_t len = end - start;
-		sub.m_buffer = new wchar[len+1];
-		memset(sub.m_buffer, 0, len*sizeof(wchar));
+		sub.m_buffer = new widechar[len + 1];
+		memset(sub.m_buffer, 0, len*sizeof(widechar));
 		wcsncpy(sub.m_buffer, m_buffer + start, end > m_size ? m_size : len);
 		sub.m_buffer[len] = '\0';
 		sub.m_size = len;

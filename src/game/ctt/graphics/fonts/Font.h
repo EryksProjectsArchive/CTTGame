@@ -49,7 +49,7 @@ public:
 
 	void render(const WDynString& string, const Rect& rect, const Color& color, flags32 flags, Vector2 scale = Vector2(1,1));
 
-	Font::GlyphData getData(wchar_t c);
+	Font::GlyphData getData(widechar c);
 
 	// NOTE: It does not handle multi-line text!
 	float calculateWidth(const WDynString& string);

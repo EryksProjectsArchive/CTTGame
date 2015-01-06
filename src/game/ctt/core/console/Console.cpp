@@ -298,7 +298,9 @@ void Console::onKeyEvent(Key::Type key, bool pressed)
 			for (ICommand * cmd : m_commands)
 			{
 				if (cmd->m_name.find(m_inputBuffer) != -1)
-					matching.pushBack(cmd);	
+				{
+					matching.pushBack(cmd);
+				}
 			}			
 
 			if (matching.size() > 1)

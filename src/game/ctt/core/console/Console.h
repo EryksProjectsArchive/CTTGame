@@ -123,7 +123,7 @@ private:
 
 
 	float m_timeToCursorBlink;
-	wchar_t m_cursor;
+	widechar m_cursor;
 	List<ICommand *> m_commands;
 public:
 	Console();

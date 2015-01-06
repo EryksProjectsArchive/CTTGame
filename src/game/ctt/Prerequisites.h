@@ -107,7 +107,10 @@ typedef double Scalar;
 typedef float Scalar;
 #endif
 
-typedef wchar_t wchar; // wide char
+typedef char ansichar; // utf8
+typedef wchar_t widechar; // utf16 wide char
+typedef uint32 utf32char; // utf32
+typedef uint64 utf64char; // utf64
 
 // Predefinitions
 

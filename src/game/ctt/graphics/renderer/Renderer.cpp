@@ -783,7 +783,7 @@ void Renderer::renderFont(const WDynString& string, const Rect& rect, const Colo
 	float y = startY;
 	for (uint32 i = 0; i < string.getLength(); ++i)
 	{
-		wchar_t charCode = string[i];
+		widechar charCode = string[i];
 		if (charCode == '\0')
 		{
 			break;
@@ -797,7 +797,7 @@ void Renderer::renderFont(const WDynString& string, const Rect& rect, const Colo
 				bool isColorCode = true;
 				for (uint32 j = 1; j < 7; ++j)
 				{
-					wchar_t wcs = string[i + j];
+					widechar wcs = string[i + j];
 					if (!iswdigit(wcs) && (wcs < 'A' || wcs > 'F') && (wcs < 'a' || wcs > 'f'))
 					{
 						isColorCode = false;
@@ -814,7 +814,7 @@ void Renderer::renderFont(const WDynString& string, const Rect& rect, const Colo
 					else 
 					{
 						i += 1;// skip '#' sign
-						wchar_t color[7] = { 0 };
+						widechar color[7] = { 0 };
 						for (uint32 j = 0; j < 6; ++j)
 							color[j] = string[i + j];
 
