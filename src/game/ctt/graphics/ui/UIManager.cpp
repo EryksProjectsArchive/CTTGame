@@ -65,11 +65,8 @@ namespace UI
 
 	void Manager::handleInput()
 	{
-		for (View * view : m_views)
-		{
-			if (view->handleInput())
-				break;
-		}
+		if (m_currentView)
+			m_currentView->handleInput();			
 	}
 
 	void Manager::render(UIRenderContext& context)
