@@ -92,15 +92,26 @@ void Console::init()
 
 	m_background->fillData(vertices, 4, indices, 2);
 
-	m_inputBackground = new Geometry<SimpleVertex2d>();
-	SimpleVertex2d inputVertices[4] = {
-		{ 0, m_height, 0xF0000000 },
-		{ width, m_height, 0xF0000000 },
-		{ width, m_height + 30.0f, 0xF0000000 },
-		{ 0, m_height + 30.0f, 0xF0000000 }
+	uint16 inputIndices[12] = {
+		0, 1, 2,
+		0, 2, 3,
+		4, 5, 6,
+		4, 6, 7
 	};
 
-	m_inputBackground->fillData(inputVertices, 4, indices, 2);
+	m_inputBackground = new Geometry<SimpleVertex2d>();
+	SimpleVertex2d inputVertices[8] = {
+		{ 0, m_height, 0xF0252525 },
+		{ width, m_height, 0xF0252525 },
+		{ width, m_height + 1.0f, 0xF0252525 },
+		{ 0, m_height + 1.0f, 0xF0252525 },
+		{ 0, m_height+1, 0xF0000000 },
+		{ width, m_height+1, 0xF0000000 },
+		{ width, m_height + 31.0f, 0xF0000000 },
+		{ 0, m_height + 31.0f, 0xF0000000 }
+	};
+
+	m_inputBackground->fillData(inputVertices, 8, inputIndices, 4);
 	m_isInitialized = true;
 }
 
@@ -339,7 +350,7 @@ void Console::render(Renderer *renderer)
 		float versionW = m_font->calculateWidth(versionString);
 		m_font->render(versionString, Rect(width-versionW-10, m_height-20.0f, 0, 0), Color(1, 1, 1, 0.2), 0);
 
-		m_font->render(WString<512> (L"> %s%c", m_inputBuffer.get(), m_cursor), Rect(10, m_height + 5.0f, 0, 0), Color(1, 1, 1, 1), 0);
+		m_font->render(WString<512> (L"> %s%c", m_inputBuffer.get(), m_cursor), Rect(10, m_height + 7.0f, 0, 0), Color(1, 1, 1, 1), 0);
 		
 		float y = 5.0f;
 		for (uint32 i = 0; i < CONSOLE_LINES; ++i)

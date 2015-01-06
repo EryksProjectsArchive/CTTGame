@@ -376,25 +376,27 @@ void Game::render()
 
 		if (gFont)
 		{
-			float fps = Timer::getFPS();
-			wchar color[10] = { 0 };
+			if (Config::get()["engine"]["fpsCounter"].getBool(false))
+			{
+				float fps = Timer::getFPS();
+				wchar color[10] = { 0 };
 
-			if (fps < 25.f)
-			{
-				wcscpy(color, L"#FF0000");
-			}
-			else if (fps >= 25.f && fps < 60)
-			{
-				wcscpy(color, L"#FF8000");
-			}
-			else
-			{
-				wcscpy(color, L"#00FF00");
-			}
-			
-			gFont->render(WString<256>(L"#FFFFFFFPS: %s%.1f", color, fps), Rect(1, 1, 10, 10), Color(0.0f, 0.0f, 0.0f, 0.6f), Font::DrawFlags::NoClip | Font::DrawFlags::DisableColorCodding);
-			gFont->render(WString<256>(L"#FFFFFFFPS: %s%.1f", color, fps), Rect(0, 0, 10, 10), Color(1.0f, 1.0f, 1.0f, 1.0f), Font::DrawFlags::NoClip);
+				if (fps < 25.f)
+				{
+					wcscpy(color, L"#FF0000");
+				}
+				else if (fps >= 25.f && fps < 60)
+				{
+					wcscpy(color, L"#FF8000");
+				}
+				else
+				{
+					wcscpy(color, L"#00FF00");
+				}
 
+				gFont->render(WString<256>(L"#FFFFFFFPS: %s%.1f", color, fps), Rect(1, 1, 10, 10), Color(0.0f, 0.0f, 0.0f, 0.6f), Font::DrawFlags::NoClip | Font::DrawFlags::DisableColorCodding);
+				gFont->render(WString<256>(L"#FFFFFFFPS: %s%.1f", color, fps), Rect(0, 0, 10, 10), Color(1.0f, 1.0f, 1.0f, 1.0f), Font::DrawFlags::NoClip);
+			}
 
 			glm::vec3 labelPos = glm::vec3(0, 2, 0);
 			glm::vec3 pos = glm::project(labelPos, glm::mat4()* Camera::current->getViewMatrix(), m_renderer->getProjectionMatrix(), m_renderer->getViewportAsVector());
