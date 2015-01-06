@@ -34,6 +34,8 @@ public:
 
 	void render();
 
+	void clear();
+
 	class SceneInfoCommand : public Console::ICommand
 	{
 	private:
@@ -41,5 +43,15 @@ public:
 	public:
 		SceneInfoCommand(Scene * scene);
 		void onExecute(const WDynString& params);
+	};
+	
+	class ClearSceneCommand : public Console::ICommand
+	{
+	private:
+		Scene *m_scene;
+	public:
+		ClearSceneCommand(Scene * scene);
+
+		void onExecute(const WDynString& params); 
 	};
 };

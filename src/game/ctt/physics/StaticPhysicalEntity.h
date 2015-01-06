@@ -21,7 +21,7 @@ private:
 	void internalStaticTransformUpdate();
 public:
 	StaticPhysicalEntity();
-	~StaticPhysicalEntity();
+	virtual ~StaticPhysicalEntity();
 
 	virtual void setPosition(Vector3 position);
 	virtual void setRotation(Quaternion rotation);

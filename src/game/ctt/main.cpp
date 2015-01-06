@@ -16,6 +16,7 @@
 #include <stdio.h>
 #include <cstring>
 
+#undef _WIN32
 #ifdef _WIN32
 int __stdcall WinMain(HINSTANCE, HINSTANCE, char*, int)
 #else

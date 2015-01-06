@@ -21,7 +21,7 @@ protected:
 	Matrix4x4 m_transform;
 public:
 	PhysicalEntity();
-	~PhysicalEntity();
+	virtual ~PhysicalEntity();
 
 	virtual void prePhysicsUpdate() {};
 	virtual void postPhysicsUpdate() {};

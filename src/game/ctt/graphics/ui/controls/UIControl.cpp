@@ -79,9 +79,9 @@ namespace UI
 
 	bool Control::handleInput()
 	{
-		for (Control *child : m_children)
+		for (List<Control *>::ReverseIterator iter = m_children.rbegin(); iter != m_children.rend(); iter++)
 		{
-			if (child->handleInput())
+			if ((*iter)->handleInput())
 				return true;
 		}
 		return false;

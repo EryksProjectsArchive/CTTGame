@@ -19,7 +19,7 @@ class DynamicPhysicalEntity : public PhysicalEntity
 {
 public:
 	DynamicPhysicalEntity();
-	~DynamicPhysicalEntity();
+	virtual ~DynamicPhysicalEntity();
 
 	virtual void setLinearVelocity(Vector3 velocity);
 	virtual Vector3 getLinearVelocity();

@@ -41,6 +41,7 @@ private:
 	uint32 m_size;
 public:
 	class Iterator;
+	class ReverseIterator;
 
 	List()
 	{
@@ -51,15 +52,16 @@ public:
 
 	~List()
 	{
+		clear();
 	}
 
 	void clear()
 	{
-		Node* node = m_end;
+		Node* node = m_begin;
 		while (node)
 		{
 			Node* nodeToRemove = node;
-			node = node->m_previous;
+			node = node->m_next;
 			delete nodeToRemove;
 		}
 		m_begin = 0;
@@ -108,14 +110,14 @@ public:
 		m_size++;
 	}
 
-	uint32 remove(type value)
+	uint32 remove(const type& value)
 	{
 		Node *node = m_begin;
 		uint32 removedElements = 0;
 		while (node)
 		{
 			Node * next = node->m_next;
-			if ((void *)&node->m_value == (void *)&value)
+			if (node->m_value == value)
 			{
 				if (node->m_next)
 				{
@@ -194,20 +196,79 @@ public:
 		return Iterator();
 	}
 
-	/**
-	 * Remember! Use --operator for it. 
-	 */
-	Iterator rbegin()
+	ReverseIterator rbegin()
 	{
-		Iterator iter;
+		ReverseIterator iter;
 		iter.m_current = m_end;
 		return iter;
 	}
 
-	Iterator rend()
+	ReverseIterator rend()
 	{
-		return Iterator();
+		return ReverseIterator();
 	}
+
+	class ReverseIterator
+	{
+	private:
+		Node *m_current;
+	public:
+		ReverseIterator()
+		{
+			m_current = 0;
+		}
+
+		type operator*()
+		{
+			return get_value();
+		}
+
+		type get_value()
+		{
+			if (!m_current) {
+				Error("List", "Null current pointer at %s (%s:%d).", __FUNCTION__, __FILE__, __LINE__);
+			}
+			return m_current->m_value;
+		}
+
+		ReverseIterator operator ++(int)
+		{
+			ReverseIterator this_ = *this;
+			m_current = m_current->m_previous;
+			return this_;
+		}
+
+		ReverseIterator operator ++()
+		{
+			m_current = m_current->m_previous;
+			return *this;
+		}
+
+		ReverseIterator operator --(int)
+		{
+			ReverseIterator this_ = *this;
+			m_current = m_current->m_next;
+			return this_;
+		}
+
+		ReverseIterator operator--()
+		{
+			m_current = m_current->m_next;
+			return *this;
+		}
+
+		bool operator!=(ReverseIterator iter) const
+		{
+			return (m_current != iter.m_current);
+		}
+
+		bool operator==(ReverseIterator iter) const
+		{
+			return (m_current == iter.m_current);
+		}
+
+		friend class List;
+	};
 
 	class Iterator
 	{
