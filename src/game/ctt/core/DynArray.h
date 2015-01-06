@@ -12,7 +12,6 @@
 #pragma once
 
 #include <Prerequisites.h>
-#include <malloc.h>
 
 #include <core/Logger.h>
 
@@ -31,7 +30,7 @@ private:
 			uint32 oldSize = m_size;
 			if (m_data)
 			{
-				temp = (T *)malloc(sizeof(T) * m_size);
+				temp = new T[m_size];
 				memcpy(temp, m_data, sizeof(T) * m_size);
 
 				delete[]m_data;
@@ -39,12 +38,12 @@ private:
 
 			m_size = newSize;
 
-			m_data = (T *)malloc(sizeof(T) * m_size);
+			m_data = new T[m_size];
 			memset(m_data, 0, sizeof(T) * m_size);
 			if (temp)
 			{
 				memcpy(m_data, temp, sizeof(T) * oldSize);
-				free(temp);
+				delete []temp;
 			}
 		}
 	}
@@ -58,13 +57,13 @@ public:
 	DynArray(uint32 elements)
 	{
 		m_size = elements;
-		m_data = (T *)malloc(sizeof(T) * m_size);
+		m_data = new T[m_size];
 	}
 
 	DynArray(const DynArray& array)
 	{
 		m_size = array.m_size;
-		m_data = (T *)malloc(sizeof(T) * m_size);
+		m_data = new T[m_size];
 		memcpy(m_data, array.m_data, sizeof(T) * m_size);
 	}
 
@@ -72,7 +71,7 @@ public:
 	{
 		if (m_data)
 		{
-			free(m_data);
+			delete []m_data;
 			m_data = 0;
 		}
 		m_size = 0;
