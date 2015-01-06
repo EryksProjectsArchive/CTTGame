@@ -41,6 +41,8 @@ namespace UI
 		void setCurrentView(const DynString& name);
 		void clearView();
 
+		void handleInput();
+
 		void render(UIRenderContext& context);
 	};
 };

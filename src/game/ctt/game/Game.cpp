@@ -63,7 +63,7 @@
 #include <core/console/Console.h>
 
 #include <graphics/ui/UIManager.h>
-#include <graphics/ui/UIView.h>
+#include <graphics/ui/controls/UIView.h>
 #include <graphics/ui/controls/UIControl.h>
 #include <graphics/ui/controls/UIButton.h>
 
@@ -243,7 +243,7 @@ bool Game::init()
 	button->setText(L"Spawn box");
 	button->onPressSubscribe(this, &Game::spawnBox);
 
-	view->attach(button);
+	view->addChild(button);
 
 	m_ui->setCurrentView("game.main_menu");
 
@@ -339,6 +339,9 @@ void Game::updateWindow()
 			m_isRunning = false;
 		}
 	}
+
+	if (m_ui)
+		m_ui->handleInput();
 }
 
 void Game::spawnBox()

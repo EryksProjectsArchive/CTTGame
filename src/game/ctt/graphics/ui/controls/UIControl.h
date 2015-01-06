@@ -39,9 +39,11 @@ namespace UI
 
 		virtual void addChild(Control *control);
 		virtual void removeChild(Control *control);
-		
+
 		virtual bool isChildOf(Control *control);
 		virtual bool isParentOf(Control *control);
+
+		virtual bool handleInput();
 
 		virtual void render(UIRenderContext& context);
 	};

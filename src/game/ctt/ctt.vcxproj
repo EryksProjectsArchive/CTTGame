@@ -202,8 +202,8 @@
     <ClCompile Include="graphics\Texture.cpp" />
     <ClCompile Include="graphics\ui\controls\UIButton.cpp" />
     <ClCompile Include="graphics\ui\controls\UIControl.cpp" />
+    <ClCompile Include="graphics\ui\controls\UIView.cpp" />
     <ClCompile Include="graphics\ui\UIManager.cpp" />
-    <ClCompile Include="graphics\ui\UIView.cpp" />
     <ClCompile Include="graphics\VertexBuffer.cpp" />
     <ClCompile Include="graphics\VertexShader.cpp" />
     <ClCompile Include="graphics\Window.cpp" />
@@ -289,9 +289,9 @@
     <ClInclude Include="graphics\Texture.h" />
     <ClInclude Include="graphics\ui\controls\UIButton.h" />
     <ClInclude Include="graphics\ui\controls\UIControl.h" />
+    <ClInclude Include="graphics\ui\controls\UIView.h" />
     <ClInclude Include="graphics\ui\UIEventHandler.h" />
     <ClInclude Include="graphics\ui\UIManager.h" />
-    <ClInclude Include="graphics\ui\UIView.h" />
     <ClInclude Include="graphics\Vertex2d.h" />
     <ClInclude Include="graphics\Vertex3d.h" />
     <ClInclude Include="graphics\VertexBuffer.h" />

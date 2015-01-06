@@ -77,11 +77,21 @@ namespace UI
 		return control->m_parent == this;
 	}
 
+	bool Control::handleInput()
+	{
+		for (Control *child : m_children)
+		{
+			if (child->handleInput())
+				return true;
+		}
+		return false;
+	}
+
 	void Control::render(UIRenderContext& context)
 	{
 		for (Control *child : m_children)
+		{
 			child->render(context);
-
-		//Info("control", "render %s", m_name.get());
+		}
 	}
 };

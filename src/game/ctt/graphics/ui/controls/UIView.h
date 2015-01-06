@@ -14,24 +14,14 @@
 #include <Prerequisites.h>
 #include <core/DynString.h>
 #include <core/List.h>
+#include <graphics/ui/controls/UIControl.h>
 
 namespace UI
 {
-	class View
+	class View : public Control
 	{
-	private:
-		DynString m_name;
-
-		List<Control *> m_controls;
 	public:
 		View(const DynString& name);
 		~View();
-
-		void attach(Control *control);
-		void detach(Control *control);
-
-		DynString getName();
-
-		void render(UIRenderContext& context);
 	};
 };

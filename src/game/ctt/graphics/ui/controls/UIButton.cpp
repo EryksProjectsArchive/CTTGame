@@ -81,36 +81,49 @@ namespace UI
 
 		Rect rct(m_position.x, m_position.y, m_position.x + m_size.x, m_position.y + m_size.y);
 
+		m_font->render(m_text, rct, m_focus ? Color(1, 0, 0, 1) : Color(1, 1, 1, 1), Font::DrawFlags::HorizontalCenter | Font::DrawFlags::VerticalCenter);
+
+		
+	}
+
+	bool Button::handleInput()
+	{
+		if (Input::get()->isLocked())
+			return false;
+
+		if (Control::handleInput())
+			return true;
+
+		Rect rct(m_position.x, m_position.y, m_position.x + m_size.x, m_position.y + m_size.y);
+
 		sint32 x = Input::get()->getMouseX();
 		sint32 y = Input::get()->getMouseY();
 
 		bool focus = (x >= rct.left && x <= rct.right) && (y >= rct.top && y <= rct.bottom);
-		m_font->render(m_text, rct, focus ? Color(1, 0, 0, 1) : Color(1, 1, 1, 1), Font::DrawFlags::HorizontalCenter | Font::DrawFlags::VerticalCenter);
-
 		if (m_focus != focus)
 		{
 			Input::get()->setCursor(focus ? Cursor::Hand : Cursor::Arrow);
 			m_focus = focus;
-			if (!m_focus)
+			if (!m_focus)			
 				m_pressed = false;
+
+			return true;
 		}
 
-		if (m_focus)
+		bool leftButtonState = Input::get()->isMouseBtnPressed(MouseButton::Left);	
+		if (m_focus && !m_pressed && leftButtonState)
 		{
-			bool leftButtonState = Input::get()->isMouseBtnPressed(MouseButton::Left);
-			if (!m_pressed && leftButtonState)
-			{
-				//Info("Button", "Press");
-				for (OnPressData data : m_onPressData)
-					data.call();
-				m_pressed = true;
-			}
-			else if (m_pressed && !leftButtonState)
-			{
-				Info("Button", "Release");
-				m_pressed = false;
-			}
+			for (OnPressData data : m_onPressData)
+				data.call(this);
+
+			m_pressed = true;
+			return true;
 		}
+
+		if (m_pressed && !leftButtonState)
+			m_pressed = false;
+
+		return false;
 	}
 
 	void Button::onPressInternal(EventHandler * handler, EventHandler::eventCallback fn)
@@ -120,5 +133,12 @@ namespace UI
 		data.callback = fn;
 		m_onPressData.pushBack(data);
 	}
-		
+
+	void Button::onPressInternal(EventHandler * handler, EventHandler::eventCallbackEmpty fn)
+	{
+		OnPressData data;
+		data.handler = handler;
+		data.callbackEmpty = fn;
+		m_onPressData.pushBack(data);
+	}
 };

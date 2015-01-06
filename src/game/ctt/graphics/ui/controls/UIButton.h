@@ -38,27 +38,35 @@ namespace UI
 		{
 			EventHandler * handler;
 			EventHandler::eventCallback callback;
+			EventHandler::eventCallbackEmpty callbackEmpty;
 
 			OnPressData()
 			{
 				handler = 0;
 				callback = 0;
+				callbackEmpty = 0;
 			}
 
 			OnPressData(const OnPressData& data)
 			{
 				handler = data.handler;
 				callback = data.callback;
+				callbackEmpty = data.callbackEmpty;
 			}
 
-			void call()
+			void call(UI::Control * source)
 			{
-				(handler->*callback)();
+				if (callbackEmpty)
+					(handler->*callbackEmpty)();
+
+				if (callback)
+					(handler->*callback)(source);
 			}
 		};
 		List<OnPressData> m_onPressData;
 
 		void onPressInternal(EventHandler * handler, EventHandler::eventCallback fn);
+		void onPressInternal(EventHandler * handler, EventHandler::eventCallbackEmpty fn);
 	public:
 		Button(const DynString& name, Vector2 position = Vector2(), Vector2 size = Vector2());
 		virtual ~Button();
@@ -68,7 +76,12 @@ namespace UI
 
 		virtual void render(UIRenderContext& context);
 
+		virtual bool handleInput();
+
 		template <typename T>
-		void onPressSubscribe(EventHandler * handler, T fn) { onPressInternal(handler, static_cast<EventHandler::eventCallback>(fn)); }		
+		void onPressSubscribe(EventHandler * handler, void (T::*fn)()) { onPressInternal(handler, static_cast<EventHandler::eventCallbackEmpty>(fn)); }		
+
+		template <typename T>
+		void onPressSubscribe(EventHandler * handler, void (T::*fn)(Control)) { onPressInternal(handler, static_cast<EventHandler::eventCallback>(fn)); }
 	};
 }

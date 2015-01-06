@@ -432,9 +432,6 @@
     <ClCompile Include="graphics\renderer\UIRenderContext.cpp">
       <Filter>Source Files\graphics\renderer</Filter>
     </ClCompile>
-    <ClCompile Include="graphics\ui\UIView.cpp">
-      <Filter>Source Files\graphics\ui</Filter>
-    </ClCompile>
     <ClCompile Include="graphics\ui\controls\UIControl.cpp">
       <Filter>Source Files\graphics\ui\controls</Filter>
     </ClCompile>
@@ -455,6 +452,9 @@
     </ClCompile>
     <ClCompile Include="graphics\renderer\DeferredRendering.cpp">
       <Filter>Source Files\graphics\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\ui\controls\UIView.cpp">
+      <Filter>Source Files\graphics\ui\controls</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -710,9 +710,6 @@
     <ClInclude Include="graphics\renderer\UIRenderContext.h">
       <Filter>Header Files\graphics\renderer</Filter>
     </ClInclude>
-    <ClInclude Include="graphics\ui\UIView.h">
-      <Filter>Header Files\graphics\ui</Filter>
-    </ClInclude>
     <ClInclude Include="graphics\ui\controls\UIControl.h">
       <Filter>Header Files\graphics\ui\controls</Filter>
     </ClInclude>
@@ -748,6 +745,9 @@
     </ClInclude>
     <ClInclude Include="graphics\ui\UIEventHandler.h">
       <Filter>Header Files\graphics\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\ui\controls\UIView.h">
+      <Filter>Header Files\graphics\ui\controls</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -9,8 +9,9 @@
 //
 //////////////////////////////////////////////
 
+#include "controls/UIView.h"
+
 #include "UIManager.h"
-#include "UIView.h"
 
 namespace UI
 {
@@ -59,6 +60,16 @@ namespace UI
 	void Manager::clearView()
 	{
 		m_currentView = 0;
+	}
+
+
+	void Manager::handleInput()
+	{
+		for (View * view : m_views)
+		{
+			if (view->handleInput())
+				break;
+		}
 	}
 
 	void Manager::render(UIRenderContext& context)
