@@ -392,33 +392,21 @@ void Game::render()
 				wcscpy(color, L"#00FF00");
 			}
 			
-			gFont->render(WString<256>(L"#FFFFFFFPS: %s%.1f", color, fps), Rect(21, 21, 10, 10), Color(0.0f, 0.0f, 0.0f, 0.6f), Font::DrawFlags::NoClip | Font::DrawFlags::DisableColorCodding);
-			gFont->render(WString<256>(L"#FFFFFFFPS: %s%.1f", color, fps), Rect(20, 20, 10, 10), Color(1.0f, 1.0f, 1.0f, 1.0f), Font::DrawFlags::NoClip);
+			gFont->render(WString<256>(L"#FFFFFFFPS: %s%.1f", color, fps), Rect(1, 1, 10, 10), Color(0.0f, 0.0f, 0.0f, 0.6f), Font::DrawFlags::NoClip | Font::DrawFlags::DisableColorCodding);
+			gFont->render(WString<256>(L"#FFFFFFFPS: %s%.1f", color, fps), Rect(0, 0, 10, 10), Color(1.0f, 1.0f, 1.0f, 1.0f), Font::DrawFlags::NoClip);
 
 
-			/*glm::vec3 pos = glm::project(glm::vec3(0, 5, 0), glm::mat4()* Camera::current->getViewMatrix(), m_renderer->getProjectionMatrix(), m_renderer->getViewportAsVector());
+			glm::vec3 labelPos = glm::vec3(0, 2, 0);
+			glm::vec3 pos = glm::project(labelPos, glm::mat4()* Camera::current->getViewMatrix(), m_renderer->getProjectionMatrix(), m_renderer->getViewportAsVector());
 			pos.y = m_renderer->getViewportAsVector().w - pos.y;
 
-			gFont->render(WString<256>(L"%.f, %.f, %.f", pos.x, pos.y, pos.z), Rect(pos.x + 1, pos.y + 1, 10, 10), Color(0.0f, 0.0f, 0.0f, 0.6f), Font::DrawFlags::NoClip);
-			gFont->render(WString<256>(L"%.f, %.f, %.f", pos.x, pos.y, pos.z), Rect(pos.x, pos.y, 10, 10), Color(1.0f, 1.0f, 1.0f, 1.0f), Font::DrawFlags::NoClip);
-
-			pos = glm::project(glm::vec3(10, 2, 10), glm::mat4()* Camera::current->getViewMatrix(), m_renderer->getProjectionMatrix(), m_renderer->getViewportAsVector());
-			pos.y = m_renderer->getViewportAsVector().w - pos.y;
-
-			gFont->render(WString<256>(L"%.f, %.f, %.f", pos.x, pos.y, pos.z), Rect(pos.x + 1, pos.y + 1, 10, 10), Color(0.0f, 0.0f, 0.0f, 0.6f), Font::DrawFlags::NoClip);
-			gFont->render(WString<256>(L"%.f, %.f, %.f", pos.x, pos.y, pos.z), Rect(pos.x, pos.y, 10, 10), Color(1.0f, 1.0f, 1.0f, 1.0f), Font::DrawFlags::NoClip);
-
-			pos = glm::project(glm::vec3(10, 1, 0), glm::mat4()* Camera::current->getViewMatrix(), m_renderer->getProjectionMatrix(), m_renderer->getViewportAsVector());
-			pos.y = m_renderer->getViewportAsVector().w - pos.y;
-
-			gFont->render(WString<256>(L"%.f, %.f, %.f", pos.x, pos.y, pos.z), Rect(pos.x+1, pos.y+1, 10, 10), Color(0.0f, 0.0f, 0.0f, 0.6f), Font::DrawFlags::NoClip);
-			gFont->render(WString<256>(L"%.f, %.f, %.f", pos.x, pos.y, pos.z), Rect(pos.x, pos.y, 10, 10), Color(1.0f, 1.0f, 1.0f, 1.0f), Font::DrawFlags::NoClip);
-
-			pos = glm::project(glm::vec3(0, 1, 10), glm::mat4()* Camera::current->getViewMatrix(), m_renderer->getProjectionMatrix(), m_renderer->getViewportAsVector());
-			pos.y = m_renderer->getViewportAsVector().w - pos.y;
-			gFont->render(WString<256>(L"%.f, %.f, %.f", pos.x, pos.y, pos.z), Rect(pos.x + 1, pos.y + 1, 10, 10), Color(0.0f, 0.0f, 0.0f, 0.6f), Font::DrawFlags::NoClip);
-			gFont->render(WString<256>(L"%.f, %.f, %.f", pos.x, pos.y, pos.z), Rect(pos.x, pos.y, 10, 10), Color(1.0f, 1.0f, 1.0f, 1.0f), Font::DrawFlags::NoClip);*/
-
+			// dot (viewDirection, cameraToPointDirection)
+			float dot = glm::dot(glm::normalize(Camera::current->getTarget() - Camera::current->getPosition()), glm::normalize(glm::vec3(0, 5, 0) - Camera::current->getPosition()));
+			if (dot > 0) // Make sure if we are looking at that point.
+			{
+				gFont->render(L"#FF0000City #00FF00Transport #0000FFTycoon", Rect(pos.x + 1, pos.y + 1, 10, 10), Color(0.0f, 0.0f, 0.0f, 0.6f), Font::DrawFlags::NoClip | Font::DrawFlags::DisableColorCodding, Vector2(1,1));
+				gFont->render(L"#FF0000City #00FF00Transport #0000FFTycoon", Rect(pos.x, pos.y, 10, 10), Color(1.0f, 1.0f, 1.0f, 1.0f), Font::DrawFlags::NoClip, Vector2(1,1));
+			}		
 		}
 
 		// Draw UI

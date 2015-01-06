@@ -80,7 +80,7 @@ public:
 	void renderGeometry(Geometry<Vertex2d> *geometry);
 	void renderGeometry(Geometry<SimpleVertex2d> *geometry);
 
-	void renderFont(const WDynString& string, const Rect& rect, const Color& color, flags32 flags, Font *font);
+	void renderFont(const WDynString& string, const Rect& rect, const Color& color, flags32 flags, Font *font, Vector2 scale = Vector2(1,1));
 
 	Rect getRect();
 

@@ -743,7 +743,7 @@ void Renderer::renderGeometry(Geometry<SimpleVertex2d> *geometry)
 	program->end();
 }
 
-void Renderer::renderFont(const WDynString& string, const Rect& rect, const Color& color, flags32 flags, Font *font)
+void Renderer::renderFont(const WDynString& string, const Rect& rect, const Color& color, flags32 flags, Font *font, Vector2 scale)
 {
 	Material* material = font->m_material;
 	
@@ -767,7 +767,7 @@ void Renderer::renderFont(const WDynString& string, const Rect& rect, const Colo
 	uint32 vertexId = 0;
 	uint32 indexId = 0;
 	float startX = rect.x;
-	float startY = rect.y + font->m_size;
+	float startY = rect.y + (font->m_size * scale.y);
 
 	if (flags & Font::DrawFlags::HorizontalCenter)
 	{
@@ -846,37 +846,43 @@ void Renderer::renderFont(const WDynString& string, const Rect& rect, const Colo
 			continue;
 		}
 
-		Font::GlyphData data = font->getData(charCode);
-		int a, b, c, d;
+		Font::GlyphData data = font->getData(charCode);		
 		if (!data.set)
 			data = font->getData('?'); // use ? for unknown characters
 		
-		vertices[vertexId].x = x;
-		vertices[vertexId].y = y - data.top;
+		int32 a, b, c, d;
+
+		// left - top
+		vertices[vertexId].x = x + data.left* scale.y;
+		vertices[vertexId].y = y + data.top* scale.y;
 		vertices[vertexId].u = data.x;
 		vertices[vertexId].v = data.y;
 		vertices[vertexId].color = drawColor;
 		a = vertexId;
 		vertexId++;
 
-		vertices[vertexId].x = x + data.bmw;
-		vertices[vertexId].y = y - data.top;
-		vertices[vertexId].u = data.w;
-		vertices[vertexId].v = data.y;
+
+		// left - bottom
+		vertices[vertexId].x = x + data.left* scale.y;
+		vertices[vertexId].y = y + (data.top + data.bmh)* scale.y;
+		vertices[vertexId].u = data.x;
+		vertices[vertexId].v = data.h;
 		vertices[vertexId].color = drawColor;
 		b = vertexId;
 		vertexId++;
 			
-		vertices[vertexId].x = x;
-		vertices[vertexId].y = y + data.bmh - data.top;
-		vertices[vertexId].u = data.x;
-		vertices[vertexId].v = data.h;
+		// right - top
+		vertices[vertexId].x = x + (data.left + data.bmw)* scale.y;
+		vertices[vertexId].y = y + data.top * scale.y;
+		vertices[vertexId].u = data.w;
+		vertices[vertexId].v = data.y;
 		vertices[vertexId].color = drawColor;
 		c = vertexId;
 		vertexId++;
 
-		vertices[vertexId].x = x + data.bmw;
-		vertices[vertexId].y = y + data.bmh - data.top;
+		// right - bottom
+		vertices[vertexId].x = x + (data.left + data.bmw) * scale.y;
+		vertices[vertexId].y = y + (data.top + data.bmh) * scale.y;
 		vertices[vertexId].u = data.w;
 		vertices[vertexId].v = data.h;
 		vertices[vertexId].color = drawColor;
@@ -891,7 +897,7 @@ void Renderer::renderFont(const WDynString& string, const Rect& rect, const Colo
 		indices[indexId++] = d;
 		indices[indexId++] = c;
 
-		x += data.bmw+1;
+		x += data.advanceX* scale.y;
 	}
 
 	Geometry<Vertex2d> geometry;

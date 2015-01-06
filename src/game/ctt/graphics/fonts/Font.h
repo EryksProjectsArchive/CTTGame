@@ -32,6 +32,7 @@ private:
 		float left;
 		float bmw;
 		float bmh;
+		float advanceX;
 	};
 
 	uint32 m_textureId;
@@ -46,7 +47,7 @@ public:
 	Font(const FilePath& fontPath, uint32 size);
 	~Font();
 
-	void render(const WDynString& string, const Rect& rect, const Color& color, flags32 flags);
+	void render(const WDynString& string, const Rect& rect, const Color& color, flags32 flags, Vector2 scale = Vector2(1,1));
 
 	Font::GlyphData getData(wchar_t c);
 

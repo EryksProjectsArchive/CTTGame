@@ -106,15 +106,18 @@ Font::Font(const FilePath& fontPath, uint32 size)
 			for (int32 _x = 0; _x < bitmap_glyph->bitmap.width; ++_x)
 				texture[((_x + x) + width * (_y + y))] = image[_x + bitmap_glyph->bitmap.width * _y];
 
+		
+
 		m_data[c].set = 1;
 		m_data[c].x = float(x) / f_Width;
-		m_data[c].y = ((float(y)) / f_Height);
+		m_data[c].y = float(y) / f_Height;
 		m_data[c].w = (float(x) + float(bitmap_glyph->bitmap.width)) / f_Width;
 		m_data[c].h = (float(y) + float(bitmap_glyph->bitmap.rows)) / f_Height;
 		m_data[c].left = float(bitmap_glyph->left);
-		m_data[c].top = float(bitmap_glyph->top);
+		m_data[c].top = -float(bitmap_glyph->top);
 		m_data[c].bmw = float(bitmap_glyph->bitmap.width);
 		m_data[c].bmh = float(bitmap_glyph->bitmap.rows);
+		m_data[c].advanceX = float(glyph->advance.x >> 16);
 
 		if (lineHeight < m_data[c].bmh)
 			lineHeight = m_data[c].bmh;
@@ -173,11 +176,11 @@ Font::~Font()
 		m_material->release();
 }
 
-void Font::render(const WDynString& string, const Rect& rect, const Color& color, flags32 flags)
+void Font::render(const WDynString& string, const Rect& rect, const Color& color, flags32 flags, Vector2 scale)
 {
 	if (m_loaded)
 	{
-		Renderer::get()->renderFont(string, rect, color, flags, this);
+		Renderer::get()->renderFont(string, rect, color, flags, this, scale);
 	}
 }
 
@@ -189,7 +192,7 @@ Font::GlyphData Font::getData(wchar_t c)
 float Font::calculateWidth(const WDynString& string)
 {
 	float w = 0;
-	for (uint32 i = 0; i < string.getLength(); ++i)
+	for (uint32 i = 0; i < string.getLength()-1; ++i)
 	{
 		wchar_t c = string[i];
 		if (c == ' ')
@@ -198,7 +201,7 @@ float Font::calculateWidth(const WDynString& string)
 			continue;
 		}
 
-		w += m_data[c].bmw + 2;
+		w += m_data[c].advanceX;
 	}
 	return w;
 }
