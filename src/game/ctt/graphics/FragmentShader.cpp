@@ -50,7 +50,7 @@ FragmentShader::FragmentShader(const char * source) : Shader(source)
 			Renderer::glGetShaderInfoLog(m_shaderId, maxLength, &maxLength, errorLog);
 			errorLog[maxLength] = '\0';
 
-			Error("shader", "Compilation error (%s):", source);
+			Error("FragmentShader", "Compilation error (%s):", source);
 
 			char *lineBuffer = errorLog;
 			uint32 startIndex = 0;
@@ -62,7 +62,7 @@ FragmentShader::FragmentShader(const char * source) : Shader(source)
 					char *line = new char[length];
 					memcpy(line, lineBuffer + startIndex, length - 1);
 					line[length - 1] = '\0';
-					Error("shader", line);
+					Error("FragmentShader", line);
 					startIndex = i + 1;
 					delete[]line;
 				}
@@ -74,8 +74,9 @@ FragmentShader::FragmentShader(const char * source) : Shader(source)
 			//Exit with failure.
 			Renderer::glDeleteShader(m_shaderId); //Don't leak the shader.
 		}
-		else {
-			Debug("shader", "Compilation success '%s'.", source);
+		else 
+		{
+			Debug("FragmentShader", "Compilation success '%s'.", source);
 		}
 
 		delete [] shaderSource;

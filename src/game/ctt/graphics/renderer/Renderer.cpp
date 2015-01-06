@@ -225,7 +225,7 @@ bool Renderer::setup(Window * window)
 	m_glContext = SDL_GL_CreateContext(window->_window);
 	if (m_glContext == NULL)
 	{
-		Error("renderer", "Cannot create OpenGL context. Error: %s", SDL_GetError());
+		Error("Renderer", "Cannot create OpenGL context. Error: %s", SDL_GetError());
 		OS::msgBox("Cannot setup OpenGL context.", "Error");
 		return false;
 	}
@@ -489,21 +489,15 @@ void Renderer::renderGeometry(Geometry<Vertex3d> *geometry, const glm::mat4x4& m
 	if (!material)
 		material = m_defaultMaterial;
 
-
 	// Shaders
 	if (!material)
-	{
-		//Error("renderer", "Cannot render geometry. No material found!");
 		return;
-	}
 
-	if (!material->m_program || !glIsProgram(material->m_program->m_programId))
-	{
-		//Error("renderer", "Cannot render geometry. No shader program assigned for material.");
+	ShaderProgram *program = material->m_program;
+	if (!program || !program->isValid())
 		return;
-	}
-	
-	glUseProgram(material->m_program->m_programId);
+
+	program->begin();
 
 	glm::mat4 viewMatrix = Camera::current->getViewMatrix();
 
@@ -609,9 +603,10 @@ void Renderer::renderGeometry(Geometry<Vertex3d> *geometry, const glm::mat4x4& m
 	if (attributeColor!= -1)
 		glDisableVertexAttribArray(attributeColor);
 
-	glUseProgram(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+	program->end();
 }
 
 void Renderer::renderGeometry(Geometry<Vertex2d> *geometry)
@@ -625,18 +620,14 @@ void Renderer::renderGeometry(Geometry<Vertex2d> *geometry)
 
 	// Shaders
 	if (!material)
-	{
-		Error("renderer", "Cannot render 2d geometry. No material found!");
 		return;
-	}
-
-	if (!material->m_program || !glIsProgram(material->m_program->m_programId))
-	{
-		Error("renderer", "Cannot render 2d geometry. No shader program assigned for material.");
+	
+	// Validate shader program
+	ShaderProgram * program = material->m_program;
+	if (!program || !program->isValid())
 		return;
-	}
 
-	glUseProgram(material->m_program->m_programId);
+	program->begin();
 
 	unsigned int orthoMatrixLocation = material->m_program->getUniformLocation("orthoMatrix");
 	if (orthoMatrixLocation != -1)
@@ -689,11 +680,12 @@ void Renderer::renderGeometry(Geometry<Vertex2d> *geometry)
 	if (attributeUV != -1)
 		glDisableVertexAttribArray(attributeUV);
 
-	glUseProgram(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
+
+	program->end();
 }
 
 void Renderer::renderGeometry(Geometry<SimpleVertex2d> *geometry)
@@ -704,18 +696,14 @@ void Renderer::renderGeometry(Geometry<SimpleVertex2d> *geometry)
 
 	// Shaders
 	if (!material)
-	{
-		Error("renderer", "Cannot render simple 2d geometry. No material found!");
 		return;
-	}
 
-	if (!material->m_program || !glIsProgram(material->m_program->m_programId))
-	{
-		Error("renderer", "Cannot render simple 2d geometry. No shader program assigned for material.");
+	// Validate shader program
+	ShaderProgram * program = material->m_program;
+	if (!program || !program->isValid())
 		return;
-	}
 
-	glUseProgram(material->m_program->m_programId);
+	program->begin();
 
 	unsigned int orthoMatrixLocation = material->m_program->getUniformLocation("orthoMatrix");
 	if (orthoMatrixLocation != -1)
@@ -747,28 +735,31 @@ void Renderer::renderGeometry(Geometry<SimpleVertex2d> *geometry)
 	if (attributeColor != -1)
 		glDisableVertexAttribArray(attributeColor);
 
-	glUseProgram(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
+
+	program->end();
 }
 
 void Renderer::renderFont(const WDynString& string, const Rect& rect, const Color& color, flags32 flags, Font *font)
 {
-	if (!font->getData('?').set)
-	{
-		Error("Font render", "Cannot find '?' character data. It's used as one that doesn't exists.");
+	Material* material = font->m_material;
+	
+	// Shaders
+	if (!material)
 		return;
-	}
+
+	ShaderProgram * program = material->m_program;
+	if (!program || !program->isValid())
+		return;
 
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_CULL_FACE);
 	glEnable(GL_BLEND);
 
-	Material* material = font->m_material;
-
-	uint32 xcolor = ((uint8)(color.a * 255) << 24) | ((uint8)(color.b * 255) << 16) | ((uint8)(color.g * 255) << 8) | ((uint8)(color.r * 255));
+	uint32 drawColor = ((uint8)(color.a * 255) << 24) | ((uint8)(color.b * 255) << 16) | ((uint8)(color.g * 255) << 8) | ((uint8)(color.r * 255));
 
 	Vertex2d * vertices = new Vertex2d[string.getLength() * 4];
 	uint16 *indices = new uint16[string.getLength() * 6];
@@ -794,7 +785,9 @@ void Renderer::renderFont(const WDynString& string, const Rect& rect, const Colo
 	{
 		wchar_t charCode = string[i];
 		if (charCode == '\0')
+		{
 			break;
+		}
 		
 		if (charCode == '#')
 		{
@@ -827,19 +820,18 @@ void Renderer::renderFont(const WDynString& string, const Rect& rect, const Colo
 
 						uint32 col = 0xFFFFFFFF;
 						swscanf(color, L"%X", &col);
-						uint8 a = xcolor >> 24 & 0xFF; // get alpha from base color
+						uint8 a = drawColor >> 24 & 0xFF; // get alpha from base color
 						uint8 r = col >> 16 & 0xFF;
 						uint8 g = col >> 8 & 0xFF;
 						uint8 b = col & 0xFF;
 
-						xcolor = (a << 24) | (b << 16) | (g << 8) | r;
+						drawColor = (a << 24) | (b << 16) | (g << 8) | r;
 						i += 5; // skip RRGGBB
 					}
 					continue;
 				}
 			}
 		}
-
 
 		if (charCode == '\n')
 		{
@@ -863,7 +855,7 @@ void Renderer::renderFont(const WDynString& string, const Rect& rect, const Colo
 		vertices[vertexId].y = y - data.top;
 		vertices[vertexId].u = data.x;
 		vertices[vertexId].v = data.y;
-		vertices[vertexId].color = xcolor;
+		vertices[vertexId].color = drawColor;
 		a = vertexId;
 		vertexId++;
 
@@ -871,7 +863,7 @@ void Renderer::renderFont(const WDynString& string, const Rect& rect, const Colo
 		vertices[vertexId].y = y - data.top;
 		vertices[vertexId].u = data.w;
 		vertices[vertexId].v = data.y;
-		vertices[vertexId].color = xcolor;
+		vertices[vertexId].color = drawColor;
 		b = vertexId;
 		vertexId++;
 			
@@ -879,7 +871,7 @@ void Renderer::renderFont(const WDynString& string, const Rect& rect, const Colo
 		vertices[vertexId].y = y + data.bmh - data.top;
 		vertices[vertexId].u = data.x;
 		vertices[vertexId].v = data.h;
-		vertices[vertexId].color = xcolor;
+		vertices[vertexId].color = drawColor;
 		c = vertexId;
 		vertexId++;
 
@@ -887,25 +879,19 @@ void Renderer::renderFont(const WDynString& string, const Rect& rect, const Colo
 		vertices[vertexId].y = y + data.bmh - data.top;
 		vertices[vertexId].u = data.w;
 		vertices[vertexId].v = data.h;
-		vertices[vertexId].color = xcolor;
+		vertices[vertexId].color = drawColor;
 		d = vertexId;
 		vertexId++;
 
-		indices[indexId] = a;
-		indexId++;
-		indices[indexId] = b;
-		indexId++;
-		indices[indexId] = c;
-		indexId++;
+		indices[indexId++] = a;
+		indices[indexId++] = b;
+		indices[indexId++] = c;
 		
-		indices[indexId] = b;
-		indexId++;
-		indices[indexId] = d;
-		indexId++;
-		indices[indexId] = c;
-		indexId++;
+		indices[indexId++] = b;
+		indices[indexId++] = d;
+		indices[indexId++] = c;
 
-		x += data.bmw+2;
+		x += data.bmw+1;
 	}
 
 	Geometry<Vertex2d> geometry;
@@ -913,20 +899,7 @@ void Renderer::renderFont(const WDynString& string, const Rect& rect, const Colo
 	delete[]vertices;
 	delete[]indices;
 
-	// Shaders
-	if (!material)
-	{
-		Error("renderer", "Cannot render font. No material found!");
-		return;
-	}
-
-	if (!material->m_program || !glIsProgram(material->m_program->m_programId))
-	{
-		Error("renderer", "Cannot render font. No shader program assigned for material.");
-		return;
-	}
-
-	glUseProgram(material->m_program->m_programId);
+	program->begin();
 
 	unsigned int orthoMatrixLocation = material->m_program->getUniformLocation("orthoMatrix");
 	if (orthoMatrixLocation != -1)
@@ -965,7 +938,7 @@ void Renderer::renderFont(const WDynString& string, const Rect& rect, const Colo
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geometry.m_indexBuffer->m_bufferId);
 
-	glDrawElements(material->m_wireframe ? GL_LINE_STRIP : GL_TRIANGLES, geometry.m_trianglesCount * 3, GL_UNSIGNED_SHORT, 0);
+	glDrawElements(GL_TRIANGLES, geometry.m_trianglesCount * 3, GL_UNSIGNED_SHORT, 0);
 	m_stats.m_trianglesDrawn += geometry.m_trianglesCount;
 	m_stats.m_drawCalls++;
 	m_stats.m_verticesDrawn += geometry.m_verticesCount;
@@ -981,6 +954,8 @@ void Renderer::renderFont(const WDynString& string, const Rect& rect, const Colo
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
+
+	program->end();
 }
 
 Rect Renderer::getRect()

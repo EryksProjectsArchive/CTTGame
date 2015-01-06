@@ -76,7 +76,7 @@ public:
 	void setMaterial(Material* material);
 	Material * getMaterial();
 
-	void renderGeometry(Geometry<Vertex3d> *geometry, const glm::mat4x4& matrix);
+	void renderGeometry(Geometry<Vertex3d> *geometry, const Matrix4x4& matrix);
 	void renderGeometry(Geometry<Vertex2d> *geometry);
 	void renderGeometry(Geometry<SimpleVertex2d> *geometry);
 

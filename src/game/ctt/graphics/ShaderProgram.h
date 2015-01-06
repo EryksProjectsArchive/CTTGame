@@ -19,13 +19,13 @@ class ShaderProgram
 private:
 	struct UniformData
 	{
-		char name[32];
+		uint32 name;
 		uint32 location;
 	};
 
 	struct AttributeData
 	{
-		char name[32];
+		uint32 name;
 		uint32 location;
 	};
 
@@ -40,6 +40,7 @@ protected:
 	uint32 m_attributesCount;
 
 	List<Shader *> m_shaders;
+
 public:
 	ShaderProgram();
 	~ShaderProgram();
@@ -50,6 +51,10 @@ public:
 	uint32 getUniformLocation(const char *name);
 	uint32 getAttributeLocation(const char *name);
 
+	void begin();
+	void end();
+	bool isValid();
+	
 	friend class Renderer;
 	friend class DeferredRendering;
 };

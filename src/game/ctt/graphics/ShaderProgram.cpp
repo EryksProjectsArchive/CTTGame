@@ -15,6 +15,8 @@
 
 #include <core/Logger.h>
 
+#include <core/hashing/JenkinsHash.h>
+
 ShaderProgram::ShaderProgram()
 {
 	m_programId = Renderer::glCreateProgram();
@@ -42,6 +44,22 @@ void ShaderProgram::attachShader(Shader * shader)
 	m_shaders.pushBack(shader);	
 }
 
+
+void ShaderProgram::begin()
+{
+	Renderer::glUseProgram(m_programId);
+}
+
+void ShaderProgram::end()
+{
+
+}
+
+bool ShaderProgram::isValid()
+{
+	return Renderer::glIsProgram(m_programId) != 0;
+}
+
 void ShaderProgram::link()
 {
 	for (auto shader : m_shaders)
@@ -58,12 +76,27 @@ void ShaderProgram::link()
 		GLint maxLength = 0;
 		Renderer::glGetProgramiv(m_programId, GL_INFO_LOG_LENGTH, &maxLength);
 
-		//The maxLength includes the NULL character
 		char *errorLog = new char[maxLength + 1];
 
 		Renderer::glGetProgramInfoLog(m_programId, maxLength, &maxLength, errorLog);
 
-		Error("program", "Linker error: %s", errorLog);
+		Error("Program", "Linker error:");
+
+		char *lineBuffer = errorLog;
+		uint32 startIndex = 0;
+		for (uint32 i = 0; i < strlen(errorLog); ++i)
+		{
+			if (errorLog[i] == '\n' || errorLog[i] == '\0')
+			{
+				uint32 length = (i - startIndex) + 1;
+				char *line = new char[length];
+				memcpy(line, lineBuffer + startIndex, length - 1);
+				line[length - 1] = '\0';
+				Error("ShaderProgram", line);
+				startIndex = i + 1;
+				delete[]line;
+			}
+		}
 
 		delete[]errorLog;
 	}
@@ -76,11 +109,13 @@ void ShaderProgram::link()
 
 unsigned int ShaderProgram::getUniformLocation(const char *name)
 {
+	uint32 hashName = JenkinsHash().encode(name, strlen(name));
+
 	if (m_uniforms)
 	{
 		for (unsigned int i = 0; i < m_uniformsCount; ++i)
 		{
-			if (!strcmp(m_uniforms[i].name, name))
+			if (m_uniforms[i].name == hashName)
 			{
 				//Info("shader program", "Cached uniform found. Name: '%s', Location: '%d'", name, m_uniforms[i].location);
 				return m_uniforms[i].location;
@@ -103,7 +138,7 @@ unsigned int ShaderProgram::getUniformLocation(const char *name)
 			m_uniforms = (UniformData *)realloc(m_uniforms, sizeof(UniformData) * m_uniformsCount);
 		}
 
-		strcpy(m_uniforms[m_uniformsCount - 1].name, name);
+		m_uniforms[m_uniformsCount - 1].name = hashName;
 		m_uniforms[m_uniformsCount - 1].location = location;
 		return location;
 	}
@@ -112,11 +147,13 @@ unsigned int ShaderProgram::getUniformLocation(const char *name)
 
 unsigned int ShaderProgram::getAttributeLocation(const char *name)
 {
+	uint32 hashName = JenkinsHash().encode(name, strlen(name));
+
 	if (m_attributes)
 	{
 		for (unsigned int i = 0; i < m_attributesCount; ++i)
 		{
-			if (!strcmp(m_attributes[i].name, name))
+			if (m_attributes[i].name == hashName)
 			{
 				//Info("shader program", "Cached attribute found. Name: '%s', Location: '%d'", name, m_attributes[i].location);
 				return m_attributes[i].location;
@@ -134,7 +171,7 @@ unsigned int ShaderProgram::getAttributeLocation(const char *name)
 
 		m_attributes = (AttributeData *)realloc(attributes, sizeof(AttributeData) * m_attributesCount);
 
-		strcpy(m_attributes[m_attributesCount - 1].name, name);
+		m_attributes[m_attributesCount - 1].name = hashName;
 		m_attributes[m_attributesCount - 1].location = location;
 		return location;
 	}

@@ -152,7 +152,13 @@ Font::Font(const FilePath& fontPath, uint32 size)
 	m_material = MaterialLib::get()->findByName("font");
 	m_material->acquire();
 
-	m_loaded = true;	
+	m_loaded = true;
+
+	if (!m_data['?'].set)
+	{
+		Warning("Font", "Cannot find '?' character data for font '%s'.", fontPath.get());
+		return;
+	}
 }
 
 Font::~Font()
@@ -170,7 +176,9 @@ Font::~Font()
 void Font::render(const WDynString& string, const Rect& rect, const Color& color, flags32 flags)
 {
 	if (m_loaded)
+	{
 		Renderer::get()->renderFont(string, rect, color, flags, this);
+	}
 }
 
 Font::GlyphData Font::getData(wchar_t c)
