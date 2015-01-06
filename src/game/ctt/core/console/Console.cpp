@@ -25,6 +25,8 @@
 #include <os/OS.h>
 #include <game/Game.h>
 
+#include <core/DynArray.h>
+
 Console * Console::s_instance = 0;
 
 Console::Console()
@@ -276,6 +278,27 @@ void Console::onKeyEvent(Key::Type key, bool pressed)
 			}
 
 			m_inputBuffer = (m_history.m_current != -1) ? m_history.m_entry[m_history.m_current].m_value : WDynString();
+		}
+
+		if (key == Key::SCANCODE_TAB && pressed && m_inputBuffer.getLength() > 0)
+		{			
+			// Process commands.
+			DynArray <ICommand *> matching;
+			for (ICommand * cmd : m_commands)
+			{
+				if (cmd->m_name.find(m_inputBuffer) != -1)
+					matching.pushBack(cmd);	
+			}			
+
+			if (matching.size() > 1)
+			{
+				for (ICommand * cmd : matching)
+				{
+					output(MessageType::Info, cmd->m_name);
+				}
+			}
+			else if (matching.size() > 0)
+				m_inputBuffer = matching[0]->m_name;
 		}
 	}
 }

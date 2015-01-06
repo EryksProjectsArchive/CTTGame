@@ -185,6 +185,19 @@ public:
 		return -1;
 	}
 
+	size_t find(const WDynString& string)
+	{
+		for (size_t i = 0; i < m_size; ++i)
+		{
+			if (!wcsncmp(m_buffer+i, string.get(), string.getLength()))
+			{
+				return i;
+			}
+		}
+
+		return -1;
+	}
+
 	WDynString substr(size_t start, size_t end)
 	{
 		if (!m_size)
