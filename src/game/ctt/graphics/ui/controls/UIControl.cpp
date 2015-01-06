@@ -14,7 +14,7 @@
 namespace UI
 {
 	Control::Control(const DynString& name, Vector2 position, Vector2 size)
-		: m_name(name), m_parent(0), m_position(position), m_size(size)
+		: m_name(name), m_parent(0), m_position(position), m_size(size), m_focus(false)
 	{
 
 	}

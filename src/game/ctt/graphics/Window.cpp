@@ -66,8 +66,9 @@ bool Window::processMessages()
 			break;
 		case SDL_MOUSEBUTTONDOWN:
 		case SDL_MOUSEBUTTONUP:
-			Input::get()->onMouseButtonEvent(event.button.button, event.button.state == SDL_PRESSED, event.button.clicks, event.button.x, event.button.y);
-			break;
+			{
+				Input::get()->onMouseButtonEvent(event.button.button, event.button.state == SDL_PRESSED, event.button.clicks, event.button.x, event.button.y);
+			} break;		
 		case SDL_TEXTINPUT:
 			{
 				char *text = event.text.text;

@@ -9,6 +9,8 @@
 //
 //////////////////////////////////////////////
 
+#include <SDL.h>
+
 #include "Input.h"
 #include "Controllable.h"
 
@@ -18,6 +20,8 @@ Input::Input()
 	memset(m_keyState, 0, Key::NUM_SCANCODES);
 	m_mouse.x = 0;
 	m_mouse.y = 0;
+	m_cursor = 0;
+
 }
 
 Input::~Input()
@@ -59,6 +63,8 @@ void Input::onMouseMove(sint32 x, sint32 y, sint32 relx, sint32 rely)
 
 void Input::onMouseButtonEvent(uint8 button, bool state, uint8 clicks, sint32 x, sint32 y)
 {
+	m_mouseBtnState[button] = state;
+
 	for (Controllable * controllable : m_controllables)
 	{
 		if (!isLocked() || controllable->m_type == ControllableType::Engine)
@@ -100,6 +106,11 @@ bool Input::isKeyDown(Key::Type key)
 	return m_keyState[key];
 }
 
+bool Input::isMouseBtnPressed(MouseButton::Type button)
+{
+	return m_mouseBtnState[button];
+}
+
 sint32 Input::getMouseX()
 {
 	return m_mouse.x;
@@ -118,4 +129,24 @@ void Input::addControllable(Controllable *controllable)
 void Input::removeControllable(Controllable *controllable)
 {
 	m_controllables.remove(controllable);
+}
+
+void Input::setCursor(Cursor::Type type)
+{
+	if (m_cursor)
+	{
+		SDL_FreeCursor(m_cursor);
+		m_cursor = 0;
+	}
+
+	if (type == Cursor::Hand)
+	{
+		m_cursor = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_HAND);
+	}
+	else
+	{
+		m_cursor = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_ARROW);
+	}
+
+	SDL_SetCursor(m_cursor);
 }

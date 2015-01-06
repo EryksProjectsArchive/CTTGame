@@ -16,6 +16,8 @@
 
 #include <resources/materials/MaterialLib.h>
 
+#include <input/Input.h>
+
 namespace UI
 {
 	Button::Button(const DynString& name, Vector2 position, Vector2 size)
@@ -77,6 +79,35 @@ namespace UI
 		Renderer::get()->setMaterial(m_material);
 		Renderer::get()->renderGeometry(m_geometry);
 
-		m_font->render(m_text, Rect(m_position.x, m_position.y, m_position.x + m_size.x, m_position.y + m_size.y), Color(1,1,1,1), Font::DrawFlags::HorizontalCenter | Font::DrawFlags::VerticalCenter);
+		Rect rct(m_position.x, m_position.y, m_position.x + m_size.x, m_position.y + m_size.y);
+
+		sint32 x = Input::get()->getMouseX();
+		sint32 y = Input::get()->getMouseY();
+
+		bool focus = (x >= rct.left && x <= rct.right) && (y >= rct.top && y <= rct.bottom);
+		m_font->render(m_text, rct, focus ? Color(1, 0, 0, 1) : Color(1, 1, 1, 1), Font::DrawFlags::HorizontalCenter | Font::DrawFlags::VerticalCenter);
+
+		if (m_focus != focus)
+		{
+			Input::get()->setCursor(focus ? Cursor::Hand : Cursor::Arrow);
+			m_focus = focus;
+			if (!m_focus)
+				m_pressed = false;
+		}
+
+		if (m_focus)
+		{
+			bool leftButtonState = Input::get()->isMouseBtnPressed(MouseButton::Left);
+			if (!m_pressed && leftButtonState)
+			{
+				Info("Button", "Press");
+				m_pressed = true;
+			}
+			else if (m_pressed && !leftButtonState)
+			{
+				Info("Button", "Release");
+				m_pressed = false;
+			}
+		}
 	}
 };

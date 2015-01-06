@@ -237,14 +237,14 @@ bool Game::init()
 	// Create main menu
 	m_ui = new UI::Manager();
 
-	/*UI::View* view = m_ui->createView("game.main_menu");
+	UI::View* view = m_ui->createView("game.main_menu");
 
 	UI::Button* button = new UI::Button("button1", Vector2(100.0f, 100.0f), Vector2(200.0f, 50.0f));
 	button->setText(L"Start Editor");
 
 	view->attach(button);
 
-	m_ui->setCurrentView("game.main_menu");*/
+	m_ui->setCurrentView("game.main_menu");
 
 	// create game sound mgr
 

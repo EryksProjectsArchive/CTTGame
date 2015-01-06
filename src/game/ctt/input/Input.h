@@ -19,12 +19,33 @@
 #include "KeyEnum.h"
 #include "Controllable.h"
 
+struct Cursor
+{
+	enum Type
+	{
+		Arrow,
+		Hand
+	};
+};
+
+struct MouseButton
+{
+	enum Type
+	{
+		Left = 1,
+		Middle = 2,
+		Right = 3,
+		Count = 3
+	};
+};
+
 class Input : public Singleton<Input>
 {
 private:
 	List<Controllable *> m_controllables;
 
 	bool m_keyState[Key::NUM_SCANCODES];
+	bool m_mouseBtnState[MouseButton::Type::Count];
 
 	struct
 	{
@@ -33,6 +54,8 @@ private:
 	} m_mouse;
 
 	int32 m_inputState;
+
+	struct SDL_Cursor *m_cursor;
 public:
 	Input();
 	~Input();
@@ -49,8 +72,11 @@ public:
 	bool isLocked();
 
 	bool isKeyDown(Key::Type key);
+	bool isMouseBtnPressed(MouseButton::Type button);
 	sint32 getMouseX();
 	sint32 getMouseY();
+
+	void setCursor(Cursor::Type type);
 private:
 	void addControllable(Controllable *controllable);
 	void removeControllable(Controllable *controllable);

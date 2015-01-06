@@ -766,17 +766,17 @@ void Renderer::renderFont(const WDynString& string, const Rect& rect, const Colo
 
 	uint32 vertexId = 0;
 	uint32 indexId = 0;
-	float startX = rect.x;
-	float startY = rect.y + (font->m_size * scale.y);
+	float startX = floor(rect.x);
+	float startY = floor(rect.y + (font->m_size * scale.y));
 
 	if (flags & Font::DrawFlags::HorizontalCenter)
 	{
-		startX = rect.x + (rect.x2 - rect.x) / 2 - font->calculateWidth(string) / 2;
+		startX = floor(rect.x + (rect.x2 - rect.x) / 2 - font->calculateWidth(string) / 2);
 	}
 
 	if (flags & Font::DrawFlags::VerticalCenter)
 	{
-		startY = rect.y + (rect.y2 - rect.y) / 2 + font->calculateHeight(string) / 2;
+		startY = floor(rect.y + (rect.y2 - rect.y) / 2 + font->calculateHeight(string) / 2);
 	}
 
 	float x = startX;

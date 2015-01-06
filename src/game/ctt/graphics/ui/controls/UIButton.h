@@ -31,6 +31,7 @@ namespace UI
 		Material *m_material;
 
 		Font *m_font;
+		bool m_pressed;
 	public:
 		Button(const DynString& name, Vector2 position = Vector2(), Vector2 size = Vector2());
 		virtual ~Button();
