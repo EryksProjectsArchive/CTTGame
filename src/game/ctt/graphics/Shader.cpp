@@ -11,8 +11,9 @@
 
 #include "Shader.h"
 
-Shader::Shader(const char *source) : m_shaderId(0)
+Shader::Shader(const FilePath& source) : m_shaderId(0), m_sourcePath(source)
 {
+	m_isCompiled = 0;
 }
 
 Shader::~Shader()

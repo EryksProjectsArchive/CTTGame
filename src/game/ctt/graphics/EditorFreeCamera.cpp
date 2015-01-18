@@ -88,17 +88,8 @@ void EditorFreeCamera::onMouseButtonEvent(uint8 button, bool state, uint8, sint3
 {
 	if (button == 3)
 	{
-		m_move = state;
-		if (m_move)
-		{
-			SDL_SetRelativeMouseMode(SDL_TRUE);
-			SDL_ShowCursor(0);
-		}
-		else
-		{
-			SDL_SetRelativeMouseMode(SDL_FALSE);
-			SDL_ShowCursor(1);
-		}
+		m_move = state;	
+		Input::get()->showCursor(!m_move);
 	}
 }
 
@@ -110,8 +101,7 @@ void EditorFreeCamera::update(float dt)
 		for (unsigned int i = 0; i < 6; ++i)
 			m_keys[i] = false;
 
-		SDL_SetRelativeMouseMode(SDL_FALSE);
-		SDL_ShowCursor(1);
+		Input::get()->showCursor(true);
 
 		processKeys = false;
 	}

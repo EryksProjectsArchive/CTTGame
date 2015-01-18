@@ -174,7 +174,7 @@ TerrainGrid::TerrainGrid(Vector3 position, uint32 size) : m_left(0), m_right(0),
 	btTransform transform = m_rigidBody->getWorldTransform();
 	transform.setOrigin(btVector3(position.x, position.y, position.z));
 	m_rigidBody->setWorldTransform(transform);
-	Game::get()->getPhysicsWorld().registerRigidBody(m_rigidBody);
+	Game::get()->getPhysicsWorld()->registerRigidBody(m_rigidBody);
 }
 
 TerrainGrid::~TerrainGrid()

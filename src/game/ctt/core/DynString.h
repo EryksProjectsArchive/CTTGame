@@ -101,17 +101,19 @@ public:
 
 	unsigned char operator[](unsigned int index) const
 	{
-		if (index < 0 || index > m_size)
+		if (index > m_size)
 			return 0;
 
 		return m_buffer[index];
 	}
 
+	// Returns size of allocated memory.
 	size_t getSize() const
 	{
-		return m_size;
+		return m_size + 1;
 	}
 
+	// Return length of string.
 	size_t getLength() const
 	{
 		return m_size;

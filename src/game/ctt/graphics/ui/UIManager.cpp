@@ -62,7 +62,6 @@ namespace UI
 		m_currentView = 0;
 	}
 
-
 	void Manager::handleInput()
 	{
 		if (m_currentView)

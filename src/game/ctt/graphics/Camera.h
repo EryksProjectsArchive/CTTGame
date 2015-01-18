@@ -43,6 +43,7 @@ public:
 	
 	virtual glm::mat4x4 getViewMatrix();
 	
+	// TODO: Camera manager.
 	static void setCurrent(Camera *);
 	static Camera * current;
 };

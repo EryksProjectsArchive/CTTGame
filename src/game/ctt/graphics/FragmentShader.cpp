@@ -16,30 +16,51 @@
 
 #include "renderer/Renderer.h"
 
-FragmentShader::FragmentShader(const char * source) : Shader(source)
+#include <io/fs/FileSystem.h>
+
+FragmentShader::FragmentShader(const FilePath& source) : Shader(source)
+{	
+}
+
+FragmentShader::~FragmentShader()
 {
-	FILE *shaderFile = fopen(source, "r");
-	if (shaderFile)
+	if (m_shaderId)
+	{
+		Renderer::glDeleteShader(m_shaderId);
+		m_shaderId = 0;
+	}
+}
+
+bool FragmentShader::compile()
+{
+	if (m_isCompiled)
+	{
+		Warning("FragmentShader", "Tried to compile shader twice. '%s'", m_sourcePath.get());
+		return true;
+	}
+
+	bool success = false;
+
+	File *file = FileSystem::get()->open(m_sourcePath, FileOpenMode::Read);
+	if (file && file->isLoaded())
 	{
 		m_shaderId = Renderer::glCreateShader(GL_FRAGMENT_SHADER);
 
-		char * shaderSource = 0;
-		unsigned int shaderLength = 0;
+		DynString source = file->getContent();
 
-		fseek(shaderFile, 0, SEEK_END);
-		shaderLength = ftell(shaderFile);
-		rewind(shaderFile);		
-		shaderSource = new char[shaderLength+1];
-		memset(shaderSource, 0, shaderLength);
-		fread(shaderSource, sizeof(char), shaderLength, shaderFile);
-		shaderSource[shaderLength] = '\0';
+		// Find any better way to do that.
+		size_t length = source.getLength();
+		char *sourceTmp = new char[length + 1];
+		memset(sourceTmp, 0, length);
+		strcpy(sourceTmp, source.get());
+		sourceTmp[length] = '\0';
 
-		Renderer::glShaderSource(m_shaderId, 1, (const GLchar **)&shaderSource, (const GLint *)&shaderLength);
+		Renderer::glShaderSource(m_shaderId, 1, (const GLchar **)&sourceTmp, (const GLint *)&length);
 		Renderer::glCompileShader(m_shaderId);
 
-		GLint success = 0;
-		Renderer::glGetShaderiv(m_shaderId, GL_COMPILE_STATUS, &success);
-		if (success == GL_FALSE)
+		GLint params = 0;
+		Renderer::glGetShaderiv(m_shaderId, GL_COMPILE_STATUS, &params);
+		if (params == GL_FALSE)
 		{
 			GLint maxLength = 0;
 			Renderer::glGetShaderiv(m_shaderId, GL_INFO_LOG_LENGTH, &maxLength);
@@ -50,7 +71,7 @@ FragmentShader::FragmentShader(const char * source) : Shader(source)
 			Renderer::glGetShaderInfoLog(m_shaderId, maxLength, &maxLength, errorLog);
 			errorLog[maxLength] = '\0';
 
-			Error("FragmentShader", "Compilation error (%s):", source);
+			Error("FragmentShader", "Compilation error (%s):", m_sourcePath.get());
 
 			char *lineBuffer = errorLog;
 			uint32 startIndex = 0;
@@ -76,19 +97,13 @@ FragmentShader::FragmentShader(const char * source) : Shader(source)
 		}
 		else 
 		{
-			Debug("FragmentShader", "Compilation success '%s'.", source);
+			Debug("FragmentShader", "Compilation success '%s'.", m_sourcePath.get());
+			success = true;
 		}
 
-		delete [] shaderSource;
-		fclose(shaderFile);
+		delete[]sourceTmp;
+		sourceTmp = 0;
 	}
-}
-
-FragmentShader::~FragmentShader()
-{
-	if (m_shaderId)
-	{
-		Renderer::glDeleteShader(m_shaderId);
-		m_shaderId = 0;
-	}
+	FileSystem::get()->close(file);
+	return success;
 }

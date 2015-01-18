@@ -16,6 +16,8 @@
 class VertexShader : public Shader
 {
 public:
-	VertexShader(const char * source);
+	VertexShader(const FilePath& source);
 	virtual ~VertexShader();
+
+	virtual bool compile();
 };

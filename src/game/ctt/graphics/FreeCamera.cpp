@@ -23,8 +23,8 @@
 
 FreeCamera::FreeCamera()
 {
-	SDL_SetRelativeMouseMode(SDL_TRUE);
-	SDL_ShowCursor(0);
+	Input::get()->showCursor(false);
+
 	for (unsigned int i = 0; i < 6; ++i)
 		m_keys[i] = false;
 

@@ -15,13 +15,13 @@
 #include "Controllable.h"
 
 Input::Input()
-	: m_inputState(0)
 {
+	m_inputState = 0;
 	memset(m_keyState, 0, Key::NUM_SCANCODES);
 	m_mouse.x = 0;
 	m_mouse.y = 0;
 	m_cursor = 0;
-
+	m_cursorVisiblity = true;
 }
 
 Input::~Input()
@@ -131,6 +131,25 @@ void Input::removeControllable(Controllable *controllable)
 	m_controllables.remove(controllable);
 }
 
+bool Input::isCursorVisible()
+{
+	return m_cursorVisiblity;
+}
+
+void Input::showCursor(bool state)
+{
+	SDL_ShowCursor(state ? 1 : 0);
+	m_cursorVisiblity = state;
+	
+	SDL_SetRelativeMouseMode(m_cursorVisiblity ? SDL_FALSE : SDL_TRUE);
+
+	if (!m_cursorVisiblity)
+	{
+		for (uint32 i = 0; i < MouseButton::Count; ++i)
+			m_mouseBtnState[i] = false;
+	}
+}
+
 void Input::setCursor(Cursor::Type type)
 {
 	if (m_cursor)
@@ -139,14 +158,14 @@ void Input::setCursor(Cursor::Type type)
 		m_cursor = 0;
 	}
 
-	if (type == Cursor::Hand)
+	SDL_SystemCursor cursor = SDL_SYSTEM_CURSOR_ARROW;
+	switch (type)
 	{
-		m_cursor = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_HAND);
-	}
-	else
-	{
-		m_cursor = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_ARROW);
+	case Cursor::Hand:
+		cursor = SDL_SYSTEM_CURSOR_HAND;
+		break;
 	}
 
+	m_cursor = SDL_CreateSystemCursor(cursor);
 	SDL_SetCursor(m_cursor);
 }

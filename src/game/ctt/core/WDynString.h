@@ -32,9 +32,9 @@ private:
 	{
 		if (m_buffer)
 		{
-			delete[] m_buffer;
-			m_buffer = 0;
+			delete[] m_buffer;			
 		}
+		m_buffer = 0;
 		m_size = 0;
 	}
 public:
@@ -128,7 +128,6 @@ public:
 		return append(rhs);
 	}
 
-
 	WDynString& operator+=(const widechar c)
 	{		
 		widechar s[2] = { c, 0 };
@@ -155,7 +154,7 @@ public:
 
 	size_t getSize()
 	{
-		return m_size;
+		return m_size + 1;
 	}
 
 	size_t getLength() const
@@ -165,7 +164,7 @@ public:
 
 	void reset()
 	{
-		clear();
+		delete[] m_buffer;
 		m_buffer = new widechar[1];
 		m_buffer[0] = '\0';
 		m_size = 0;
@@ -178,30 +177,18 @@ public:
 
 	size_t find(widechar c)
 	{
-		widechar *buffer = m_buffer;
-		size_t index = 0;
-		while (*buffer)
-		{
-			if (*buffer == c)
-				return index;
-
-			*buffer++;
-			index++;
-		}
+		for (size_t i = 0; i < m_size + 1; ++i)
+			if (m_buffer[i] == c)
+				return i;
 		return -1;
 	}
 
 	size_t find(const WDynString& string)
 	{
-		widechar *buffer = m_buffer;
-		size_t index = 0;
-		while (*buffer)
+		for(size_t i = 0; i < m_size+1; ++i)
 		{
-			if (!wcsncmp(buffer, string.get(), string.getLength()))
-				return index;
-
-			*buffer++;
-			index++;
+			if (!wcsncmp(m_buffer+i, string.get(), string.getLength()))
+				return i;
 		}
 		return -1;
 	}

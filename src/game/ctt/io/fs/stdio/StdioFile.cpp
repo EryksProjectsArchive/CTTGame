@@ -91,10 +91,11 @@ namespace Stdio
 		if (m_isLoaded)
 		{
 			seek(0, SeekOrigin::End);
-			long size = tell();
+			int32 size = tell();
 			rewind();
 
 			char *buffer = new char[size + 1];
+			memset(buffer, 0, size);
 			read(buffer, size, sizeof(char));
 			buffer[size] = '\0';
 

@@ -16,30 +16,51 @@
 
 #include "renderer/Renderer.h"
 
-VertexShader::VertexShader(const char * source) : Shader(source)
+#include <io/fs/FileSystem.h>
+
+VertexShader::VertexShader(const FilePath& source) : Shader(source)
+{	
+}
+
+VertexShader::~VertexShader()
 {
-	FILE *shaderFile = fopen(source, "r");
-	if (shaderFile)
+	if (m_shaderId)
+	{
+		Renderer::glDeleteShader(m_shaderId);
+		m_shaderId = 0;
+	}
+}
+
+bool VertexShader::compile()
+{
+	if (m_isCompiled)
+	{
+		Warning("VertexShader", "Tried to compile shader twice. '%s'", m_sourcePath.get());
+		return true;
+	}
+	
+	bool success = false;
+
+	File *file = FileSystem::get()->open(m_sourcePath, FileOpenMode::Read);
+	if (file && file->isLoaded())
 	{
 		m_shaderId = Renderer::glCreateShader(GL_VERTEX_SHADER);
 
-		char * shaderSource = 0;
-		unsigned int shaderLength = 0;
+		DynString source = file->getContent();
 
-		fseek(shaderFile, 0, SEEK_END);
-		shaderLength = ftell(shaderFile);
-		rewind(shaderFile);
-		shaderSource = new char[shaderLength];
-		memset(shaderSource, 0, shaderLength);
-		fread(shaderSource, sizeof(char), shaderLength, shaderFile);
-		shaderSource[shaderLength - 1] = '\0';
-
-		Renderer::glShaderSource(m_shaderId, 1, (const GLchar **)&shaderSource, (const GLint *)&shaderLength);
+		// Find any better way to do that.
+		size_t length = source.getLength();
+		char *sourceTmp = new char[length + 1];
+		memset(sourceTmp, 0, length);
+		strcpy(sourceTmp, source.get());
+		sourceTmp[length] = '\0';
+		
+		Renderer::glShaderSource(m_shaderId, 1, (const GLchar **)&sourceTmp, (const GLint *)&length);
 		Renderer::glCompileShader(m_shaderId);
 
-		GLint success = 0;
-		Renderer::glGetShaderiv(m_shaderId, GL_COMPILE_STATUS, &success);
-		if (success == GL_FALSE)
+		GLint params = 0;
+		Renderer::glGetShaderiv(m_shaderId, GL_COMPILE_STATUS, &params);
+		if (params == GL_FALSE)
 		{
 			GLint maxLength = 0;
 			Renderer::glGetShaderiv(m_shaderId, GL_INFO_LOG_LENGTH, &maxLength);
@@ -48,9 +69,9 @@ VertexShader::VertexShader(const char * source) : Shader(source)
 			char *errorLog = new char[maxLength + 1];
 
 			Renderer::glGetShaderInfoLog(m_shaderId, maxLength, &maxLength, errorLog);
-			errorLog[maxLength] = '\0';
+			//errorLog[maxLength] = '\0';
 
-			Error("shader", "Compilation error (%s):", source);
+			Error("VertexShader", "Compilation error (%s):", m_sourcePath.get());
 
 			char *lineBuffer = errorLog;
 			uint32 startIndex = 0;
@@ -62,7 +83,7 @@ VertexShader::VertexShader(const char * source) : Shader(source)
 					char *line = new char[length];
 					memcpy(line, lineBuffer + startIndex, length - 1);
 					line[length - 1] = '\0';
-					Error("shader", line);
+					Error("VertexShader", line);
 					startIndex = i + 1;
 					delete[]line;
 				}
@@ -74,21 +95,17 @@ VertexShader::VertexShader(const char * source) : Shader(source)
 			//Exit with failure.
 			Renderer::glDeleteShader(m_shaderId); //Don't leak the shader.
 		}
-		else {
-			Debug("shader", "Compilation success '%s'.", source);
+		else 
+		{
+			Debug("VertexShader", "Compilation success '%s'.", m_sourcePath.get());
+			success = true;
+			m_isCompiled = 1;
 		}
 
 
-		delete[] shaderSource;
-		fclose(shaderFile);
+		delete[]sourceTmp;
+		sourceTmp = 0;
 	}
-}
-
-VertexShader::~VertexShader()
-{
-	if (m_shaderId)
-	{
-		Renderer::glDeleteShader(m_shaderId);
-		m_shaderId = 0;
-	}
+	FileSystem::get()->close(file);
+	return success;
 }

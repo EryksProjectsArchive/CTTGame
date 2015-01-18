@@ -18,8 +18,10 @@
 class FragmentShader : public Shader
 {
 public:
-	FragmentShader(const char * source);
+	FragmentShader(const FilePath& source);
 	virtual ~FragmentShader();
+
+	virtual bool compile();
 };
 
 typedef FragmentShader PixelShader;

@@ -46,7 +46,7 @@ public:
 	~ShaderProgram();
 
 	void attachShader(Shader * shader);
-	void link();
+	bool link();
 
 	uint32 getUniformLocation(const char *name);
 	uint32 getAttributeLocation(const char *name);

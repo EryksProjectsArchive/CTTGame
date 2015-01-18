@@ -21,6 +21,7 @@
 #include "../UIEventHandler.h"
 
 #include <graphics/Geometry.h>
+#include <list>
 
 namespace UI
 {
@@ -29,14 +30,14 @@ namespace UI
 	private:
 		WDynString m_text;
 		Geometry<Vertex2d>* m_geometry;
-		Material *m_material;
+		Material* m_material;
 
-		Font *m_font;
+		Font* m_font;
 		bool m_pressed;
 
 		struct OnPressData
 		{
-			EventHandler * handler;
+			EventHandler* handler;
 			EventHandler::eventCallback callback;
 			EventHandler::eventCallbackEmpty callbackEmpty;
 
@@ -54,13 +55,24 @@ namespace UI
 				callbackEmpty = data.callbackEmpty;
 			}
 
-			void call(UI::Control * source)
-			{
-				if (callbackEmpty)
-					(handler->*callbackEmpty)();
+			OnPressData& operator=(const OnPressData& data)
+			{	
+				handler = data.handler;
+				callback = data.callback;
+				callbackEmpty = data.callbackEmpty;
+				return *this;
+			}
 
-				if (callback)
-					(handler->*callback)(source);
+			void call(UI::Control * control)
+			{
+				if (handler)
+				{
+					if (callback)
+						(handler->*callback)(control);
+
+					if (callbackEmpty)
+						(handler->*callbackEmpty)();
+				}
 			}
 		};
 		List<OnPressData> m_onPressData;
@@ -82,6 +94,6 @@ namespace UI
 		void onPressSubscribe(EventHandler * handler, void (T::*fn)()) { onPressInternal(handler, static_cast<EventHandler::eventCallbackEmpty>(fn)); }		
 
 		template <typename T>
-		void onPressSubscribe(EventHandler * handler, void (T::*fn)(Control)) { onPressInternal(handler, static_cast<EventHandler::eventCallback>(fn)); }
+		void onPressSubscribe(EventHandler * handler, void (T::*fn)(Control* control)) { onPressInternal(handler, static_cast<EventHandler::eventCallback>(fn)); }
 	};
 }

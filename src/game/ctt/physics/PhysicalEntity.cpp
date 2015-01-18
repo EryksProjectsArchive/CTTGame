@@ -19,16 +19,16 @@
 PhysicalEntity::PhysicalEntity()
 	: m_rigidBody(0)
 {
-	Game::get()->getPhysicsWorld().registerEntity(this);
+	Game::get()->getPhysicsWorld()->registerEntity(this);
 }
 
 PhysicalEntity::~PhysicalEntity()
 {
-	Game::get()->getPhysicsWorld().unregisterEntity(this);
+	Game::get()->getPhysicsWorld()->unregisterEntity(this);
 
 	if (m_rigidBody)
 	{
-		Game::get()->getPhysicsWorld().unregisterRigidBody(m_rigidBody);
+		Game::get()->getPhysicsWorld()->unregisterRigidBody(m_rigidBody);
 
 		if (m_rigidBody->getCollisionShape())
 			delete m_rigidBody->getCollisionShape();
@@ -65,6 +65,9 @@ void PhysicalEntity::setPosition(Vector3 position)
 {	
 	if (m_rigidBody)
 	{
+		if (!m_rigidBody->isActive())
+			m_rigidBody->activate(true);
+
 		btTransform transform = m_rigidBody->getWorldTransform();
 		transform.setOrigin(btVector3(position.x, position.y, position.z));
 		m_rigidBody->setWorldTransform(transform);
@@ -85,6 +88,9 @@ void PhysicalEntity::setRotation(Quaternion rotation)
 {
 	if (m_rigidBody)
 	{
+		if (!m_rigidBody->isActive())
+			m_rigidBody->activate(true);
+
 		btTransform transform = m_rigidBody->getWorldTransform();
 		transform.setRotation(btQuaternion(rotation.x, rotation.y, rotation.z, rotation.w));
 		m_rigidBody->setWorldTransform(transform);
@@ -150,6 +156,7 @@ void PhysicalEntity::setupPhysics(btCollisionShape * shape)
 	m_collisionShape = shape;
 	if (m_rigidBody)
 	{
-		Game::get()->getPhysicsWorld().registerRigidBody(m_rigidBody);
+		Game::get()->getPhysicsWorld()->registerRigidBody(m_rigidBody);
+		m_rigidBody->setUserPointer(this);
 	}
 }

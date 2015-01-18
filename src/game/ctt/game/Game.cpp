@@ -87,10 +87,12 @@ public:
 
 class SpawnCommand : public Console::ICommand
 {
+private:
+	Game * m_game;
 public:
-	SpawnCommand() : Console::ICommand(L"spawn", L"Spawns an entity")
+	SpawnCommand(Game * game) : Console::ICommand(L"spawn", L"Spawns an entity")
 	{
-
+		m_game = game;
 	}
 
 	void onExecute(const WDynString& params)
@@ -99,12 +101,7 @@ public:
 		{
 			if (params == L"box")
 			{
-				BoxEntity * box = new BoxEntity();
-				box->setPosition(Vector3(0, 10, 0));
-				Game::get()->getScene().addEntity(box);
-
-				if (m_console)
-					m_console->output(Console::MessageType::Info, WString<128>(L"Spawned box (%d)!", box->getUID()));
+				m_game->spawnBox();
 			}
 			else 
 			{
@@ -122,17 +119,18 @@ public:
 
 
 Game::Game()
-	: Controllable(ControllableType::Engine), m_renderer(0), m_window(0), m_scene(0), m_physicsWorld(0), m_config(0), m_console(new Console()), m_ui(0), m_box(0)
+	: Controllable(ControllableType::Engine), m_renderer(0), m_window(0), m_scene(0), m_physicsWorld(0), m_config(0), m_console(new Console()), m_ui(0)
 {
 	m_console->addCommand(new ConsoleQuitCommand());
-	m_console->addCommand(new SpawnCommand());
+	m_console->addCommand(new SpawnCommand(this));
+	m_currentPickedEntity = 0;
+	m_hoverDistance = 10.0f;
 
 	s_instance = this;
 }
 
 Game::~Game()
 {
-	m_box = 0;
 	if (gFont)
 	{
 		delete gFont;
@@ -275,30 +273,6 @@ bool Game::init()
 	if (Config::get()["engine"]["console"].getBool(false))	
 		m_console->init();
 
-	// EVERYTHING FROM ENGINE IS INITIALIZED WE CAN SETUP EVERYTHING BELLOW
-
-	/*Entity *entity = new Entity(EntityType::Dummy);	
-	m_scene->addEntity(entity);
-
-	CrossroadEntity * crossroad = new CrossroadEntity();
-	m_scene->addEntity(crossroad);
-
-	crossroad = new CrossroadEntity();
-	crossroad->setPosition(Vector3(37.153f, 0, 0));
-	m_scene->addEntity(crossroad);
-
-	crossroad = new CrossroadEntity();
-	crossroad->setPosition(Vector3(-37.153f, 0, 0));
-	m_scene->addEntity(crossroad);
-
-	crossroad = new CrossroadEntity();
-	crossroad->setPosition(Vector3(0, 0, 37.153f));
-	m_scene->addEntity(crossroad);
-
-	crossroad = new CrossroadEntity();
-	crossroad->setPosition(Vector3(0, 0, -37.153f));
-	m_scene->addEntity(crossroad);
-	*/
 	BoxEntity *testEntity = 0;
 	for (int i = 0; i < 10; ++i)
 	{
@@ -306,10 +280,6 @@ bool Game::init()
 		testEntity->setPosition(Vector3(0, testEntity->getHeight() + (i * (testEntity->getHeight() + 0.5f)), 0));
 		m_scene->addEntity(testEntity);
 	}
-
-	/*m_box = new CrossroadEntity();
-	m_box->setPosition(Vector3(0,0,0));
-	m_scene->addEntity(m_box);*/
 
 	Environment::get()->setSunPosition(Vector3(30.0f, 10.0f, 0.0f));
 
@@ -348,7 +318,7 @@ void Game::spawnBox()
 {
 	BoxEntity * box = new BoxEntity();
 	box->setPosition(Vector3(0, 10, 0));
-	Game::get()->getScene().addEntity(box);
+	m_scene->addEntity(box);
 
 	if (m_console)
 		m_console->output(Console::MessageType::Info, WString<128>(L"Spawned box (%d)!", box->getUID()));
@@ -359,19 +329,49 @@ void Game::update(double deltaTime)
 	if (Camera::current)
 	{
 		Camera::current->update(float(deltaTime));
-
-		/*if (!((EditorFreeCamera *)Camera::current)->isMoving())
-		{
+		{		
 			int32 x, y;
-			SDL_GetMouseState(&x, &y);
+			if (((EditorFreeCamera *)Camera::current)->isMoving())
+			{
+				x = m_window->getWidth() / 2;
+				y = m_window->getHeight() / 2;
+			}
+			else 
+			{
+				SDL_GetMouseState(&x, &y);
+			}
 
 			Vector3 pos = glm::unProject(glm::vec3(x, m_renderer->getViewportAsVector().w - y, 1), glm::mat4() * Camera::current->getViewMatrix(), m_renderer->getProjectionMatrix(), m_renderer->getViewportAsVector());
 
-			Vector3 res;
-			m_physicsWorld->rayTest(Camera::current->getPosition(), pos, &res);
+			if (!((EditorFreeCamera *)Camera::current)->isMoving() && Input::get()->isMouseBtnPressed(MouseButton::Left) && !m_currentPickedEntity)
+			{
+				m_hoverDistance = 10.f;
+				PhysicalEntity *entity = 0;
+				Vector3 res;
+				if (m_physicsWorld->rayTest(Camera::current->getPosition(), pos, &res, &entity))
+				{
+					if (entity)
+						m_currentPickedEntity = entity;
+				}
+			}
 
-			m_box->setPosition(res);
-		}*/
+			if(Input::get()->isKeyDown(Key::SCANCODE_LSHIFT) && m_currentPickedEntity) 
+			{
+				m_currentPickedEntity = 0;
+			}
+
+			if (m_currentPickedEntity)
+			{
+				Vector3 newPos = Camera::current->getPosition() - glm::normalize(Camera::current->getPosition() - pos) * Vector3(m_hoverDistance);
+				/*Vector3 res;
+				if (m_physicsWorld->rayTest(Camera::current->getPosition(), newPos, &res))
+				{
+					newPos = res;
+				}*/
+
+				m_currentPickedEntity->setPosition(newPos);
+			}
+		}
 	}
 
 	m_physicsWorld->pulse(float(deltaTime));
@@ -480,19 +480,28 @@ void Game::onMouseButtonEvent(uint8 button, bool state, uint8 clicks, sint32 x, 
 	}
 }
 
-PhysicsWorld& Game::getPhysicsWorld()
+void Game::onMouseScroll(sint32 horizontal, sint32 vertical)
 {
-	return *m_physicsWorld;
+	if (vertical > 0) m_hoverDistance += 1.0f;
+	else if (vertical < 0) m_hoverDistance -= 1.0f;
+
+	if (m_hoverDistance < 3.0f)
+		m_hoverDistance = 3.0f;
 }
 
-UI::Manager& Game::getUI()
+PhysicsWorld* Game::getPhysicsWorld()
 {
-	return *m_ui;
+	return m_physicsWorld;
 }
 
-Scene& Game::getScene()
+UI::Manager* Game::getUI()
 {
-	return *m_scene;
+	return m_ui;
+}
+
+Scene* Game::getScene()
+{
+	return m_scene;
 }
 
 Game * Game::get()

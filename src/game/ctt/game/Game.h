@@ -21,7 +21,10 @@
 
 #include <graphics/ui/UIEventHandler.h>
 
-class Game : public Application, public Controllable, public UI::EventHandler
+class Game : 
+	public UI::EventHandler,
+	public Application, 
+	public Controllable
 {
 private:
 	static Game *s_instance;
@@ -32,9 +35,11 @@ private:
 	PhysicsWorld* m_physicsWorld;
 	Config* m_config;
 	class Console* m_console;
-	class CrossroadEntity* m_box;
 
 	UI::Manager* m_ui;
+
+	class PhysicalEntity * m_currentPickedEntity;
+	float m_hoverDistance;
 public:
 	Game();
 	~Game();
@@ -49,10 +54,11 @@ public:
 
 	void onKeyEvent(Key::Type key, bool state) override;
 	void onMouseButtonEvent(uint8 button, bool state, uint8 clicks, sint32 x, sint32 y) override;
+	void onMouseScroll(sint32 horizontal, sint32 vertical) override;
 
-	PhysicsWorld& getPhysicsWorld();
-	UI::Manager& getUI();
-	Scene& getScene();
+	PhysicsWorld* getPhysicsWorld();
+	UI::Manager* getUI();
+	Scene* getScene();
 
 	static Game* get();
 };

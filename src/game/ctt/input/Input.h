@@ -56,6 +56,7 @@ private:
 	int32 m_inputState;
 
 	struct SDL_Cursor *m_cursor;
+	bool m_cursorVisiblity;
 public:
 	Input();
 	~Input();
@@ -76,6 +77,8 @@ public:
 	sint32 getMouseX();
 	sint32 getMouseY();
 
+	bool isCursorVisible();
+	void showCursor(bool state);
 	void setCursor(Cursor::Type type);
 private:
 	void addControllable(Controllable *controllable);

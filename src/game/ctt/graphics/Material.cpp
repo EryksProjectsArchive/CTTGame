@@ -80,12 +80,12 @@ bool Material::load()
 
 		if (m_hasVertexShader)
 		{
-			m_program->attachShader(new VertexShader(FilePath("../../data/shaders/%s.vert", m_vertexShaderName.get())));
+			m_program->attachShader(new VertexShader(FilePath("shaders/%s.vert", m_vertexShaderName.get())));
 		}
 
 		if (m_hasFragmentShader)
 		{
-			m_program->attachShader(new FragmentShader(FilePath("../../data/shaders/%s.frag",m_fragmentShaderName.get())));
+			m_program->attachShader(new FragmentShader(FilePath("shaders/%s.frag",m_fragmentShaderName.get())));
 		}
 
 		m_program->link();

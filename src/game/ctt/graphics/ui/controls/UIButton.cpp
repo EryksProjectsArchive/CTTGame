@@ -62,6 +62,7 @@ namespace UI
 			delete m_geometry;
 			m_geometry = 0;
 		}
+		m_onPressData.clear();
 	}
 
 	void Button::setText(const WDynString& text)
@@ -81,9 +82,7 @@ namespace UI
 
 		Rect rct(m_position.x, m_position.y, m_position.x + m_size.x, m_position.y + m_size.y);
 
-		m_font->render(m_text, rct, m_focus ? Color(1, 0, 0, 1) : Color(1, 1, 1, 1), Font::DrawFlags::HorizontalCenter | Font::DrawFlags::VerticalCenter);
-
-		
+		m_font->render(m_text, rct, m_focus ? Color(1, 0, 0, 1) : Color(1, 1, 1, 1), Font::DrawFlags::HorizontalCenter | Font::DrawFlags::VerticalCenter);		
 	}
 
 	bool Button::handleInput()
@@ -93,6 +92,9 @@ namespace UI
 
 		if (Control::handleInput())
 			return true;
+
+		if (!Input::get()->isCursorVisible())
+			return false;
 
 		Rect rct(m_position.x, m_position.y, m_position.x + m_size.x, m_position.y + m_size.y);
 
@@ -113,8 +115,10 @@ namespace UI
 		bool leftButtonState = Input::get()->isMouseBtnPressed(MouseButton::Left);	
 		if (m_focus && !m_pressed && leftButtonState)
 		{
-			for (OnPressData data : m_onPressData)
-				data.call(this);
+			for (OnPressData& data : m_onPressData)
+			{
+				data.call(this);				
+			}
 
 			m_pressed = true;
 			return true;
@@ -132,6 +136,7 @@ namespace UI
 		data.handler = handler;
 		data.callback = fn;
 		m_onPressData.pushBack(data);
+		handler->registerCaller(this);
 	}
 
 	void Button::onPressInternal(EventHandler * handler, EventHandler::eventCallbackEmpty fn)
@@ -140,5 +145,6 @@ namespace UI
 		data.handler = handler;
 		data.callbackEmpty = fn;
 		m_onPressData.pushBack(data);
+		handler->registerCaller(this);
 	}
 };

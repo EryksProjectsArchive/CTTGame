@@ -33,7 +33,7 @@ ShaderProgram::~ShaderProgram()
 		m_uniformsCount = 0;
 	}
 
-	for (auto shader : m_shaders)
+	for (Shader* shader : m_shaders)
 		delete shader;
 
 	m_shaders.clear();
@@ -41,9 +41,21 @@ ShaderProgram::~ShaderProgram()
 
 void ShaderProgram::attachShader(Shader * shader)
 {
+	if (!shader)
+	{
+		Error("ShaderProgram", "Trying to add non existing shader.");
+		return;
+	}
+
+	// Compile shader
+	if (!shader->compile())
+	{
+		Error("ShaderProgram", "Unable to compile shader.");
+		return;
+	}
+
 	m_shaders.pushBack(shader);	
 }
-
 
 void ShaderProgram::begin()
 {
@@ -60,8 +72,16 @@ bool ShaderProgram::isValid()
 	return Renderer::glIsProgram(m_programId) != 0;
 }
 
-void ShaderProgram::link()
+bool ShaderProgram::link()
 {
+	if (!m_shaders.size())
+	{
+		Error("ShaderProgram", "Unable to link program. No shaders attached.");
+		return false;
+	}
+
+	bool success = true;
+
 	for (auto shader : m_shaders)
 	{
 		Renderer::glAttachShader(m_programId, shader->m_shaderId);
@@ -69,18 +89,18 @@ void ShaderProgram::link()
 
 	Renderer::glLinkProgram(m_programId);
 
-	GLint success = 0;
-	Renderer::glGetProgramiv(m_programId, GL_LINK_STATUS, &success);
-	if (success == GL_FALSE)
+	GLint params = 0;
+	Renderer::glGetProgramiv(m_programId, GL_LINK_STATUS, &params);
+	if (params == GL_FALSE)
 	{
 		GLint maxLength = 0;
 		Renderer::glGetProgramiv(m_programId, GL_INFO_LOG_LENGTH, &maxLength);
 
 		char *errorLog = new char[maxLength + 1];
-
 		Renderer::glGetProgramInfoLog(m_programId, maxLength, &maxLength, errorLog);
+		errorLog[maxLength] = '\0';
 
-		Error("Program", "Linker error:");
+		Error("ShaderProgram", "Linker error:");
 
 		char *lineBuffer = errorLog;
 		uint32 startIndex = 0;
@@ -99,12 +119,14 @@ void ShaderProgram::link()
 		}
 
 		delete[]errorLog;
+		success = false;
 	}
 
 	for (auto shader : m_shaders)
 	{
 		Renderer::glDetachShader(m_programId, shader->m_shaderId);
 	}
+	return success;
 }
 
 unsigned int ShaderProgram::getUniformLocation(const char *name)

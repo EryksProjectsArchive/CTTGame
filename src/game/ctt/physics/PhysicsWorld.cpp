@@ -131,7 +131,7 @@ void PhysicsWorld::unregisterRigidBody(btRigidBody *rigidBody)
 		m_dynamicsWorld->removeRigidBody(rigidBody);
 }
 
-bool PhysicsWorld::rayTest(Vector3 begin, Vector3 end, Vector3 * position)
+bool PhysicsWorld::rayTest(Vector3 begin, Vector3 end, Vector3 * position, PhysicalEntity ** entity)
 {
 	if (m_dynamicsWorld)
 	{
@@ -142,7 +142,10 @@ bool PhysicsWorld::rayTest(Vector3 begin, Vector3 end, Vector3 * position)
 		{
 			position->x = result.m_hitPointWorld.x();
 			position->y = result.m_hitPointWorld.y();
-			position->z = result.m_hitPointWorld.z();			
+			position->z = result.m_hitPointWorld.z();	
+
+			if (entity)
+				*entity = (PhysicalEntity *)result.m_collisionObject->getUserPointer();
 			return true;
 		}
 	}

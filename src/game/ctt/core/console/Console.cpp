@@ -146,7 +146,7 @@ void Console::onKeyEvent(Key::Type key, bool pressed)
 				bool commandExecuted = false;
 				
 				size_t space = m_inputBuffer.find(' ');
-				WDynString commandName = m_inputBuffer.substr(0, space!=-1?space:m_inputBuffer.getLength());
+				WDynString commandName = m_inputBuffer.substr(0, (space != -1) ? space : m_inputBuffer.getLength());
 				WDynString params = m_inputBuffer.substr(space+1, m_inputBuffer.getLength());
 				for (ICommand *command : m_commands)
 				{
@@ -333,7 +333,7 @@ void Console::render(Renderer *renderer)
 		m_timeToCursorBlink -= Timer::getDeltaTime();
 		if (m_timeToCursorBlink <= 0.0f)
 		{
-			m_cursor = m_cursor == '|' ? ' ' : '|';
+			m_cursor = ((m_cursor == '|') ? ' ' : '|');
 			m_timeToCursorBlink = 0.35f;
 		}
 		
