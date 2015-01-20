@@ -456,6 +456,9 @@
     <ClCompile Include="graphics\ui\controls\UIView.cpp">
       <Filter>Source Files\graphics\ui\controls</Filter>
     </ClCompile>
+    <ClCompile Include="core\threading\Mutex.cpp">
+      <Filter>Source Files\core\threading</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="os\OS.h">
@@ -748,6 +751,12 @@
     </ClInclude>
     <ClInclude Include="graphics\ui\controls\UIView.h">
       <Filter>Header Files\graphics\ui\controls</Filter>
+    </ClInclude>
+    <ClInclude Include="core\threading\Mutex.h">
+      <Filter>Header Files\core\threading</Filter>
+    </ClInclude>
+    <ClInclude Include="core\threading\AutoLock.h">
+      <Filter>Header Files\core\threading</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

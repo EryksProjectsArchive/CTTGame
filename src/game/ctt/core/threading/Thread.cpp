@@ -23,14 +23,16 @@ Thread::~Thread()
 	this->end(true);
 }
 
-void Thread::setUserData(void *userData)
+template <typename T>
+void Thread::setUserData(T *userData)
 {
-	m_data.m_userData = userData;
+	m_data.m_userData = (void *)userData;
 }
 
-void* Thread::getUserData()
+template <typename T>
+T* Thread::getUserData()
 {
-	return m_data.m_userData;
+	return (T *)m_data.m_userData;
 }
 
 bool Thread::start()

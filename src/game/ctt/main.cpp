@@ -9,36 +9,45 @@
 //
 //////////////////////////////////////////////
 
+// Application stuffs.
 #include <game/Game.h>
+
+// Engine stuffs.
 #include <core/ExceptionHandler.h>
 
-#include <list>
-#include <stdio.h>
-#include <cstring>
+#include <os/OS.h>
 
-#undef _WIN32
 #ifdef _WIN32
 int __stdcall WinMain(HINSTANCE, HINSTANCE, char*, int)
 #else
 int main()
 #endif
 {
+	// Initialize exception handler
 	ExceptionHandler::init();
-	{
-#ifdef EDITOR
-		//Application *app = new Editor();
-		// TODO
-#else
-		Application *app = new Game();
-#endif
-		if (app->init()) 
-			while (app->pulse());
 
-		delete app;
+	// Initialize time
+	OS::initTime();
+
+#ifdef EDITOR
+	//Application *app = new Editor();
+#else
+	Application *app = new Game();
+#endif
+	if (app->init())
+	{
+		while (app->pulse());
 	}
+
+	delete app;
 
 #ifdef _MEM_LEAKS_DEBUG
 	_CrtDumpMemoryLeaks();
 #endif
+
+#ifdef _WIN32
+	return S_OK;
+#else
 	return 1;
+#endif
 }

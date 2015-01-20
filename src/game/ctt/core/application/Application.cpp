@@ -29,9 +29,6 @@ bool Application::init()
 	if (m_isInitialized)
 		return false;
 
-	// Time
-	OS::initTime();
-
 	m_time = double(OS::getMicrosecondsCount() / 1000000);
 	m_accumulator = 0.0;
 	m_deltaTime = 1 / 60.0f;

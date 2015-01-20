@@ -50,6 +50,7 @@ public:
 		m_size = 0;
 	}
 
+
 	~List()
 	{
 		clear();

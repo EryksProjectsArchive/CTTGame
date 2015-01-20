@@ -23,8 +23,11 @@ public:
 	Thread(void(*callback)(void * data));
 	~Thread();
 
-	void setUserData(void* userData);
-	void* getUserData();
+	template <typename T>
+	void setUserData(T* userData);
+
+	template <typename T>
+	T* getUserData();
 
 	bool start();
 	bool end(bool force = false);

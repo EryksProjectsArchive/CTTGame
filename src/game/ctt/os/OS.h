@@ -14,18 +14,41 @@
 #include <Prerequisites.h>
 
 #include <core/String.h>
+#include <core/DynString.h>
 
 #ifdef _WIN32
 #include <Windows.h>
 #endif
 
+#ifdef _WIN32
+#define MUTEX_WAIT_INFIITE INFINITE
+
+#define USE_CRITICAL_SECTIONS 1
+#else
+#define MUTEX_WAIT_INFINITE ((uint32)-1)
+#endif
 namespace OS
 {
 #ifdef _WIN32
+	// Threads
 	typedef HANDLE ThreadHandle;
+
+#ifdef USE_CRITICAL_SECTIONS 
+	// Mutexes
+	typedef CRITICAL_SECTION MutexHandle;
+#else
+	typedef HANDLE MutexHandle;
+#endif
 #else
 	// TODO
 #endif
+
+	void initializeMutex(MutexHandle* mutex, const DynString& name = "");
+	void destroyMutex(MutexHandle* mutex);
+	void lockMutex(MutexHandle *mutex, uint32 waitTime);
+	void unlockMutex(MutexHandle *mutex);
+	bool tryLockMutex(MutexHandle *mutex);
+
 	// Threads
 	typedef void(*pfnThreadCallback)(void * data);
 
@@ -34,8 +57,7 @@ namespace OS
 		pfnThreadCallback m_callback;
 		void* m_userData;
 	};
-
-	
+		
 	ThreadHandle createThread(ThreadRunData *data);
 	bool terminateThread(ThreadHandle handle, uint32 exitCode);
 	uint32 waitForThread(ThreadHandle handle, uint32 interval);

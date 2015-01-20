@@ -172,6 +172,7 @@
     <ClCompile Include="core\console\Console.cpp" />
     <ClCompile Include="core\ExceptionHandler.cpp" />
     <ClCompile Include="core\Logger.cpp" />
+    <ClCompile Include="core\threading\Mutex.cpp" />
     <ClCompile Include="core\threading\Thread.cpp" />
     <ClCompile Include="core\Timer.cpp" />
     <ClCompile Include="game\environment\Environment.cpp" />
@@ -254,6 +255,8 @@
     <ClInclude Include="core\Singleton.h" />
     <ClInclude Include="core\String.h" />
     <ClInclude Include="core\StringUtilities.h" />
+    <ClInclude Include="core\threading\AutoLock.h" />
+    <ClInclude Include="core\threading\Mutex.h" />
     <ClInclude Include="core\threading\Thread.h" />
     <ClInclude Include="core\Timer.h" />
     <ClInclude Include="core\WDynString.h" />

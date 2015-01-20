@@ -35,7 +35,71 @@
 
 namespace OS
 {
-	static void runThread(void *data)
+	// Mutexes
+	void initializeMutex(MutexHandle* mutex, const DynString& name)
+	{
+		if (mutex)
+		{
+#ifdef USE_CRITICAL_SECTIONS
+			InitializeCriticalSection(mutex);
+#else
+			*mutex = CreateMutex(NULL, FALSE, name.getLength() > 0 ? name.get() : NULL);
+#endif
+		}
+	}
+
+	void destroyMutex(MutexHandle* mutex)
+	{
+		if (mutex)
+		{
+#ifdef USE_CRITICAL_SECTIONS
+			DeleteCriticalSection(mutex);
+#else
+			CloseHandle(*mutex);
+			*mutex = 0;
+#endif
+		}
+	}
+
+	void lockMutex(MutexHandle *mutex, uint32 waitTime)
+	{
+		if (mutex)
+		{
+#ifdef USE_CRITICAL_SECTIONS
+			EnterCriticalSection(mutex);
+#else
+			WaitForSingleObject(*mutex, waitTime);
+#endif
+		}
+	}
+
+	void unlockMutex(MutexHandle *mutex)
+	{
+		if (mutex)
+		{
+#ifdef USE_CRITICAL_SECTIONS
+			LeaveCriticalSection(mutex);
+#else
+			ReleaseMutex(*mutex);
+#endif
+		}
+	}
+
+	bool tryLockMutex(MutexHandle *mutex)
+	{
+		if (mutex)
+		{
+#ifdef USE_CRITICAL_SECTIONS
+			return TryEnterCriticalSection(mutex) == TRUE;
+#else
+			return WaitForSingleObject(*mutex, 0) == WAIT_OBJECT_0;
+#endif
+		}
+		return false;
+	}
+
+	// Threads
+	void runThread(void *data)
 	{
 		ThreadRunData *runData = (ThreadRunData *)data;
 		if (runData)
@@ -92,11 +156,10 @@ namespace OS
 		return false;
 	}
 
-	static FilePath g_homePath;
 	FilePath getAppPath()
 	{
 #ifdef _WIN32
-		static char path[MAX_PATH] = { 0 };
+		char path[MAX_PATH] = { 0 };
 		GetModuleFileName(NULL, path, MAX_PATH);
 		for (size_t i = strlen(path); i > 0; i--)
 		{
@@ -112,9 +175,10 @@ namespace OS
 #endif
 	}
 
+	static FilePath g_homePath;
 	FilePath initHomePath(const char *appName)
 	{
-		static char myDocuments[MAX_PATH] = { 0 };
+		char myDocuments[MAX_PATH] = { 0 };
 		
 #ifdef _WIN32
 		HRESULT hResult = SHGetFolderPath(NULL, CSIDL_PERSONAL, NULL, SHGFP_TYPE_CURRENT, (LPSTR)myDocuments);
