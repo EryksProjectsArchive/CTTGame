@@ -235,6 +235,9 @@
     <Filter Include="Source Files\core\threading">
       <UniqueIdentifier>{3b0a6aa0-0816-4c39-a899-76ef431939b3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\core\data">
+      <UniqueIdentifier>{eec465a0-8fed-440a-9220-3bc4b004c93c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -757,6 +760,9 @@
     </ClInclude>
     <ClInclude Include="core\threading\AutoLock.h">
       <Filter>Header Files\core\threading</Filter>
+    </ClInclude>
+    <ClInclude Include="core\data\ProtectedData.h">
+      <Filter>Header Files\core\data</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

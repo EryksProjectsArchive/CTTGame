@@ -243,6 +243,7 @@
     <ClInclude Include="core\application\Application.h" />
     <ClInclude Include="core\Array.h" />
     <ClInclude Include="core\console\Console.h" />
+    <ClInclude Include="core\data\ProtectedData.h" />
     <ClInclude Include="core\DynArray.h" />
     <ClInclude Include="core\DynString.h" />
     <ClInclude Include="core\ExceptionHandler.h" />
