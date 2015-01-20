@@ -25,6 +25,20 @@ public:
 	{
 	}
 
+	ProtectedData(const ProtectedData& data)
+	{
+		m_data = data.m_data;
+	}
+
+	~ProtectedData()
+	{
+	}
+
+	ProtectedData& operator=(ProtectedData& data)
+	{
+		m_data = data.m_data;
+	}
+
 	void set(T data)
 	{
 		uint8 *inBuffer = (uint8 *)&data;
