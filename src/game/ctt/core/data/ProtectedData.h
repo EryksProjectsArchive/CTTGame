@@ -41,37 +41,27 @@ public:
 
 	void set(T data)
 	{
-		uint8 *inBuffer = (uint8 *)&data;
-		uint8 *buffer = (uint8 *)&m_data;
 		for (uint32 i = 0; i < sizeof(T); ++i)
-		{
-			uint8 inByte = *(uint8 *)(inBuffer + i);
-			*(uint8 *)(buffer + i) = ~(inByte ^ g_protectMagic);
-		}
+			*((uint8 *)&m_data + i) = ~(*((uint8 *)&data + i) ^ g_protectMagic);
 	}
 
 	T get()
 	{
 		uint8 outBuffer[sizeof(T)] = { 0 };
-		uint8 * buffer = (uint8 *)&m_data;
 		for (uint32 i = 0; i < sizeof(T); ++i)
-		{
-			uint8 byte = *(uint8 *)(buffer + i);
-			outBuffer[i] = ~(byte ^ g_protectMagic);
-		}
-
+			*((uint8 *)&outBuffer + i) = ~(*((uint8 *)&m_data + i) ^ g_protectMagic);
 		return *(T *)outBuffer;
 	}
 
 	inline T val() 
 	{
-		return get() 
-	};
+		return get();
+	}
 
 	inline T value() 
 	{
 		return get();
-	};
+	}
 
 	ProtectedData& operator=(T value)
 	{
