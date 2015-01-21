@@ -18,18 +18,18 @@ RenderContext::RenderContext()
 
 RenderContext::~RenderContext()
 {
-	for (RenderTask* task : m_renderTasks)
+	Renderer * renderer = Renderer::get();
+	for (uint32 i = 0; i < RENDER_PRIORITY_COUNT; ++i)
 	{
-		Renderer::get()->setMaterial(task->m_material);
-		Renderer::get()->renderGeometry(task->m_geometry, task->m_matrix);
-		delete task;
+		while (m_task[i].size() > 0)
+		{
+			BaseRenderTask *task = m_task[i].front();
+			if (task)
+			{
+				task->performRender(renderer);
+				delete task;
+			}
+			m_task[i].popFront();
+		}
 	}
-	m_renderTasks.clear();
-}
-
-RenderTask * RenderContext::newTask()
-{
-	RenderTask *task = new RenderTask();
-	m_renderTasks.pushBack(task);
-	return task;
 }

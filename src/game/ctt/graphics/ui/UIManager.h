@@ -43,6 +43,6 @@ namespace UI
 
 		void handleInput();
 
-		void render(UIRenderContext& context);
+		void render(RenderContext& context);
 	};
 };

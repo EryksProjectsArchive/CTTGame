@@ -86,7 +86,7 @@ namespace UI
 		virtual void setText(const WDynString& text);
 		virtual WDynString getText();
 
-		virtual void render(UIRenderContext& context);
+		virtual void render(RenderContext& context);
 
 		virtual bool handleInput();
 

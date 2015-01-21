@@ -50,7 +50,6 @@
 #include <game/scene/entities/types/BallEntity.h>
 
 #include <graphics/fonts/Font.h>
-#include <graphics/renderer/UIRenderContext.h>
 
 #include "Game.h"
 #include "environment/Environment.h"
@@ -428,7 +427,7 @@ void Game::render()
 		// Draw UI
 		if (m_ui)
 		{
-			UIRenderContext context;
+			RenderContext context;
 			m_ui->render(context);
 		}
 

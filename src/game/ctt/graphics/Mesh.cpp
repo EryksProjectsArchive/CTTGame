@@ -20,6 +20,7 @@
 #include <core/Timer.h>
 
 #include <resources/materials/MaterialLib.h>
+#include <graphics/renderer/tasks/ModelRenderTask.h>
 
 Mesh::Mesh(mesh * meshData)
 	: m_geometry(0), m_meshName(0), m_material(0),
@@ -75,11 +76,11 @@ const char * Mesh::getName()
 
 void Mesh::render(RenderContext& context, Matrix4x4 modelMatrix)
 {
-	RenderTask * renderingTask = context.newTask();
+	ModelRenderTask * renderingTask = context.newTask<ModelRenderTask>();
 	
-	renderingTask->m_geometry = m_geometry;
-	renderingTask->m_material = m_material;
-	renderingTask->m_matrix = m_modelSpaceMatrix * modelMatrix;
+	renderingTask->setGeometry(m_geometry);
+	renderingTask->setMaterial(m_material);
+	renderingTask->setModelMatrix(m_modelSpaceMatrix * modelMatrix);
 }
 
 AABB * Mesh::getAABB()

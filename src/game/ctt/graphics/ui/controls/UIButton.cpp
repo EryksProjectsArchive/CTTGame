@@ -12,7 +12,8 @@
 #include "UIButton.h"
 
 #include <math/Rect.h>
-#include <graphics/renderer/UIRenderContext.h>
+#include <graphics/renderer/RenderContext.h>
+#include <graphics/renderer/tasks/UIRenderTask.h>
 
 #include <resources/materials/MaterialLib.h>
 
@@ -20,6 +21,47 @@
 
 namespace UI
 {
+	class ButtonRenderTask : public UIRenderTask
+	{
+	private:
+		Font *m_font;
+		WDynString m_text;
+
+		bool m_focus;
+
+		Rect m_rect;
+	public:
+		ButtonRenderTask()
+		{
+			m_focus = 0;
+			m_font = 0;
+		}
+
+		virtual void setRect(const Rect& rect)
+		{
+			m_rect = rect;
+		}
+
+		virtual void setFocus(bool focus)
+		{
+			m_focus = focus;
+		}
+
+		virtual void setLabel(Font *font, const WDynString& text)
+		{
+			m_font = font;
+			m_text = text;
+		}
+
+		virtual void performRender(Renderer * renderer)
+		{
+			UIRenderTask::preformRender(renderer);
+
+			if (m_font)
+				m_font->render(m_text, m_rect, m_focus ? Color(1, 0, 0, 1) : Color(1, 1, 1, 1), Font::DrawFlags::HorizontalCenter | Font::DrawFlags::VerticalCenter);
+		}
+	};
+
 	Button::Button(const DynString& name, Vector2 position, Vector2 size)
 		: Control(name, position, size), m_text(L"Button"), m_font(0), m_material(0), m_geometry(0)
 	{
@@ -75,14 +117,15 @@ namespace UI
 		return m_text;
 	}
 
-	void Button::render(UIRenderContext& context)
+	void Button::render(RenderContext& context)
 	{			
-		Renderer::get()->setMaterial(m_material);
-		Renderer::get()->renderGeometry(m_geometry);
+		ButtonRenderTask * task = context.newTask<ButtonRenderTask>();
 
-		Rect rct(m_position.x, m_position.y, m_position.x + m_size.x, m_position.y + m_size.y);
-
-		m_font->render(m_text, rct, m_focus ? Color(1, 0, 0, 1) : Color(1, 1, 1, 1), Font::DrawFlags::HorizontalCenter | Font::DrawFlags::VerticalCenter);		
+		task->setMaterial(m_material);
+		task->setGeometry(m_geometry);
+		task->setRect(Rect(m_position.x, m_position.y, m_position.x + m_size.x, m_position.y + m_size.y));
+		task->setLabel(m_font, m_text);
+		task->setFocus(m_focus);
 	}
 
 	bool Button::handleInput()

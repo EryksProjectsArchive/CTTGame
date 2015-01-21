@@ -180,7 +180,6 @@ class SoundManager;
 struct SoundData;
 
 // Graphics
-class UIRenderContext;
 class RenderContext;
 class Renderer;
 class ModelFormat;

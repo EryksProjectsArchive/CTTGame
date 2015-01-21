@@ -19,28 +19,38 @@
 #include <core/List.h>
 #include <core/SharedPtr.h>
 
-class RenderTask
-{
-public:
-	Geometry<Vertex3d> * m_geometry;
-	Material * m_material;
-	Matrix4x4 m_matrix;
-
-	RenderTask()
-	{
-		m_geometry = 0;
-		m_material = 0;
-	}
-};
+#include "tasks/BaseRenderTask.h"
 
 class ShaderProgram;
 class RenderContext
 {
 private:
-	List<RenderTask *> m_renderTasks;
+	List<BaseRenderTask *> m_task[RENDER_PRIORITY_COUNT];
 public:
 	RenderContext();
 	~RenderContext();
 
-	RenderTask * newTask();
+	template <typename taskType>
+	taskType* newTask()
+	{
+		taskType *task = new taskType();
+
+		RenderPriority priority = task->getRenderPriority();
+		switch (priority)
+		{
+		case RENDER_HIGH_PRIORITY:
+			{
+				m_task[priority].pushFront(task);
+			} break;
+		case RENDER_LOW_PRIORITY:
+			{
+				m_task[priority].pushBack(task);
+			} break;
+		default:
+			{
+				m_task[priority].pushBack(task);
+			} break;
+		}		
+		return task;
+	}
 };

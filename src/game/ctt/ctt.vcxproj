@@ -197,7 +197,6 @@
     <ClCompile Include="graphics\renderer\DeferredRendering.cpp" />
     <ClCompile Include="graphics\renderer\RenderContext.cpp" />
     <ClCompile Include="graphics\renderer\Renderer.cpp" />
-    <ClCompile Include="graphics\renderer\UIRenderContext.cpp" />
     <ClCompile Include="graphics\Shader.cpp" />
     <ClCompile Include="graphics\ShaderProgram.cpp" />
     <ClCompile Include="graphics\Texture.cpp" />
@@ -287,7 +286,10 @@
     <ClInclude Include="graphics\renderer\DeferredRendering.h" />
     <ClInclude Include="graphics\renderer\RenderContext.h" />
     <ClInclude Include="graphics\renderer\Renderer.h" />
-    <ClInclude Include="graphics\renderer\UIRenderContext.h" />
+    <ClInclude Include="graphics\renderer\RenderPriority.h" />
+    <ClInclude Include="graphics\renderer\tasks\BaseRenderTask.h" />
+    <ClInclude Include="graphics\renderer\tasks\ModelRenderTask.h" />
+    <ClInclude Include="graphics\renderer\tasks\UIRenderTask.h" />
     <ClInclude Include="graphics\Shader.h" />
     <ClInclude Include="graphics\ShaderProgram.h" />
     <ClInclude Include="graphics\Texture.h" />

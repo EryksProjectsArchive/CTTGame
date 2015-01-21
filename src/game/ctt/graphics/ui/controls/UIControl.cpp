@@ -87,7 +87,7 @@ namespace UI
 		return false;
 	}
 
-	void Control::render(UIRenderContext& context)
+	void Control::render(RenderContext& context)
 	{
 		for (Control *child : m_children)
 		{

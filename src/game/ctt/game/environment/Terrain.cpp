@@ -12,6 +12,8 @@
 #include "Terrain.h"
 
 #include <graphics/renderer/RenderContext.h>
+#include <graphics/renderer/tasks/ModelRenderTask.h>
+
 #include <resources/materials/MaterialLib.h>
 
 #include <game/Game.h>
@@ -185,9 +187,10 @@ TerrainGrid::~TerrainGrid()
 
 void TerrainGrid::render(RenderContext& context)
 {
-	RenderTask *task = context.newTask();
+	// TODO: TerrainRenderTask
+	ModelRenderTask *task = context.newTask<ModelRenderTask>();
 
-	task->m_geometry = &m_geometry;
-	task->m_material = m_material;
-	task->m_matrix = m_world;
+	task->setGeometry(&m_geometry);
+	task->setMaterial(m_material);
+	task->setModelMatrix(m_world);
 }

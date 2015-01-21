@@ -45,6 +45,6 @@ namespace UI
 
 		virtual bool handleInput();
 
-		virtual void render(UIRenderContext& context);
+		virtual void render(RenderContext& context);
 	};
 }

@@ -69,6 +69,48 @@ public:
 		m_end = 0;
 	}
 
+	void popFront()
+	{
+		Node *node = m_begin;
+		if (node)
+		{
+			m_begin = node->m_next;
+			if (m_begin)
+				m_begin->m_previous = 0;
+			--m_size;
+		}
+	}
+
+	void popBack()
+	{
+		Node *node = m_end;
+		if (node)
+		{
+			m_end = node->m_previous;
+			if (m_end)
+				m_end->m_next = 0;
+			--m_size;
+		}
+	}
+
+	type front()
+	{
+		if (!m_begin)
+		{
+			Error("List", "Null front pointer at %s (%s:%d).", __FUNCTION__, __FILE__, __LINE__);
+		}
+		return m_begin->m_value;
+	}
+
+	type back()
+	{
+		if (!m_end)
+		{
+			Error("List", "Null end pointer at %s (%s:%d).", __FUNCTION__, __FILE__, __LINE__);
+		}
+		return m_end->value;
+	}
+
 	/**
 	 * This functions push value in front of list
 	 */
@@ -88,7 +130,7 @@ public:
 			m_begin = newNode;
 		}
 
-		m_size++;
+		++m_size;
 	}
 
 	/**
@@ -108,7 +150,8 @@ public:
 			newNode->m_previous = m_end;
 			m_end = newNode;
 		}
-		m_size++;
+
+		++m_size;
 	}
 
 	uint32 remove(const type& value)
@@ -141,7 +184,7 @@ public:
 				}
 
 				delete node;
-				m_size --;
+				--m_size;
 				removedElements++;
 			}
 

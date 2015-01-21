@@ -17,8 +17,9 @@
 
 #include <os/OS.h>
 
+#undef _WIN32
 #ifdef _WIN32
-int __stdcall WinMain(HINSTANCE, HINSTANCE, char*, int)
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdLine)
 #else
 int main()
 #endif

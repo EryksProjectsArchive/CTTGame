@@ -68,7 +68,7 @@ namespace UI
 			m_currentView->handleInput();			
 	}
 
-	void Manager::render(UIRenderContext& context)
+	void Manager::render(RenderContext& context)
 	{
 		if (m_currentView)
 			m_currentView->render(context);
