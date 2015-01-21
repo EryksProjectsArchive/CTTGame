@@ -1,0 +1,10 @@
+{	
+	"textures": [
+        { "name": "diffuse", "path": "nomaterial.bmp", "mipMaps": false }
+    ],
+	"shaders": {
+        "vertex": "simple",
+        "fragment": "simple"
+    },
+    "wireframe": false
+}

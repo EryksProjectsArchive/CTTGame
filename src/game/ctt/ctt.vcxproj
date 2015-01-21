@@ -181,6 +181,7 @@
     <ClCompile Include="game\scene\entities\Entity.cpp" />
     <ClCompile Include="game\scene\entities\types\BallEntity.cpp" />
     <ClCompile Include="game\scene\entities\types\BoxEntity.cpp" />
+    <ClCompile Include="game\scene\entities\types\BusStopEntity.cpp" />
     <ClCompile Include="game\scene\entities\types\CrossroadEntity.cpp" />
     <ClCompile Include="game\scene\Scene.cpp" />
     <ClCompile Include="graphics\BufferBase.cpp" />
@@ -268,6 +269,7 @@
     <ClInclude Include="game\scene\entities\Entity.h" />
     <ClInclude Include="game\scene\entities\types\BallEntity.h" />
     <ClInclude Include="game\scene\entities\types\BoxEntity.h" />
+    <ClInclude Include="game\scene\entities\types\BusStopEntity.h" />
     <ClInclude Include="game\scene\entities\types\CrossroadEntity.h" />
     <ClInclude Include="game\scene\Scene.h" />
     <ClInclude Include="graphics\BufferBase.h" />

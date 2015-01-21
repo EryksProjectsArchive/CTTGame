@@ -26,6 +26,7 @@ private:
 	btCollisionDispatcher* m_dispatcher;
 	btSequentialImpulseConstraintSolver* m_solver;
 	btDiscreteDynamicsWorld* m_dynamicsWorld;
+	btIDebugDraw * m_debugDrawer;
 
 	bool m_initialized;
 
@@ -39,6 +40,7 @@ public:
 	bool init();
 
 	void pulse(float dt);
+	void render(RenderContext& context);
 
 	void registerEntity(PhysicalEntity * entity);
 	void unregisterEntity(PhysicalEntity * entity);

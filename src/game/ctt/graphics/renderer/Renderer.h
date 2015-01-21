@@ -24,6 +24,12 @@
 
 #include "DeferredRendering.h"
 
+struct Vertex3d_pc
+{
+	float x, y, z;
+	unsigned int color;
+};
+
 class Renderer : public Instance<Renderer>
 {
 protected:
@@ -37,6 +43,7 @@ protected:
 
 	Material* m_currentMaterial;
 	Material* m_defaultMaterial;
+	Material* m_simpleColorMat;
 
 	DeferredRendering m_deferredRenderer;
 
@@ -79,6 +86,7 @@ public:
 	void renderGeometry(Geometry<Vertex3d> *geometry, const Matrix4x4& matrix);
 	void renderGeometry(Geometry<Vertex2d> *geometry);
 	void renderGeometry(Geometry<SimpleVertex2d> *geometry);
+	void renderGeometry(Geometry<Vertex3d_pc> *geometry, const Matrix4x4& matrix);
 
 	void renderFont(const WDynString& string, const Rect& rect, const Color& color, flags32 flags, Font *font, Vector2 scale = Vector2(1,1));
 

@@ -242,6 +242,12 @@ bool Game::init()
 
 	view->addChild(button);
 
+	button = new UI::Button("spawn_busstop_button", Vector2(100.0f, 160.0f), Vector2(200.0f, 50.0f));
+	button->setText(L"Spawn bus stop");
+	button->onPressSubscribe(this, &Game::spawnBusStop);
+
+	view->addChild(button);
+
 	m_ui->setCurrentView("game.main_menu");
 
 	// create game sound mgr
@@ -321,6 +327,17 @@ void Game::spawnBox()
 
 	if (m_console)
 		m_console->output(Console::MessageType::Info, WString<128>(L"Spawned box (%d)!", box->getUID()));
+}
+
+#include "scene/entities/types/BusStopEntity.h"
+void Game::spawnBusStop()
+{
+	BusStopEntity * busstop = new BusStopEntity();
+	busstop->setPosition(Vector3(0, 10, 0));
+	m_scene->addEntity(busstop);
+
+	if (m_console)
+		m_console->output(Console::MessageType::Info, WString<128>(L"Spawned bus stop (%d)!", busstop->getUID()));
 }
 
 void Game::update(double deltaTime)

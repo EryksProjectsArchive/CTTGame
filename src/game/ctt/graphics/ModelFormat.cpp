@@ -55,6 +55,7 @@ bool ModelFormat::load(mdl * mdlStruct, File *file)
 		
 		// Read material name
 		file->read(&mdlStruct->meshes[i].material.len, 1, sizeof(mdlStruct->meshes[i].material.len));
+		
 		mdlStruct->meshes[i].material.value = new char[mdlStruct->meshes[i].material.len+1];
 		file->read(mdlStruct->meshes[i].material.value, mdlStruct->meshes[i].material.len, sizeof(char));
 		mdlStruct->meshes[i].material.value [mdlStruct->meshes[i].material.len] = '\0';

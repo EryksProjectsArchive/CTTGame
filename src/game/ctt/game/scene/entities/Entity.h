@@ -22,6 +22,7 @@ struct EntityType
 		Dummy,
 		Crossroad,
 		Box,
+		BusStop,
 		Ball
 	};
 };

@@ -75,6 +75,16 @@ void DynamicPhysicalEntity::postPhysicsUpdate()
 	}
 }
 
+void DynamicPhysicalEntity::setCenterOfMass(Vector3 vector)
+{
+	if (m_rigidBody)
+	{
+		btTransform transform = m_rigidBody->getCenterOfMassTransform();
+		transform.setOrigin(btVector3(vector.x, vector.y, vector.z));
+		m_rigidBody->setCenterOfMassTransform(transform);
+	}
+}
+
 void DynamicPhysicalEntity::setMass(float mass)
 {
 	if (m_rigidBody)
@@ -88,7 +98,6 @@ void DynamicPhysicalEntity::setMass(float mass)
 		btVector3 inertia;
 		m_collisionShape->calculateLocalInertia(mass, inertia);
 		m_rigidBody->setMassProps(mass, inertia);
-		
 		m_rigidBody->updateInertiaTensor();
 	}
 }

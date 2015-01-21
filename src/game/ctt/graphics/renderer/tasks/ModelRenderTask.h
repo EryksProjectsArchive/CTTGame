@@ -43,7 +43,8 @@ public:
 	virtual void setMaterial(Material* material)
 	{
 		m_material = material;
-		m_material->acquire();
+		if (m_material)
+			m_material->acquire();
 	}
 
 	virtual void setModelMatrix(const Matrix4x4& matrix)

@@ -31,6 +31,7 @@ public:
 
 	virtual void postPhysicsUpdate();
 
+	virtual void setCenterOfMass(Vector3 vector);
 	virtual void setMass(float mass);
 
 protected:

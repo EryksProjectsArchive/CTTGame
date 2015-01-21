@@ -39,5 +39,7 @@ public:
 
 	void render(RenderContext& context, Matrix4x4 modelMatrix);
 
+	Vector3& getPosition();
+
 	AABB * getAABB();
 };

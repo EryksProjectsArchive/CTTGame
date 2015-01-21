@@ -462,6 +462,9 @@
     <ClCompile Include="core\threading\Mutex.cpp">
       <Filter>Source Files\core\threading</Filter>
     </ClCompile>
+    <ClCompile Include="game\scene\entities\types\BusStopEntity.cpp">
+      <Filter>Source Files\game\scene\entities\types</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="os\OS.h">
@@ -772,6 +775,9 @@
     </ClInclude>
     <ClInclude Include="graphics\renderer\RenderPriority.h">
       <Filter>Header Files\graphics\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="game\scene\entities\types\BusStopEntity.h">
+      <Filter>Header Files\game\scene\entities\types</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

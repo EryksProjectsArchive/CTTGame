@@ -87,3 +87,8 @@ AABB * Mesh::getAABB()
 {
 	return &m_aabb;
 }
+
+Vector3& Mesh::getPosition()
+{
+	return m_position;
+}

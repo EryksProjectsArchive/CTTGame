@@ -48,6 +48,9 @@ Scene::~Scene()
 	}
 }
 
+#include <game/Game.h>
+#include <physics/PhysicsWorld.h>
+
 void Scene::render()
 {
 	Renderer::get()->beginSceneRender();
@@ -60,6 +63,9 @@ void Scene::render()
 
 		for (auto entity : m_entities)
 			entity->render(ctx);
+
+		// Render physics world (debug)
+		Game::get()->getPhysicsWorld()->render(ctx);
 	}
 	Renderer::get()->endSceneRender();
 }

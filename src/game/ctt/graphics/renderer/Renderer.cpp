@@ -403,8 +403,11 @@ bool Renderer::setup(Window * window)
 	glClearColor(0, 0, 0, 1.0f);
 	glClearDepth(1.0f);
 	
-	m_defaultMaterial = MaterialLib::get()->findByName("default");
+	m_defaultMaterial = MaterialLib::get()->findByName("none");
 	m_defaultMaterial->acquire();
+
+	m_simpleColorMat = MaterialLib::get()->findByName("primitive");
+	m_simpleColorMat->acquire();
 
 	unsigned int HackVAO;
 	glGenVertexArrays(1, &HackVAO);
@@ -776,6 +779,52 @@ void Renderer::renderGeometry(Geometry<SimpleVertex2d> *geometry)
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
+
+	program->end();
+}
+
+void Renderer::renderGeometry(Geometry<Vertex3d_pc> * geometry, const Matrix4x4& matrix)
+{
+	Material* material = m_simpleColorMat;
+
+	// Shaders
+	if (!material)
+		return;
+
+	ShaderProgram *program = material->m_program;
+	if (!program || !program->isValid())
+		return;
+
+	program->begin();
+
+	glm::mat4 viewMatrix = Camera::current->getViewMatrix();
+	glm::mat4x4 mvp = m_projectionMatrix * viewMatrix * matrix;
+
+	unsigned int mvpMatrixLocation = material->m_program->getUniformLocation("mvpMatrix");
+	if (mvpMatrixLocation != -1)
+	{
+		glUniformMatrix4fv(mvpMatrixLocation, 1, GL_FALSE, glm::value_ptr(mvp));
+	}
+	unsigned int attributePosition = material->m_program->getAttributeLocation("vertexPosition");
+	unsigned int attributeColor = material->m_program->getAttributeLocation("vertexColor");
+
+	glEnableVertexAttribArray(attributePosition);
+	glEnableVertexAttribArray(attributeColor);
+
+	glBindBuffer(GL_ARRAY_BUFFER, geometry->m_vertexBuffer->m_bufferId);
+
+	glVertexAttribPointer(attributePosition, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex3d_pc), 0);	
+	glVertexAttribPointer(attributeColor, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(Vertex3d_pc), (void *)offsetof(Vertex3d_pc, color));
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geometry->m_indexBuffer->m_bufferId);
+
+	glDrawElements(GL_LINES, geometry->m_trianglesCount * 3, GL_UNSIGNED_SHORT, 0);
+
+	glDisableVertexAttribArray(attributePosition);
+	glDisableVertexAttribArray(attributeColor);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	program->end();
 }
