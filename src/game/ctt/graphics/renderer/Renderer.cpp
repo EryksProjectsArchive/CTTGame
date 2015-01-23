@@ -203,6 +203,9 @@ Renderer::~Renderer()
 
 	if (m_defaultMaterial)
 		m_defaultMaterial->release();
+
+	if (m_simpleColorMat)
+		m_simpleColorMat->release();
 }
 
 bool Renderer::setup(Window * window)
@@ -446,6 +449,11 @@ void Renderer::postFrame()
 Matrix4x4 Renderer::getProjectionMatrix()
 {
 	return m_projectionMatrix;
+}
+
+Matrix4x4 Renderer::getOrthoMatrix()
+{
+	return m_orthoMatrix;
 }
 
 glm::vec4 Renderer::getViewportAsVector()

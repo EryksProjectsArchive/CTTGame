@@ -22,6 +22,7 @@
 #include <game/environment/Terrain.h>
 
 Scene::Scene()
+	: m_camera(0), m_terrain(0)
 {
 	m_camera = new EditorFreeCamera();
 	Camera::setCurrent(m_camera);

@@ -39,6 +39,7 @@ Terrain::Terrain(uint32 width, uint32 height)
 			m_node[x][y] = 0;
 	}
 
+	uint32 i = 0;
 	Vector3 point(-(float)(width / 2), 0, -(float)(height / 2));
 	for (uint32 y = 0; y < m_hNodes; ++y)
 	{
@@ -46,21 +47,28 @@ Terrain::Terrain(uint32 width, uint32 height)
 		{			
 			m_node[x][y] = new TerrainGrid(point, m_nodeSize);
 			point.x += m_nodeSize;
+			++i;
 		}
 		point.x = -(float)(width / 2);
 		point.z += m_nodeSize;
+	
 	}
+
+	Info("terrain", "Add %d grids", i);
 }
 	
 Terrain::~Terrain()
 {
+	uint32 i = 0;
 	for (uint32 y = 0; y < m_hNodes; ++y)
 	{
 		for (uint32 x = 0; x < m_wNodes; ++x)
 		{
 			delete m_node[x][y];
+			++i;
 		}
 	}
+	Info("terrain", "Removed %d grids", i);
 
 	for (uint32 x = 0; x < m_wNodes; ++x)
 		delete [] m_node[x];
@@ -181,6 +189,12 @@ TerrainGrid::TerrainGrid(Vector3 position, uint32 size) : m_left(0), m_right(0),
 
 TerrainGrid::~TerrainGrid()
 {
+	if (m_rigidBody)
+	{
+		Game::get()->getPhysicsWorld()->unregisterRigidBody(m_rigidBody);
+		delete m_rigidBody;
+	}
+
 	if (m_material)
 		m_material->release();
 }

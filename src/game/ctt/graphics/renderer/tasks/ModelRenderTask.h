@@ -29,10 +29,8 @@ public:
 		m_material = 0;
 	}
 
-	~ModelRenderTask()
+	virtual ~ModelRenderTask()
 	{
-		if (m_material)
-			m_material->release();
 	}
 
 	virtual void setGeometry(Geometry<Vertex3d> *geometry)
@@ -43,8 +41,6 @@ public:
 	virtual void setMaterial(Material* material)
 	{
 		m_material = material;
-		if (m_material)
-			m_material->acquire();
 	}
 
 	virtual void setModelMatrix(const Matrix4x4& matrix)

@@ -123,7 +123,7 @@ Game::Game()
 	m_console->addCommand(new ConsoleQuitCommand());
 	m_console->addCommand(new SpawnCommand(this));
 	m_currentPickedEntity = 0;
-	m_hoverDistance = 10.0f;
+	m_activeMoveAxis = ActiveMoveAxis::None;
 	m_rotate = false;
 
 	s_instance = this;
@@ -131,6 +131,12 @@ Game::Game()
 
 Game::~Game()
 {
+	if (m_ui)
+	{
+		delete m_ui;
+		m_ui = 0;
+	}
+
 	if (gFont)
 	{
 		delete gFont;
@@ -147,12 +153,6 @@ Game::~Game()
 	{
 		delete m_physicsWorld;
 		m_physicsWorld = 0;
-	}
-
-	if (m_ui)
-	{
-		delete m_ui;
-		m_ui = 0;
 	}
 
 	if (m_renderer)
@@ -354,8 +354,11 @@ void Game::update(double deltaTime)
 	{
 		Camera::current->update(float(deltaTime));
 		{		
+			EditorFreeCamera * camera = ((EditorFreeCamera *)Camera::current);
+
+			bool resetPosition = false;
 			int32 x, y;
-			if (((EditorFreeCamera *)Camera::current)->isMoving())
+			if (camera->isMoving())
 			{
 				x = m_window->getWidth() / 2;
 				y = m_window->getHeight() / 2;
@@ -363,13 +366,40 @@ void Game::update(double deltaTime)
 			else 
 			{
 				SDL_GetMouseState(&x, &y);
+
+				if (m_activeMoveAxis != ActiveMoveAxis::None && m_currentPickedEntity)
+				{
+					if (x >= m_window->getWidth()-1)
+					{
+						SDL_WarpMouseInWindow(m_window->_window, 0, y);
+						x = 0;
+						resetPosition = true;
+					}
+					else if (x < 1)
+					{
+						SDL_WarpMouseInWindow(m_window->_window, m_window->getWidth(), y);
+						x = m_window->getWidth();
+						resetPosition = true;
+					}
+
+					if (y >= m_window->getHeight() - 1)
+					{
+						SDL_WarpMouseInWindow(m_window->_window, x, 0);
+						y = 0;
+						resetPosition = true;
+					}
+					else if (y < 1)
+					{
+						SDL_WarpMouseInWindow(m_window->_window, x, m_window->getHeight());
+						y = m_window->getHeight();
+						resetPosition = true;
+					}
+				}
 			}
 
-			Vector3 pos = glm::unProject(glm::vec3(x, m_renderer->getViewportAsVector().w - y, 1), glm::mat4() * Camera::current->getViewMatrix(), m_renderer->getProjectionMatrix(), m_renderer->getViewportAsVector());
-
-			EditorFreeCamera * camera = ((EditorFreeCamera *)Camera::current);
-
-			if (!camera->isMoving() && Input::get()->isMouseBtnPressed(MouseButton::Left) && !m_currentPickedEntity)
+			Vector3 pos = glm::unProject(glm::vec3(x, m_renderer->getViewportAsVector().w - y, 1), glm::mat4() * camera->getViewMatrix(), m_renderer->getProjectionMatrix(), m_renderer->getViewportAsVector());
+					
+			if (!camera->isMoving() && Input::get()->isMouseBtnPressed(MouseButton::Left) /*&& !m_currentPickedEntity*/)
 			{				
 				PhysicalEntity *entity = 0;
 				Vector3 res;
@@ -377,8 +407,7 @@ void Game::update(double deltaTime)
 				{
 					if (entity)
 					{
-						m_currentPickedEntity = entity;
-						m_hoverDistance = glm::length(Camera::current->getPosition() - m_currentPickedEntity->getPosition());					
+						m_currentPickedEntity = entity;			
 					}
 				}
 			}
@@ -388,11 +417,39 @@ void Game::update(double deltaTime)
 				m_currentPickedEntity = 0;
 			}
 
+			Matrix4x4 persp = glm::perspective(glm::radians(45.0f), m_window->getAspectRatio(), 0.1f, 100.0f);
+
+			Vector3 _world = glm::unProject(glm::vec3(x, m_renderer->getViewportAsVector().w - y, 1), glm::mat4() * camera->getViewMatrix(), persp, m_renderer->getViewportAsVector());
+			Vector3 world;
+			if (!resetPosition)
+				 world = _world - m_lastMouseWorldPos;
+			m_lastMouseWorldPos = _world;
+
 			if (m_currentPickedEntity && !camera->isMoving())
 			{
-				Vector3 newPos = Camera::current->getPosition() - glm::normalize(Camera::current->getPosition() - pos) * Vector3(m_hoverDistance);
-				
-				m_currentPickedEntity->setPosition(newPos);
+				if (m_activeMoveAxis != ActiveMoveAxis::None)
+				{				
+					Vector3 _pos = m_currentPickedEntity->getPosition();
+		
+					float mp = 0.2f;
+					switch (m_activeMoveAxis)
+					{
+					case ActiveMoveAxis::X:
+						{
+							_pos.x += world.x * mp;
+						} break;
+					case ActiveMoveAxis::Y:
+						{
+							_pos.y += world.y * mp;
+						} break;
+					case ActiveMoveAxis::Z:
+						{
+							_pos.z += world.z * mp;
+						} break;
+					};
+
+					m_currentPickedEntity->setPosition(_pos);
+				}
 			}
 		}
 	}
@@ -417,9 +474,27 @@ void Game::render()
 			Matrix4x4 modelMatrix;
 			modelMatrix = glm::translate(modelMatrix, m_currentPickedEntity->getPosition());
 
-			m_renderer->drawLine3D(Vector3(), Vector3(3, 0, 0), Color(1, 0, 0, 1), modelMatrix);
-			m_renderer->drawLine3D(Vector3(), Vector3(0, 3, 0), Color(0, 1, 0, 1), modelMatrix);
-			m_renderer->drawLine3D(Vector3(), Vector3(0, 0, 3), Color(0, 0, 1, 1), modelMatrix);
+			switch (m_activeMoveAxis)
+			{
+			case ActiveMoveAxis::X:
+				{
+					m_renderer->drawLine3D(Vector3(-100,0,0), Vector3(100, 0, 0), Color(1, 0, 0, 1), modelMatrix);
+				} break;
+			case ActiveMoveAxis::Y:
+				{
+					m_renderer->drawLine3D(Vector3(0,-100,0), Vector3(0, 100, 0), Color(0, 1, 0, 1), modelMatrix);
+				} break;
+			case ActiveMoveAxis::Z:
+				{
+					m_renderer->drawLine3D(Vector3(0, 0, -100), Vector3(0, 0, 100), Color(0, 0, 1, 1), modelMatrix);
+				} break;
+			default:
+				{
+					m_renderer->drawLine3D(Vector3(), Vector3(3, 0, 0), Color(1, 0, 0, 1), modelMatrix);
+					m_renderer->drawLine3D(Vector3(), Vector3(0, 3, 0), Color(0, 1, 0, 1), modelMatrix);
+					m_renderer->drawLine3D(Vector3(), Vector3(0, 0, 3), Color(0, 0, 1, 1), modelMatrix);
+				} break;
+			};
 		}
 
 		m_renderer->endSceneRender();
@@ -487,6 +562,20 @@ void Game::onKeyEvent(Key::Type key, bool state)
 
 	if (key == Key::SCANCODE_LALT)
 		m_rotate = state;
+
+	if (state)
+	{
+		if (key == Key::SCANCODE_X)
+			m_activeMoveAxis = ActiveMoveAxis::X;
+		else if (key == Key::SCANCODE_Y)
+			m_activeMoveAxis = ActiveMoveAxis::Y;
+		else if (key == Key::SCANCODE_Z)
+			m_activeMoveAxis = ActiveMoveAxis::Z;
+	}
+	else if (!state && ((key == Key::SCANCODE_X) || (key == Key::SCANCODE_Y) || (key == Key::SCANCODE_Z)))
+	{
+		m_activeMoveAxis = ActiveMoveAxis::None;
+	}
 }
 
 void Game::onMouseButtonEvent(uint8 button, bool state, uint8 clicks, sint32 x, sint32 y)
@@ -538,13 +627,6 @@ void Game::onMouseScroll(sint32 horizontal, sint32 vertical)
 	
 
 		m_currentPickedEntity->setRotation(glm::rotate(rotation, v/10, Vector3(0,1,0)));
-	}
-	else {
-		if (vertical > 0) m_hoverDistance += 1.0f;
-		else if (vertical < 0) m_hoverDistance -= 1.0f;
-
-		if (m_hoverDistance < 3.0f)
-			m_hoverDistance = 3.0f;
 	}
 }
 

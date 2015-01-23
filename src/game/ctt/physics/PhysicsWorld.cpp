@@ -27,15 +27,16 @@ public:
 	{
 		Vector3 pos = Camera::current->getPosition();
 
-		Vector3 diff = pos - Vector3(from.x(), from.y(), from.z());
-		if (glm::length(diff) > 50)
+		Vector3 diffA = pos - Vector3(from.x(), from.y(), from.z());
+		Vector3 diffB = pos - Vector3(to.x(), to.y(), to.z());
+		if ((glm::length(diffA) > 500) && (glm::length(diffB) > 500))
 			return;
 
 		Vertex3d_pc vert;
 		vert.x = from.x();
 		vert.y = from.y();
 		vert.z = from.z();		
-		vert.color = ((uint8)255 << 24) | ((uint8)(color.z() * 255) << 16) | ((uint8)(color.y() * 255) << 8) | ((uint8)(color.x() * 255));
+		vert.color = 0xFFFFFFFF;// ((uint8)255 << 24) | ((uint8)(color.z() * 255) << 16) | ((uint8)(color.y() * 255) << 8) | ((uint8)(color.x() * 255));
 		m_line.pushBack(vert);
 		m_indices.pushBack(m_line.size() - 1);
 		vert.x = to.x();

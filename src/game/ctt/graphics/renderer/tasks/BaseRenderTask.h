@@ -23,6 +23,8 @@ public:
 		m_priority = RENDER_NORMAL_PRIORITY;
 	}
 
+	virtual ~BaseRenderTask() {}
+
 	virtual RenderPriority getRenderPriority()
 	{
 		return m_priority;

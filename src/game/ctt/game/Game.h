@@ -21,6 +21,14 @@
 
 #include <graphics/ui/UIEventHandler.h>
 
+enum ActiveMoveAxis
+{
+	None,
+	X,
+	Y,
+	Z
+};
+
 class Game : 
 	public UI::EventHandler,
 	public Application, 
@@ -39,8 +47,9 @@ private:
 	UI::Manager* m_ui;
 
 	class PhysicalEntity * m_currentPickedEntity;
-	float m_hoverDistance;
 	bool m_rotate;
+	ActiveMoveAxis m_activeMoveAxis;
+	Vector3 m_lastMouseWorldPos;
 public:
 	Game();
 	~Game();

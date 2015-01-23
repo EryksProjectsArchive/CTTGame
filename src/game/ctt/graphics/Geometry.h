@@ -18,7 +18,6 @@
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
 
-
 template <class VertexType>
 class Geometry
 {
@@ -38,7 +37,7 @@ public:
 		m_verticesCount = 0;
 	}
 
-	~Geometry()
+	virtual ~Geometry()
 	{
 		if (m_vertexBuffer)
 		{
@@ -53,7 +52,7 @@ public:
 		}
 	}
 	
-	void fillData(VertexType *vertices, uint16 verticesCount, void *triangles, uint16 trianglesCount)
+	virtual void fillData(VertexType *vertices, uint16 verticesCount, void *triangles, uint16 trianglesCount)
 	{
 		m_trianglesCount = trianglesCount;
 		m_verticesCount = verticesCount;
@@ -66,11 +65,10 @@ public:
 
 		if (m_indexBuffer)
 		{
-			m_indexBuffer->allocate(sizeof(uint16) * (trianglesCount * 3), false);
+			m_indexBuffer->allocate(sizeof(uint16) * trianglesCount * 3, false);
 			m_indexBuffer->fillData(triangles);
 		}
 	}
-
 
 	friend class Renderer;
 	friend class DeferredRendering;

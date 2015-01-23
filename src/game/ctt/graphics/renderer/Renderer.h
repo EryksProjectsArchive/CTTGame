@@ -74,6 +74,7 @@ public:
 	void postFrame();
 
 	Matrix4x4 getProjectionMatrix();
+	Matrix4x4 getOrthoMatrix();
 	glm::vec4 getViewportAsVector();
 
 	void setFullscreen(bool fullscreen);

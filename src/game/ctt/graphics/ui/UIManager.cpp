@@ -23,10 +23,7 @@ namespace UI
 	Manager::~Manager()
 	{
 		for (View *view : m_views)
-		{
 			delete view;
-		}
-
 		m_views.clear();
 		m_currentView = 0;
 	}

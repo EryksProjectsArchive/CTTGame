@@ -37,7 +37,7 @@ void CacheableResource::acquire()
 		{
 			Debug("cacheable resource", "Loaded cacheable resource. '%s'", m_filePath.get());
 		}
-	}
+	}	
 }
 
 void CacheableResource::release()

@@ -21,11 +21,16 @@ namespace UI
 
 	Control::~Control()
 	{
-		for (Control *control : m_children)		
-			control->m_parent = 0;
-
 		if (m_parent)
 			m_parent->m_children.remove(this);
+
+		for (Control *control : m_children)
+		{
+			control->m_parent = 0;
+			delete control;
+		}
+
+		m_children.clear();		
 	}
 
 	DynString Control::getName()
