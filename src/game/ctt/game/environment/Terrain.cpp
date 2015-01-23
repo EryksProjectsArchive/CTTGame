@@ -151,10 +151,10 @@ TerrainGrid::TerrainGrid(Vector3 position, uint32 size) : m_left(0), m_right(0),
 	m_material->acquire();
 
 	Vertex3d vertices[4] = {
-		{ 0, 0, 0, 0, 1, 0, 0, 0, 0xFFFFFFFF, 0, 0, 0, 0 },
-		{ float(size), 0, 0, 0, 1, 0, 60, 0, 0xFFFFFFFF, 0, 0, 0, 0 },
-		{ float(size), 0, float(size), 0, 1, 0, 60, 60, 0xFFFFFFFF, 0, 0, 0, 0 },
-		{ 0, 0, float(size), 0, 1, 0, 0, 60, 0xFFFFFFFF, 0, 0, 0, 0 }
+		{ 0, 0, 0, 0, 1, 0, 0, 0, 0xFFFFFFFF, 0, 0, 0 },
+		{ float(size), 0, 0, 0, 1, 0, 60, 0, 0xFFFFFFFF, 0, 0, 0 },
+		{ float(size), 0, float(size), 0, 1, 0, 60, 60, 0xFFFFFFFF, 0, 0, 0 },
+		{ 0, 0, float(size), 0, 1, 0, 0, 60, 0xFFFFFFFF, 0, 0, 0 }
 	};
 
 	uint16 indices[6] = {

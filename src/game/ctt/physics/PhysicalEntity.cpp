@@ -41,6 +41,16 @@ PhysicalEntity::~PhysicalEntity()
 	}
 }
 
+void PhysicalEntity::_wakeUp()
+{
+	if (m_rigidBody)
+	{
+		// Check if our rigid body is not active if so activate it to apply our changes.
+		if (!m_rigidBody->isActive())
+			m_rigidBody->activate(true);
+	}
+}
+
 void PhysicalEntity::setLinearVelocity(Vector3 velocity)
 {
 	Warning("Physics", "%s: Setting linear velocity is not possible for static entity. (%s:%d)", FUNCTION_NAME, __FILE__, __LINE__);
@@ -65,12 +75,11 @@ void PhysicalEntity::setPosition(Vector3 position)
 {	
 	if (m_rigidBody)
 	{
-		if (!m_rigidBody->isActive())
-			m_rigidBody->activate(true);
-
+		_wakeUp();
 		btTransform transform = m_rigidBody->getWorldTransform();
 		transform.setOrigin(btVector3(position.x, position.y, position.z));
 		m_rigidBody->setWorldTransform(transform);
+		m_rigidBody->clearForces();
 	}
 }
 
@@ -88,12 +97,11 @@ void PhysicalEntity::setRotation(Quaternion rotation)
 {
 	if (m_rigidBody)
 	{
-		if (!m_rigidBody->isActive())
-			m_rigidBody->activate(true);
-
+		_wakeUp();
 		btTransform transform = m_rigidBody->getWorldTransform();
 		transform.setRotation(btQuaternion(rotation.x, rotation.y, rotation.z, rotation.w));
 		m_rigidBody->setWorldTransform(transform);
+		m_rigidBody->clearForces();
 	}
 }
 
@@ -159,4 +167,9 @@ void PhysicalEntity::setupPhysics(btCollisionShape * shape)
 		Game::get()->getPhysicsWorld()->registerRigidBody(m_rigidBody);
 		m_rigidBody->setUserPointer(this);
 	}
+}
+
+Matrix4x4 PhysicalEntity::getMatrix()
+{
+	return m_transform;
 }

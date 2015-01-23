@@ -40,7 +40,8 @@ CrossroadEntity::CrossroadEntity()
 	if (file->isLoaded())
 	{
 		mdl data;
-		if (ModelFormat::load(&data, file))
+		int32 flags = 0;
+		if (ModelFormat::load(&data, file, &flags))
 		{
 			btTriangleMesh *triMesh = new btTriangleMesh();
 

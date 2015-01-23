@@ -24,15 +24,18 @@
 BallEntity::BallEntity() : Entity(EntityType::Ball)
 {
 	m_model = ModelLib::get()->findByName("ball");
-	m_model->acquire();
+	if (m_model)
+	{
+		m_model->acquire();
 
-	AABB * aabb = m_model->getAABB();
+		AABB * aabb = m_model->getAABB();
 
-	float radius = (aabb->getMax().y - aabb->getMin().y) / 2;
-	setupPhysics(new btSphereShape(radius));
-	setMass(50);
-	setFriction(6);
-	setRestitution(1.0f);
+		float radius = (aabb->getMax().y - aabb->getMin().y) / 2;
+		setupPhysics(new btSphereShape(radius));
+		setMass(50);
+		setFriction(6);
+		setRestitution(1.0f);
+	}
 }
 
 BallEntity::~BallEntity()

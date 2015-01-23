@@ -13,6 +13,8 @@
 
 #include <Prerequisites.h>
 
+#define MODEL_FORMAT_VERSION 2
+
 struct string
 {
 	uint32 len;
@@ -41,6 +43,7 @@ struct triangle
 	uint16 c;
 };
 
+// NOTE: I'm using Vertex3d when loading not this definition.
 struct vertex
 {
 	float x;
@@ -52,7 +55,6 @@ struct vertex
 	float u;
 	float v;
 	uint32 color;
-	float tanw;
 	float tanx;
 	float tany;
 	float tanz;
@@ -92,6 +94,13 @@ struct mdl
 	struct mesh * meshes;
 };
 
+enum ModelFormatFlags
+{
+	NORMAL_MODEL = 0,
+	HAS_TANGENT = 1,
+	IS_RIGID = 2
+};
+
 #include <Prerequisites.h>
 
 #include <stdio.h>
@@ -99,5 +108,5 @@ struct mdl
 class ModelFormat
 {
 public:
-	static bool load(mdl * mdlStruct, File *file);
+	static bool load(mdl * mdlStruct, File *file, int32 * flags);
 };

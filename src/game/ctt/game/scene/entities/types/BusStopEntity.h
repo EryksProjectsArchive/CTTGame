@@ -13,9 +13,9 @@
 
 #include <Prerequisites.h>
 
-#include <physics/DynamicPhysicalEntity.h>
+#include <physics/StaticPhysicalEntity.h>
 
-class BusStopEntity : public Entity, public DynamicPhysicalEntity
+class BusStopEntity : public Entity, public StaticPhysicalEntity
 {
 private:
 	Model *m_model;

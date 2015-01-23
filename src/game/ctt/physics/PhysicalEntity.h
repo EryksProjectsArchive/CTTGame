@@ -19,6 +19,8 @@ protected:
 	btCollisionShape *m_collisionShape;
 
 	Matrix4x4 m_transform;
+
+	virtual void _wakeUp();
 public:
 	PhysicalEntity();
 	virtual ~PhysicalEntity();
@@ -46,6 +48,8 @@ public:
 	virtual void setMass(float mass);
 	virtual void setFriction(float friction);
 	virtual void setRestitution(float restitution);
+
+	virtual Matrix4x4 getMatrix();
 
 protected:
 	// ---- Methods for all class that inherits from physical entity -----

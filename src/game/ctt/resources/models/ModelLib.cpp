@@ -46,7 +46,7 @@ Model * ModelLib::findByName(const DynString& name)
 	{
 		mdl m;
 		file->read(&m, 1, sizeof(mdl) - sizeof(m.meshes));
-		if (!memcmp(m.id, "CTTMDL", 6) && m.version == 1)
+		if (!memcmp(m.id, "CTTMDL", 6) && m.version == MODEL_FORMAT_VERSION)
 		{
 			model = new Model(name, path);
 			m_models.pushBack(model);

@@ -18,11 +18,10 @@
 
 #include "Vertex3d.h"
 
-bool ModelFormat::load(mdl * mdlStruct, File *file)
+bool ModelFormat::load(mdl * mdlStruct, File *file, int32 * flags)
 {
 	if (!mdlStruct || !file || !file->isLoaded())
 		return false;
-
 
 	file->read(mdlStruct, 1, sizeof(mdl) - sizeof(mdlStruct->meshes));
 
@@ -32,7 +31,7 @@ bool ModelFormat::load(mdl * mdlStruct, File *file)
 		return false;
 	}
 
-	if (mdlStruct->version != 1)
+	if (mdlStruct->version != MODEL_FORMAT_VERSION)
 	{
 		Error("ModelFormat", "File version does not match\n.");
 		return false;

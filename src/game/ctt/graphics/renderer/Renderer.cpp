@@ -829,6 +829,36 @@ void Renderer::renderGeometry(Geometry<Vertex3d_pc> * geometry, const Matrix4x4&
 	program->end();
 }
 
+void Renderer::drawLine3D(const Vector3& start, const Vector3& end, const Color& color, const Matrix4x4& matrix)
+{
+	Geometry<Vertex3d_pc> geometry;
+
+	Vertex3d_pc* vertices = new Vertex3d_pc[2];
+
+	memset(vertices, 0, sizeof(Vertex3d_pc) * 2);
+
+	vertices[0].x = start.x;
+	vertices[0].y = start.y;
+	vertices[0].z = start.z;
+
+	vertices[1].x = end.x;
+	vertices[1].y = end.y;
+	vertices[1].z = end.z;
+
+	vertices[0].color = vertices[1].color = ((uint8)(color.a * 255) << 24) | ((uint8)(color.b * 255) << 16) | ((uint8)(color.g * 255) << 8) | ((uint8)(color.r * 255));
+
+	uint16 *indices = new uint16[3];
+	indices[0] = 0;
+	indices[1] = 1;
+	indices[2] = 0;
+
+	geometry.fillData(vertices, 2, indices, 1);
+	delete[]vertices;
+	delete[]indices;
+
+	renderGeometry(&geometry, matrix);	
+}
+
 void Renderer::renderFont(const WDynString& string, const Rect& rect, const Color& color, flags32 flags, Font *font, Vector2 scale)
 {
 	Material* material = font->m_material;

@@ -124,6 +124,7 @@ Game::Game()
 	m_console->addCommand(new SpawnCommand(this));
 	m_currentPickedEntity = 0;
 	m_hoverDistance = 10.0f;
+	m_rotate = false;
 
 	s_instance = this;
 }
@@ -332,8 +333,13 @@ void Game::spawnBox()
 #include "scene/entities/types/BusStopEntity.h"
 void Game::spawnBusStop()
 {
+	Vector3 a = Camera::current->getPosition();
+	Vector3 b = Camera::current->getTarget();
+
+	Vector3 diff = glm::normalize(b - a);
+
 	BusStopEntity * busstop = new BusStopEntity();
-	busstop->setPosition(Vector3(0, 10, 0));
+	busstop->setPosition(a + (diff * 3.f));
 	m_scene->addEntity(busstop);
 
 	if (m_console)
@@ -359,15 +365,19 @@ void Game::update(double deltaTime)
 
 			Vector3 pos = glm::unProject(glm::vec3(x, m_renderer->getViewportAsVector().w - y, 1), glm::mat4() * Camera::current->getViewMatrix(), m_renderer->getProjectionMatrix(), m_renderer->getViewportAsVector());
 
-			if (!((EditorFreeCamera *)Camera::current)->isMoving() && Input::get()->isMouseBtnPressed(MouseButton::Left) && !m_currentPickedEntity)
-			{
-				m_hoverDistance = 10.f;
+			EditorFreeCamera * camera = ((EditorFreeCamera *)Camera::current);
+
+			if (!camera->isMoving() && Input::get()->isMouseBtnPressed(MouseButton::Left) && !m_currentPickedEntity)
+			{				
 				PhysicalEntity *entity = 0;
 				Vector3 res;
 				if (m_physicsWorld->rayTest(Camera::current->getPosition(), pos, &res, &entity))
 				{
 					if (entity)
+					{
 						m_currentPickedEntity = entity;
+						m_hoverDistance = glm::length(Camera::current->getPosition() - m_currentPickedEntity->getPosition());					
+					}
 				}
 			}
 
@@ -376,15 +386,10 @@ void Game::update(double deltaTime)
 				m_currentPickedEntity = 0;
 			}
 
-			if (m_currentPickedEntity)
+			if (m_currentPickedEntity && !camera->isMoving())
 			{
 				Vector3 newPos = Camera::current->getPosition() - glm::normalize(Camera::current->getPosition() - pos) * Vector3(m_hoverDistance);
-				/*Vector3 res;
-				if (m_physicsWorld->rayTest(Camera::current->getPosition(), newPos, &res))
-				{
-					newPos = res;
-				}*/
-
+				
 				m_currentPickedEntity->setPosition(newPos);
 			}
 		}
@@ -401,8 +406,21 @@ void Game::render()
 	{
 		m_renderer->preFrame();
 
+		m_renderer->beginSceneRender();
 		if (m_scene)
 			m_scene->render();
+
+		if (m_currentPickedEntity)
+		{
+			Matrix4x4 modelMatrix;
+			modelMatrix = glm::translate(modelMatrix, m_currentPickedEntity->getPosition());
+
+			m_renderer->drawLine3D(Vector3(), Vector3(3, 0, 0), Color(1, 0, 0, 1), modelMatrix);
+			m_renderer->drawLine3D(Vector3(), Vector3(0, 3, 0), Color(0, 1, 0, 1), modelMatrix);
+			m_renderer->drawLine3D(Vector3(), Vector3(0, 0, 3), Color(0, 0, 1, 1), modelMatrix);
+		}
+
+		m_renderer->endSceneRender();
 
 		if (gFont)
 		{
@@ -428,6 +446,7 @@ void Game::render()
 				gFont->render(WString<256>(L"#FFFFFFFPS: %s%.1f", color, fps), Rect(0, 0, 10, 10), Color(1.0f, 1.0f, 1.0f, 1.0f), Font::DrawFlags::NoClip);
 			}
 
+			/*
 			glm::vec3 labelPos = glm::vec3(0, 2, 0);
 			glm::vec3 pos = glm::project(labelPos, glm::mat4()* Camera::current->getViewMatrix(), m_renderer->getProjectionMatrix(), m_renderer->getViewportAsVector());
 			pos.y = m_renderer->getViewportAsVector().w - pos.y;
@@ -438,7 +457,8 @@ void Game::render()
 			{
 				gFont->render(L"#FF0000City #00FF00Transport #0000FFTycoon", Rect(pos.x + 1, pos.y + 1, 10, 10), Color(0.0f, 0.0f, 0.0f, 0.6f), Font::DrawFlags::NoClip | Font::DrawFlags::DisableColorCodding, Vector2(1, 1));
 				gFont->render(L"#FF0000City #00FF00Transport #0000FFTycoon", Rect(pos.x, pos.y, 10, 10), Color(1.0f, 1.0f, 1.0f, 1.0f), Font::DrawFlags::NoClip, Vector2(1,1));
-			}		
+			}
+			*/	
 		}
 
 		// Draw UI
@@ -462,6 +482,9 @@ void Game::onKeyEvent(Key::Type key, bool state)
 {
 	if (key == Key::SCANCODE_ESCAPE)	
 		m_isRunning = false;	
+
+	if (key == Key::SCANCODE_LALT)
+		m_rotate = state;
 }
 
 void Game::onMouseButtonEvent(uint8 button, bool state, uint8 clicks, sint32 x, sint32 y)
@@ -497,12 +520,30 @@ void Game::onMouseButtonEvent(uint8 button, bool state, uint8 clicks, sint32 x, 
 }
 
 void Game::onMouseScroll(sint32 horizontal, sint32 vertical)
-{
-	if (vertical > 0) m_hoverDistance += 1.0f;
-	else if (vertical < 0) m_hoverDistance -= 1.0f;
+{	
+	if (!m_currentPickedEntity)
+		return;
 
-	if (m_hoverDistance < 3.0f)
-		m_hoverDistance = 3.0f;
+	if (m_rotate)
+	{
+		Quaternion rotation = m_currentPickedEntity->getRotation();
+
+		float v = 0;
+		if (vertical > 0)
+			v = 1;
+		else if (vertical < 0)
+			v = -1;
+	
+
+		m_currentPickedEntity->setRotation(glm::rotate(rotation, v/10, Vector3(0,1,0)));
+	}
+	else {
+		if (vertical > 0) m_hoverDistance += 1.0f;
+		else if (vertical < 0) m_hoverDistance -= 1.0f;
+
+		if (m_hoverDistance < 3.0f)
+			m_hoverDistance = 3.0f;
+	}
 }
 
 PhysicsWorld* Game::getPhysicsWorld()

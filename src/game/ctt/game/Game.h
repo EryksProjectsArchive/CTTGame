@@ -40,6 +40,7 @@ private:
 
 	class PhysicalEntity * m_currentPickedEntity;
 	float m_hoverDistance;
+	bool m_rotate;
 public:
 	Game();
 	~Game();

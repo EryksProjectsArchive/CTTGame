@@ -22,7 +22,6 @@ struct Vertex3d
 	float u;
 	float v;
 	uint32 color;
-	float tanw;
 	float tanx;
 	float tany;
 	float tanz;

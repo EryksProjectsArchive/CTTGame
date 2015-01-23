@@ -88,6 +88,8 @@ public:
 	void renderGeometry(Geometry<SimpleVertex2d> *geometry);
 	void renderGeometry(Geometry<Vertex3d_pc> *geometry, const Matrix4x4& matrix);
 
+	void drawLine3D(const Vector3& start, const Vector3& end, const Color& color, const Matrix4x4& matrix = Matrix4x4());
+
 	void renderFont(const WDynString& string, const Rect& rect, const Color& color, flags32 flags, Font *font, Vector2 scale = Vector2(1,1));
 
 	Rect getRect();

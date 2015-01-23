@@ -62,7 +62,8 @@ bool Model::load()
 		{
 			Vector3 max, min;
 			mdl mdlData;
-			if (ModelFormat::load(&mdlData, file))
+			int32 flags = 0;
+			if (ModelFormat::load(&mdlData, file, &flags))
 			{
 				m_meshes = new Mesh*[mdlData.meshCount];
 				for (unsigned char i = 0; i < mdlData.meshCount; ++i)

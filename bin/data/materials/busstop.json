@@ -1,0 +1,10 @@
+{	
+	"textures": [
+        { "name": "diffuse", "path": "busstop.png", "mipMaps": true }
+    ],
+	"shaders": {
+        "vertex": "simple",
+        "fragment": "simple"
+    },
+    "wireframe": false
+}

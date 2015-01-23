@@ -53,7 +53,6 @@ Scene::~Scene()
 
 void Scene::render()
 {
-	Renderer::get()->beginSceneRender();
 	{
 		// Separated render context for entities
 		RenderContext ctx;
@@ -67,7 +66,6 @@ void Scene::render()
 		// Render physics world (debug)
 		Game::get()->getPhysicsWorld()->render(ctx);
 	}
-	Renderer::get()->endSceneRender();
 }
 
 void Scene::addEntity(Entity *entity)
