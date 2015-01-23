@@ -279,6 +279,7 @@ bool Game::init()
 	if (Config::get()["engine"]["console"].getBool(false))	
 		m_console->init();
 
+#if 0
 	BoxEntity *testEntity = 0;
 	for (int i = 0; i < 10; ++i)
 	{
@@ -286,6 +287,7 @@ bool Game::init()
 		testEntity->setPosition(Vector3(0, testEntity->getHeight() + (i * (testEntity->getHeight() + 0.5f)), 0));
 		m_scene->addEntity(testEntity);
 	}
+#endif
 
 	Environment::get()->setSunPosition(Vector3(30.0f, 10.0f, 0.0f));
 

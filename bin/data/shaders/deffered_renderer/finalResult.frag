@@ -13,15 +13,12 @@ uniform mat4 projectionMatrix;
 out vec4 color;
 
 // Day
-vec3 ambientColor = vec3(0.7, 0.6, 0.5); 
-// Night
-//vec3 ambientColor = vec3(0.2, 0.2, 0.4);
-
-vec3 specularColor = vec3(0.5,0.5,0.5);
+vec3 ambientColor = vec3(0.1,0.1,0.1);
+vec3 specularColor = vec3(0.1,0.1,0.1);
 
 vec3 getWorldPosition()
 {
-    float z = texture(depthTexture, vUV).r* 2.0 - 1.0;
+    float z = texture(depthTexture, vUV).r * 2.0 - 1.0;
     vec4 screenPosition = vec4(vUV * 2.0 - 1.0, z, 1.0);
     screenPosition = unProjectMatrix * screenPosition;
 
@@ -71,11 +68,19 @@ void main(void)
 	vec3 vecPosition = getWorldPosition();
 	vec3 vecNormal = texture2D(normalTexture, vUV).xyz;
 
+	// Sun
+	float power = 1000.0f;
+	float size = 800.0f;
+	vec3 lightColor = vec3(0.8, 0.8, 0.8);
+	vec3 lightPosition = vec3(viewMatrix * vec4(200,500,0,1));
+
+	lighting += calculatePointLight_BlinnPhong(vecPosition, vecNormal, lightColor, lightPosition, size, power);
+
 	// Light
-	float power = 2.0f;
-	float size = 20.0f;
-	vec3 lightColor = vec3(1, 0.5, 0);
-	vec3 lightPosition = vec3(viewMatrix * vec4(0.8,2,0.8,1));
+	power = 2.0f;
+	size = 20.0f;
+	lightColor = vec3(1, 0.5, 0);
+	lightPosition = vec3(viewMatrix * vec4(0.8,2,0.8,1));
 
 	lighting += calculatePointLight_BlinnPhong(vecPosition, vecNormal, lightColor, lightPosition, size, power);
 
