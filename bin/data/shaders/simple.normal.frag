@@ -15,6 +15,6 @@ layout(location = 2) out float outDepth;
 void main(void)
 {	
 	outDiffuse = vColor.rgb * texture2D(diffuse, vUV).rgb;
-	outNormal = vNormal * normalize(texture2D(normal, vUV).rgb * 2.0 - 1.0);
+	outNormal = normalize(vNormal + (texture2D(normal, vUV).rgb * 2.0 - 1.0));
 	outDepth = gl_FragCoord.z;
 }

@@ -70,8 +70,8 @@ void main(void)
 
 	// Sun
 	float power = 1000.0f;
-	float size = 800.0f;
-	vec3 lightColor = vec3(0.8, 0.8, 0.8);
+	float size = 1000.0f;
+	vec3 lightColor = vec3(1, 1, 1);
 	vec3 lightPosition = vec3(viewMatrix * vec4(200,500,0,1));
 
 	lighting += calculatePointLight_BlinnPhong(vecPosition, vecNormal, lightColor, lightPosition, size, power);
