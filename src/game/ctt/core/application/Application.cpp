@@ -41,7 +41,7 @@ bool Application::pulse()
 
 	updateWindow();
 
-	double time = double(OS::getMicrosecondsCount() / 1000000.f);
+	double time = double(OS::getMicrosecondsCount() / double(1000 * 1000));
 	double frameTime = time - m_time;
 	if (frameTime > 0.25)
 		frameTime = 0.25;

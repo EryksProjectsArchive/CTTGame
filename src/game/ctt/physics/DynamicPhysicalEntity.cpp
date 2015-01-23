@@ -113,3 +113,23 @@ void DynamicPhysicalEntity::setupPhysics(btCollisionShape * shape)
 
 	PhysicalEntity::setupPhysics(shape);
 }
+
+void DynamicPhysicalEntity::internalStaticTransformUpdate()
+{
+	if (m_rigidBody)
+	{
+		m_rigidBody->getWorldTransform().getOpenGLMatrix((float *)&m_transform[0][0]);
+	}
+}
+
+void DynamicPhysicalEntity::setPosition(Vector3 position)
+{
+	PhysicalEntity::setPosition(position);
+	internalStaticTransformUpdate();
+}
+
+void DynamicPhysicalEntity::setRotation(Quaternion rotation)
+{
+	PhysicalEntity::setRotation(rotation);
+	internalStaticTransformUpdate();
+}

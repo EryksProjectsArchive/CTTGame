@@ -27,6 +27,9 @@ public:
 	virtual void setAngularVelocity(Vector3 velocity);
 	virtual Vector3 getAngularVelocity();
 
+	virtual void setPosition(Vector3 position);
+	virtual void setRotation(Quaternion rotation);
+
 	virtual bool isDynamic();
 
 	virtual void postPhysicsUpdate();
@@ -36,4 +39,7 @@ public:
 
 protected:
 	void setupPhysics(btCollisionShape * shape);
+
+private:
+	void internalStaticTransformUpdate();
 };
