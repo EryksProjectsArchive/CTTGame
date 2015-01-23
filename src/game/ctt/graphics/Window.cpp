@@ -24,11 +24,12 @@ Window::Window()
 Window::~Window()
 {
 	if (_window)
-	{
-		_window = 0;
+	{	
 		SDL_DestroyWindow(_window);
+		_window = 0;
 	}
 }
+
 
 bool Window::setup(const char *title, unsigned short width, unsigned short height, bool fullscreen)
 {
@@ -37,7 +38,7 @@ bool Window::setup(const char *title, unsigned short width, unsigned short heigh
 		_window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_OPENGL | (fullscreen ? SDL_WINDOW_FULLSCREEN_DESKTOP : SDL_WINDOW_SHOWN));
 		if (!_window)
 			return false;
-
+		
 		return true;
 	}
 	return false;
