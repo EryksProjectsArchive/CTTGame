@@ -19,7 +19,7 @@ template <typename T>
 class ProtectedData
 {
 private:
-	T m_data;
+	uint8 m_data[sizeof(T)];
 public:
 	ProtectedData()
 	{
@@ -40,17 +40,22 @@ public:
 	}
 
 	void set(T data)
-	{
+	{		
+		uint8 * _data = reinterpret_cast<uint8 *>(&data);
 		for (uint32 i = 0; i < sizeof(T); ++i)
-			*((uint8 *)&m_data + i) = ~(*((uint8 *)&data + i) ^ g_protectMagic);
+		{
+			m_data[i] = ~(_data[i] ^ g_protectMagic);
+		}		
 	}
 
 	T get()
 	{
 		uint8 outBuffer[sizeof(T)] = { 0 };
 		for (uint32 i = 0; i < sizeof(T); ++i)
-			*((uint8 *)&outBuffer + i) = ~(*((uint8 *)&m_data + i) ^ g_protectMagic);
-		return *(T *)outBuffer;
+		{
+			outBuffer[i] = ~(m_data[i] ^ g_protectMagic);
+		}
+		return *reinterpret_cast<T *>(outBuffer);
 	}
 
 	inline T val() 

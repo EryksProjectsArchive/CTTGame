@@ -515,7 +515,7 @@ void Renderer::renderGeometry(Geometry<Vertex3d> *geometry, const glm::mat4x4& m
 	unsigned int normalMatrixLocation = material->m_program->getUniformLocation("normalMatrix");
 	if (normalMatrixLocation != -1)
 	{
-		glUniformMatrix3fv(normalMatrixLocation, 1, GL_TRUE, glm::value_ptr(glm::inverse(viewMatrix * matrix)));
+		glUniformMatrix4fv(normalMatrixLocation, 1, GL_FALSE, glm::value_ptr(viewMatrix * matrix));
 	}
 
 	unsigned int modelMatrixLocation = material->m_program->getUniformLocation("modelMatrix");

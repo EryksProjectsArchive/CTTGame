@@ -1,7 +1,7 @@
 #version 330 core
 
 uniform mat4 mvpMatrix;
-uniform mat3 normalMatrix;
+uniform mat4 normalMatrix;
 uniform mat4 modelMatrix;
 uniform mat4 viewMatrix;
 
@@ -22,5 +22,5 @@ void main(void)
 
 	vUV = vertexUV;
 	vColor = vertexColor;
-	vNormal = normalize(mat3(viewMatrix * modelMatrix) * vertexNormal).xyz;
+	vNormal = vec3(normalMatrix * vec4(vertexNormal, 0));
 }

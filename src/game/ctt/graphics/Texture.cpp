@@ -71,9 +71,6 @@ bool Texture::load()
 			format = GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;
 			Renderer::glCompressedTexImage2D(GL_TEXTURE_2D, 0, format, data->width, data->height, 0, ((data->width + 3) / 4) * ((data->height + 3) / 4) * 16, data->pixels);
 			break;
-		case EImageCompreesion::NONE:
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, data->width, data->height, 0, format, GL_UNSIGNED_BYTE, data->pixels);
-			break;
 		default:
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, data->width, data->height, 0, format, GL_UNSIGNED_BYTE, data->pixels);
 			break;
