@@ -62,13 +62,13 @@ bool DeferredRendering::initialize(Renderer* renderer, uint32 width, uint32 heig
 	Renderer::glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_RENDERBUFFER, m_normalRenderBuffer);
 
 	Renderer::glBindRenderbuffer(GL_RENDERBUFFER, m_depthRenderBuffer);
-	Renderer::glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT32F, width, height);
+	Renderer::glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, width, height);
 	Renderer::glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_depthRenderBuffer);
 
 	// Create diffuse texture
 	glGenTextures(1, &m_diffuseTexture);
 	glBindTexture(GL_TEXTURE_2D, m_diffuseTexture);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_FLOAT, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -102,11 +102,11 @@ bool DeferredRendering::initialize(Renderer* renderer, uint32 width, uint32 heig
 	GLenum status = Renderer::glCheckFramebufferStatus(GL_FRAMEBUFFER);
 	if (status != GL_FRAMEBUFFER_COMPLETE_EXT)
 	{
-		Renderer::glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+		Renderer::glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		return false;
 	}
 
-	Renderer::glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+	Renderer::glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	return true;
 }
 
@@ -174,7 +174,7 @@ void DeferredRendering::end()
 	Renderer::glBindFramebuffer(GL_READ_FRAMEBUFFER, m_fbo);
 
 	// Render final result
-	glDisable(GL_DEPTH_TEST);
+	//glDisable(GL_DEPTH_TEST);
 	glDisable(GL_CULL_FACE);
 	glDisable(GL_BLEND);
 

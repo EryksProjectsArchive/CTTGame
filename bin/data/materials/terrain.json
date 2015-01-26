@@ -1,10 +1,10 @@
 {
 	"textures": [
-        { "name": "diffuse", "path": "terrain_grass_0.png", "mipMaps": true },
-        { "name": "normal", "path": "terrain_normal_0.png", "mipMaps": true }
+        { "name": "diffuse", "path": "terrain_grass_0.png", "mipMaps": true }/*,
+        { "name": "normal", "path": "terrain_normal_0.png", "mipMaps": false }*/
     ],
 	"shaders": {
         "vertex": "simple",
-        "fragment": "simple.normal"
+        "fragment": "simple"
     }
 }

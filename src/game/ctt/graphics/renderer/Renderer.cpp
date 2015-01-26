@@ -223,7 +223,7 @@ bool Renderer::setup(Window * window)
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 32);
 
 	m_glContext = SDL_GL_CreateContext(window->_window);
 	if (m_glContext == NULL)
@@ -395,10 +395,12 @@ bool Renderer::setup(Window * window)
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
 	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LESS);
+	glDepthFunc(GL_LEQUAL);
 	
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 	
+	glShadeModel(GL_SMOOTH);
+
 	glEnable(GL_CULL_FACE);
 	glFrontFace(GL_CW);
 	glCullFace(GL_BACK);
@@ -511,11 +513,11 @@ void Renderer::renderGeometry(Geometry<Vertex3d> *geometry, const glm::mat4x4& m
 	program->begin();
 
 	glm::mat4 viewMatrix = Camera::current->getViewMatrix();
-
+	glm::mat3 normalMatrix = glm::mat3(viewMatrix * matrix);
 	unsigned int normalMatrixLocation = material->m_program->getUniformLocation("normalMatrix");
 	if (normalMatrixLocation != -1)
-	{
-		glUniformMatrix4fv(normalMatrixLocation, 1, GL_FALSE, glm::value_ptr(viewMatrix * matrix));
+	{		
+		glUniformMatrix3fv(normalMatrixLocation, 1, GL_FALSE, glm::value_ptr(normalMatrix));
 	}
 
 	unsigned int modelMatrixLocation = material->m_program->getUniformLocation("modelMatrix");

@@ -1,9 +1,9 @@
 #version 330 core
 
 uniform mat4 mvpMatrix;
-uniform mat4 normalMatrix;
 uniform mat4 modelMatrix;
 uniform mat4 viewMatrix;
+uniform mat3 normalMatrix;
 
 attribute vec3 vertexPosition;
 attribute vec3 vertexNormal;
@@ -11,7 +11,6 @@ attribute vec2 vertexUV;
 attribute vec4 vertexColor;
 
 out vec2 vUV;
-
 out vec4 vColor;
 out vec3 vNormal;
 
@@ -19,8 +18,7 @@ out vec3 vNormal;
 void main(void)
 {
 	gl_Position = mvpMatrix * vec4(vertexPosition, 1.0);
-
 	vUV = vertexUV;
 	vColor = vertexColor;
-	vNormal = vec3(normalMatrix * vec4(vertexNormal, 0));
+	vNormal = vertexNormal;
 }
