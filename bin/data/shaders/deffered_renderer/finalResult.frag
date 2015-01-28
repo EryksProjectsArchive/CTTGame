@@ -43,14 +43,14 @@ vec4 calculatePointLight_BlinnPhong(vec3 position, vec3 normal, vec3 lightColor,
 		specular = pow(specularAngle, 16.0);
 	}
 
-	float multiplier = 1-clamp(distance(position, lightPosition)/size, 0, 1);
+	float multiplier = 1.0-clamp(distance(position, lightPosition)/size, 0, 1);
 
 	return vec4(ambientColor + (lambertian * lightColor + specular * specularColor) * multiplier, 1);
 }
 
 void main(void)
 {		
-	vec4 lighting;
+	vec4 lighting = vec4(0, 0, 0, 0);
 
 	// Base color of texture
 	color = texture2D(diffuseTexture, vUV);
@@ -59,10 +59,8 @@ void main(void)
 	vec3 vecPosition = getWorldPosition();
 	vec3 vecNormal = normalize((texture2D(normalTexture, vUV).xyz * 2) - 1);
 
-	//color = vec4(vecNormal, 1);
-
 	// Sun
-	float power = 1000.0f;
+	float power = 10.0f;
 	float size = 1000.0f;
 	vec3 lightColor = vec3(1, 1, 1);
 	vec3 lightPosition = vec3(200,500,0);
@@ -70,7 +68,7 @@ void main(void)
 	lighting += calculatePointLight_BlinnPhong(vecPosition, vecNormal, lightColor, lightPosition, size, power);
 
 	// Light
-	power = 20.0f;
+	power = 1.0f;
 	size = 20.0f;
 	lightColor = vec3(1, 0.5, 0);
 	lightPosition = vec3(0.8,2,0.8);
