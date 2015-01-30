@@ -27,20 +27,47 @@ vec3 getWorldPosition()
 }
 
 
+vec2 shift[20] = vec2[20](
+	vec2(0.427835603932, 0.477655295239),
+	vec2(0.251234811205, -0.57155564682),
+	vec2(0.660700865496, -0.690274124225),
+	vec2(0.210817722507, 0.236357604372),
+	vec2(0.408419298903, -0.60207668689),
+	vec2(-0.843159634641, -0.908271879051),
+	vec2(-0.405977503359, -0.258039204955),
+	vec2(-0.113997265239, 0.309559575797),
+	vec2(0.11578311972, 0.668418375007),
+	vec2(-0.0348932234126, 0.581132158975),
+	vec2(-0.394591224328, -0.971131362331),
+	vec2(-0.0244046280709, -0.887950429262),
+	vec2(-0.514683384993, -0.736217282451),
+	vec2(0.0922579997571, -0.549640301737),
+	vec2(0.602153194993, 0.950229230671),
+	vec2(0.646078312638, 0.332015424308),
+	vec2(0.293169534658, 0.457958499538),
+	vec2(0.571889062031, -0.723372669044),
+	vec2(0.32334337527, -0.698435936951),
+	vec2(0.618576434245, 0.0463357570433)
+);
+
 vec4 calculatePointLight_BlinnPhong(vec3 position, vec3 normal, vec3 lightColor, vec3 lightPosition, float size, float powe)
 {
 	float visibility = 1.0;
 
+	float n = clamp(dot(normal, normalize(lightPosition - position)), 0, 1);
+	float bias = clamp(0.000001 * tan(acos(n)), 0, 0.01);
 
 	vec3 wsPos = getWorldPosition();
 	vec4 uv = depthBiasMVP * vec4(wsPos, 1);
 	if(uv.x <= 1 && uv.y <= 1 && uv.x >= 0 && uv.y >= 0)
-	{	
-		float bias = 0.00002;
-		float depthValue = texture(shadowTexture, uv.xy).r;
-		if(depthValue < uv.z-bias)
+	{			
+		for(int i = 0; i < 20; ++i)
 		{
-			visibility = 0.02;
+			float depthValue = texture(shadowTexture, uv.xy + shift[i]/(10 * 200)).r;
+			if(depthValue < uv.z-bias)
+			{
+ 				visibility -= (0.8 / 20);
+ 			}
 		}
 	}
 	// Convert light position to screen-space.	
