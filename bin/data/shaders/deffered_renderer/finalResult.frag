@@ -54,9 +54,6 @@ vec4 calculatePointLight_BlinnPhong(vec3 position, vec3 normal, vec3 lightColor,
 {
 	float visibility = 1.0;
 
-	float n = clamp(dot(normal, normalize(lightPosition - position)), 0, 1);
-	float bias = clamp(0.000001 * tan(acos(n)), 0, 0.01);
-
 	vec3 wsPos = getWorldPosition();
 	vec4 uv = depthBiasMVP * vec4(wsPos, 1);
 	if(uv.x <= 1 && uv.y <= 1 && uv.x >= 0 && uv.y >= 0)
@@ -64,7 +61,7 @@ vec4 calculatePointLight_BlinnPhong(vec3 position, vec3 normal, vec3 lightColor,
 		for(int i = 0; i < 20; ++i)
 		{
 			float depthValue = texture(shadowTexture, uv.xy + shift[i]/(10 * 200)).r;
-			if(depthValue < uv.z-bias)
+			if(depthValue < uv.z)
 			{
  				visibility -= (0.8 / 20);
  			}
