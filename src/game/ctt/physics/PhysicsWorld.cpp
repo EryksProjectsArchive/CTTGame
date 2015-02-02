@@ -179,7 +179,7 @@ void PhysicsWorld::pulse(float dt)
 		entity->prePhysicsUpdate();
 
 	if (m_dynamicsWorld)
-		m_dynamicsWorld->stepSimulation(dt, 10, dt);
+		m_dynamicsWorld->stepSimulation(dt, 1, dt);
 	
 	for (PhysicalEntity *entity : m_entities)
 		entity->postPhysicsUpdate();

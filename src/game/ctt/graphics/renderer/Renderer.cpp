@@ -401,7 +401,7 @@ bool Renderer::setup(Window * window)
 	glDepthFunc(GL_LEQUAL);
 	
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-	
+
 	glShadeModel(GL_SMOOTH);
 
 	glEnable(GL_CULL_FACE);
@@ -912,8 +912,7 @@ void Renderer::renderGeometry(Geometry<Vertex3d_pc> * geometry, const Matrix4x4&
 void Renderer::drawLine3D(const Vector3& start, const Vector3& end, const Color& color, const Matrix4x4& matrix)
 {
 	if (m_dynamicShadowsPass.isActive()) return;
-	
-	glDisable(GL_DEPTH_TEST);
+
 	Geometry<Vertex3d_pc> geometry;
 
 	Vertex3d_pc* vertices = new Vertex3d_pc[2];
