@@ -413,9 +413,19 @@ bool Renderer::setup(Window * window)
 	glClearDepth(1.0f);
 	
 	m_defaultMaterial = MaterialLib::get()->findByName("none");
+	if (!m_defaultMaterial)
+	{
+		Error("Renderer", "Unable to setup default material!");
+		return false;
+	}
 	m_defaultMaterial->acquire();
 
 	m_simpleColorMat = MaterialLib::get()->findByName("primitive");
+	if (!m_simpleColorMat)
+	{
+		Error("Renderer", "Unable to setup primitive material!");
+		return false;
+	}
 	m_simpleColorMat->acquire();
 
 	unsigned int HackVAO;

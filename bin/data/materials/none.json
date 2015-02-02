@@ -5,6 +5,5 @@
 	"shaders": {
         "vertex": "simple",
         "fragment": "simple"
-    },
-    "wireframe": false,
+    }
 }

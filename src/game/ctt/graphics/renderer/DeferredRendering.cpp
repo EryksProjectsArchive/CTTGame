@@ -350,7 +350,7 @@ void DeferredRendering::end(const Matrix4x4& shadowMatrixParameter)
 
 	Renderer::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geometry.m_indexBuffer->m_bufferId);
 
-	glDrawElements(m_deferredResultMaterial->m_wireframe ? GL_LINE_STRIP : GL_TRIANGLES, geometry.m_trianglesCount * 3, GL_UNSIGNED_SHORT, 0);
+	glDrawElements(GL_TRIANGLES, geometry.m_trianglesCount * 3, GL_UNSIGNED_SHORT, 0);
 
 	Renderer::glDisableVertexAttribArray(attributePosition);
 	if (attributeColor != -1)
