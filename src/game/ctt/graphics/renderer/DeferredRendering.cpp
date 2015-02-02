@@ -95,8 +95,7 @@ bool DeferredRendering::initialize(Renderer* renderer, uint32 width, uint32 heig
 
 	glGenTextures(1, &m_materialParameterTexture);
 	glBindTexture(GL_TEXTURE_2D, m_materialParameterTexture);
-
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE32UI_EXT, width, height, 0, GL_LUMINANCE_INTEGER_EXT, GL_UNSIGNED_INT, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_R32UI, width, height, 0, GL_RED_INTEGER, GL_UNSIGNED_INT, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
