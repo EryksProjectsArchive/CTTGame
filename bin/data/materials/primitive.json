@@ -4,8 +4,6 @@
         "fragment": "simpleColor"
     },
     "parameters": {
-    	"shadeless": true,
-    	"castshadows": false,
-    	"receiveshadows": false
+    	"shadeless": true
     }
 }
