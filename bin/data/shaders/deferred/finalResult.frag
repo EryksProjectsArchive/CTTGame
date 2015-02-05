@@ -76,7 +76,7 @@ vec4 calculatePointLight_BlinnPhong(uint materialParams, vec3 position, vec3 nor
 				float depthValue = texture(shadowTexture, uv.xy + shift[i]/(10 * 200)).r;
 				if(depthValue < uv.z)
 				{
-	 				visibility -= (0.8 / 20);
+	 				visibility -= (0.6 / 20);
  				}
 			}
 		}

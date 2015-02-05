@@ -100,13 +100,12 @@ void DynamicShadowsPass::destroy()
 void DynamicShadowsPass::begin()
 {
 	// Compute shadow View Projection matrix
-	Vector3 lightPosition = Vector3(40, 50, 0);
-	Vector3 lightDirection = Vector3(0, 0, 0);
+	
 	Vector3 cam = CameraManager::get()->getCurrent()->getPosition();
-	lightDirection += cam;
-	lightPosition += cam;
+	Vector3 lightPosition = cam + Vector3(20, 25, 0);
+	Vector3 lightDirection = cam - Vector3(40, 50, 0);
 
-	Matrix4x4 projection = glm::ortho<float>(-80, 80, -80, 80, 1, 1000);
+	Matrix4x4 projection = glm::ortho<float>(-100, 100, -100, 100, 0.1f, 1000.0f);
 	Matrix4x4 view = glm::lookAt(lightPosition, lightDirection, glm::vec3(0, 1, 0));
 	m_viewProjectionMatrix = projection * view;
 

@@ -21,6 +21,8 @@ private:
 	static double s_deltaTimed;
 	static float s_deltaTime;
 	static float s_fps;
+
+	static float s_timeToUpdateFPS;
 public:
 	static double getDeltaTimed();
 	static float getDeltaTime();
