@@ -143,7 +143,9 @@ float Config::Entry::getFloat(float def)
 {
 	if (m_type == Config::Entry::ValueType::Float)
 		return m_data.floatValue;
-	
+	else if (m_type == Config::Entry::ValueType::Integer)
+		return (float)m_data.integerValue;
+
 	m_type = Config::Entry::ValueType::Float;
 	m_data.floatValue = def;
 	return def;

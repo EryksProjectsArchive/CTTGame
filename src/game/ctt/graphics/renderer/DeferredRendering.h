@@ -34,6 +34,8 @@ private:
 
 	uint32 m_width;
 	uint32 m_height;
+	uint32 m_internalWidth;
+	uint32 m_internalHeight;
 
 	uint32 m_depthShadowTexture;
 
@@ -42,7 +44,7 @@ public:
 	DeferredRendering();
 	~DeferredRendering();
 
-	bool initialize(Renderer *renderer, uint32 width, uint32 height);
+	bool initialize(Renderer *renderer, uint32 width, uint32 height, float scaling);
 	void destroy();
 
 	void setShadowTexture(uint32 depthShadowTexture);

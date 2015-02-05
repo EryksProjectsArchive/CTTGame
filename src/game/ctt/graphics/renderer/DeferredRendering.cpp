@@ -32,7 +32,7 @@ DeferredRendering::~DeferredRendering()
 {
 }
 
-bool DeferredRendering::initialize(Renderer* renderer, uint32 width, uint32 height)
+bool DeferredRendering::initialize(Renderer* renderer, uint32 width, uint32 height, float scaling)
 {
 	m_deferredResultMaterial = MaterialLib::get()->findByName("deferredResult");
 	if (!m_deferredResultMaterial)
@@ -42,6 +42,12 @@ bool DeferredRendering::initialize(Renderer* renderer, uint32 width, uint32 heig
 
 	m_width = width;
 	m_height = height;
+	m_internalWidth = uint32(float(width) * scaling);
+	m_internalHeight = uint32(float(height) * scaling);
+	if (scaling != 1.f)
+	{
+		Info("Deferred", "Scaled: %dx%d (%.1f%%)", m_internalWidth, m_internalHeight, scaling * 100.f);
+	}
 	m_renderer = renderer;
 
 	// Setup deferred rendering
@@ -55,25 +61,25 @@ bool DeferredRendering::initialize(Renderer* renderer, uint32 width, uint32 heig
 	Renderer::glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
 
 	Renderer::glBindRenderbuffer(GL_RENDERBUFFER, m_diffuseRenderBuffer);
-	Renderer::glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA, width, height);
+	Renderer::glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA, m_internalWidth, m_internalHeight);
 	Renderer::glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, m_diffuseRenderBuffer);
 
 	Renderer::glBindRenderbuffer(GL_RENDERBUFFER, m_normalRenderBuffer);
-	Renderer::glRenderbufferStorage(GL_RENDERBUFFER, GL_RGB16F, width, height);
+	Renderer::glRenderbufferStorage(GL_RENDERBUFFER, GL_RGB16F, m_internalWidth, m_internalHeight);
 	Renderer::glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_RENDERBUFFER, m_normalRenderBuffer);
 
 	Renderer::glBindRenderbuffer(GL_RENDERBUFFER, m_materialParameterRB);
-	Renderer::glRenderbufferStorage(GL_RENDERBUFFER, GL_R32UI, width, height);
+	Renderer::glRenderbufferStorage(GL_RENDERBUFFER, GL_R32UI, m_internalWidth, m_internalHeight);
 	Renderer::glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_RENDERBUFFER, m_materialParameterRB);
 
 	Renderer::glBindRenderbuffer(GL_RENDERBUFFER, m_depthRenderBuffer);
-	Renderer::glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, width, height);
+	Renderer::glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, m_internalWidth, m_internalHeight);
 	Renderer::glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_depthRenderBuffer);
 
 	// Create diffuse texture
 	glGenTextures(1, &m_diffuseTexture);
 	glBindTexture(GL_TEXTURE_2D, m_diffuseTexture);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_internalWidth, m_internalHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -84,7 +90,7 @@ bool DeferredRendering::initialize(Renderer* renderer, uint32 width, uint32 heig
 
 	glGenTextures(1, &m_normalTexture);
 	glBindTexture(GL_TEXTURE_2D, m_normalTexture);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F_ARB, width, height, 0, GL_RGB, GL_FLOAT, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F_ARB, m_internalWidth, m_internalHeight, 0, GL_RGB, GL_FLOAT, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -95,7 +101,7 @@ bool DeferredRendering::initialize(Renderer* renderer, uint32 width, uint32 heig
 
 	glGenTextures(1, &m_materialParameterTexture);
 	glBindTexture(GL_TEXTURE_2D, m_materialParameterTexture);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_R32UI, width, height, 0, GL_RED_INTEGER, GL_UNSIGNED_INT, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_R32UI, m_internalWidth, m_internalHeight, 0, GL_RED_INTEGER, GL_UNSIGNED_INT, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -106,7 +112,7 @@ bool DeferredRendering::initialize(Renderer* renderer, uint32 width, uint32 heig
 
 	glGenTextures(1, &m_depthTexture);
 	glBindTexture(GL_TEXTURE_2D, m_depthTexture);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, m_internalWidth, m_internalHeight, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -177,7 +183,7 @@ void DeferredRendering::begin()
 	Renderer::glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_fbo);
 	glPushAttrib(GL_VIEWPORT_BIT);
 
-	glViewport(0, 0, m_width, m_height);
+	glViewport(0, 0, m_internalWidth, m_internalHeight);
 
 	// Clear the render targets
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -193,6 +199,7 @@ void DeferredRendering::end(const Matrix4x4& shadowMatrixParameter)
 {
 	Renderer::glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 	glPopAttrib();
+	glViewport(0, 0, m_width, m_height);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	Renderer::glBindFramebuffer(GL_READ_FRAMEBUFFER, m_fbo);

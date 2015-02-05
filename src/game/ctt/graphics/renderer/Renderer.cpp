@@ -433,7 +433,10 @@ bool Renderer::setup(Window * window)
 	glBindVertexArray(HackVAO);
 
 	// Initialize deferred rendering
-	if (!m_deferredRenderer.initialize(this, (uint32)m_rect.right, (uint32)m_rect.bottom))
+	float scaling = Config::get()["graphics"]["scaling"].getFloat(1.0f);
+	uint32 deferredWidth = uint32(m_rect.right);
+	uint32 deferredHeight = uint32(m_rect.bottom);
+	if (!m_deferredRenderer.initialize(this, deferredWidth, deferredHeight, scaling))
 	{
 		Error("Renderer", "Unable to initialize deferred renderer. [%d]", glGetError());
 		return false;
