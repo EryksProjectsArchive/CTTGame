@@ -139,7 +139,7 @@ uint32 Config::Entry::getInteger(uint32 def)
 	return def;
 }
 
-float Config::Entry::getFloat(float def)
+float Config::Entry::getFloat(float defaultValue)
 {
 	if (m_type == Config::Entry::ValueType::Float)
 		return m_data.floatValue;
@@ -147,33 +147,33 @@ float Config::Entry::getFloat(float def)
 		return (float)m_data.integerValue;
 
 	m_type = Config::Entry::ValueType::Float;
-	m_data.floatValue = def;
-	return def;
+	m_data.floatValue = defaultValue;
+	return defaultValue;
 }
 
-List<Config::Entry *> Config::Entry::getArrayData()
+List<Config::Entry *>& Config::Entry::getArrayData()
 {
 	return m_data.arrayData;
 }
 
-DynString Config::Entry::getString(const DynString& def)
+DynString Config::Entry::getString(const DynString& defaultValue)
 {
 	if (m_type == Config::Entry::ValueType::String) 
 		return m_data.stringData;
 	
 	m_type = Config::Entry::ValueType::String;
-	m_data.stringData = def;
-	return def;
+	m_data.stringData = defaultValue;
+	return defaultValue;
 }
 
-bool Config::Entry::getBool(bool def)
+bool Config::Entry::getBool(bool defaultValue)
 {
 	if (m_type == Config::Entry::ValueType::Boolean)
 		return m_data.booleanData;
 
 	m_type = Config::Entry::ValueType::Boolean;
-	m_data.booleanData = def;
-	return def;
+	m_data.booleanData = defaultValue;
+	return defaultValue;
 }
 
 Config::Entry::ValueType::Type Config::Entry::type()

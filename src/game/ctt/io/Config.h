@@ -72,11 +72,11 @@ public:
 		Entry(const DynString& name);
 		~Entry();
 
-		uint32 getInteger(uint32 def = 0);
-		float getFloat(float def = 0);
-		List<Entry *> getArrayData();
-		DynString getString(const DynString& def = DynString());
-		bool getBool(bool def = false);
+		uint32 getInteger(uint32 defaultValue = 0);
+		float getFloat(float defaultValue = 0);
+		List<Entry *>& getArrayData();
+		DynString getString(const DynString& defaultValue = DynString());
+		bool getBool(bool defaultValue = false);
 
 		ValueType::Type type();
 
