@@ -471,6 +471,9 @@
     <ClCompile Include="graphics\CameraManager.cpp">
       <Filter>Source Files\graphics</Filter>
     </ClCompile>
+    <ClCompile Include="game\environment\Sky.cpp">
+      <Filter>Source Files\game\environment</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="os\OS.h">
@@ -790,6 +793,9 @@
     </ClInclude>
     <ClInclude Include="graphics\CameraManager.h">
       <Filter>Header Files\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="game\environment\Sky.h">
+      <Filter>Header Files\game\environment</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

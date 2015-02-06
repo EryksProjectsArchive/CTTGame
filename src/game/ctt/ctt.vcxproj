@@ -176,6 +176,7 @@
     <ClCompile Include="core\threading\Thread.cpp" />
     <ClCompile Include="core\Timer.cpp" />
     <ClCompile Include="game\environment\Environment.cpp" />
+    <ClCompile Include="game\environment\Sky.cpp" />
     <ClCompile Include="game\environment\Terrain.cpp" />
     <ClCompile Include="game\Game.cpp" />
     <ClCompile Include="game\scene\entities\Entity.cpp" />
@@ -266,6 +267,7 @@
     <ClInclude Include="core\WString.h" />
     <ClInclude Include="Debugging.h" />
     <ClInclude Include="game\environment\Environment.h" />
+    <ClInclude Include="game\environment\Sky.h" />
     <ClInclude Include="game\environment\Terrain.h" />
     <ClInclude Include="game\Game.h" />
     <ClInclude Include="game\scene\entities\Entity.h" />
