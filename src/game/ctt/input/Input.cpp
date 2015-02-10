@@ -297,6 +297,9 @@ void Input::_processBinds(Key::Type key, bool pressed)
 {
 	for (BindData data : m_binds)
 	{
+		if (data.inputItem.device != INPUT_DEVICE_KEYBOARD) // Process only keyboard binds.
+			continue;
+
 		if (((Key::Type)data.inputItem.numeric) == key && data.pressed == pressed)
 		{
 			if (!Console::get()->execute(data.value))
