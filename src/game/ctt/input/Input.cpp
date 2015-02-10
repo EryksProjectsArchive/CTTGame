@@ -301,7 +301,7 @@ void Input::_processBinds(Key::Type key, bool pressed)
 		{
 			if (!Console::get()->execute(data.value))
 			{
-				Error("Input", "Unable to execute bind '%s'", data.value.get());
+				Error("Input", "Unable to execute bind '%s'", StringUtilities::toMultiByte(data.value).get());
 			}
 			break;
 		}
