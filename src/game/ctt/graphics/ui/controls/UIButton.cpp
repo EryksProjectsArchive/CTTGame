@@ -147,7 +147,7 @@ namespace UI
 		bool focus = (x >= rct.left && x <= rct.right) && (y >= rct.top && y <= rct.bottom);
 		if (m_focus != focus)
 		{
-			Input::get()->setCursor(focus ? Cursor::Hand : Cursor::Arrow);
+			Input::get()->setCursor(focus ? MOUSE_CURSOR_HAND : MOUSE_CURSOR_ARROW);
 			m_focus = focus;
 			if (!m_focus)			
 				m_pressed = false;
@@ -155,7 +155,7 @@ namespace UI
 			return true;
 		}
 
-		bool leftButtonState = Input::get()->isMouseBtnPressed(MouseButton::Left);	
+		bool leftButtonState = Input::get()->isMouseBtnPressed(MOUSE_BUTTON_LEFT);	
 		if (m_focus && !m_pressed && leftButtonState)
 		{
 			for (OnPressData& data : m_onPressData)

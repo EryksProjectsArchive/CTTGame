@@ -23,7 +23,17 @@
 #define DEFINE_KEY_ITEM(s)\
 	{ INPUT_DEVICE_KEYBOARD, Key::SCANCODE_##s, TO_UNICODE(#s) }
 
+#define DEFINE_MOUSE_BUTTON(s)\
+	{ INPUT_DEVICE_MOUSE, MouseButton::MOUSE_BUTTON_##s, TO_UNICODE(#s) }
+
+#define DEFINE_MOUSE_WHEEL(s)\
+	{ INPUT_DEVICE_MOUSE, MouseWheelAxis::MOUSE_WHEEL_AXIS_##s, TO_UNICODE(#s) }
+
+#define DEFINE_MOUSE_AXIS(s)\
+		{ INPUT_DEVICE_MOUSE, MouseAxis::MOUSE_AXIS_##s, TO_UNICODE(#s) }
+
 InputItem g_inputItems[INPUT_ITEMS_COUNT] = {
+	// Keyboard
 	DEFINE_KEY_ITEM(A),
 	DEFINE_KEY_ITEM(B),
 	DEFINE_KEY_ITEM(C),
@@ -263,7 +273,18 @@ InputItem g_inputItems[INPUT_ITEMS_COUNT] = {
 	DEFINE_KEY_ITEM(EJECT),
 	DEFINE_KEY_ITEM(SLEEP),
 	DEFINE_KEY_ITEM(APP1),
-	DEFINE_KEY_ITEM(APP2)
+	DEFINE_KEY_ITEM(APP2),
+
+	// Mouse
+	DEFINE_MOUSE_BUTTON(LEFT),
+	DEFINE_MOUSE_BUTTON(MIDDLE),
+	DEFINE_MOUSE_BUTTON(RIGHT),
+
+	DEFINE_MOUSE_WHEEL(X),
+	DEFINE_MOUSE_WHEEL(Y),
+
+	DEFINE_MOUSE_AXIS(X),
+	DEFINE_MOUSE_AXIS(Y)
 };
 
 Input::Input()
@@ -301,6 +322,60 @@ void Input::_processBinds(Key::Type key, bool pressed)
 			continue;
 
 		if (((Key::Type)data.inputItem.numeric) == key && data.pressed == pressed)
+		{
+			if (!Console::get()->execute(data.value))
+			{
+				Error("Input", "Unable to execute bind '%s'", StringUtilities::toMultiByte(data.value).get());
+			}
+			break;
+		}
+	}
+}
+
+void Input::_processBinds(MouseButton button, bool pressed)
+{
+	for (BindData data : m_binds)
+	{
+		if ((data.inputItem.device != INPUT_DEVICE_MOUSE) || (data.inputItem.numeric > MouseButton::MOUSE_BUTTON_COUNT)) // Process only mouse binds.
+			continue;
+
+		if (((MouseButton)data.inputItem.numeric) == button && data.pressed == pressed)
+		{
+			if (!Console::get()->execute(data.value))
+			{
+				Error("Input", "Unable to execute bind '%s'", StringUtilities::toMultiByte(data.value).get());
+			}
+			break;
+		}
+	}
+}
+
+void Input::_processBinds(MouseAxis axis, bool up)
+{
+	for (BindData data : m_binds)
+	{
+		if ((data.inputItem.device != INPUT_DEVICE_MOUSE) || (data.inputItem.numeric <= MouseWheelAxis::MOUSE_WHEEL_AXIS_Y)) // Process only mouse axis binds.
+			continue;
+
+		if (((MouseAxis)data.inputItem.numeric) == axis && data.pressed == up)
+		{
+			if (!Console::get()->execute(data.value))
+			{
+				Error("Input", "Unable to execute bind '%s'", StringUtilities::toMultiByte(data.value).get());
+			}
+			break;
+		}
+	}
+}
+
+void Input::_processBinds(MouseWheelAxis axis, bool up)
+{
+	for (BindData data : m_binds)
+	{
+		if ((data.inputItem.device != INPUT_DEVICE_MOUSE) || (data.inputItem.numeric <= MouseButton::MOUSE_BUTTON_COUNT)) // Process only mouse axis binds.
+			continue;
+
+		if (((MouseAxis)data.inputItem.numeric) == axis && data.pressed == up)
 		{
 			if (!Console::get()->execute(data.value))
 			{
@@ -398,12 +473,58 @@ void Input::onMouseScroll(sint32 horizontal, sint32 vertical)
 		if (!isLocked() || controllable->m_type == ControllableType::Engine)
 			controllable->onMouseScroll(horizontal, vertical);
 	}
+
+	if (!isLocked())
+	{
+		if (horizontal != 0)
+		{
+			uint32 n = abs(horizontal);
+			bool up = horizontal > 0;
+			while (n-- > 0)
+			{
+				_processBinds(MouseWheelAxis::MOUSE_WHEEL_AXIS_X, up);
+			}
+		}
+
+		if (vertical != 0)
+		{
+			uint32 n = abs(vertical);
+			bool up = vertical > 0;
+			while (n-- > 0)
+			{
+				_processBinds(MouseWheelAxis::MOUSE_WHEEL_AXIS_Y, up);
+			}
+		}
+	}
 }
 
 void Input::onMouseMove(sint32 x, sint32 y, sint32 relx, sint32 rely)
-{
+{	
 	m_mouse.x = x;
 	m_mouse.y = y;
+
+	if (!isLocked())
+	{
+		if (relx != 0)
+		{
+			uint32 n = abs(relx);
+			bool up =  relx > 0;
+			while (n-- > 0)
+			{
+				_processBinds(MouseAxis::MOUSE_AXIS_X, up);
+			}
+		}
+
+		if (rely != 0)
+		{
+			uint32 n = abs(rely);
+			bool up = rely > 0;
+			while (n-- > 0)
+			{
+				_processBinds(MouseAxis::MOUSE_AXIS_Y, up);
+			}
+		}
+	}
 
 	for (Controllable * controllable : m_controllables)
 	{
@@ -421,6 +542,11 @@ void Input::onMouseButtonEvent(uint8 button, bool state, uint8 clicks, sint32 x,
 		if (!isLocked() || controllable->m_type == ControllableType::Engine)
 			controllable->onMouseButtonEvent(button, state, clicks, x, y);
 	}
+
+	if (!isLocked())
+	{
+		_processBinds((MouseButton)button, state);
+	}
 }
 
 void Input::onTextInput(const WDynString& string)
@@ -435,7 +561,7 @@ void Input::onTextInput(const WDynString& string)
 void Input::bind(const WDynString& inputItem, bool pressed, const WDynString& value)
 {
 	InputItem item = getInputItem(inputItem);
-	if (item.isValid && item.device == INPUT_DEVICE_KEYBOARD)
+	if (item.isValid)
 	{
 		// Remove duplicate actions.
 		for (BindData data : m_binds)
@@ -488,7 +614,7 @@ bool Input::isKeyDown(Key::Type key)
 	return m_keyState[key];
 }
 
-bool Input::isMouseBtnPressed(MouseButton::Type button)
+bool Input::isMouseBtnPressed(MouseButton button)
 {
 	return m_mouseBtnState[button];
 }
@@ -527,12 +653,12 @@ void Input::showCursor(bool state)
 
 	if (!m_cursorVisiblity)
 	{
-		for (uint32 i = 0; i < MouseButton::Count; ++i)
+		for (uint32 i = 0; i < MouseButton::MOUSE_BUTTON_COUNT; ++i)
 			m_mouseBtnState[i] = false;
 	}
 }
 
-void Input::setCursor(Cursor::Type type)
+void Input::setCursor(MouseCursor type)
 {
 	if (m_cursor)
 	{
@@ -543,7 +669,7 @@ void Input::setCursor(Cursor::Type type)
 	SDL_SystemCursor cursor = SDL_SYSTEM_CURSOR_ARROW;
 	switch (type)
 	{
-	case Cursor::Hand:
+	case MouseCursor::MOUSE_CURSOR_HAND:
 		cursor = SDL_SYSTEM_CURSOR_HAND;
 		break;
 	}

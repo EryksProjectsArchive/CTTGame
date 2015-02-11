@@ -425,7 +425,7 @@ void Game::update(double deltaTime)
 				{
 					Vector3 pos = glm::unProject(glm::vec3(x, m_renderer->getViewportAsVector().w - y, 1), glm::mat4() * camera->getViewMatrix(), m_renderer->getProjectionMatrix(), m_renderer->getViewportAsVector());
 
-					if (!camera->isMoving() && Input::get()->isMouseBtnPressed(MouseButton::Left) /*&& !m_currentPickedEntity*/)
+					if (!camera->isMoving() && Input::get()->isMouseBtnPressed(MOUSE_BUTTON_LEFT) /*&& !m_currentPickedEntity*/)
 					{
 						PhysicalEntity *entity = 0;
 						Vector3 res;
@@ -447,7 +447,7 @@ void Game::update(double deltaTime)
 					m_action = false;
 					m_activeAxis = ActiveAxis::None;
 				}
-				if (Input::get()->isMouseBtnPressed(MouseButton::Left) && m_currentPickedEntity && m_action)
+				if (Input::get()->isMouseBtnPressed(MOUSE_BUTTON_LEFT) && m_currentPickedEntity && m_action)
 				{
 					m_activeAxis = ActiveAxis::None;
 				}
