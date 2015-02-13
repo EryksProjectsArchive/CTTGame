@@ -7,10 +7,12 @@ attribute vec4 vertexColor;
 attribute vec2 vertexUV;
 
 out vec4 vColor;
+out vec2 vUV;
 
 // Simple vertex shader
 void main(void)
 {
 	gl_Position = orthoMatrix * vec4(vertexPosition, 1, 1);
 	vColor = vertexColor;
+	vUV = vertexUV;
 }

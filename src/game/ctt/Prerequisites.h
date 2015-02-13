@@ -206,14 +206,13 @@ namespace UI
 	class Manager;
 	class View;
 	class Control;
+	class Skin;
 };
 
 struct Vertex2d;
 struct Vertex3d;
 struct SimpleVertex2d;
 struct ImageData;
-
-
 
 // Math
 typedef glm::quat Quaternion;

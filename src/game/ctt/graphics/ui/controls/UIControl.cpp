@@ -14,7 +14,7 @@
 namespace UI
 {
 	Control::Control(const DynString& name, Vector2 position, Vector2 size)
-		: m_name(name), m_parent(0), m_position(position), m_size(size), m_focus(false)
+		: m_name(name), m_parent(0), m_position(position), m_size(size), m_hover(false), m_skin(0)
 	{
 
 	}
@@ -31,6 +31,7 @@ namespace UI
 		}
 
 		m_children.clear();		
+		m_skin = 0;
 	}
 
 	DynString Control::getName()
@@ -50,6 +51,7 @@ namespace UI
 
 		m_parent = control;
 		m_parent->m_children.pushBack(control);
+		setSkin(control->m_skin);
 	}
 
 	void Control::addChild(Control *control)
@@ -59,6 +61,7 @@ namespace UI
 
 		control->m_parent = this;
 		m_children.pushBack(control);
+		control->setSkin(m_skin);
 	}
 
 	void Control::removeChild(Control *control)
@@ -90,6 +93,19 @@ namespace UI
 				return true;
 		}
 		return false;
+	}
+
+	void Control::setSkin(Skin *skin)
+	{
+		for (Control * control : m_children)
+			control->setSkin(skin);
+
+		m_skin = skin;
+	}
+
+	Skin * Control::getSkin()
+	{
+		return m_skin;
 	}
 
 	void Control::render(RenderContext& context)

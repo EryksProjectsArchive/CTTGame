@@ -85,4 +85,6 @@ public:
 	friend class DynamicShadowsPass;
 	friend class MaterialLib;
 
+	Texture* getTexture(uint32 i);
+	Texture* getTexture(const DynString& name);
 };

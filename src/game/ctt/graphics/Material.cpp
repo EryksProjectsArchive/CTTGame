@@ -95,3 +95,35 @@ void Material::addTexture(const DynString& name, const FilePath& path, bool mipm
 		data->m_wrap[i] = wrap[i];
 	m_textures.pushBack(data);
 }
+
+
+Texture* Material::getTexture(uint32 i)
+{
+	if (i > m_textures.size())
+		return 0;
+
+	Texture * tex = 0;
+	uint32 c = i;
+	for (TextureData * data : m_textures)
+	{
+		if (c == 0)
+		{
+			tex = data->m_texture;
+			break;
+		}
+		c--;
+	}
+	return tex;
+}
+
+Texture* Material::getTexture(const DynString& name)
+{
+	for (TextureData * data : m_textures)
+	{
+		if (data->m_name == name)
+		{
+			return data->m_texture;
+		}
+	}
+	return 0;
+}

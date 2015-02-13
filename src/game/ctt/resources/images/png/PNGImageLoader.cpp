@@ -115,7 +115,7 @@ namespace PNG
 							uint8** row_pointers = new uint8*[data->height];
 
 							for (uint32 i = 0; i < data->height; ++i)
-								row_pointers[data->height - 1 - i] = data->pixels + i * rowbytes;
+								row_pointers[i] = data->pixels + i * rowbytes;
 
 							png_read_image(pngPtr, row_pointers);
 

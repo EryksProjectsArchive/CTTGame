@@ -14,8 +14,9 @@
 
 namespace UI
 {	
-	View::View(const DynString& name) : Control(name)
+	View::View(const DynString& name, Skin *skin) : Control(name)
 	{
+		m_skin = skin;
 	}
 	
 	View::~View()

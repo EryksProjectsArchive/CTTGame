@@ -29,8 +29,6 @@ namespace UI
 	{
 	private:
 		WDynString m_text;
-		Geometry<Vertex2d>* m_geometry;
-		Material* m_material;
 
 		Font* m_font;
 		bool m_pressed;

@@ -16,6 +16,7 @@
 namespace UI
 {
 	class View;
+	class Skin;
 
 	class Manager
 	{
@@ -23,8 +24,9 @@ namespace UI
 		List<View *> m_views;
 
 		View *m_currentView;
+		Skin *m_skin;
 	public:
-		Manager();
+		Manager(Skin * skin);
 		~Manager();
 
 		/**

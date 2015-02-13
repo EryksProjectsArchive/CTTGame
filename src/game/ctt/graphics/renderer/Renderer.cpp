@@ -692,6 +692,7 @@ void Renderer::renderGeometry(Geometry<Vertex2d> *geometry)
 
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_CULL_FACE);
+	glEnable(GL_BLEND);
 
 	Material* material = m_currentMaterial;
 	if (!material)

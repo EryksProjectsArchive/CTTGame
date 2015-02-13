@@ -45,6 +45,7 @@ private:
 	class Console* m_console;
 
 	UI::Manager* m_ui;
+	UI::Skin* m_skin;
 
 	class PhysicalEntity * m_currentPickedEntity;
 	bool m_rotate;

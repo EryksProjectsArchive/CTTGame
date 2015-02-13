@@ -24,10 +24,11 @@ namespace UI
 	protected:
 		Vector2 m_position;
 		Vector2 m_size;
-		bool m_focus;
+		bool m_hover;
 
 		List<Control *> m_children;
 		Control *m_parent;
+		Skin *m_skin;
 	public:
 		Control(const DynString& name, Vector2 position = Vector2(), Vector2 size = Vector2());
 		virtual ~Control();
@@ -44,6 +45,9 @@ namespace UI
 		virtual bool isParentOf(Control *control);
 
 		virtual bool handleInput();
+
+		virtual void setSkin(Skin *skin);
+		virtual Skin * getSkin();
 
 		virtual void render(RenderContext& context);
 	};

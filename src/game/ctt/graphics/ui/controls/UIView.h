@@ -21,7 +21,7 @@ namespace UI
 	class View : public Control
 	{
 	public:
-		View(const DynString& name);
+		View(const DynString& name, Skin* skin);
 		~View();
 	};
 };

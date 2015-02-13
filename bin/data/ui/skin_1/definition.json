@@ -1,0 +1,56 @@
+{
+	"texture": "ui/skin.png",
+	"controls": 
+	[
+		{
+			"name": "button", 
+			"elements": 
+			[
+				{ 
+					"name": "left_corner", 
+					"type": "texture", 
+					"x": 0, 
+					"y": 0, 
+					"w": 0, 
+					"h": 0 
+				},
+				{ 
+					"name": "right_corner", 
+					"type": "texture", 
+					"x": 0, 
+					"y": 0, 
+					"w": 0, 
+					"h": 0
+				},
+				{ 
+					"name": "body", 
+					"type": "texture", 
+					"state": "normal",
+					"x": 0, 
+					"y": 0, 
+					"w": 57, 
+					"h": 29
+				},
+				{ 
+					"name": "body", 
+					"type": "texture", 
+					"state": "hover",
+					"x": 57, 
+					"y": 0, 
+					"w": 114, 
+					"h": 29
+				},
+				{ 
+					"name": "text", 
+					"type": "label", 
+					"aligin": "center|center" 
+				}
+			] 
+		}
+	],
+	"colors": 
+	{
+		"buttonNormal": {"r": 1.0, "g": 1.0, "b": 1.0 },
+		"buttonHover": {"r": 1.0, "g": 0.5, "b": 0 }
+	}	
+}

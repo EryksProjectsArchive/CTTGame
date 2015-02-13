@@ -11,13 +11,14 @@
 
 #include "controls/UIView.h"
 
+#include "UISkin.h"
 #include "UIManager.h"
 
 namespace UI
 {
-	Manager::Manager() : m_currentView(0)
+	Manager::Manager(Skin *skin) : m_currentView(0)
 	{
-
+		m_skin = skin;
 	}
 
 	Manager::~Manager()
@@ -30,7 +31,7 @@ namespace UI
 
 	View* Manager::createView(const DynString& name)
 	{
-		View* view = new View(name);
+		View* view = new View(name, m_skin);
 		m_views.pushBack(view);
 		return view;
 	}

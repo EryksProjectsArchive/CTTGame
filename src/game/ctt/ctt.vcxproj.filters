@@ -474,6 +474,9 @@
     <ClCompile Include="game\environment\Sky.cpp">
       <Filter>Source Files\game\environment</Filter>
     </ClCompile>
+    <ClCompile Include="graphics\ui\UISkin.cpp">
+      <Filter>Source Files\graphics\ui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="os\OS.h">
@@ -796,6 +799,9 @@
     </ClInclude>
     <ClInclude Include="game\environment\Sky.h">
       <Filter>Header Files\game\environment</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\ui\UISkin.h">
+      <Filter>Header Files\graphics\ui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

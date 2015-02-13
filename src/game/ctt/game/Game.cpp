@@ -61,6 +61,7 @@
 
 #include <core/console/Console.h>
 
+#include <graphics/ui/UISkin.h>
 #include <graphics/ui/UIManager.h>
 #include <graphics/ui/controls/UIView.h>
 #include <graphics/ui/controls/UIControl.h>
@@ -135,6 +136,12 @@ Game::~Game()
 	{
 		delete m_ui;
 		m_ui = 0;
+	}
+
+	if (m_skin)
+	{
+		delete m_skin;
+		m_skin = 0;
 	}
 
 	if (gFont)
@@ -248,7 +255,8 @@ bool Game::init()
 	CameraManager::get()->setCurrent(CAMERA_TYPE_EDITOR_FREE);
 
 	// Create main menu
-	m_ui = new UI::Manager();
+	m_skin = new UI::Skin("skin_1");
+	m_ui = new UI::Manager(m_skin);
 
 	UI::View* view = m_ui->createView("game.main_menu");
 

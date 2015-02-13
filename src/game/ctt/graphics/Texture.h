@@ -21,6 +21,9 @@ class Texture : public CacheableResource
 private:
 	uint32 m_textureID;
 	bool m_mipmaps;
+
+	uint32 m_width;
+	uint32 m_height;
 public:
 	Texture(const FilePath& filePath, bool mipmaps = false);
 	~Texture();
@@ -30,6 +33,9 @@ public:
 	bool load();
 
 	bool isLoaded();
+
+	uint32 width();
+	uint32 height();
 
 	friend class Renderer;
 };

@@ -17,7 +17,7 @@
 #include <graphics/ImageData.h>
 
 Texture::Texture(const FilePath& filePath, bool mipmaps)
-	: m_textureID(-1), CacheableResource(filePath), m_mipmaps(mipmaps)
+	: m_textureID(-1), CacheableResource(filePath), m_mipmaps(mipmaps), m_width(0), m_height(0)
 {
 }
 
@@ -41,6 +41,9 @@ bool Texture::load()
 	ImageData * data = ImageLoader::get()->load(m_filePath);
 	if (data)
 	{
+		m_width = data->width;
+		m_height = data->height;
+
 		glGenTextures(1, &m_textureID);
 		glBindTexture(GL_TEXTURE_2D, m_textureID);
 		uint32 format = GL_RGB;
@@ -92,4 +95,14 @@ bool Texture::load()
 bool Texture::isLoaded()
 {
 	return m_isLoaded && glIsTexture(m_textureID);
+}
+
+uint32 Texture::width()
+{
+	return m_width;
+}
+
+uint32 Texture::height()
+{
+	return m_height;
 }
