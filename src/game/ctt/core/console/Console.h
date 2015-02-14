@@ -117,10 +117,9 @@ private:
 
 			m_current = -1;
 		}
-
+		
 		int32 m_current;
 	} m_history;
-
 
 	float m_timeToCursorBlink;
 	widechar m_cursor;
@@ -128,6 +127,9 @@ private:
 public:
 	Console();
 	~Console();
+
+	void loadHistory();
+	void saveHistory();
 
 	void init();
 

@@ -11,8 +11,11 @@
 
 #include "Console.h"
 
+#include <json/json.h>
+
 #include <core/WString.h>
 #include <io/Config.h>
+#include <io/fs/FileSystem.h>
 #include <graphics/fonts/Font.h>
 #include <math/Rect.h>
 
@@ -65,6 +68,54 @@ Console::~Console()
 		m_inputBackground = 0;
 	}
 	s_instance = 0;
+}
+
+void Console::loadHistory()
+{
+	File *file = FileSystem::get()->open("home/consoleInputHistory.json", FileOpenMode::Read);
+	if (file->isLoaded())
+	{
+		Json::Reader reader;
+		Json::Value root;
+		if (reader.parse(file->getContent().get(), root))
+		{
+			if (root.isArray())
+			{
+				for (uint32 i = 0; i < root.size(); ++i)
+				{
+					if (root[i].isString())
+					{
+						m_history.add(StringUtilities::toWideChar(root[i].asCString()));
+					}
+				}
+			}
+		}
+		else
+		{
+			Error("Console", "Unable to parse input history: %s", reader.getFormatedErrorMessages().c_str());
+		}
+	}
+	FileSystem::get()->close(file);
+}
+
+void Console::saveHistory()
+{
+	File *file = FileSystem::get()->open("home/consoleInputHistory.json", FileOpenMode::Write | FileOpenMode::Extra);
+	if (file->isLoaded())
+	{
+		Json::Value root;
+		for (int32 i = CONSOLE_HISTORY-1; i >= 0; --i)
+		{
+			if (m_history.m_entry[i].m_used)
+			{
+				root.append(StringUtilities::toMultiByte(m_history.m_entry[i].m_value).get());
+			}
+		}
+
+		std::string data = root.toStyledString();
+		file->write(data.c_str(), data.length(), sizeof(char));		
+	}
+	FileSystem::get()->close(file);
 }
 
 void Console::init()
@@ -273,21 +324,17 @@ bool Console::onKeyEvent(Key::Type key, bool pressed)
 				if (!m_history.m_entry[m_history.m_current].m_used || m_history.m_current >= CONSOLE_HISTORY - 1)
 					m_history.m_current = -1;
 			}
-
 			m_inputBuffer = (m_history.m_current != -1) ? m_history.m_entry[m_history.m_current].m_value : WDynString();
 		}
 
 		if (key == Key::SCANCODE_DOWN && pressed)
 		{
-			if (m_history.m_current == -1)
-				m_history.m_current = CONSOLE_HISTORY-1;
-			else
+			if (m_history.m_current != -1)
 			{
 				m_history.m_current--;
 				if (!m_history.m_entry[m_history.m_current].m_used || m_history.m_current < 0)
 					m_history.m_current = -1;
 			}
-
 			m_inputBuffer = (m_history.m_current != -1) ? m_history.m_entry[m_history.m_current].m_value : WDynString();
 		}
 

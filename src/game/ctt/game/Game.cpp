@@ -194,8 +194,10 @@ Game::~Game()
 		m_config = 0;
 	}
 
+
 	if (m_console)
 	{
+		m_console->saveHistory();
 		delete m_console;
 		m_console = 0;
 	}
@@ -226,6 +228,10 @@ bool Game::init()
 	FileSystem::get()->setHomePath(OS::getHomePath());
 	FileSystem::get()->registerFileSystem(new Stdio::FileSystem());
 	FileSystem::get()->setBaseDirectory(FilePath("%s../../data/", OS::getAppPath().get()));
+
+	// Our fs is ready - load history of console
+	if (m_console)
+		m_console->loadHistory();
 
 	// setup logger
 	Logger::init(FilePath("%sgame.log", OS::getHomePath().get()), false);
