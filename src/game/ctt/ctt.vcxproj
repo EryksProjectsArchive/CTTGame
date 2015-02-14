@@ -257,6 +257,7 @@
     <ClInclude Include="core\Instance.h" />
     <ClInclude Include="core\List.h" />
     <ClInclude Include="core\Logger.h" />
+    <ClInclude Include="core\performance\Profiler.h" />
     <ClInclude Include="core\SharedPtr.h" />
     <ClInclude Include="core\Singleton.h" />
     <ClInclude Include="core\String.h" />

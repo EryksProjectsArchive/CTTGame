@@ -20,6 +20,7 @@
 #include <core/application/Application.h>
 
 #include <graphics/ui/UIEventHandler.h>
+#include <graphics/ui/controls/UILabel.h>
 
 enum ActiveMoveAxis
 {
@@ -46,6 +47,7 @@ private:
 
 	UI::Manager* m_ui;
 	UI::Skin* m_skin;
+	UI::Label* m_profilerInfo;
 
 	class PhysicalEntity * m_currentPickedEntity;
 	bool m_rotate;

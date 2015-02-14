@@ -31,6 +31,31 @@ struct Vertex3d_pc
 	unsigned int color;
 };
 
+struct RenderStatistics
+{
+	uint32 m_drawCalls;
+	uint64 m_verticesProcessed;
+	uint64 m_trianglesProcessed;
+	
+	RenderStatistics()
+	{
+		reset();
+	}
+
+	void reset()
+	{
+		m_drawCalls = 0;
+		m_trianglesProcessed = m_verticesProcessed = 0llu;
+	}
+
+	void addDrawCall(uint64 vertices, uint64 triangles)
+	{
+		m_verticesProcessed += vertices;
+		m_trianglesProcessed += triangles;
+		m_drawCalls++;
+	}
+};
+
 class Renderer : public Instance<Renderer>
 {
 protected:
@@ -49,20 +74,7 @@ protected:
 	DeferredRendering m_deferredRenderer;
 	DynamicShadowsPass m_dynamicShadowsPass;
 
-	struct
-	{
-		unsigned int m_trianglesDrawn;
-		unsigned int m_drawCalls;
-		unsigned int m_verticesDrawn;
-
-		void reset()
-		{
-			m_trianglesDrawn = 0;
-			m_drawCalls = 0;
-			m_verticesDrawn = 0;
-		}
-	} m_stats;
-
+	RenderStatistics m_stats;
 	Rect m_rect;
 public:
 	Renderer();
@@ -76,6 +88,8 @@ public:
 	void beginDeferredPass();
 	void endDeferredPass();
 	void postFrame();
+
+	RenderStatistics& stats();
 
 	Matrix4x4 getProjectionMatrix();
 	Matrix4x4 getOrthoMatrix();

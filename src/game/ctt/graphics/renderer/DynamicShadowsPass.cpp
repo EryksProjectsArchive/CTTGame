@@ -166,6 +166,7 @@ void DynamicShadowsPass::renderGeometry(Geometry<Vertex3d> *geometry, const Matr
 	Renderer::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geometry->m_indexBuffer->m_bufferId);
 
 	glDrawElements(GL_TRIANGLES, geometry->m_trianglesCount * 3, GL_UNSIGNED_SHORT, 0);
+	Renderer::get()->stats().addDrawCall(geometry->m_verticesCount, geometry->m_trianglesCount);
 
 	Renderer::glDisableVertexAttribArray(attributePosition);
 

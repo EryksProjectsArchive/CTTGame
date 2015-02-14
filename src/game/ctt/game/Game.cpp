@@ -68,6 +68,14 @@
 #include <graphics/ui/controls/UIButton.h>
 #include <graphics/ui/controls/UILabel.h>
 
+#include <core/performance/Profiler.h>
+
+Profiler g_sceneDrawProfiler;
+Profiler g_lastUpdateProfiler;
+extern Profiler g_physicsUpdateProfiler;
+extern Profiler g_frameProfiler;
+Profiler g_uiDrawProfiler;
+
 Game * Game::s_instance = 0;
 Font *gFont = 0;
 
@@ -285,6 +293,13 @@ bool Game::init()
 	label->setShadowColor(Color(0, 0, 0, 1));
 	label->setTextColor(Color(1, 1, 1, 1));
 
+	m_profilerInfo = new UI::Label("profiler_info", Vector2(1, 170.f), Vector2(500, 500.f));
+	view->addChild(m_profilerInfo);
+	m_profilerInfo->setText(L"Profiler info");
+	m_profilerInfo->setShadow(true);
+	m_profilerInfo->setFont("Tahoma", 20);
+	m_profilerInfo->setTextColor(Color(1, 1, 1, 1));
+
 	m_ui->setCurrentView("game.main_menu");
 
 	// create game sound mgr
@@ -387,6 +402,7 @@ void Game::spawnBusStop()
 
 void Game::update(double deltaTime)
 {
+	g_lastUpdateProfiler.start();
 	Camera * currentCamera = CameraManager::get()->getCurrent();
 
 	if (currentCamera)
@@ -535,6 +551,7 @@ void Game::update(double deltaTime)
 	m_physicsWorld->pulse(float(deltaTime));
 
 	Environment::get()->pulse();
+	g_lastUpdateProfiler.end();
 }
 
 void Game::render()
@@ -542,6 +559,8 @@ void Game::render()
 	if (m_renderer)
 	{
 		m_renderer->preFrame();
+
+		g_sceneDrawProfiler.start();
 
 		// Shadows
 		m_renderer->beginShadowPass();
@@ -586,6 +605,9 @@ void Game::render()
 		}
 
 		m_renderer->endDeferredPass();
+
+		g_sceneDrawProfiler.end();
+		g_uiDrawProfiler.start();
 
 		if (gFont)
 		{
@@ -638,6 +660,12 @@ void Game::render()
 		{
 			m_console->render(m_renderer);
 		}
+
+		g_uiDrawProfiler.end();
+
+		RenderStatistics stats = m_renderer->stats();
+		m_profilerInfo->setText(WString<256>(L"Profiler(s):\nScene draw: %.02fms\nUI Draw: %.02fms\nPhysics update: %.02fms\nFrame: %.02fms\nLast update: %.02fms\nPhysical ticks: %d\nFPS: %.0f\nRenderer: DC: %d VC: %llu", 
+			g_sceneDrawProfiler.getTime() / 1000.f, g_uiDrawProfiler.getTime() / 1000.f, g_physicsUpdateProfiler.getTime() / 1000.f, g_frameProfiler.getTime() / 1000.f, g_lastUpdateProfiler.getTime() / 1000.f, m_physicsTicks, Timer::getFPS(), stats.m_drawCalls, stats.m_verticesProcessed));
 
 		m_renderer->postFrame();
 	}

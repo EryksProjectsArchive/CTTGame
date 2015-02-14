@@ -14,6 +14,11 @@
 #include <os/OS.h>
 #include <core/Timer.h>
 
+#include <core/performance/Profiler.h>
+
+Profiler g_frameProfiler;
+Profiler g_physicsUpdateProfiler;
+
 Application::Application() : m_isInitialized(false), m_isRunning(false)
 {
 
@@ -37,27 +42,32 @@ bool Application::init()
 
 bool Application::pulse()
 {
+	g_frameProfiler.start();
 	Timer::frameStart();
 
 	updateWindow();
 
+	g_physicsUpdateProfiler.start();
 	double time = double(OS::getMicrosecondsCount() / double(1000 * 1000));
 	double frameTime = time - m_time;
-	if (frameTime > 0.25)
-		frameTime = 0.25;
+	if (frameTime > m_deltaTime)
+		frameTime = m_deltaTime;
 	m_time = time;
 
 	m_accumulator += frameTime;
-
+	m_physicsTicks = 0;
 	while (m_accumulator >= m_deltaTime)
 	{
 		update(m_deltaTime);
 		m_accumulator -= m_deltaTime;
+		m_physicsTicks++;
 	}
+	g_physicsUpdateProfiler.end();
 
 	render();
 
 	Timer::frameEnd();
+	g_frameProfiler.end();
 	return m_isRunning;
 }
 

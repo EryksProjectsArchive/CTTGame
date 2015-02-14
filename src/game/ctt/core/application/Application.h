@@ -11,6 +11,8 @@
 
 #pragma once
 
+#include <Prerequisites.h>
+
 class Application
 {
 protected:
@@ -20,6 +22,8 @@ protected:
 	double m_deltaTime;
 	double m_accumulator;
 	double m_time;
+
+	uint32 m_physicsTicks;
 
 	virtual void render();
 	virtual void update(double deltaTime);

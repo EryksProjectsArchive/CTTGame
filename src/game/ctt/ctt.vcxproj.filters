@@ -241,6 +241,9 @@
     <Filter Include="Header Files\graphics\renderer\tasks">
       <UniqueIdentifier>{724a2be2-8281-49c5-a365-3b0ec1ad455b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\core\performance">
+      <UniqueIdentifier>{e1ac45e3-e333-481a-ada8-4cc190ded530}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -808,6 +811,9 @@
     </ClInclude>
     <ClInclude Include="graphics\ui\controls\UILabel.h">
       <Filter>Header Files\graphics\ui\controls</Filter>
+    </ClInclude>
+    <ClInclude Include="core\performance\Profiler.h">
+      <Filter>Header Files\core\performance</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

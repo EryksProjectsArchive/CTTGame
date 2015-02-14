@@ -485,6 +485,11 @@ void Renderer::postFrame()
 	m_stats.reset();
 }
 
+RenderStatistics& Renderer::stats()
+{
+	return m_stats;
+}
+
 Matrix4x4 Renderer::getProjectionMatrix()
 {
 	return m_projectionMatrix;
@@ -664,13 +669,9 @@ void Renderer::renderGeometry(Geometry<Vertex3d> *geometry, const glm::mat4x4& m
 	glPolygonMode(GL_FRONT_AND_BACK, (material->m_parameters & Material::Parameters::RENDER_WIREFRAME) ? GL_LINE : GL_FILL);
 
 	glDrawElements(GL_TRIANGLES, geometry->m_trianglesCount * 3, GL_UNSIGNED_SHORT, 0);
+	m_stats.addDrawCall(geometry->m_verticesCount, geometry->m_trianglesCount);
 
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-
-	//glDrawElements((material->m_parameters & Material::Parameters::RENDER_WIREFRAME) ? GL_LINES : GL_TRIANGLES, geometry->m_trianglesCount * 3, GL_UNSIGNED_SHORT, 0);
-	m_stats.m_trianglesDrawn += geometry->m_trianglesCount;
-	m_stats.m_drawCalls++;
-	m_stats.m_verticesDrawn += geometry->m_verticesCount;
 
 	glDisableVertexAttribArray(attributePosition);
 	if (attributeNormal != -1)
@@ -784,9 +785,7 @@ void Renderer::renderGeometry(Geometry<Vertex2d> *geometry)
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geometry->m_indexBuffer->m_bufferId);
 
 	glDrawElements((material->m_parameters & Material::Parameters::RENDER_WIREFRAME) ? GL_LINE_STRIP : GL_TRIANGLES, geometry->m_trianglesCount * 3, GL_UNSIGNED_SHORT, 0);
-	m_stats.m_trianglesDrawn += geometry->m_trianglesCount;
-	m_stats.m_drawCalls++;
-	m_stats.m_verticesDrawn += geometry->m_verticesCount;
+	m_stats.addDrawCall(geometry->m_verticesCount, geometry->m_trianglesCount);
 
 	glDisableVertexAttribArray(attributePosition);
 	if (attributeColor != -1)
@@ -849,9 +848,7 @@ void Renderer::renderGeometry(Geometry<SimpleVertex2d> *geometry)
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geometry->m_indexBuffer->m_bufferId);
 
 	glDrawElements((material->m_parameters & Material::Parameters::RENDER_WIREFRAME) ? GL_LINE_STRIP : GL_TRIANGLES, geometry->m_trianglesCount * 3, GL_UNSIGNED_SHORT, 0);
-	m_stats.m_trianglesDrawn += geometry->m_trianglesCount;
-	m_stats.m_drawCalls++;
-	m_stats.m_verticesDrawn += geometry->m_verticesCount;
+	m_stats.addDrawCall(geometry->m_verticesCount, geometry->m_trianglesCount);
 
 	glDisableVertexAttribArray(attributePosition);
 	if (attributeColor != -1)
@@ -910,6 +907,7 @@ void Renderer::renderGeometry(Geometry<Vertex3d_pc> * geometry, const Matrix4x4&
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geometry->m_indexBuffer->m_bufferId);
 
 	glDrawElements(GL_LINES, geometry->m_trianglesCount * 3, GL_UNSIGNED_SHORT, 0);
+	m_stats.addDrawCall(geometry->m_verticesCount, geometry->m_trianglesCount);
 
 	glDisableVertexAttribArray(attributePosition);
 	glDisableVertexAttribArray(attributeColor);
@@ -1154,9 +1152,7 @@ void Renderer::renderFont(const WDynString& string, const Rect& rect, const Colo
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geometry.m_indexBuffer->m_bufferId);
 
 	glDrawElements(GL_TRIANGLES, geometry.m_trianglesCount * 3, GL_UNSIGNED_SHORT, 0);
-	m_stats.m_trianglesDrawn += geometry.m_trianglesCount;
-	m_stats.m_drawCalls++;
-	m_stats.m_verticesDrawn += geometry.m_verticesCount;
+	m_stats.addDrawCall(geometry.m_verticesCount, geometry.m_trianglesCount);
 
 	glDisableVertexAttribArray(attributePosition);
 	if (attributeUV != -1)
