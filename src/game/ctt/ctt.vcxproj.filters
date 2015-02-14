@@ -477,6 +477,9 @@
     <ClCompile Include="graphics\ui\UISkin.cpp">
       <Filter>Source Files\graphics\ui</Filter>
     </ClCompile>
+    <ClCompile Include="graphics\ui\controls\UILabel.cpp">
+      <Filter>Source Files\graphics\ui\controls</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="os\OS.h">
@@ -802,6 +805,9 @@
     </ClInclude>
     <ClInclude Include="graphics\ui\UISkin.h">
       <Filter>Header Files\graphics\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\ui\controls\UILabel.h">
+      <Filter>Header Files\graphics\ui\controls</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

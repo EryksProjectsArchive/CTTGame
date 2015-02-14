@@ -1177,3 +1177,25 @@ Rect Renderer::getRect()
 {
 	return m_rect;
 }
+
+void Renderer::setScissor(bool enabled, const Rect& rect)
+{
+	if (enabled)
+	{
+		glEnable(GL_SCISSOR_TEST);
+
+		Vector2 size;
+		size.x = (rect.right - rect.left);
+		size.y = (rect.bottom - rect.top);
+		
+		Vector2 coords;
+		coords.x = rect.left;
+		coords.y = m_rect.bottom - rect.top - (rect.bottom - rect.top);
+
+		glScissor((int32)coords.x, (int32)coords.y, (int32)size.x, (int32)size.y);
+	}
+	else
+	{
+		glDisable(GL_SCISSOR_TEST);
+	}	
+}

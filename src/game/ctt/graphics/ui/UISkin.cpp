@@ -41,6 +41,8 @@ namespace UI
 	{
 		m_colors.buttonNormal = Color(1, 1, 1, 1);
 		m_colors.buttonHover = Color(1, 1, 1, 1);
+		m_colors.labelNormal = Color(1, 1, 1, 1);
+		m_colors.labelShadow = Color(0, 0, 0, 1);
 	}
 
 	void Skin::setup()
@@ -139,11 +141,14 @@ namespace UI
 										m_colors.##n.r = CLAMP_COLOR(node.get("r", 1.0f).asFloat());\
 										m_colors.##n.g = CLAMP_COLOR(node.get("g", 1.0f).asFloat());\
 										m_colors.##n.b = CLAMP_COLOR(node.get("b", 1.0f).asFloat());\
+										m_colors.##n.a = CLAMP_COLOR(node.get("a", 1.0f).asFloat());\
 									}\
 								}
 
 							READ_COLOR(buttonNormal);
 							READ_COLOR(buttonHover);
+							READ_COLOR(labelNormal);
+							READ_COLOR(labelShadow);
 
 							#undef READ_COLOR
 							#undef CLAMP_COLOR						

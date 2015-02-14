@@ -58,11 +58,14 @@ namespace UI
 		{
 			if (m_skin)
 			{
+				renderer->setScissor(true, m_rect);
 				Skin::Colors colors = m_skin->colors();
 				UIRenderTask::preformRender(renderer);
 
 				if (m_font)
 					m_font->render(m_text, m_rect, m_hover ? colors.buttonHover : colors.buttonNormal, Font::DrawFlags::HorizontalCenter | Font::DrawFlags::VerticalCenter);
+
+				renderer->setScissor(false);
 			}
 			else
 			{

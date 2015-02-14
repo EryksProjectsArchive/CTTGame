@@ -24,6 +24,8 @@ namespace UI
 		{
 			Color buttonNormal;
 			Color buttonHover;
+			Color labelNormal;
+			Color labelShadow;
 		};
 
 		struct ButtonGeometryData
