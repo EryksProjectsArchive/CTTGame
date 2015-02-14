@@ -28,6 +28,15 @@ namespace UI
 			Color labelShadow;
 		};
 
+		struct Data
+		{
+			struct
+			{
+				Vector2 shadowOffset;
+				bool shadow;
+			} label;
+		};
+
 		struct ButtonGeometryData
 		{
 			float x, y, w, h;
@@ -44,6 +53,7 @@ namespace UI
 		Material * m_material;
 
 		Colors m_colors;
+		Data m_data;
 
 		struct
 		{
@@ -62,6 +72,7 @@ namespace UI
 		virtual Material *getMaterial();
 
 		virtual const Colors& colors();
+		virtual const Data& data();
 		
 		virtual Geometry<Vertex2d>* generateButtonGeometry(const Rect& rect, bool hover);		
 	};

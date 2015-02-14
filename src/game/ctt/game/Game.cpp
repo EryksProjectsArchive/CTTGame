@@ -262,25 +262,28 @@ bool Game::init()
 	UI::View* view = m_ui->createView("game.main_menu");
 
 	UI::Button* button = new UI::Button("spawn_box_button", Vector2(0, 100.0f), Vector2(150.0f, 30.0f));
+	view->addChild(button);
+
 	button->setText(L"Spawn box");
 	button->onPressSubscribe(this, &Game::spawnBox);
 
 	view->addChild(button);
 
 	button = new UI::Button("spawn_busstop_button", Vector2(0, 131.0f), Vector2(150.0f, 30.0f));
+	view->addChild(button);
 	button->setText(L"Spawn bus stop");
 	button->onPressSubscribe(this, &Game::spawnBusStop);
 
-	view->addChild(button);
-
 	UI::Label* label = new UI::Label("spawn_items", Vector2(0, 70.f), Vector2(100.0f, 30.0f));
+	view->addChild(label);
+
 	label->setText(L"Items:");
 	label->setShadow(true);
+	label->setShadowOffset(Vector2(2, 2));
 	label->setFont("Tahoma", 20);
 	label->setAlignment(ALIGNMENT_VERTICAL_CENTER);
 	label->setShadowColor(Color(0, 0, 0, 1));
-	label->setTextColor(Color(1, 1, 1, 0.5));
-	view->addChild(label);
+	label->setTextColor(Color(1, 1, 1, 1));
 
 	m_ui->setCurrentView("game.main_menu");
 

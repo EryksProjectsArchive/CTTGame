@@ -43,6 +43,9 @@ namespace UI
 		m_colors.buttonHover = Color(1, 1, 1, 1);
 		m_colors.labelNormal = Color(1, 1, 1, 1);
 		m_colors.labelShadow = Color(0, 0, 0, 1);
+
+		m_data.label.shadowOffset = Vector2(1, 1);
+		m_data.label.shadow = true;
 	}
 
 	void Skin::setup()
@@ -118,7 +121,29 @@ namespace UI
 													}
 												}
 											}
-										}
+										}										
+									}
+									else if (node["name"].asString() == "label")
+									{
+										for (uint32 j = 0; j < node["elements"].size(); ++j)
+										{
+											Json::Value element = node["elements"][j];
+											if (element.isObject())
+											{
+												if (element["name"].isString())
+												{
+													if(element["name"].asString() == "shadowOffset")
+													{
+														m_data.label.shadowOffset.x = element.get("x", 1.0f).asFloat();
+														m_data.label.shadowOffset.y = element.get("y", 1.0f).asFloat();			
+													}
+													else if (element["name"].asString() == "shadow")
+													{
+														m_data.label.shadow = element.get("enabled", true).asBool();
+													}													
+												}
+											}
+										}									
 									}
 								}
 							}
@@ -186,6 +211,11 @@ namespace UI
 	const Skin::Colors& Skin::colors()
 	{
 		return m_colors;
+	}
+
+	const Skin::Data& Skin::data()
+	{
+		return m_data;
 	}
 
 	Geometry<Vertex2d>* Skin::generateButtonGeometry(const Rect& rect, bool hover)

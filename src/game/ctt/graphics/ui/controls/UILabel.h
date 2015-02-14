@@ -40,6 +40,7 @@ namespace UI
 		Font* m_font;
 		bool m_shadow;
 		uint32 m_alignment;
+		Vector2 m_shadowOffset;
 
 		unsigned char m_textColorSet : 1;
 		unsigned char m_shadowColorSet : 1;
@@ -64,6 +65,11 @@ namespace UI
 
 		virtual void setShadowColor(const Color& color);
 		virtual Color getShadowColor();
+
+		virtual void setShadowOffset(const Vector2& offset);
+		virtual Vector2 getShadowOffset();
+
+		virtual void setSkin(Skin* skin);
 
 		virtual void setFont(const DynString& fontName, uint32 size = 15);
 		

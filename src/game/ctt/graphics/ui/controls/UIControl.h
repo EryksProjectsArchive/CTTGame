@@ -36,8 +36,11 @@ namespace UI
 		DynString getName();
 
 		virtual Control * getParent();
+
+		// NOTE: This function overrides all user defined style changes for child.
 		virtual void setParent(Control *control);
 
+		// NOTE: This function overrides all user defined style changes for child.
 		virtual void addChild(Control *control);
 		virtual void removeChild(Control *control);
 

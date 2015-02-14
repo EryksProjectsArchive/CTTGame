@@ -32,6 +32,7 @@ namespace UI
 		uint32 m_alignment;
 		Color m_textColor;
 		Color m_shadowColor;
+		Vector2 m_shadowOffset;
 	public:
 		LabelRenderTask()
 		{
@@ -53,6 +54,11 @@ namespace UI
 		virtual void setShadow(bool shadow)
 		{
 			m_shadow = shadow;
+		}
+
+		virtual void setShadowOffset(const Vector2& offset)
+		{
+			m_shadowOffset = offset;
 		}
 
 		virtual void setSkin(Skin * skin)
@@ -98,7 +104,7 @@ namespace UI
 				{
 					if (m_shadow)
 					{
-						Rect r(m_rect.left+2,m_rect.top+2,m_rect.right+2,m_rect.bottom+2);
+						Rect r(m_rect.left + m_shadowOffset.x, m_rect.top + m_shadowOffset.y, m_rect.right + m_shadowOffset.x, m_rect.bottom + m_shadowOffset.y);
 						m_font->render(m_text, r, m_shadowColor, m_alignment);
 					}
 
@@ -115,7 +121,7 @@ namespace UI
 
 	Label::Label(const DynString& name, Vector2 position, Vector2 size)
 		: Control(name, position, size), m_text(L"Label"), m_font(0), m_shadow(true), m_alignment(ALIGNMENT_DEFAULT),
-		  m_textColorSet(0), m_shadowColorSet(0)
+		m_textColorSet(0), m_shadowColorSet(0), m_shadowOffset(Vector2(1,1))
 	{
 		m_font = new Font("fonts/Tahoma.ttf", 15);
 	}
@@ -160,6 +166,8 @@ namespace UI
 
 		if (m_shadowColorSet)
 			task->setShadowColor(m_shadowColor);
+		
+		task->setShadowOffset(m_shadowOffset);
 	}
 
 	void Label::setShadow(bool state)
@@ -203,6 +211,16 @@ namespace UI
 		return m_shadowColorSet ? m_shadowColor : m_skin->colors().labelShadow;
 	}
 
+	void Label::setShadowOffset(const Vector2& offset)
+	{
+		m_shadowOffset = offset;
+	}
+
+	Vector2 Label::getShadowOffset()
+	{
+		return m_shadowOffset;
+	}
+
 	void Label::setTextColor(const Color& color)
 	{
 		m_textColorSet = 1;
@@ -212,5 +230,15 @@ namespace UI
 	Color Label::getTextColor()
 	{
 		return m_textColorSet ? m_textColor : m_skin->colors().labelNormal;
+	}
+
+	void Label::setSkin(Skin* skin)
+	{
+		Control::setSkin(skin);
+
+		Skin::Data data = m_skin->data();
+
+		m_shadowOffset = data.label.shadowOffset;
+		m_shadow = data.label.shadow;
 	}
 };
