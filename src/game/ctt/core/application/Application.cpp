@@ -36,7 +36,7 @@ bool Application::init()
 
 	m_time = double(OS::getMicrosecondsCount() / 1000000);
 	m_accumulator = 0.0;
-	m_deltaTime = 1 / 60.0f;
+	m_deltaTime = 0.01;
 	return true;
 }
 
@@ -50,8 +50,8 @@ bool Application::pulse()
 	g_physicsUpdateProfiler.start();
 	double time = double(OS::getMicrosecondsCount() / double(1000 * 1000));
 	double frameTime = time - m_time;
-	if (frameTime > m_deltaTime)
-		frameTime = m_deltaTime;
+	if (frameTime > 0.25)
+		frameTime = 0.25;
 	m_time = time;
 
 	m_accumulator += frameTime;

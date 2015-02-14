@@ -106,6 +106,11 @@ struct InputItem
 			};
 		}
 	}	
+
+	bool operator==(const InputItem& item)
+	{
+		return (device == item.device && numeric == item.numeric && isValid == item.isValid);
+	}
 };
 
 #define INPUT_ITEMS_COUNT 247
@@ -171,14 +176,16 @@ public:
 	Input();
 	~Input();
 
+	void registerCommands();
+
 	void onKeyEvent(Key::Type key, bool pressed);
 	void onMouseScroll(sint32 horizontal, sint32 vertical);
 	void onMouseMove(sint32 x, sint32 y, sint32 relx, sint32 rely);
 	void onMouseButtonEvent(uint8 button, bool state, uint8 clicks, sint32 x, sint32 y);
 	void onTextInput(const WDynString& string);
 
-	void bind(const WDynString& inputItem, bool pressed, const WDynString& value);
-	void unbind(const WDynString& value);
+	bool bind(const WDynString& inputItem, const WDynString& value);
+	bool unbind(const WDynString& inputItem);
 
 	void deserializeBinds(File *file);
 	void serializeBinds(File *file);
@@ -196,6 +203,26 @@ public:
 	bool isCursorVisible();
 	void showCursor(bool state);
 	void setCursor(MouseCursor type);
+
+	class BindCommand : public Console::ICommand
+	{
+	private:
+		Input *m_input;
+	public:
+		BindCommand(Input *input);
+
+		void onExecute(const WDynString& args);
+	};
+
+	class UnbindCommand : public Console::ICommand
+	{
+	private:
+		Input *m_input;
+	public:
+		UnbindCommand(Input *input);
+
+		void onExecute(const WDynString& args);
+	};
 private:
 	void addControllable(Controllable *controllable);
 	void removeControllable(Controllable *controllable);

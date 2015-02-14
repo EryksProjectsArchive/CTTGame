@@ -147,7 +147,7 @@ bool Console::onKeyEvent(Key::Type key, bool pressed)
 				
 				size_t space = m_inputBuffer.find(' ');
 				WDynString commandName = m_inputBuffer.substr(0, (space != -1) ? space : m_inputBuffer.getLength());
-				WDynString params = m_inputBuffer.substr(space+1, m_inputBuffer.getLength());
+				WDynString params = (space == -1) ? L"" : m_inputBuffer.substr(space + 1, m_inputBuffer.getLength());
 				for (ICommand *command : m_commands)
 				{
 					if (command->m_name == commandName)
@@ -427,7 +427,7 @@ bool Console::execute(const WDynString& value)
 	WDynString input = value;
 	size_t space = input.find(' ');
 	WDynString commandName = input.substr(0, (space != -1) ? space : input.getLength());
-	WDynString params = input.substr(space + 1, input.getLength());
+	WDynString params = (space == -1) ? L"" : input.substr(space + 1, input.getLength());
 
 	for (ICommand *command : m_commands)
 	{

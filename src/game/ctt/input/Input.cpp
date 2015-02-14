@@ -294,12 +294,18 @@ Input::Input()
 	m_mouse.x = 0;
 	m_mouse.y = 0;
 	m_cursor = 0;
-	m_cursorVisiblity = true;
+	m_cursorVisiblity = true;	
 }
 
 Input::~Input()
 {
 	m_binds.clear();
+}
+
+void Input::registerCommands()
+{
+	Console::get()->addCommand(new BindCommand(this));
+	Console::get()->addCommand(new UnbindCommand(this));
 }
 
 InputItem Input::getInputItem(const WDynString& value)
@@ -408,7 +414,7 @@ void Input::deserializeBinds(File *file)
 						bool pressed = (str[0] == '+');
 						
 						Info("Input", "New bind loaded. %s, %s, %s", str.substr(1, str.length()).c_str(), pressed ? "press" : "release", names.c_str());
-						bind(StringUtilities::toWideChar(str.substr(1, str.length()).c_str()), pressed, StringUtilities::toWideChar(names.c_str()));
+						bind(StringUtilities::toWideChar(str.c_str()), StringUtilities::toWideChar(names.c_str()));
 					}
 				}
 			}
@@ -558,11 +564,15 @@ void Input::onTextInput(const WDynString& string)
 	}
 }
 
-void Input::bind(const WDynString& inputItem, bool pressed, const WDynString& value)
+bool Input::bind(const WDynString& inputItem, const WDynString& value)
 {
-	InputItem item = getInputItem(inputItem);
+	bool pressed = (inputItem[0] == '+');
+
+	WDynString itemName = inputItem;
+	itemName = itemName.substr(1, inputItem.getLength());
+	InputItem item = getInputItem(itemName);
 	if (item.isValid)
-	{
+	{	
 		// Remove duplicate actions.
 		for (BindData data : m_binds)
 		{
@@ -574,19 +584,31 @@ void Input::bind(const WDynString& inputItem, bool pressed, const WDynString& va
 		}
 
 		m_binds.pushBack(BindData(item, pressed, value));
+		return true;
 	}
+	return false;
 }
 
-void Input::unbind(const WDynString& value)
+bool Input::unbind(const WDynString& inputItem)
 {
-	for (BindData data : m_binds)
+	bool pressed = (inputItem[0] == '+');
+
+	WDynString itemName = inputItem;
+	itemName = itemName.substr(1, inputItem.getLength());
+
+	InputItem item = getInputItem(itemName);
+	if (item.isValid)
 	{
-		if (data.value == value)
+		for (BindData data : m_binds)
 		{
-			m_binds.remove(data);
-			break;
+			if (data.pressed == pressed && data.inputItem == item)
+			{
+				m_binds.remove(data);
+				return true;
+			}
 		}
 	}
+	return false;
 }
 
 void Input::lock()
@@ -676,4 +698,61 @@ void Input::setCursor(MouseCursor type)
 
 	m_cursor = SDL_CreateSystemCursor(cursor);
 	SDL_SetCursor(m_cursor);
+}
+
+Input::BindCommand::BindCommand(Input* input)
+	: Console::ICommand(L"bind", L"Binds input item"), m_input(input)
+{
+
+}
+
+void Input::BindCommand::onExecute(const WDynString& args)
+{
+	WDynString params = args;
+	
+	size_t space = params.find(' ');
+	if (space != -1)
+	{
+		WDynString inputItem = params.substr(0, space);
+		WDynString action = params.substr(space + 1, params.getLength());
+
+		if (m_input->bind(inputItem, action))
+		{
+			bool press = inputItem[0] == '+';
+			Info("InputBindCommand", "New bind: %s, %s, %s", StringUtilities::toMultiByte(inputItem.substr(1, inputItem.getLength())).get(), press ? "press" : "release", StringUtilities::toMultiByte(action).get());
+		}
+		else
+		{
+			Error("InputBindCommand", "Unable to bind action. Invalid input item.");
+		}
+	}
+	else 
+	{
+		Error("InputBindCommand", "bind <input item> <action>");
+	}
+}
+
+Input::UnbindCommand::UnbindCommand(Input* input)
+	: Console::ICommand(L"unbind", L"Unbinds input item"), m_input(input)
+{
+
+}
+
+void Input::UnbindCommand::onExecute(const WDynString& args)
+{	
+	if (args.getLength() > 0)
+	{
+		if (m_input->unbind(args))
+		{
+			Info("InputUnbindCommand", "Success");			
+		}
+		else
+		{
+			Error("InputUnbindCommand", "Unable to unbind action. No action assigned.");
+		}
+	}
+	else
+	{
+		Error("InputBindCommand", "unbind <input item>");
+	}
 }

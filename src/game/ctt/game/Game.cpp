@@ -132,6 +132,7 @@ Game::Game()
 {
 	m_console->addCommand(new ConsoleQuitCommand());
 	m_console->addCommand(new SpawnCommand(this));
+	Input::get()->registerCommands();
 	m_currentPickedEntity = 0;
 	m_activeMoveAxis = ActiveMoveAxis::None;
 	m_rotate = false;
@@ -254,7 +255,7 @@ bool Game::init()
 	}
 
 	// Bind escape key
-	Input::get()->bind(L"keyboard.escape", true, L"quit");
+	Input::get()->bind(L"+keyboard.escape", L"quit");
 
 	File *inputFile = FileSystem::get()->open("home/inputBinds.json", FileOpenMode::Read | FileOpenMode::Extra);
 	Input::get()->deserializeBinds(inputFile);
