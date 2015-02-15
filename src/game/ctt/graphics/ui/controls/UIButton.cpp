@@ -14,7 +14,7 @@
 
 #include <math/Rect.h>
 #include <graphics/renderer/RenderContext.h>
-#include <graphics/renderer/tasks/UIRenderTask.h>
+#include "../renderer/tasks/UILabelRenderTask.h"
 
 #include <resources/materials/MaterialLib.h>
 
@@ -22,50 +22,19 @@
 
 namespace UI
 {
-	class ButtonRenderTask : public UIRenderTask
+	class ButtonRenderTask : public LabelRenderTask
 	{
-	private:
-		Font *m_font;
-		WDynString m_text;
-
-		bool m_hover;
-
-		Rect m_rect;
 	public:
 		ButtonRenderTask()
 		{
-			m_hover = 0;
-			m_font = 0;
-		}
-
-		virtual void setRect(const Rect& rect)
-		{
-			m_rect = rect;
-		}
-
-		virtual void setHover(bool focus)
-		{
-			m_hover = focus;
-		}
-
-		virtual void setLabel(Font *font, const WDynString& text)
-		{
-			m_font = font;
-			m_text = text;
 		}
 
 		virtual void performRender(Renderer * renderer)
 		{
 			if (m_skin)
 			{
-				renderer->setScissor(true, m_rect);
-				Skin::Colors colors = m_skin->colors();
-				UIRenderTask::preformRender(renderer);
-
-				if (m_font)
-					m_font->render(m_text, m_rect, m_hover ? colors.buttonHover : colors.buttonNormal, Font::DrawFlags::HorizontalCenter | Font::DrawFlags::VerticalCenter);
-
-				renderer->setScissor(false);
+				UIRenderTask::performRender(renderer);				
+				LabelRenderTask::performRender(renderer);
 			}
 			else
 			{
@@ -75,29 +44,16 @@ namespace UI
 	};
 
 	Button::Button(const DynString& name, Vector2 position, Vector2 size)
-		: Control(name, position, size), m_text(L"Button"), m_font(0)
+		: Label(name, position, size)
 	{
-		m_font = new Font("fonts/Tahoma.ttf", 15);		
+		setAlignment(ALIGNMENT_HORIZONTAL_CENTER | ALIGNMENT_VERTICAL_CENTER);
+		setText(L"button");
+		setShadow(true);
 	}
 
 	Button::~Button()
 	{
-		if (m_font)
-		{
-			delete m_font;
-			m_font = 0;
-		}
 		m_onPressData.clear();
-	}
-
-	void Button::setText(const WDynString& text)
-	{
-		m_text = text;
-	}
-
-	WDynString Button::getText()
-	{
-		return m_text;
 	}
 
 	void Button::render(RenderContext& context)
@@ -111,11 +67,27 @@ namespace UI
 
 		Rect rct(m_position.x, m_position.y, m_position.x + m_size.x, m_position.y + m_size.y);
 		Geometry<Vertex2d> *geometry = m_skin->generateButtonGeometry(rct, m_hover);
+		task->setAlignment(m_alignment);
 		task->setGeometry(geometry);
 		task->setSkin(m_skin);
 		task->setRect(rct);
+		task->setShadow(m_shadow);
 		task->setLabel(m_font, m_text);
-		task->setHover(m_hover);
+
+		if (m_shadowColorSet)
+		{
+			task->setShadowColor(m_shadowColor);
+		}
+		
+		if (m_textColorSet)
+		{
+			task->setTextColor(m_textColor);
+		}
+		else 
+		{
+			Skin::Colors colors = m_skin->colors();
+			task->setTextColor(m_hover ? colors.buttonHover : colors.buttonNormal);
+		}
 	}
 
 	bool Button::handleInput()

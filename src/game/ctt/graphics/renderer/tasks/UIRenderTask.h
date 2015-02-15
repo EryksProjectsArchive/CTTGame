@@ -48,7 +48,7 @@ public:
 		m_geometry = geometry;
 	}
 
-	virtual void preformRender(Renderer * renderer)
+	virtual void performRender(Renderer * renderer)
 	{
 		if (m_skin)
 		{

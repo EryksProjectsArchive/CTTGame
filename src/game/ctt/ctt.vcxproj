@@ -308,6 +308,7 @@
     <ClInclude Include="graphics\ui\controls\UIControl.h" />
     <ClInclude Include="graphics\ui\controls\UILabel.h" />
     <ClInclude Include="graphics\ui\controls\UIView.h" />
+    <ClInclude Include="graphics\ui\renderer\tasks\UILabelRenderTask.h" />
     <ClInclude Include="graphics\ui\UIEventHandler.h" />
     <ClInclude Include="graphics\ui\UIManager.h" />
     <ClInclude Include="graphics\ui\UISkin.h" />

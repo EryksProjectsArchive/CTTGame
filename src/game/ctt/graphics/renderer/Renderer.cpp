@@ -236,11 +236,9 @@ bool Renderer::setup(Window * window)
 	}
 
 #ifdef DEBUG
-#define MISSING_FUNCTION(name)\
-	Error("Renderer", "%s: Cannot find %s function. (%s:%d)", FUNCTION_NAME, name, __FILE__, __LINE__)
+#	define MISSING_FUNCTION(name) Error("Renderer", "%s: Cannot find %s function. (%s:%d)", FUNCTION_NAME, name, __FILE__, __LINE__)
 #else
-#define MISSING_FUNCTION(name)\
-	Error("Renderer", "Cannot find %s function.", name)	
+#	define MISSING_FUNCTION(name) Error("Renderer", "Cannot find %s function.", name)
 #endif
 
 

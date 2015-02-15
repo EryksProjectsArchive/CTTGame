@@ -35,7 +35,7 @@ namespace UI
 {
 	class Label : public Control
 	{
-	private:
+	protected:
 		WDynString m_text;
 		Font* m_font;
 		bool m_shadow;

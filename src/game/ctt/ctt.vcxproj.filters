@@ -244,6 +244,12 @@
     <Filter Include="Header Files\core\performance">
       <UniqueIdentifier>{e1ac45e3-e333-481a-ada8-4cc190ded530}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\graphics\ui\renderer">
+      <UniqueIdentifier>{fd1fb00d-29ee-4b97-a8cf-2ba7b4afb04c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\graphics\ui\renderer\tasks">
+      <UniqueIdentifier>{8a75087d-0355-4a09-bd68-82f8d118d0bc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -814,6 +820,9 @@
     </ClInclude>
     <ClInclude Include="core\performance\Profiler.h">
       <Filter>Header Files\core\performance</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\ui\renderer\tasks\UILabelRenderTask.h">
+      <Filter>Header Files\graphics\ui\renderer\tasks</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

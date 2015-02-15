@@ -18,6 +18,7 @@
 #include <graphics/fonts/Font.h>
 
 #include "UIControl.h"
+#include "UILabel.h"
 #include "../UIEventHandler.h"
 
 #include <graphics/Geometry.h>
@@ -25,12 +26,9 @@
 
 namespace UI
 {
-	class Button : public Control
+	class Button : public Label
 	{
-	private:
-		WDynString m_text;
-
-		Font* m_font;
+	protected:
 		bool m_pressed;
 
 		struct OnPressData
@@ -80,9 +78,6 @@ namespace UI
 	public:
 		Button(const DynString& name, Vector2 position = Vector2(), Vector2 size = Vector2());
 		virtual ~Button();
-
-		virtual void setText(const WDynString& text);
-		virtual WDynString getText();
 
 		virtual void render(RenderContext& context);
 
