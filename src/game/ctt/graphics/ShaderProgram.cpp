@@ -130,14 +130,9 @@ unsigned int ShaderProgram::getAttributeLocation(const char *name)
 		// Add new attribute
 		++m_attributesCount;
 
-		if (!m_attributes)
-		{
-			m_attributes = (AttributeData *)malloc(sizeof(AttributeData));
-		}
-		else
-		{
-			m_attributes = (AttributeData *)realloc(m_attributes, sizeof(AttributeData) * m_attributesCount);
-		}
+		AttributeData * attributes = m_attributes;
+
+		m_attributes = (AttributeData *)realloc(attributes, sizeof(AttributeData) * m_attributesCount);
 
 		strcpy(m_attributes[m_attributesCount - 1].name, name);
 		m_attributes[m_attributesCount - 1].location = location;

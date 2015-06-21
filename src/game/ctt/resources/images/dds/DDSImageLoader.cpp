@@ -94,8 +94,8 @@ namespace DDS
 
 	void ImageLoader::flipDxt3(uint8* data, uint32 count)
 	{
-		uint32 i;
-		for (i = 0; i < count; ++i) {
+		for (uint32 i = 0; i < count; ++i) 
+		{
 			uint8 tmp;
 
 			tmp = data[0];
@@ -106,7 +106,8 @@ namespace DDS
 			data[1] = data[2];
 			data[2] = tmp;
 
-			for (i = 0; i < count; ++i) {
+			for (uint32 j = 0; j < count; ++j) 
+			{
 				tmp = data[12];
 				data[12] = data[15];
 				data[15] = tmp;
@@ -123,11 +124,12 @@ namespace DDS
 
 	void ImageLoader::flipDxt5(uint8* data, uint32 count)
 	{
-		uint32 i;
-		for (i = 0; i < count; ++i) {
+		for (uint32 i = 0; i < count; ++i) 
+		{
 			flipComplexAlphaBlock(data);
 
-			for (i = 0; i < count; ++i) {
+			for (uint32 j = 0; j < count; ++j) 
+			{
 				uint8 tmp;
 
 				tmp = data[12];

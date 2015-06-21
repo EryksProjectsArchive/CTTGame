@@ -72,7 +72,7 @@ namespace WAV
 			if (waveFile.info.AudioFormat == 1)
 			{
 				data = new SoundData();
-				if (waveFile.info.NumChannels == 1 || waveFile.info.NumChannels == 2 && waveFile.info.BitsPerSample == 8 || waveFile.info.BitsPerSample == 16)
+				if ((waveFile.info.NumChannels == 1 || waveFile.info.NumChannels == 2) && (waveFile.info.BitsPerSample == 8 || waveFile.info.BitsPerSample == 16))
 				{
 					if (waveFile.info.NumChannels == 1 && waveFile.info.BitsPerSample == 8)
 					{

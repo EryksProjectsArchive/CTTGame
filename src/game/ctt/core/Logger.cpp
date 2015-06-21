@@ -105,8 +105,8 @@ void Logger::log(const char *tag, LogType type, const char *msg, ...)
 
 	delete []wcMessage;
 
-	printf(prefix);
-	fprintf(s_logFile, prefix);
+	printf("%s", prefix);
+	fprintf(s_logFile, "%s", prefix);
 
 	va_copy(args2, args);
 	vfprintf(s_logFile, msg, args2);

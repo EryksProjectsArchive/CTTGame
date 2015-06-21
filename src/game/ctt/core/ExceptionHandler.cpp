@@ -40,19 +40,19 @@ void getAdditionalInfoAboutAddr(uint32 address, uint32 * addressWithoutBase, cha
 		return;
 	}
 	*addressWithoutBase = address - (DWORD)Buffer.AllocationBase;
-	if (*addressWithoutBase < 0)
+	/*if (*addressWithoutBase < 0) unsigned musn't be smaller than false :)
 	{
 		*addressWithoutBase = 0xBEEF0004;
 		return;
-	}
+	}*/
 }
 
 LONG WINAPI exceptionFilter(LPEXCEPTION_POINTERS exceptionPointers)
 {
 	// Get MyDocuments
-	char path[MAX_PATH] = { 0 };
-	HRESULT hResult = SHGetFolderPath(NULL, CSIDL_PERSONAL, NULL, SHGFP_TYPE_CURRENT, (LPSTR)path);
-	sprintf(path, "%s\\%s\\crash.log", path, GAME_NAME);
+	char path[MAX_PATH] = { 0 }, tmpPath[MAX_PATH] = { 0 };
+	HRESULT hResult = SHGetFolderPath(NULL, CSIDL_PERSONAL, NULL, SHGFP_TYPE_CURRENT, (LPSTR)tmpPath);
+	sprintf(path, "%s\\%s\\crash.log", tmpPath, GAME_NAME);
 
 	FILE *fp = fopen(path, "a+");
 	if (fp)

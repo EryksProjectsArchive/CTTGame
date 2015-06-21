@@ -28,7 +28,7 @@ public:
 		memset(m_buffer, 0, maxSize * sizeof(wchar));
 	}
 
-	WString(const WString<maxSize>& string) : WString()
+	WString(const WString& string) : WString()
 	{
 		wcscpy(m_buffer, string.m_buffer);
 	}

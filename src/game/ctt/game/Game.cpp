@@ -304,8 +304,7 @@ void Game::update(double deltaTime)
 		}
 	}
 
-	if (m_physicsWorld)
-		m_physicsWorld->pulse(float(deltaTime));
+	m_physicsWorld->pulse(float(deltaTime));
 
 	Environment::get()->pulse();
 }
