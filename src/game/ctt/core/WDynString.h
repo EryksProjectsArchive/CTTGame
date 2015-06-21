@@ -13,6 +13,8 @@
 
 #include <Prerequisites.h>
 
+#include <core/Logger.h>
+
 /**
 * WDynString class is used to store dynamically allocated string. May be used to save memory.
 * String stored in this class is null terminated so can be used in any standard c methods.
@@ -58,6 +60,15 @@ public:
 		m_size = size;
 	}
 
+	WDynString(wchar_t *buffer)
+	{
+		size_t size = wcslen(buffer);
+		m_buffer = new wchar_t[size + 1];
+		wcscpy(m_buffer, buffer);
+		m_buffer[size] = '\0';
+		m_size = size;
+	}
+
 	template <int sizeOfString>
 	WDynString(WString<sizeOfString> buffer)
 	{
@@ -92,6 +103,23 @@ public:
 		return *this;
 	}
 
+	WDynString& operator+=(const WDynString& rhs)
+	{		
+		wchar_t *temp = new wchar_t[m_size + 1];
+		wcscpy(temp, m_buffer);
+		
+		m_size += rhs.m_size;
+
+		delete[]m_buffer;
+		m_buffer = new wchar_t[m_size + 1];
+		wcscpy(m_buffer, temp);
+		wcscat(m_buffer, rhs.m_buffer);
+		m_buffer[m_size] = '\0';
+
+		delete[]temp;
+		return *this;
+	}
+
 	bool operator==(const WDynString& rhs)
 	{
 		return !wcscmp(m_buffer, rhs.m_buffer);
@@ -113,5 +141,30 @@ public:
 	unsigned int getLength() const
 	{
 		return m_size;
+	}
+
+	void reset()
+	{
+		m_buffer = new wchar_t[1];
+		m_buffer[0] = '\0';
+		m_size = 0;
+	}
+
+	WDynString substr(uint32 start, uint32 end)
+	{
+		if (!m_size)
+			return *this;
+
+		WDynString sub;
+		if (sub.m_buffer)
+			delete[]sub.m_buffer;
+
+		uint32 len = end - start;
+		sub.m_buffer = new wchar_t[len+1];
+		memset(sub.m_buffer, 0, len*sizeof(wchar_t));
+		wcsncpy(sub.m_buffer, m_buffer + start, end > m_size ? m_size : len);
+		sub.m_buffer[len] = '\0';
+		sub.m_size = len;
+		return sub;
 	}
 };

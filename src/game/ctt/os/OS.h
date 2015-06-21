@@ -32,6 +32,9 @@ namespace OS
 	bool makeDirectory(const FilePath& path);
 	bool isFileOSDynLib(const FilePath& path);
 
+	// Strings
+	void multiByteToWideChar(const char *ansi, uint32 ansiLen, wchar_t **utf8, uint32 *utf8Len);
+
 	// Dynamic libs
 	DynamicLibrary * openDynamicLibrary(const FilePath path);
 

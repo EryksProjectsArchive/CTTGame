@@ -17,6 +17,8 @@
 #include <graphics/BufferBase.h>
 #include <graphics/Geometry.h>
 #include <core/SharedPtr.h>
+#include <graphics/Vertex2d.h>
+#include <math/Rect.h>
 
 class Renderer
 {
@@ -50,6 +52,7 @@ protected:
 
 	Geometry<Vertex3d> *m_helperLines;
 	Material *m_helperMaterial;
+	Rect m_rect;
 public:
 	Renderer();
 	~Renderer();
@@ -67,7 +70,12 @@ public:
 	Material * getMaterial();
 
 	void renderGeometry(Geometry<Vertex3d> *geometry, const glm::mat4x4& matrix);
+	void renderGeometry(Geometry<Vertex2d> *geometry);
+	void renderGeometry(Geometry<SimpleVertex2d> *geometry);
+
 	void renderFont(const WDynString& string, const Rect& rect, const Color& color, flags32 flags, Font *font);
+
+	Rect getRect();
 
 	static Renderer& get();
 

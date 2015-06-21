@@ -1,0 +1,6 @@
+{	
+	"shaders": {
+        "vertex": "console",
+        "fragment": "console"
+    }
+}

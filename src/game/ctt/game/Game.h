@@ -20,7 +20,7 @@
 class Game : public Controllable
 {
 private:
-	static Game *s_singleton;
+	static Game *s_instance;
 
 	bool m_isRunning;
 	bool m_isInitialized;
@@ -30,6 +30,7 @@ private:
 	Scene *m_scene;
 	PhysicsWorld *m_physicsWorld;
 	Config *m_config;
+	class Console *m_console;
 
 	double m_deltaTime;
 	double m_accumulator;
@@ -41,6 +42,7 @@ public:
 	bool init();
 
 	bool pulse();
+	void shutdown();
 
 	void onKeyEvent(Key::Type key, bool state) override;
 

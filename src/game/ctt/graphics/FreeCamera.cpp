@@ -79,6 +79,14 @@ void FreeCamera::onKeyEvent(Key::Type key, bool state)
 
 void FreeCamera::update(float dt)
 {
+	if (input()->isLocked())
+	{
+		for (unsigned int i = 0; i < 6; ++i)
+			m_keys[i] = false;
+
+		return;
+	}
+
 	Vector3 begin = m_position;
 
 	bool update = false;

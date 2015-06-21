@@ -49,6 +49,8 @@ public:
 	void render(const WDynString& string, const Rect& rect, const Color& color, flags32 flags);
 
 	Font::GlyphData getData(wchar_t c);
+
+	float calculateWidth(const WDynString& string);
 public:
 	struct DrawFlags
 	{

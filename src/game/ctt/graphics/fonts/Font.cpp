@@ -26,6 +26,8 @@
 
 #include <io/fs/FileSystem.h>
 
+#include <core/WDynString.h>
+
 Font::Font(const FilePath& fontPath, uint32 size)
 	: m_textureId(0), m_loaded(false), m_size(size)
 {
@@ -67,8 +69,8 @@ Font::Font(const FilePath& fontPath, uint32 size)
 
 	FT_Set_Pixel_Sizes(face, size, 0);
 
-	uint32 width = 1280;
-	uint32 height = 720;
+	uint32 width = 1024;
+	uint32 height = 1024;
 
 	uint32 x = 0;
 	uint32 y = 0;
@@ -120,8 +122,8 @@ Font::Font(const FilePath& fontPath, uint32 size)
 		m_data[c].bmw = float(bitmap_glyph->bitmap.width);
 		m_data[c].bmh = float(bitmap_glyph->bitmap.rows);
 
-		x += size + 5;
-		if ((x + size + 5) >= width)
+		x += m_data[c].bmw;
+		if ((x + size) >= width)
 		{
 			x = 0;
 			y += size + 5;
@@ -129,7 +131,7 @@ Font::Font(const FilePath& fontPath, uint32 size)
 
 		if ((y + size + 5) >= height)
 		{
-			Error("Font", "Height limit of font atlas has been exceeded!");
+			Error("Font", "Height limit of font atlas has been exceeded! (%d)", (y+size+5));
 			break;
 		}
 	}
@@ -176,4 +178,21 @@ void Font::render(const WDynString& string, const Rect& rect, const Color& color
 Font::GlyphData Font::getData(wchar_t c)
 {
 	return m_data[c];
+}
+
+float Font::calculateWidth(const WDynString& string)
+{
+	float w = 0;
+	for (uint32 i = 0; i < string.getLength(); ++i)
+	{
+		wchar_t c = string[i];
+		if (c == ' ')
+		{
+			w += m_size / 2;
+			continue;
+		}
+
+		w += m_data[c].bmw + 2;
+	}
+	return w;
 }

@@ -13,6 +13,7 @@
 #include "Controllable.h"
 
 Input::Input()
+	: m_inputState(0)
 {
 	memset(m_keyState, 0, Key::NUM_SCANCODES);
 	m_mouse.x = 0;
@@ -29,13 +30,19 @@ void Input::onKeyEvent(Key::Type key, bool pressed)
 	m_keyState[key] = pressed;
 
 	for (Controllable * controllable : m_controllables)
-		controllable->onKeyEvent(key, pressed);
+	{
+		if (!isLocked() || controllable->m_type == ControllableType::Engine)
+			controllable->onKeyEvent(key, pressed);
+	}
 }
 
 void Input::onMouseScroll(sint32 horizontal, sint32 vertical)
 {
 	for (Controllable * controllable : m_controllables)
-		controllable->onMouseScroll(horizontal, vertical);
+	{
+		if (!isLocked() || controllable->m_type == ControllableType::Engine)
+			controllable->onMouseScroll(horizontal, vertical);
+	}
 }
 
 void Input::onMouseMove(sint32 x, sint32 y, sint32 relx, sint32 rely)
@@ -44,13 +51,45 @@ void Input::onMouseMove(sint32 x, sint32 y, sint32 relx, sint32 rely)
 	m_mouse.y = y;
 
 	for (Controllable * controllable : m_controllables)
-		controllable->onMouseMove(x, y, relx, rely);
+	{
+		if (!isLocked() || controllable->m_type == ControllableType::Engine)
+			controllable->onMouseMove(x, y, relx, rely);
+	}
 }
 
 void Input::onMouseButtonEvent(uint8 button, bool state, uint8 clicks, sint32 x, sint32 y)
 {
 	for (Controllable * controllable : m_controllables)
-		controllable->onMouseButtonEvent(button, state, clicks, x, y);
+	{
+		if (!isLocked() || controllable->m_type == ControllableType::Engine)
+			controllable->onMouseButtonEvent(button, state, clicks, x, y);
+	}
+}
+
+void Input::onTextInput(const WDynString& string)
+{
+	for (Controllable * controllable : m_controllables)
+	{
+		if (!isLocked() || controllable->m_type == ControllableType::Engine)
+			controllable->onTextInput(string);
+	}
+}
+
+void Input::lock()
+{
+	m_inputState++;
+}
+
+void Input::unlock()
+{
+	m_inputState--;
+	if (m_inputState < 0)
+		m_inputState = 0;
+}
+
+bool Input::isLocked()
+{
+	return m_inputState > 0;
 }
 
 bool Input::isKeyDown(Key::Type key)

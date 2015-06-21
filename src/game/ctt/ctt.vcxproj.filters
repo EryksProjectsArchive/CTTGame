@@ -375,6 +375,9 @@
     <ClCompile Include="resources\images\png\PNGImageLoader.cpp">
       <Filter>Source Files\resources\images\png</Filter>
     </ClCompile>
+    <ClCompile Include="core\console\Console.cpp">
+      <Filter>Source Files\core\console</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="os\OS.h">
@@ -607,6 +610,15 @@
     </ClInclude>
     <ClInclude Include="input\KeyEnum.h">
       <Filter>Header Files\input</Filter>
+    </ClInclude>
+    <ClInclude Include="input\ControllableType.h">
+      <Filter>Header Files\input</Filter>
+    </ClInclude>
+    <ClInclude Include="core\console\Console.h">
+      <Filter>Header Files\core\console</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\Vertex2d.h">
+      <Filter>Header Files\graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

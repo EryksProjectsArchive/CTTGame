@@ -31,6 +31,8 @@ private:
 		sint32 x;
 		sint32 y;
 	} m_mouse;
+
+	int32 m_inputState;
 public:
 	Input();
 	~Input();
@@ -39,6 +41,12 @@ public:
 	void onMouseScroll(sint32 horizontal, sint32 vertical);
 	void onMouseMove(sint32 x, sint32 y, sint32 relx, sint32 rely);
 	void onMouseButtonEvent(uint8 button, bool state, uint8 clicks, sint32 x, sint32 y);
+	void onTextInput(const WDynString& string);
+
+	void lock();
+	void unlock();
+
+	bool isLocked();
 
 	bool isKeyDown(Key::Type key);
 	sint32 getMouseX();

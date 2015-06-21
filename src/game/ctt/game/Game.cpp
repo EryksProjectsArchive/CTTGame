@@ -57,13 +57,15 @@
 #include <core/WDynString.h>
 #include <core/WString.h>
 
-Game * Game::s_singleton = 0;
+#include <core/console/Console.h>
+
+Game * Game::s_instance = 0;
 Font *gFont = 0;
 
 Game::Game()
-	: m_isRunning(false), m_isInitialized(false), m_renderer(0), m_window(0), m_scene(0), m_physicsWorld(0), m_config(0)
+	: Controllable(ControllableType::Engine), m_isRunning(false), m_isInitialized(false), m_renderer(0), m_window(0), m_scene(0), m_physicsWorld(0), m_config(0), m_console(new Console())
 {
-	s_singleton = this;
+	s_instance = this;
 }
 
 Game::~Game()
@@ -108,7 +110,13 @@ Game::~Game()
 		m_config = 0;
 	}
 
-	s_singleton = 0;
+	if (m_console)
+	{
+		delete m_console;
+		m_console = 0;
+	}
+
+	s_instance = 0;
 }
 
 bool Game::init()
@@ -172,16 +180,6 @@ bool Game::init()
 		return false;
 	}
 
-	Sound *sound = SoundManager::get()->createSound(SoundType::Effect);
-
-	if (!sound->load("sounds/test.wav"))
-	{
-		return false;
-	}
-
-	sound->setVolume(0.1f);
-	sound->play(false);
-
 	// Setup physics
 	m_physicsWorld = new PhysicsWorld();
 	if (!m_physicsWorld || !m_physicsWorld->init())
@@ -198,6 +196,11 @@ bool Game::init()
 		return false;
 	}
 
+	// setup console
+	if (Config::get()["engine"]["console"].getBool(false))	
+		m_console->init();
+
+	// EVERYTHING FROM ENGINE IS INITIALIZED WE CAN SETUP EVERYTHING BELLOW
 
 	Entity *entity = new Entity(EntityType::Dummy);	
 	m_scene->addEntity(entity);
@@ -232,6 +235,16 @@ bool Game::init()
 	Environment::get()->setSunPosition(Vector3(30.0f, 10.0f, 0.0f));
 
 	gFont = new Font("fonts/MSMHei-Bold.ttf", 15);
+
+	Sound *sound = SoundManager::get()->createSound(SoundType::Effect);
+
+	if (!sound->load("sounds/test.wav"))
+	{
+		return false;
+	}
+
+	sound->setVolume(0.1f);
+	sound->play(false);
 
 	m_isInitialized = true;
 	m_isRunning = true;
@@ -299,6 +312,11 @@ bool Game::pulse()
 			gFont->render(WString<256>(L"#64A5F2Testujemy renderowanie tekstu, jest coraz lepiej :D\n#00FF00Druga linia :)\n#216422Mamy sporo FPS'ów: #FF0000%.1f\n#FF8000łóść чертовски сука шлюха こんにちは", Timer::getFPS()), Rect(20, 20, 10, 10), Color(1.0f, 1.0f, 1.0f, 1.0f), Font::DrawFlags::NoClip);
 		}
 
+		// Draw UI
+
+		// Draw console
+		m_console->render(m_renderer);
+
 		m_renderer->postFrame();
 	}
 
@@ -347,5 +365,10 @@ PhysicsWorld * Game::getPhysicsWorld()
 
 Game * Game::get()
 {
-	return s_singleton;
+	return s_instance;
+}
+
+void Game::shutdown()
+{
+	m_isRunning = false;
 }

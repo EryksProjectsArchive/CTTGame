@@ -46,6 +46,8 @@
 
 #include <core/WDynString.h>
 
+#include <graphics/Vertex2d.h>
+
 // Extension methods
 PFNGLENABLEIPROC Renderer::glEnablei = 0;
 
@@ -172,6 +174,7 @@ Renderer::Renderer()
 {
 	s_instance = this;
 	m_stats.reset();
+	m_rect.bottom = m_rect.top = m_rect.right = m_rect.left = 0;
 }
 
 Renderer::~Renderer()
@@ -203,6 +206,8 @@ bool Renderer::setup(Window * window)
 
 	m_projectionMatrix = glm::perspective(45.0f, window->getAspectRatio(), 0.1f, 1000.0f);
 	m_orthoMatrix = glm::ortho(0.f, (float)m_window->getWidth(), (float)m_window->getHeight(), 0.f, -1.f, 1.f);
+	m_rect.bottom = float(m_window->getHeight());
+	m_rect.right = float(m_window->getWidth());
 
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
@@ -567,12 +572,142 @@ void Renderer::renderGeometry(Geometry<Vertex3d> *geometry, const glm::mat4x4& m
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-struct SimpleVertex2d
+void Renderer::renderGeometry(Geometry<Vertex2d> *geometry)
 {
-	float x, y;
-	unsigned int color;
-	float u, v;
-};
+	Material* material = m_currentMaterial;
+	if (!material)
+		material = m_defaultMaterial;
+
+	// Shaders
+	if (!material)
+	{
+		Error("renderer", "Cannot render 2d geometry. No material found!");
+		return;
+	}
+
+	if (!material->m_program || !glIsProgram(material->m_program->m_programId))
+	{
+		Error("renderer", "Cannot render 2d geometry. No shader program assigned for material.");
+		return;
+	}
+
+	glUseProgram(material->m_program->m_programId);
+
+	unsigned int orthoMatrixLocation = material->m_program->getUniformLocation("orthoMatrix");
+	if (orthoMatrixLocation != -1)
+	{
+		glUniformMatrix4fv(orthoMatrixLocation, 1, GL_FALSE, glm::value_ptr(m_orthoMatrix));
+	}
+
+	if (material->m_hasTexture)
+	{
+		if (glIsTexture(material->m_texture->m_textureID))
+		{
+			unsigned int textureLocation = material->m_program->getUniformLocation("texture");
+			if (textureLocation != -1)
+			{
+				glActiveTexture(GL_TEXTURE0);
+				glBindTexture(GL_TEXTURE_2D, material->m_texture->m_textureID);
+				glUniform1i(textureLocation, 0);
+			}
+		}
+	}
+
+	unsigned int attributePosition = material->m_program->getAttributeLocation("vertexPosition");
+	unsigned int attributeUV = material->m_program->getAttributeLocation("vertexUV");
+	unsigned int attributeColor = material->m_program->getAttributeLocation("vertexColor");
+
+	glEnableVertexAttribArray(attributePosition);
+	if (attributeColor != -1)
+		glEnableVertexAttribArray(attributeColor);
+	if (attributeUV != -1)
+		glEnableVertexAttribArray(attributeUV);
+
+	glBindBuffer(GL_ARRAY_BUFFER, geometry->m_vertexBuffer->m_bufferId);
+
+	glVertexAttribPointer(attributePosition, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex2d), 0);
+	if (attributeColor != -1)
+		glVertexAttribPointer(attributeColor, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(Vertex2d), (void *)offsetof(Vertex2d, color));
+	if (attributeUV != -1)
+		glVertexAttribPointer(attributeUV, 2, GL_FLOAT, GL_FALSE, sizeof(SimpleVertex2d), (void *)offsetof(Vertex2d, u));
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geometry->m_indexBuffer->m_bufferId);
+
+	glDrawElements(GL_TRIANGLES, geometry->m_trianglesCount * 3, GL_UNSIGNED_SHORT, 0);
+	m_stats.m_trianglesDrawn += geometry->m_trianglesCount;
+	m_stats.m_drawCalls++;
+	m_stats.m_verticesDrawn += geometry->m_verticesCount;
+
+	glDisableVertexAttribArray(attributePosition);
+	if (attributeColor != -1)
+		glDisableVertexAttribArray(attributeColor);
+	if (attributeUV != -1)
+		glDisableVertexAttribArray(attributeUV);
+
+	glUseProgram(0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
+}
+
+void Renderer::renderGeometry(Geometry<SimpleVertex2d> *geometry)
+{
+	Material* material = m_currentMaterial;
+	if (!material)
+		material = m_defaultMaterial;
+
+	// Shaders
+	if (!material)
+	{
+		Error("renderer", "Cannot render simple 2d geometry. No material found!");
+		return;
+	}
+
+	if (!material->m_program || !glIsProgram(material->m_program->m_programId))
+	{
+		Error("renderer", "Cannot render simple 2d geometry. No shader program assigned for material.");
+		return;
+	}
+
+	glUseProgram(material->m_program->m_programId);
+
+	unsigned int orthoMatrixLocation = material->m_program->getUniformLocation("orthoMatrix");
+	if (orthoMatrixLocation != -1)
+	{
+		glUniformMatrix4fv(orthoMatrixLocation, 1, GL_FALSE, glm::value_ptr(m_orthoMatrix));
+	}
+
+	unsigned int attributePosition = material->m_program->getAttributeLocation("vertexPosition");
+	unsigned int attributeColor = material->m_program->getAttributeLocation("vertexColor");
+
+	glEnableVertexAttribArray(attributePosition);
+	if (attributeColor != -1)
+		glEnableVertexAttribArray(attributeColor);
+
+	glBindBuffer(GL_ARRAY_BUFFER, geometry->m_vertexBuffer->m_bufferId);
+
+	glVertexAttribPointer(attributePosition, 2, GL_FLOAT, GL_FALSE, sizeof(SimpleVertex2d), 0);
+	if (attributeColor != -1)
+		glVertexAttribPointer(attributeColor, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(SimpleVertex2d), (void *)offsetof(SimpleVertex2d, color));
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geometry->m_indexBuffer->m_bufferId);
+
+	glDrawElements(GL_TRIANGLES, geometry->m_trianglesCount * 3, GL_UNSIGNED_SHORT, 0);
+	m_stats.m_trianglesDrawn += geometry->m_trianglesCount;
+	m_stats.m_drawCalls++;
+	m_stats.m_verticesDrawn += geometry->m_verticesCount;
+
+	glDisableVertexAttribArray(attributePosition);
+	if (attributeColor != -1)
+		glDisableVertexAttribArray(attributeColor);
+
+	glUseProgram(0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
+}
 
 void Renderer::renderFont(const WDynString& string, const Rect& rect, const Color& color, flags32 flags, Font *font)
 {
@@ -589,7 +724,7 @@ void Renderer::renderFont(const WDynString& string, const Rect& rect, const Colo
 
 	uint32 xcolor = ((uint8)(color.a * 255) << 24) | ((uint8)(color.b * 255) << 16) | ((uint8)(color.g * 255) << 8) | ((uint8)(color.r * 255));
 
-	SimpleVertex2d * vertices = new SimpleVertex2d[string.getLength() * 4];
+	Vertex2d * vertices = new Vertex2d[string.getLength() * 4];
 	uint16 *indices = new uint16[string.getLength() * 6];
 
 	uint32 vertexId = 0;
@@ -628,7 +763,7 @@ void Renderer::renderFont(const WDynString& string, const Rect& rect, const Colo
 					{
 						i += 1;// skip '#' sign
 						wchar_t color[7] = { 0 };
-						for (uint32 j = 0; j < 7; ++j)
+						for (uint32 j = 0; j < 6; ++j)
 							color[j] = string[i + j];
 
 						uint32 col = 0xFFFFFFFF;
@@ -714,7 +849,7 @@ void Renderer::renderFont(const WDynString& string, const Rect& rect, const Colo
 		x += data.bmw+2;
 	}
 
-	Geometry<SimpleVertex2d> geometry;
+	Geometry<Vertex2d> geometry;
 	geometry.fillData(vertices, vertexId, indices, indexId/3);
 	delete[]vertices;
 	delete[]indices;
@@ -763,15 +898,18 @@ void Renderer::renderFont(const WDynString& string, const Rect& rect, const Colo
 
 	glBindBuffer(GL_ARRAY_BUFFER, geometry.m_vertexBuffer->m_bufferId);
 
-	glVertexAttribPointer(attributePosition, 2, GL_FLOAT, GL_FALSE, sizeof(SimpleVertex2d), 0);
+	glVertexAttribPointer(attributePosition, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex2d), 0);
 	if (attributeUV != -1)
-		glVertexAttribPointer(attributeUV, 2, GL_FLOAT, GL_FALSE, sizeof(SimpleVertex2d), (void *)offsetof(SimpleVertex2d, u));
+		glVertexAttribPointer(attributeUV, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex2d), (void *)offsetof(Vertex2d, u));
 	if (attributeColor != -1)
-		glVertexAttribPointer(attributeColor, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(SimpleVertex2d), (void *)offsetof(SimpleVertex2d, color));
+		glVertexAttribPointer(attributeColor, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(Vertex2d), (void *)offsetof(Vertex2d, color));
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geometry.m_indexBuffer->m_bufferId);
 
 	glDrawElements(GL_TRIANGLES, geometry.m_trianglesCount * 3, GL_UNSIGNED_SHORT, 0);
+	m_stats.m_trianglesDrawn += geometry.m_trianglesCount;
+	m_stats.m_drawCalls++;
+	m_stats.m_verticesDrawn += geometry.m_verticesCount;
 
 	glDisableVertexAttribArray(attributePosition);
 	if (attributeUV != -1)
@@ -789,4 +927,9 @@ void Renderer::renderFont(const WDynString& string, const Rect& rect, const Colo
 Renderer& Renderer::get()
 {
 	return *s_instance;
+}
+
+Rect Renderer::getRect()
+{
+	return m_rect;
 }

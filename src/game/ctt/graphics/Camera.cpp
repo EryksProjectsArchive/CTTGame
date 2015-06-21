@@ -13,7 +13,7 @@
 
 Camera * Camera::current = 0;
 
-Camera::Camera() : m_viewMatrix(glm::lookAt(glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0))), m_fov(45.f)
+Camera::Camera() : Controllable(ControllableType::Gameplay), m_viewMatrix(glm::lookAt(glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0))), m_fov(45.f)
 {
 }
 

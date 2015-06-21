@@ -15,6 +15,9 @@
 #include <cstdarg>
 
 #include "Logger.h"
+#include "console/Console.h"
+
+#include <os/OS.h>
 
 FILE * Logger::s_logFile = 0;
 
@@ -51,6 +54,16 @@ void Logger::log(const char *tag, LogType type, const char *msg, ...)
 	}
 
 	va_list args, args2;
+
+	char message[512] = { 0 };
+	wchar_t* wcMessage = 0;
+	uint32 len = 0;
+	va_start(args, msg);
+	vsprintf(message, msg, args);
+	va_end(args);
+
+	OS::multiByteToWideChar(message, strlen(message), &wcMessage, &len);
+
 	va_start(args, msg);
 
 	time_t timeraw = time(NULL);
@@ -66,21 +79,29 @@ void Logger::log(const char *tag, LogType type, const char *msg, ...)
 	}
 
 	const char * prefix = 0;
+	Console::MessageType::Type consoleMessageType;
 	switch (type)
 	{
 	case LogType_Error:
 		prefix = "<error> ";
+		consoleMessageType = Console::MessageType::Error;
 		break;
 	case LogType_Warning:
 		prefix = "<warning> ";
+		consoleMessageType = Console::MessageType::Warning;
 		break;
 	case LogType_Debug:
 		prefix = "<debug> ";
+		consoleMessageType = Console::MessageType::Invalid;
 		break;
 	default:
 		prefix = "<info> ";
+		consoleMessageType = Console::MessageType::Info;
 		break;		
 	}
+
+	Console::get()->output(consoleMessageType, wcMessage);
+	delete []wcMessage;
 
 	printf(prefix);
 	fprintf(s_logFile, prefix);

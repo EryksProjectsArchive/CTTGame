@@ -12,6 +12,8 @@
 #include "Window.h"
 #include <game/Game.h>
 #include <input/Input.h>
+#include <os/OS.h>
+#include <core/WDynString.h>
 
 Window::Window()
 	: _window(0)
@@ -32,7 +34,7 @@ bool Window::setup(const char *title, unsigned short width, unsigned short heigh
 {
 	if (!_window)
 	{
-		_window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_OPENGL | (fullscreen ? SDL_WINDOW_FULLSCREEN : SDL_WINDOW_SHOWN));
+		_window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_OPENGL | (fullscreen ? SDL_WINDOW_FULLSCREEN_DESKTOP : SDL_WINDOW_SHOWN));
 		if (!_window)
 			return false;
 
@@ -66,6 +68,15 @@ bool Window::processMessages()
 		case SDL_MOUSEBUTTONUP:
 			Input::get()->onMouseButtonEvent(event.button.button, event.button.state == SDL_PRESSED, event.button.clicks, event.button.x, event.button.y);
 			break;
+		case SDL_TEXTINPUT:
+			{
+				char *text = event.text.text;
+				wchar_t *wcText = 0;
+				uint32 wcLen = 0;
+				OS::multiByteToWideChar(text, strlen(text), &wcText, &wcLen);
+				Input::get()->onTextInput(wcText);
+				delete[]wcText;
+			} break;
 		}
 	}
 	return true;

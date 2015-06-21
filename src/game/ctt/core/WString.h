@@ -28,31 +28,31 @@ public:
 		memset(m_buffer, 0, maxSize * sizeof(wchar_t));
 	}
 
-	WString(const WString<maxSize>& string)
+	WString(const WString<maxSize>& string) : WString()
 	{
-		wcsncpy(m_buffer, string.m_buffer, maxSize);
+		wcscpy(m_buffer, string.m_buffer);
 	}
 
-	WString(const wchar_t *buffer)
+	WString(const wchar_t *buffer) : WString()
 	{
-		memset(m_buffer, 0, maxSize* sizeof(wchar_t));
-
 		size_t size = wcslen(buffer);
 		if (size > maxSize)
 			size = maxSize;
 
 		wcsncpy(m_buffer, buffer, size);
+		size_t len = wcslen(m_buffer);
+		m_buffer[len] = '\0';
 	}
 
-	WString(wchar_t *buffer)
+	WString(wchar_t *buffer) : WString()
 	{
-		memset(m_buffer, 0, maxSize* sizeof(wchar_t));
-
 		size_t size = wcslen(buffer);
 		if (size > maxSize)
 			size = maxSize;
 
-		wsccpy(m_buffer, buffer);
+		wcsncpy(m_buffer, buffer, size);
+		size_t len = wcslen(m_buffer);
+		m_buffer[len] = '\0';
 	}
 
 	explicit WString(const wchar_t *buffer, ...)

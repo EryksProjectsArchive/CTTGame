@@ -13,7 +13,8 @@
 
 #include "Input.h"
 
-Controllable::Controllable()
+Controllable::Controllable(ControllableType::Type type)
+	: m_type(type)
 {
 	registerInput();
 }

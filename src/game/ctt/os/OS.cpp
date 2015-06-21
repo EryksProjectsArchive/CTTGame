@@ -128,6 +128,14 @@ namespace OS
 		return false;
 	}
 
+	void multiByteToWideChar(const char *mb, uint32 mbLen, wchar_t **wc, uint32 *wcLen)
+	{
+		*wcLen = ::MultiByteToWideChar(CP_UTF8, NULL, mb, mbLen, NULL, 0);
+		*wc = new wchar_t[*wcLen + 1];
+		::MultiByteToWideChar(CP_UTF8, NULL, mb, mbLen, *wc, *wcLen);
+		(*wc)[*wcLen] = '\0';
+	}
+	
 	DynamicLibrary * openDynamicLibrary(FilePath path)
 	{
 #ifdef _WIN32
