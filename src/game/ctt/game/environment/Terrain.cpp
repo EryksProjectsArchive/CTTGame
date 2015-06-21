@@ -21,16 +21,16 @@
 
 Terrain::Terrain(uint32 width, uint32 height)
 {
-	m_nodeSize = 400;
+	m_nodeSize = 250;
 	m_width = width;
 	m_height = height;
 	m_wNodes = width / m_nodeSize;
 	m_hNodes = height / m_nodeSize;
 
-	m_node = new TerrainNode**[m_wNodes];
+	m_node = new TerrainGrid**[m_wNodes];
 	for (uint32 x = 0; x < m_wNodes; ++x)
 	{
-		m_node[x] = new TerrainNode*[m_hNodes];
+		m_node[x] = new TerrainGrid*[m_hNodes];
 		for (uint32 y = 0; y < m_hNodes; ++y)
 			m_node[x][y] = 0;
 	}
@@ -40,7 +40,7 @@ Terrain::Terrain(uint32 width, uint32 height)
 	{
 		for (uint32 x = 0; x < m_wNodes; ++x)
 		{
-			m_node[x][y] = new TerrainNode(point, m_nodeSize);
+			m_node[x][y] = new TerrainGrid(point, m_nodeSize);
 			point.x += m_nodeSize;
 		}
 		point.x = -(float)(width / 2);
@@ -137,7 +137,7 @@ void Terrain::render(RenderContext& context)
 
 }
 
-TerrainNode::TerrainNode(Vector3 position, uint32 size) : m_left(0), m_right(0), m_top(0), m_bottom(0)
+TerrainGrid::TerrainGrid(Vector3 position, uint32 size) : m_left(0), m_right(0), m_top(0), m_bottom(0)
 {
 	m_world = glm::translate(glm::mat4(), position);
 	m_material = MaterialLib::get()->findByName("terrain");
@@ -171,13 +171,13 @@ TerrainNode::TerrainNode(Vector3 position, uint32 size) : m_left(0), m_right(0),
 	Game::get()->getPhysicsWorld()->registerRigidBody(m_rigidBody);
 }
 
-TerrainNode::~TerrainNode()
+TerrainGrid::~TerrainGrid()
 {
 	if (m_material)
 		m_material->release();
 }
 
-void TerrainNode::render(RenderContext& context)
+void TerrainGrid::render(RenderContext& context)
 {
 	RenderTask *task = context.newTask();
 

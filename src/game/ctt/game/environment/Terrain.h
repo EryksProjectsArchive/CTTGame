@@ -16,7 +16,7 @@
 
 #include <btBulletDynamicsCommon.h>
 
-class TerrainNode
+class TerrainGrid
 {
 private:
 	Geometry<Vertex3d> m_geometry;
@@ -26,15 +26,15 @@ private:
 	Matrix4x4 m_world;
 
 	// Next nodes in projected onto 2d plane
-	TerrainNode *m_right;
-	TerrainNode *m_left;
-	TerrainNode *m_top;
-	TerrainNode *m_bottom;
+	TerrainGrid *m_right;
+	TerrainGrid *m_left;
+	TerrainGrid *m_top;
+	TerrainGrid *m_bottom;
 
 	btRigidBody *m_rigidBody;
 public:
-	TerrainNode(Vector3 position, uint32 size);
-	~TerrainNode();
+	TerrainGrid(Vector3 position, uint32 size);
+	~TerrainGrid();
 
 	void render(RenderContext& context);
 };
@@ -42,7 +42,7 @@ public:
 class Terrain
 {
 private:
-	TerrainNode ***m_node;
+	TerrainGrid ***m_node;
 
 	uint32 m_wNodes;
 	uint32 m_hNodes;

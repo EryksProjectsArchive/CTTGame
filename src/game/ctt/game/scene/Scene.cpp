@@ -16,14 +16,14 @@
 #include "entities/Entity.h"
 #include "Scene.h"
 
-#include <graphics/FreeCamera.h>
+#include <graphics/EditorFreeCamera.h>
 #include <graphics/renderer/RenderContext.h>
 
 #include <game/environment/Terrain.h>
 
 Scene::Scene()
 {
-	m_camera = new FreeCamera();
+	m_camera = new EditorFreeCamera();
 	Camera::setCurrent(m_camera);
 	m_terrain = new Terrain(30000, 30000);
 }

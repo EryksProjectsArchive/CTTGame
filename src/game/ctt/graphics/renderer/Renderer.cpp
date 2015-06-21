@@ -352,6 +352,7 @@ bool Renderer::setup(Window * window)
 	
 	glEnable(GL_CULL_FACE);
 	glFrontFace(GL_CW);
+	glCullFace(GL_BACK);
 	
 	m_defaultMaterial = MaterialLib::get()->findByName("default");
 	m_defaultMaterial->acquire();
@@ -365,9 +366,11 @@ bool Renderer::setup(Window * window)
 	
 	m_helperLines = new Geometry<Vertex3d>(EDrawType::LINES);
 
-	Vertex3d vertices[4] = { 0 };
+	Vertex3d vertices[6] = { 0 };
 
 	// Format: 0xAABBGGRR bcz of endian
+	vertices[0].color = 0xFF0000FF;
+
 	vertices[1].x = 8;
 	vertices[1].color = 0xFF0000FF;
 
@@ -377,10 +380,11 @@ bool Renderer::setup(Window * window)
 	vertices[3].z = 8;
 	vertices[3].color = 0xFFFF0000;
 
+	vertices[4].color = 0xFF00FF00;
+	vertices[5].color = 0xFFFF0000;
+
 	unsigned short indices[6] = {
-		0, 1,
-		0, 2,
-		0, 3
+		0, 1, 2, 4, 3, 5
 	};
 
 	m_helperLines->fillData(vertices, 4, indices, 2);

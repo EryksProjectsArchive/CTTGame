@@ -390,6 +390,9 @@
     <ClCompile Include="resources\sounds\ogg\OGGsoundLoader.cpp">
       <Filter>Source Files\resources\sounds\ogg</Filter>
     </ClCompile>
+    <ClCompile Include="graphics\EditorFreeCamera.cpp">
+      <Filter>Source Files\graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="os\OS.h">
@@ -637,6 +640,9 @@
     </ClInclude>
     <ClInclude Include="resources\sounds\ogg\OGGsoundLoader.h">
       <Filter>Header Files\resources\sounds\ogg</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\EditorFreeCamera.h">
+      <Filter>Header Files\graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

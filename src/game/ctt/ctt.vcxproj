@@ -179,6 +179,7 @@
     <ClCompile Include="game\scene\Scene.cpp" />
     <ClCompile Include="graphics\BufferBase.cpp" />
     <ClCompile Include="graphics\Camera.cpp" />
+    <ClCompile Include="graphics\EditorFreeCamera.cpp" />
     <ClCompile Include="graphics\fonts\Font.cpp" />
     <ClCompile Include="graphics\FragmentShader.cpp" />
     <ClCompile Include="graphics\FreeCamera.cpp" />
@@ -251,6 +252,7 @@
     <ClInclude Include="game\scene\Scene.h" />
     <ClInclude Include="graphics\BufferBase.h" />
     <ClInclude Include="graphics\Camera.h" />
+    <ClInclude Include="graphics\EditorFreeCamera.h" />
     <ClInclude Include="graphics\fonts\Font.h" />
     <ClInclude Include="graphics\FragmentShader.h" />
     <ClInclude Include="graphics\FreeCamera.h" />
