@@ -407,7 +407,6 @@ bool Renderer::setup(Window * window)
 	glEnable(GL_CULL_FACE);
 	glFrontFace(GL_CW);
 	glCullFace(GL_BACK);
-
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
 	glClearDepth(1.0f);
@@ -662,7 +661,13 @@ void Renderer::renderGeometry(Geometry<Vertex3d> *geometry, const glm::mat4x4& m
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geometry->m_indexBuffer->m_bufferId);
 	
-	glDrawElements((material->m_parameters & Material::Parameters::RENDER_WIREFRAME) ? GL_LINE_STRIP : GL_TRIANGLES, geometry->m_trianglesCount * 3, GL_UNSIGNED_SHORT, 0);
+	glPolygonMode(GL_FRONT_AND_BACK, (material->m_parameters & Material::Parameters::RENDER_WIREFRAME) ? GL_LINE : GL_FILL);
+
+	glDrawElements(GL_TRIANGLES, geometry->m_trianglesCount * 3, GL_UNSIGNED_SHORT, 0);
+
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+	//glDrawElements((material->m_parameters & Material::Parameters::RENDER_WIREFRAME) ? GL_LINES : GL_TRIANGLES, geometry->m_trianglesCount * 3, GL_UNSIGNED_SHORT, 0);
 	m_stats.m_trianglesDrawn += geometry->m_trianglesCount;
 	m_stats.m_drawCalls++;
 	m_stats.m_verticesDrawn += geometry->m_verticesCount;
