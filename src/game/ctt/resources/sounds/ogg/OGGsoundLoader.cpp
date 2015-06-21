@@ -46,11 +46,11 @@ namespace OGG
 			{
 				int8 id[5] = { 0 };
 				file->read(id, 4, 1);
-				isValid = (id[0] == 'O' && id[1] == 'g' && id[2] == 'g' && id[3] == 'S');
+				isValid = isValid &&(id[0] == 'O' && id[1] == 'g' && id[2] == 'g' && id[3] == 'S');
 				file->seek(29, SeekOrigin::Type::Set);
 				int8 ids[7] = { 0 };
 				file->read(ids, 6, 1);
-				isValid = (ids[0] == 'v' && ids[1] == 'o' && ids[2] == 'r' && ids[3] == 'b' && ids[4] == 'i' && ids[5] == 's');
+				isValid = isValid &&(ids[0] == 'v' && ids[1] == 'o' && ids[2] == 'r' && ids[3] == 'b' && ids[4] == 'i' && ids[5] == 's');
 
 				FileSystem::get()->close(file);
 			}
@@ -116,12 +116,14 @@ namespace OGG
 						}
 					}
 				}
-				else{
-					Error("OGGsoundLoader", "");
+				else
+				{
+					Error("OGGSoundLoader", "Cannot get informations about audio from ogg file '%s'.", filePath.get());
 				}
 			}
-			else{
-				Error("OGGsoundLoader", "");
+			else
+			{
+				Error("OGGSoundLoader", "Cannot setup ogg callbacks.");
 			}
 
 			ov_clear(&vorbis_file);
@@ -143,21 +145,31 @@ namespace OGG
 
 	int SoundLoader::fileSeek(void* datasource, ogg_int64_t offset, int whence)
 	{
-		switch (whence) {
-		case SEEK_SET: (static_cast<File*> (datasource)->seek((int)offset, SeekOrigin::Set));   break;
-		case SEEK_CUR: (static_cast<File*> (datasource)->seek((int)offset, SeekOrigin::Current)); break;
-		case SEEK_END: (static_cast<File*> (datasource)->seek((int)offset, SeekOrigin::End));     break;
-		default: return -1;
+		switch (whence)
+		{
+		case SEEK_SET: 
+			(static_cast<File*> (datasource)->seek((int)offset, SeekOrigin::Set));   
+			break;
+		case SEEK_CUR: 
+			(static_cast<File*> (datasource)->seek((int)offset, SeekOrigin::Current)); 
+			break;
+		case SEEK_END: 
+			(static_cast<File*> (datasource)->seek((int)offset, SeekOrigin::End));    
+			break;
+		default: 
+			return -1;
 		}
 		return 0;
 	}
 
 
-	int SoundLoader::fileClose(void* ) {
+	int SoundLoader::fileClose(void* )
+	{
 		return 0;
 	}
 
-	long SoundLoader::fileTell(void* datasource) {
+	long SoundLoader::fileTell(void* datasource) 
+	{
 		return (static_cast<File*> (datasource)->tell());
 	}
 };

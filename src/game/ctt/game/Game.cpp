@@ -38,8 +38,8 @@
 #include <resources/images/jpeg/JPEGImageLoader.h>
 #include <resources/images/dds/DDSImageLoader.h>
 #include <resources/SoundLoader.h>
-#include <resources/sounds/wav/WAVsoundLoader.h>
-#include <resources/sounds/ogg/OGGsoundLoader.h>
+#include <resources/sounds/wav/WAVSoundLoader.h>
+#include <resources/sounds/ogg/OGGSoundLoader.h>
 
 #include <physics/PhysicsWorld.h>
 

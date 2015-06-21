@@ -226,8 +226,8 @@
     <ClCompile Include="resources\images\png\PNGImageLoader.cpp" />
     <ClCompile Include="resources\Resource.cpp" />
     <ClCompile Include="resources\SoundLoader.cpp" />
-    <ClCompile Include="resources\sounds\ogg\OGGsoundLoader.cpp" />
-    <ClCompile Include="resources\sounds\wav\WAVsoundLoader.cpp" />
+    <ClCompile Include="resources\sounds\ogg\OGGSoundLoader.cpp" />
+    <ClCompile Include="resources\sounds\wav\WAVSoundLoader.cpp" />
     <ClCompile Include="sound\openal\OpenALImpl.cpp" />
     <ClCompile Include="sound\Sound.cpp" />
     <ClCompile Include="sound\SoundManager.cpp" />
@@ -303,6 +303,7 @@
     <ClInclude Include="physics\PhysicalEntity.h" />
     <ClInclude Include="physics\PhysicsWorld.h" />
     <ClInclude Include="Prerequisites.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="resources\CacheableResource.h" />
     <ClInclude Include="resources\ImageLoader.h" />
     <ClInclude Include="resources\images\bmp\BMPImageLoader.h" />
@@ -314,8 +315,8 @@
     <ClInclude Include="resources\Resource.h" />
     <ClInclude Include="resources\ResourceLib.h" />
     <ClInclude Include="resources\SoundLoader.h" />
-    <ClInclude Include="resources\sounds\ogg\OGGsoundLoader.h" />
-    <ClInclude Include="resources\sounds\wav\WAVsoundLoader.h" />
+    <ClInclude Include="resources\sounds\ogg\OGGSoundLoader.h" />
+    <ClInclude Include="resources\sounds\wav\WAVSoundLoader.h" />
     <ClInclude Include="sound\openal\OpenALImpl.h" />
     <ClInclude Include="sound\Sound.h" />
     <ClInclude Include="sound\SoundData.h" />
@@ -361,6 +362,9 @@
     <ProjectReference Include="..\..\libs\zlib-1.2.8\win32\zlib.vcxproj">
       <Project>{60f89955-91c6-3a36-8000-13c592fec2df}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resource.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

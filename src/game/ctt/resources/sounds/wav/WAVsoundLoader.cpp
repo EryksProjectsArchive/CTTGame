@@ -43,13 +43,13 @@ namespace WAV
 				isValid = (id[0] == 'R' && id[1] == 'I' && id[2] == 'F' && id[3] == 'F');
 				file->seek(8, SeekOrigin::Type::Set);
 				file->read(id, 4, 1);
-				isValid = (id[0] == 'W' && id[1] == 'A' && id[2] == 'V' && id[3] == 'E');
+				isValid = isValid &&(id[0] == 'W' && id[1] == 'A' && id[2] == 'V' && id[3] == 'E');
 				file->seek(12, SeekOrigin::Type::Set);
 				file->read(id, 4, 1);
-				isValid = (id[0] == 'f' && id[1] == 'm' && id[2] == 't' && id[3] == ' ');
+				isValid = isValid&&(id[0] == 'f' && id[1] == 'm' && id[2] == 't' && id[3] == ' ');
 				file->seek(36, SeekOrigin::Type::Set);
 				file->read(id, 4, 1);
-				isValid = (id[0] == 'd' && id[1] == 'a' && id[2] == 't' && id[3] == 'a');
+				isValid = isValid&&(id[0] == 'd' && id[1] == 'a' && id[2] == 't' && id[3] == 'a');
 
 				FileSystem::get()->close(file);
 			}
@@ -97,11 +97,11 @@ namespace WAV
 					file->read(data->data, waveFile.data.ChunkSize, 1);
 				}
 				else {
-					Error("WAVsoundLoader", "Sound is not correctly formatted");
+					Error("WAVSoundLoader", "Sound is not correctly formatted");
 				}
 			}
 			else {
-				Error("WAVsoundLoader", "Sound is not PCM!");
+				Error("WAVSoundLoader", "Sound is not PCM!");
 			}
 
 		FileSystem::get()->close(file);

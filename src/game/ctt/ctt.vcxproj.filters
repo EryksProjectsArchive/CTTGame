@@ -223,6 +223,12 @@
     <Filter Include="Source Files\graphics\ui\controls">
       <UniqueIdentifier>{57951d55-ad73-47c0-851e-7234dda6b26e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\resources\sounds\ogg">
+      <UniqueIdentifier>{4233acc5-4a3f-48bd-af2b-974b34c56a52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\resources\sounds\ogg">
+      <UniqueIdentifier>{993b3956-b610-43fb-9589-9cfb90b112d9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -342,7 +348,7 @@
     <ClCompile Include="game\environment\Environment.cpp">
       <Filter>Source Files\game\environment</Filter>
     </ClCompile>
-    <ClCompile Include="resources\sounds\wav\WAVsoundLoader.cpp">
+    <ClCompile Include="resources\sounds\wav\WAVSoundLoader.cpp">
       <Filter>Source Files\resources\sounds\wav</Filter>
     </ClCompile>
     <ClCompile Include="resources\SoundLoader.cpp">
@@ -428,6 +434,9 @@
     </ClCompile>
     <ClCompile Include="graphics\ui\controls\UIButton.cpp">
       <Filter>Source Files\graphics\ui\controls</Filter>
+    </ClCompile>
+    <ClCompile Include="resources\sounds\ogg\OGGSoundLoader.cpp">
+      <Filter>Source Files\resources\sounds\ogg</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -578,7 +587,7 @@
     <ClInclude Include="resources\SoundLoader.h">
       <Filter>Header Files\resources</Filter>
     </ClInclude>
-    <ClInclude Include="resources\sounds\wav\WAVsoundLoader.h">
+    <ClInclude Include="resources\sounds\wav\WAVSoundLoader.h">
       <Filter>Header Files\resources\sounds\wav</Filter>
     </ClInclude>
     <ClInclude Include="sound\SoundData.h">
@@ -692,10 +701,21 @@
     <ClInclude Include="graphics\ui\controls\UIButton.h">
       <Filter>Header Files\graphics\ui\controls</Filter>
     </ClInclude>
+    <ClInclude Include="resources\sounds\ogg\OGGSoundLoader.h">
+      <Filter>Header Files\resources\sounds\ogg</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="todo.txt">
       <Filter>Resource Files</Filter>
     </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resource.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>
