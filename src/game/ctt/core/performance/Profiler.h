@@ -42,3 +42,27 @@ public:
 		return m_time;
 	}
 };
+
+class ProfilerScope
+{
+private:
+	Profiler *m_profiler;
+
+public:
+	ProfilerScope(Profiler *profiler)
+		: m_profiler(profiler)
+	{
+		m_profiler->start();
+	}
+
+	~ProfilerScope()
+	{
+		m_profiler->end();
+	}
+};
+
+#define _CONCAT(a,b) a ## b
+#define CONCAT(a,b) _CONCAT(a,b)
+#define PROFILER(profilerObject) ProfilerScope CONCAT(profiler, __LINE__)(&profilerObject)
+
+/* EOF */
