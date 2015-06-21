@@ -40,11 +40,10 @@ namespace JPEG
 			File *file = FileSystem::get()->open(filePath, FileOpenMode::Binary);
 			if (file->isLoaded())
 			{
-//				char id[3] = { 0 };
-//				file->read(id, 2, 1);
-
-				isValid = true;
-
+				int8 id[5] = { 0 };
+				file->seek(6, SeekOrigin::Set);
+				file->read(id, 4, 1);
+				isValid = (id[0] == 'E' && id[1] == 'x' && id[2] == 'i' && id[3] == 'f') || (id[0] == 'J' && id[1] == 'F' && id[2] == 'I' && id[3] == 'F');
 				FileSystem::get()->close(file);
 			}
 		}
@@ -61,7 +60,7 @@ namespace JPEG
 		File *file = FileSystem::get()->open(filePath, FileOpenMode::Binary);
 		if (file->isLoaded())
 		{
-			unsigned long length;
+			uint32 length;
 			jpeg_decompress_struct cinfo;
 			data = new ImageData;
 			jpeg_error_mgr jerr;
@@ -75,7 +74,7 @@ namespace JPEG
 			file->seek(0, SeekOrigin::End);
 			length = file->tell();
 			file->rewind();
-			tmp_data = new unsigned char[length + 1];
+			tmp_data = new uint8[length + 1];
 			file->read(tmp_data, length, 1);
 			tmp_data[length] = '\0';
 
@@ -89,7 +88,7 @@ namespace JPEG
 			data->width = cinfo.output_width;
 			data->format = cinfo.output_components == 4 ? EImageFormat::RGBA : EImageFormat::RGB;
 
-			data->pixels = new unsigned char[data->width * data->height * cinfo.output_components];
+			data->pixels = new uint8[data->width * data->height * cinfo.output_components];
 
 			while (cinfo.output_scanline < cinfo.output_height)
 			{

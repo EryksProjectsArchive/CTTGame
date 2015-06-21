@@ -56,7 +56,7 @@ bool Texture::load()
 			format = GL_RGB;
 			break;
 		}
-		/*
+		
 		switch (data->compressed)
 		{
 		case EImageCompreesion::DXT1:
@@ -69,25 +69,15 @@ bool Texture::load()
 			break;
 		case EImageCompreesion::DXT5:
 			format = GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;
-			for (int i = 0, iOffset = 0, iSize; i < 11; i++)
-			{
-				iSize = ((data->width + 3) / 4) * ((data->height + 3) / 4) * 16;
-				Renderer::glCompressedTexImage2D(GL_TEXTURE_2D, i, format, data->width, data->height, 0, iSize, data->pixels + iOffset);
-				iOffset += iSize;
-
-				//Scale next level.
-				data->width /= 2;
-				data->height /= 2;
-			}
-
-			
+			Renderer::glCompressedTexImage2D(GL_TEXTURE_2D, 0, format, data->width, data->height, 0, ((data->width + 3) / 4) * ((data->height + 3) / 4) * 16, data->pixels);
+			break;
+		case EImageCompreesion::NONE:
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, data->width, data->height, 0, format, GL_UNSIGNED_BYTE, data->pixels);
 			break;
 		default:
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, data->width, data->height, 0, format, GL_UNSIGNED_BYTE, data->pixels);
 			break;
-		}*/
-
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, data->width, data->height, 0, format, GL_UNSIGNED_BYTE, data->pixels);
+		}
 		
 		if (m_mipmaps)
 		{

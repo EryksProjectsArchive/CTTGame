@@ -40,7 +40,7 @@ namespace PNG
 			{
 				//Allocate a buffer of 8 bytes, where we can put the file signature.
 				png_byte pngsig[8];
-				int is_png = 0;
+				int32 is_png = 0;
 
 				//Read the 8 bytes from the stream into the sig buffer.
 				file->read(pngsig, 8, 1);
@@ -62,7 +62,7 @@ namespace PNG
 
 		File_Struct *file = (File_Struct*)png_get_io_ptr(png_ptr);
 
-		file->file->read((char*)data, length, 1);
+		file->file->read((int8*)data, length, 1);
 	}  
 
 	ImageData * ImageLoader::load(FilePath filePath)
@@ -115,7 +115,7 @@ namespace PNG
 							uint8** row_pointers = new uint8*[data->height];
 
 							for (uint32 i = 0; i < data->height; ++i)
-								row_pointers[data->height - 1 - i] = data->pixels + i *rowbytes;
+								row_pointers[data->height - 1 - i] = data->pixels + i * rowbytes;
 
 							png_read_image(pngPtr, row_pointers);
 

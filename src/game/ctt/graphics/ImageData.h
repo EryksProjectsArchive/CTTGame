@@ -20,7 +20,7 @@ struct EImageFormat
 		RGBA
 	};
 };
-/*
+
 struct EImageCompreesion
 {
 	enum Compressed
@@ -30,14 +30,14 @@ struct EImageCompreesion
 		DXT3,
 		DXT5
 	};
-};*/
+};
 struct ImageData
 {
-	unsigned char *pixels;
-	unsigned int width;
-	unsigned int height;
+	uint8 *pixels;
+	uint32 width;
+	uint32 height;
 	EImageFormat::Type format;
-//	EImageCompreesion::Compressed compressed;
+	EImageCompreesion::Compressed compressed;
 
 	ImageData()
 	{
@@ -45,7 +45,7 @@ struct ImageData
 		width = 0;
 		height = 0;
 		format = EImageFormat::RGB;
-//		compressed = EImageCompreesion::NONE;
+		compressed = EImageCompreesion::NONE;
 
 	}
 

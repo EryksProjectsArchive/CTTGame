@@ -38,7 +38,7 @@ namespace WAV
 			File *file = FileSystem::get()->open(filePath, FileOpenMode::Binary);
 			if (file->isLoaded())
 			{
-				char id[5] = { 0 };
+				int8 id[5] = { 0 };
 				file->read(id, 4, 1);
 				isValid = (id[0] == 'R' && id[1] == 'I' && id[2] == 'F' && id[3] == 'F');
 				file->seek(8, SeekOrigin::Type::Set);
@@ -93,7 +93,7 @@ namespace WAV
 
 					data->size = waveFile.data.ChunkSize;
 					data->sampleRate = waveFile.info.SampleRate;
-					data->data = new unsigned char[waveFile.data.ChunkSize];
+					data->data = new uint8[waveFile.data.ChunkSize];
 					file->read(data->data, waveFile.data.ChunkSize, 1);
 				}
 				else {

@@ -13,10 +13,10 @@
 
 struct SoundData
 {
-	unsigned char *data;
-	unsigned int format;
-	unsigned int size;
-	unsigned int sampleRate;
+	uint8 *data;
+	uint32 format;
+	uint32 size;
+	uint32 sampleRate;
 
 	SoundData()
 	{

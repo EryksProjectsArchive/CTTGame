@@ -332,6 +332,8 @@ bool Renderer::setup(Window * window)
 
 	ASSERT_FUNCTION(glGenVertexArrays = (PFNGLGENVERTEXARRAYSPROC)SDL_GL_GetProcAddress("glGenVertexArrays"));
 
+	ASSERT_FUNCTION(glCompressedTexImage2D = (PFNGLCOMPRESSEDTEXIMAGE2DPROC)SDL_GL_GetProcAddress("glCompressedTexImage2D"));
+
 	SDL_GL_SetSwapInterval(Config::get()["graphics"]["vsync"].getBool(false) ? 1 : 0); // set 0 to disable vsync
 
 	glViewport(0, 0, window->getWidth(), window->getHeight());

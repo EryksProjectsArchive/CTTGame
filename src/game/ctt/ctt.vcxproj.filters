@@ -359,6 +359,7 @@
     </ClCompile>
     <ClCompile Include="core\ExceptionHandler.cpp">
       <Filter>Source Files\core</Filter>
+    </ClCompile>
     <ClCompile Include="resources\images\jpeg\JPEGImageLoader.cpp">
       <Filter>Source Files\resources\images\jpeg</Filter>
     </ClCompile>
