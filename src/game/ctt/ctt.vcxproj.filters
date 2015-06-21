@@ -193,6 +193,12 @@
     <Filter Include="Source Files\resources\images\png">
       <UniqueIdentifier>{31023c4e-dab1-4b6b-96a2-83b370126c6f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\core\console">
+      <UniqueIdentifier>{7977012b-1262-460a-bfc0-d623d0d852c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\core\console">
+      <UniqueIdentifier>{9c7bdf84-72df-4b43-9f0c-0009ee529f29}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

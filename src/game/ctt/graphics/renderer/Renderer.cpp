@@ -622,7 +622,6 @@ void Renderer::renderFont(const WDynString& string, const Rect& rect, const Colo
 				{				
 					if (flags & Font::DrawFlags::DisableColorCodding)
 					{
-						// Skip color codding
 						i += 6;
 					}
 					else 
@@ -634,7 +633,7 @@ void Renderer::renderFont(const WDynString& string, const Rect& rect, const Colo
 
 						uint32 col = 0xFFFFFFFF;
 						swscanf(color, L"%X", &col);
-						uint8 a = 255;
+						uint8 a = xcolor >> 24 & 0xFF; // get alpha from base color
 						uint8 r = col >> 16 & 0xFF;
 						uint8 g = col >> 8 & 0xFF;
 						uint8 b = col & 0xFF;

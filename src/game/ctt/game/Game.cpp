@@ -295,8 +295,8 @@ bool Game::pulse()
 
 		if (gFont)
 		{
-			gFont->render(WString<256>(L"Testujemy renderowanie tekstu, jest coraz lepiej :D\nDruga linia :)\nMamy sporo FPS'ów: #FF0000%.1f#FF8000 łóść чертовски сука шлюха こんにちは", Timer::getFPS()), Rect(21, 21, 10, 10), Color(0.0f, 0.0f, 0.0f, 0.6f), Font::DrawFlags::NoClip | Font::DrawFlags::DisableColorCodding);
-			gFont->render(WString<256>(L"Testujemy renderowanie tekstu, jest coraz lepiej :D\nDruga linia :)\nMamy sporo FPS'ów: #FF0000%.1f#FF8000 łóść чертовски сука шлюха こんにちは", Timer::getFPS()), Rect(20, 20, 10, 10), Color(1.0f, 1.0f, 1.0f, 1.0f), Font::DrawFlags::NoClip);
+			gFont->render(WString<256>(L"#64A5F2Testujemy renderowanie tekstu, jest coraz lepiej :D\n#00FF00Druga linia :)\n#216422Mamy sporo FPS'ów: #FF0000%.1f\n#FF8000łóść чертовски сука шлюха こんにちは", Timer::getFPS()), Rect(21, 21, 10, 10), Color(0.0f, 0.0f, 0.0f, 0.6f), Font::DrawFlags::NoClip | Font::DrawFlags::DisableColorCodding);
+			gFont->render(WString<256>(L"#64A5F2Testujemy renderowanie tekstu, jest coraz lepiej :D\n#00FF00Druga linia :)\n#216422Mamy sporo FPS'ów: #FF0000%.1f\n#FF8000łóść чертовски сука шлюха こんにちは", Timer::getFPS()), Rect(20, 20, 10, 10), Color(1.0f, 1.0f, 1.0f, 1.0f), Font::DrawFlags::NoClip);
 		}
 
 		m_renderer->postFrame();
