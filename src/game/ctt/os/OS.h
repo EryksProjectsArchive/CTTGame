@@ -13,6 +13,10 @@
 
 #include <video/Window.h>
 
+#ifndef MAX_PATH
+#define MAX_PATH 260
+#endif
+
 namespace OS
 {
 	// Paths

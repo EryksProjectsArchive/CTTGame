@@ -28,7 +28,11 @@ Game::Game()
 
 Game::~Game()
 {
-
+	if(this->mWindow)
+	{
+		delete this->mWindow;
+		this->mWindow = 0;
+	}
 }
 
 Model *gModel = 0;
@@ -43,7 +47,7 @@ bool Game::init()
 	// Initialize sounds mgr, assets mgr etc
 
 	// Setup home directory
-	char szHomePath[256] = { 0 };
+	char szHomePath[MAX_PATH] = { 0 };
 	strcpy(szHomePath, OS::initHomePath("City Transport Tycoon"));
 
 	char szLogPath[256] = { 0 };

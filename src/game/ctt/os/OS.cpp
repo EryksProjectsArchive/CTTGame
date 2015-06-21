@@ -1,14 +1,14 @@
-/////////////////////////////////////////////////
+//////////////////////////////////////////////
 //
-//				Optimus Engine
+//		   City Transport Tycoon
+//	   Copyright (C) Black Ice Mountains
+//		 	All rights reserved
 //
-// File:				OS.cpp
-// Author(s):			Eryk Dwornicki
-// Created:				11st July 2014
+// File		: os/OS.cpp
+// Author	: Eryk Dwornicki
+//			  Patryk Ławicki
 //
-//	Copyright (C) 2014+ Black Ice Mountains
-//
-/////////////////////////////////////////////////
+//////////////////////////////////////////////
 
 #include <video/Window.h>
 
@@ -18,10 +18,17 @@
 #include <stdio.h>
 
 #ifdef _WIN32
-#include <Windows.h>
-#include <ShlObj.h>
+#	include <Windows.h>
+#	include <ShlObj.h>
 
-#include "win32/Win32Window.h"
+#	include "win32/Win32Window.h"
+#elif __linux__ 
+#	include <sys/stat.h>
+#	include <sys/types.h>
+#	include <pwd.h>
+#	include <unistd.h>
+
+#	include "linux/LinuxWindow.h"
 #endif
 
 namespace OS
@@ -40,7 +47,7 @@ namespace OS
 			}
 		}
 		return path;
-#else
+#elif __linux__ 
 		return 0;
 #endif
 	}
@@ -62,8 +69,8 @@ namespace OS
 
 	char * getHomePath(const char *file)
 	{
-#ifdef _WIN32
 		static char myDocuments[MAX_PATH] = { 0 };
+#ifdef _WIN32
 		HRESULT hResult = SHGetFolderPath(NULL, CSIDL_PERSONAL, NULL, SHGFP_TYPE_CURRENT, (LPSTR)myDocuments);
 		if (file)
 		{
@@ -72,8 +79,16 @@ namespace OS
 		}
 		strcat(myDocuments, "\\");
 		return myDocuments;
-#else
-		return 0;
+#elif __linux__ 
+		struct passwd *pw = getpwuid(getuid());
+		if (file)
+		{
+			strcat(myDocuments, pw->pw_dir);
+			strcat(myDocuments, "/");
+			strcat(myDocuments, file);
+		}
+		strcat(myDocuments, "/");
+		return myDocuments;
 #endif
 	}
 
@@ -81,8 +96,9 @@ namespace OS
 	{
 #ifdef _WIN32
 		return GetFileAttributes(path) != INVALID_FILE_ATTRIBUTES;
-#else
-		return false;
+#elif __linux__ 
+		struct stat buf;
+		return !stat(path,&buf);
 #endif
 	}
 
@@ -90,8 +106,9 @@ namespace OS
 	{
 #ifdef _WIN32
 		return GetFileAttributes(path) != INVALID_FILE_ATTRIBUTES;
-#else
-		return false;
+#elif __linux__ 
+		struct stat buf;
+		return !stat(path,&buf);
 #endif
 	}
 
@@ -99,8 +116,8 @@ namespace OS
 	{
 #ifdef _WIN32
 		return ::CreateDirectory(path, NULL) == TRUE;
-#else
-		return false;
+#elif __linux__ 
+		return ::mkdir(path, S_IRWXU|S_IRGRP|S_IXGRP);
 #endif
 	}
 
@@ -108,8 +125,8 @@ namespace OS
 	{
 #ifdef _WIN32
 		return new Win32::Window();
-#else
-		return 0;
+#elif __linux__ 
+		return new Linux::Window();
 #endif
 	}
 

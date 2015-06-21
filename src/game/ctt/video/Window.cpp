@@ -35,6 +35,11 @@ void * IWindow::getPtr()
 	return 0;
 }
 
+void * IWindow::getSpecificPtr(unsigned char slot)
+{
+	return 0;
+}
+
 void IWindow::setRenderer(IRenderer *renderer)
 {
 	this->mRenderer = renderer;

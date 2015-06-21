@@ -6,17 +6,26 @@
 //
 // File		: video/renderer/opengl/OpenGLContext.h
 // Author	: Eryk Dwornicki
+//			  Patryk Ławicki
 //
 //////////////////////////////////////////////
 
 #pragma once
 
 #ifdef _WIN32
-#include <Windows.h>
+#	include <Windows.h>
+#elif __linux__
+#	include <dlfcn.h>
+#	include <string.h>
+#	include <GL/glx.h>
 #endif
 
 #include <video/Window.h>
-#include <gl/GL.h>
+#include <GL/gl.h>
+
+#ifndef _WIN32
+#	define _stdcall __attribute__((_stdcall_))
+#endif
 
 namespace OpenGL
 {
@@ -31,8 +40,12 @@ namespace OpenGL
 
 		HDC mHDC;
 		HGLRC mHRC;
+#elif __linux__
+        void * mModule;
+
+        GLXContext mGLXContext;
 #endif
-		IWindow *mWindow;
+        IWindow *mWindow;
 	public:
 		Impl();
 		~Impl();
@@ -48,6 +61,12 @@ namespace OpenGL
 		BOOL	(_stdcall *wglMakeCurrent)(HDC, HGLRC);
 		BOOL	(_stdcall *wglDeleteContext)(HGLRC);
 		PROC	(_stdcall *wglGetProcAddress)(LPCSTR);
+#elif __linux__
+		GLXContext	(_stdcall *glXCreateContext)(Display *dpy, XVisualInfo *vis, GLXContext shareList, Bool direct);
+		Bool	(_stdcall *glXMakeCurrent)(Display *   dpy, GLXDrawable   drawable, GLXContext   ctx);
+		Bool	(_stdcall *glXDestroyContext)(Display *   dpy, GLXContext   ctx);
+		void	*(_stdcall *glXGetProcAddress)(const GLubyte *   procName);
+		void 	(_stdcall * glXSwapBuffers)(Display *  	dpy, GLXDrawable  	drawable);
 #endif
 
 		void	(_stdcall *glShadeModel)(GLenum mode);

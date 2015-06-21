@@ -6,6 +6,7 @@
 //
 // File		: video/renderer/opengl/OpenGLImpl.cpp
 // Author	: Eryk Dwornicki
+//			  Patryk Ławicki
 //
 //////////////////////////////////////////////
 
@@ -28,17 +29,20 @@ namespace OpenGL
 	Impl::~Impl()
 	{
 #ifdef _WIN32
-		this->wglMakeCurrent(NULL, NULL);
-		this->wglDeleteContext(this->mHRC);
-		this->mHRC = NULL;
+		wglMakeCurrent(NULL, NULL);
+		wglDeleteContext(mHRC);
+		mHRC = NULL;
 
-		ReleaseDC((HWND)mWindow->getPtr(), this->mHDC);
-		this->mHDC = NULL;
+		ReleaseDC((HWND)mWindow->getPtr(), mHDC);
+		mHDC = NULL;
 #endif
-
 		if (this->mModule)
 		{
-			FreeLibrary(this->mModule);
+#ifdef _WIN32
+			FreeLibrary(mModule);
+#elif __linux__ 
+			dlclose(mModule);
+#endif
 			this->mModule = 0;
 		}
 	}
@@ -83,11 +87,12 @@ namespace OpenGL
 			return false;
 		}
 
-		this->mModule = LoadLibrary("opengl32.dll");
+#ifdef _WIN32
+		mModule = LoadLibrary("opengl32.dll");
 #elif __linux__
-		//this->mModule = dlopen("libGL.so", )
+		mModule = dlopen("libGL.so", RTLD_NOW);
 #endif
-		if (this->mModule)
+		if (mModule)
 		{
 #ifdef _WIN32
 #define GET_PROC GetProcAddress
@@ -121,14 +126,30 @@ namespace OpenGL
 			}
 
 #define EXT_METHOD(name)\
-			*(unsigned int *)&this->name = (unsigned int)this->wglGetProcAddress(#name);\
-			if(!this->name) { \
+			*(unsigned int *)&name = (unsigned int)wglGetProcAddress(#name);\
+			if(!name) { \
 				Error("gfx","Cannot find OpenGL Method - '%s'.",#name);\
 				return false;\
-						}
-
+			}
 #elif __linux__
+			METHOD(glXCreateContext);
+			METHOD(glXMakeCurrent);
+			METHOD(glXDestroyContext);
+			METHOD(glXGetProcAddress);
+			METHOD(glXSwapBuffers);
 
+
+			mGLXContext = this->glXCreateContext((Display *)mWindow->getSpecificPtr(1), (XVisualInfo *)mWindow->getSpecificPtr(0), NULL, GL_TRUE);
+
+			this->glXMakeCurrent((Display *)mWindow->getSpecificPtr(1),  *(GLXDrawable*)mWindow->getPtr(), mGLXContext);
+
+
+#define EXT_METHOD(name)\
+			*(unsigned int *)&name = (unsigned int)glXGetProcAddress(#name);\
+			if(!name) { \
+				Error("gfx","Cannot find OpenGL Method - '%s'.",#name);\
+				return false;\
+			}
 #endif
 
 			METHOD(glGetString);
@@ -191,7 +212,10 @@ namespace OpenGL
 	void Impl::swapBuffers()
 	{
 #ifdef _WIN32
-		SwapBuffers(this->mHDC);
+		SwapBuffers(mHDC);
+#elif __linux__ 
+
+ 		this->glXSwapBuffers((Display *)mWindow->getSpecificPtr(1), *(GLXDrawable*)mWindow->getPtr());
 #endif
 	}
 
