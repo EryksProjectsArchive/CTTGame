@@ -30,6 +30,12 @@ public:
 		// Cast and receive shadows by default
 		DEFAULT = (CAST_SHADOWS | RECEIVE_SHADOWS)
 	};
+
+	enum TextureWrap
+	{
+		TEXTURE_WRAP_CLAMP,
+		TEXTURE_WRAP_REPEAT
+	};
 private:
 	struct TextureData
 	{
@@ -37,10 +43,13 @@ private:
 		FilePath m_path;
 		Texture* m_texture;
 		uint8 m_mipmaps : 1;
+		TextureWrap m_wrap[2];
 
 		TextureData()
 		{
 			m_texture = 0;
+			m_wrap[0] = TEXTURE_WRAP_REPEAT;
+			m_wrap[1] = TEXTURE_WRAP_REPEAT;
 		}
 
 		TextureData(const TextureData& data)
@@ -69,7 +78,7 @@ public:
 	void destroy() override;
 	bool load() override;
 
-	void addTexture(const DynString& name, const FilePath& path, bool mipmaps);
+	void addTexture(const DynString& name, const FilePath& path, bool mipmaps, TextureWrap wrap[2]);
 
 	friend class Renderer;
 	friend class DeferredRendering;

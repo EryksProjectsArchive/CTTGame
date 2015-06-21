@@ -80,7 +80,18 @@ Material * MaterialLib::findByName(const DynString& name)
 						Json::Value path = texture["path"];
 						Json::Value mipmap = texture["mipMaps"];
 
-						material->addTexture(name.asCString(), path.asCString(), mipmap.asBool());
+						Material::TextureWrap wrap[2] = { Material::TEXTURE_WRAP_REPEAT, Material::TEXTURE_WRAP_REPEAT };
+
+						Json::Value wrapData = texture["wrap"];
+						if (wrapData.isObject())
+						{
+							if (wrapData.get("u", "repeat").asString() == "clamp")
+								wrap[0] = Material::TEXTURE_WRAP_CLAMP;
+							if (wrapData.get("v", "repeat").asString() == "clamp")
+								wrap[1] = Material::TEXTURE_WRAP_CLAMP;
+						}
+
+						material->addTexture(name.asCString(), path.asCString(), mipmap.asBool(), wrap);
 					}
 				}
 			}

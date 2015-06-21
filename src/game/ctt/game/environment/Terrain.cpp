@@ -25,7 +25,7 @@
 
 Terrain::Terrain(uint32 width, uint32 height)
 {
-	m_nodeSize = 300;
+	m_nodeSize = 600;
 	m_width = width;
 	m_height = height;
 	m_wNodes = width / m_nodeSize;
@@ -98,56 +98,59 @@ void Terrain::render(RenderContext& context)
 				m_node[x][y]->render(context);
 		}
 	
-		if (xInRange && (y + 1) < hNodes)
+		for (uint32 i = 0; i < 2; ++i)
 		{
-			if (m_node[x][y + 1])
-				m_node[x][y + 1]->render(context);
-		}
+			if (xInRange && (y + i) < hNodes)
+			{
+				if (m_node[x][y + i])
+					m_node[x][y + i]->render(context);
+			}
 
-		if (xInRange && (y - 1) >= 0)
-		{
-			if (m_node[x][y - 1])
-				m_node[x][y - 1]->render(context);
-		}
+			if (xInRange && (y - i) >= 0)
+			{
+				if (m_node[x][y - i])
+					m_node[x][y - i]->render(context);
+			}
 
-		// X Y
-		if ((x + 1) < wNodes && (y + 1) < hNodes)
-		{
-			if (m_node[x + 1][y + 1])
-				m_node[x + 1][y + 1]->render(context);
-		}
+			// X Y
+			if ((x + i) < wNodes && (y + i) < hNodes)
+			{
+				if (m_node[x + i][y + i])
+					m_node[x + i][y + i]->render(context);
+			}
 
-		// X
-		if ((x + 1) < wNodes && (y - 1) >= 0)
-		{
-			if (m_node[x + 1][y - 1])
-				m_node[x + 1][y - 1]->render(context);
-		}
+			// X
+			if ((x + i) < wNodes && (y - i) >= 0)
+			{
+				if (m_node[x + i][y - i])
+					m_node[x + i][y - i]->render(context);
+			}
 
-		// Y
-		if ((x - 1) >= 0 && (y + 1) < hNodes)
-		{
-			if (m_node[x - 1][y + 1])
-				m_node[x - 1][y + 1]->render(context);
-		}
+			// Y
+			if ((x - i) >= 0 && (y + i) < hNodes)
+			{
+				if (m_node[x - i][y + i])
+					m_node[x - i][y + i]->render(context);
+			}
 
-		// Y
-		if (yInRange && (x+1) < wNodes)
-		{
-			if (m_node[x + 1][y])
-				m_node[x + 1][y]->render(context);
-		}
+			// Y
+			if (yInRange && (x + i) < wNodes)
+			{
+				if (m_node[x + i][y])
+					m_node[x + i][y]->render(context);
+			}
 
-		if (yInRange && (x - 1) >= 0)
-		{
-			if (m_node[x-1][y])
-				m_node[x-1][y]->render(context);
-		}
+			if (yInRange && (x - i) >= 0)
+			{
+				if (m_node[x - i][y])
+					m_node[x - i][y]->render(context);
+			}
 
-		if ((x-1) >= 0 && (y-1) >= 0)
-		{
-			if (m_node[x-1][y - 1])
-				m_node[x-1][y - 1]->render(context);
+			if ((x - i) >= 0 && (y - i) >= 0)
+			{
+				if (m_node[x - i][y - i])
+					m_node[x - i][y - i]->render(context);
+			}
 		}
 	}
 }

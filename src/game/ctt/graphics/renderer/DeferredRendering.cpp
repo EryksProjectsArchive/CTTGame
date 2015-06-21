@@ -187,7 +187,7 @@ void DeferredRendering::begin()
 
 	// Clear the render targets
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+	
 	Renderer::glActiveTexture(GL_TEXTURE0);
 	glEnable(GL_TEXTURE_2D);
 

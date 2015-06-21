@@ -408,7 +408,6 @@ bool Renderer::setup(Window * window)
 	glFrontFace(GL_CW);
 	glCullFace(GL_BACK);
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-
 	glClearDepth(1.0f);
 	
 	m_defaultMaterial = MaterialLib::get()->findByName("none");
@@ -627,8 +626,9 @@ void Renderer::renderGeometry(Geometry<Vertex3d> *geometry, const glm::mat4x4& m
 					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 				}
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, (textureData->m_wrap[0] == Material::TEXTURE_WRAP_REPEAT) ? GL_REPEAT : GL_CLAMP);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, (textureData->m_wrap[1] == Material::TEXTURE_WRAP_REPEAT) ? GL_REPEAT : GL_CLAMP);
 
 				glUniform1i(textureLocation, textureId);
 				++textureId;

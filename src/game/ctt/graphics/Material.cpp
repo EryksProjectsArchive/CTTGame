@@ -85,11 +85,13 @@ bool Material::load()
 	return false;
 }
 
-void Material::addTexture(const DynString& name, const FilePath& path, bool mipmaps)
+void Material::addTexture(const DynString& name, const FilePath& path, bool mipmaps, TextureWrap wrap[2])
 {
 	TextureData* data = new TextureData;
 	data->m_name = name;
 	data->m_path = path;
 	data->m_mipmaps = mipmaps ? 1 : 0;
+	for (uint32 i = 0; i < 2; ++i)
+		data->m_wrap[i] = wrap[i];
 	m_textures.pushBack(data);
 }
