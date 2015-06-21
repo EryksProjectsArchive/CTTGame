@@ -65,7 +65,6 @@ bool FragmentShader::compile()
 			GLint maxLength = 0;
 			Renderer::glGetShaderiv(m_shaderId, GL_INFO_LOG_LENGTH, &maxLength);
 
-			//The maxLength includes the NULL character
 			char *errorLog = new char[maxLength + 1];
 
 			Renderer::glGetShaderInfoLog(m_shaderId, maxLength, &maxLength, errorLog);
@@ -90,10 +89,7 @@ bool FragmentShader::compile()
 			}
 
 			delete[]errorLog;
-
-			//Provide the infolog in whatever manor you deem best.
-			//Exit with failure.
-			Renderer::glDeleteShader(m_shaderId); //Don't leak the shader.
+			Renderer::glDeleteShader(m_shaderId);
 		}
 		else 
 		{

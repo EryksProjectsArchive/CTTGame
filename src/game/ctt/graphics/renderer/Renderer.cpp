@@ -450,6 +450,8 @@ bool Renderer::setup(Window * window)
 		return false;
 	}
 
+	Info("Renderer", "OpenGL renderer has been initialized. Vendor: %s, Renderer: %s", glGetString(GL_VENDOR), glGetString(GL_RENDERER));
+
 	return true;
 }
 
