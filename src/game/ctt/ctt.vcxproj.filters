@@ -451,7 +451,7 @@
     </ClInclude>
     <ClInclude Include="sound\SoundManager.h">
       <Filter>Header Files\sound</Filter>
-    </ClCompile>
+    </ClInclude>
     <ClInclude Include="game\scene\entities\types\CrossroadEntity.h">
       <Filter>Header Files\game\scene\entities\types</Filter>
     </ClInclude>
