@@ -4,21 +4,29 @@
 //	   Copyright (C) Black Ice Mountains
 //		 	All rights reserved
 //
-// File		: video/Mesh.cpp
+// File		: graphics/renderer/BufferBase.cpp
 // Author	: Eryk Dwornicki
 //
 //////////////////////////////////////////////
 
-#include "Mesh.h"
+#include "BufferBase.h"
 
-Mesh::Mesh()
+BufferBase::BufferBase()
 {
+
 }
 
-Mesh::~Mesh()
+BufferBase::~BufferBase()
 {
+
 }
 
-void Mesh::render(IRenderer *renderer)
+void BufferBase::allocate(unsigned int size)
 {
+
+}
+
+void BufferBase::fillData(void * data)
+{
+
 }

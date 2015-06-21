@@ -4,7 +4,7 @@
 //	   Copyright (C) Black Ice Mountains
 //		 	All rights reserved
 //
-// File		: video/Model.cpp
+// File		: graphics/Model.cpp
 // Author	: Eryk Dwornicki
 //
 //////////////////////////////////////////////

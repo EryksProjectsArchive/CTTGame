@@ -4,27 +4,20 @@
 //	   Copyright (C) Black Ice Mountains
 //		 	All rights reserved
 //
-// File		: video/renderer/Renderer.h
+// File		: graphics/renderer/Renderer.h
 // Author	: Eryk Dwornicki
 //
 //////////////////////////////////////////////
 
 #pragma once
 
-#include <video/Window.h>
+#include <graphics/Window.h>
 #include "BufferBase.h"
-
-enum RendererAPIs
-{
-	RENDERER_API_NOAPI,
-	RENDERER_API_OPENGL,
-	RENDERER_APIs_COUNT
-};
 
 class IRenderer
 {
 protected:
-	IWindow * mWindow;
+	IWindow * m_window;
 public:
 	IRenderer();
 	virtual ~IRenderer();
@@ -39,7 +32,4 @@ public:
 	virtual void setFullscreen(bool fullscreen);
 
 	virtual BufferBase * createBuffer(BufferType type);
-
-	static IRenderer * create(RendererAPIs api);
-	static RendererAPIs getAPIIdFromString(const char *api);
 };

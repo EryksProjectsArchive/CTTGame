@@ -4,23 +4,23 @@
 //	   Copyright (C) Black Ice Mountains
 //		 	All rights reserved
 //
-// File		: video/Window.h
+// File		: graphics/Window.h
 // Author	: Eryk Dwornicki
 //
 //////////////////////////////////////////////
 
 #pragma once
 
-class IWindow;
-#include <video/renderer/Renderer.h>
-
 class IRenderer;
 class IWindow
 {
 protected:
-	bool mFullscreen;
+	unsigned short m_width;
+	unsigned short m_height;
 
-	IRenderer *mRenderer;
+	bool m_fullscreen;
+
+	IRenderer *m_renderer;
 public:
 	IWindow();
 	virtual ~IWindow();
@@ -30,6 +30,9 @@ public:
 
 	virtual void * getPtr();
 	virtual void * getSpecificPtr(unsigned char slot);
+
+	virtual void handleFocusLost();
+	virtual void handleFocus();
 
 	virtual void setFullscreen(bool fullscreen, unsigned short width = 0, unsigned short height = 0);
 	virtual bool isFullscreenEnabled();

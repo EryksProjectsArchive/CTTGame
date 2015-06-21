@@ -31,24 +31,6 @@
     <Filter Include="Source Files\os\win32">
       <UniqueIdentifier>{3d067636-e8ae-43c0-8d62-94ca53d3a7bc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\video">
-      <UniqueIdentifier>{642a9b4b-e2fa-497e-97cf-3c73e659bfc2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\video">
-      <UniqueIdentifier>{56c16caf-505b-4f20-a359-61a3e9147ca8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\video\renderer">
-      <UniqueIdentifier>{3874eba0-a470-4194-aa47-68640f732978}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\video\renderer">
-      <UniqueIdentifier>{ee9a6d7d-d2b0-44e7-bb06-58f1653eb0f9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\video\renderer\opengl">
-      <UniqueIdentifier>{4bc8dcc4-dfbf-403f-af8f-f0f2d4ccac77}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\video\renderer\opengl">
-      <UniqueIdentifier>{d50c7fa7-f2cf-4415-91d4-fa5a81e0eb69}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\math">
       <UniqueIdentifier>{94b2b005-e014-4c13-bb58-142bf3132adc}</UniqueIdentifier>
     </Filter>
@@ -67,6 +49,24 @@
     <Filter Include="Source Files\sound\openal">
       <UniqueIdentifier>{49a0d5ac-f287-46cd-bc2c-504b319b0d7d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\graphics">
+      <UniqueIdentifier>{642a9b4b-e2fa-497e-97cf-3c73e659bfc2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\graphics">
+      <UniqueIdentifier>{0d6f1933-38fd-4d59-a392-69e77092441f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\graphics\renderer">
+      <UniqueIdentifier>{6c17839e-058a-472e-851f-8f592836f8c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\graphics\renderer">
+      <UniqueIdentifier>{ef30589c-382a-4136-a550-334787ad7856}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\graphics\renderer\opengl">
+      <UniqueIdentifier>{cfb2d6cf-fe6d-4247-81a7-fabc058744c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\graphics\renderer\opengl">
+      <UniqueIdentifier>{51b82679-e37a-4747-8892-2a26b72f3d5a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -81,23 +81,8 @@
     <ClCompile Include="os\win32\Win32Window.cpp">
       <Filter>Source Files\os\win32</Filter>
     </ClCompile>
-    <ClCompile Include="video\Window.cpp">
-      <Filter>Source Files\video</Filter>
-    </ClCompile>
     <ClCompile Include="core\Logger.cpp">
       <Filter>Source Files\core</Filter>
-    </ClCompile>
-    <ClCompile Include="video\renderer\opengl\OpenGLRenderer.cpp">
-      <Filter>Source Files\video\renderer\opengl</Filter>
-    </ClCompile>
-    <ClCompile Include="video\renderer\Renderer.cpp">
-      <Filter>Source Files\video\renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="video\renderer\opengl\OpenGLImpl.cpp">
-      <Filter>Source Files\video\renderer\opengl</Filter>
-    </ClCompile>
-    <ClCompile Include="video\renderer\BufferBase.cpp">
-      <Filter>Source Files\video\renderer</Filter>
     </ClCompile>
     <ClCompile Include="math\Vector.cpp">
       <Filter>Source Files\math</Filter>
@@ -123,6 +108,30 @@
     <ClCompile Include="sound\openal\OpenALSoundMgr.cpp">
       <Filter>Source Files\sound\openal</Filter>
     </ClCompile>
+    <ClCompile Include="graphics\Model.cpp">
+      <Filter>Source Files\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\Window.cpp">
+      <Filter>Source Files\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\Mesh.cpp">
+      <Filter>Source Files\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\renderer\Renderer.cpp">
+      <Filter>Source Files\graphics\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\renderer\BufferBase.cpp">
+      <Filter>Source Files\graphics\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\renderer\opengl\OpenGLRenderer.cpp">
+      <Filter>Source Files\graphics\renderer\opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\renderer\opengl\OpenGLImpl.cpp">
+      <Filter>Source Files\graphics\renderer\opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\Graphics.cpp">
+      <Filter>Source Files\graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\Game.h">
@@ -134,23 +143,8 @@
     <ClInclude Include="os\win32\Win32Window.h">
       <Filter>Header Files\os\win32</Filter>
     </ClInclude>
-    <ClInclude Include="video\Window.h">
-      <Filter>Header Files\video</Filter>
-    </ClInclude>
     <ClInclude Include="core\Logger.h">
       <Filter>Header Files\core</Filter>
-    </ClInclude>
-    <ClInclude Include="video\renderer\Renderer.h">
-      <Filter>Header Files\video\renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="video\renderer\opengl\OpenGLRenderer.h">
-      <Filter>Header Files\video\renderer\opengl</Filter>
-    </ClInclude>
-    <ClInclude Include="video\renderer\opengl\OpenGLImpl.h">
-      <Filter>Header Files\video\renderer\opengl</Filter>
-    </ClInclude>
-    <ClInclude Include="video\renderer\BufferBase.h">
-      <Filter>Header Files\video\renderer</Filter>
     </ClInclude>
     <ClInclude Include="math\Matrix.h">
       <Filter>Header Files\math</Filter>
@@ -163,12 +157,6 @@
     </ClInclude>
     <ClInclude Include="math\EulerAngles.h">
       <Filter>Header Files\math</Filter>
-    </ClInclude>
-    <ClInclude Include="video\Model.h">
-      <Filter>Header Files\video</Filter>
-    </ClInclude>
-    <ClInclude Include="video\Mesh.h">
-      <Filter>Header Files\video</Filter>
     </ClInclude>
     <ClInclude Include="sound\Sound.h">
       <Filter>Header Files\sound</Filter>
@@ -187,6 +175,36 @@
     </ClInclude>
     <ClInclude Include="sound\openal\OpenALSoundMgr.h">
       <Filter>Header Files\sound\openal</Filter>
+    </ClInclude>
+    <ClInclude Include="video\Mesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="video\Model.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\Mesh.h">
+      <Filter>Header Files\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\Model.h">
+      <Filter>Header Files\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\Window.h">
+      <Filter>Header Files\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\renderer\BufferBase.h">
+      <Filter>Header Files\graphics\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\renderer\Renderer.h">
+      <Filter>Header Files\graphics\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\renderer\opengl\OpenGLImpl.h">
+      <Filter>Header Files\graphics\renderer\opengl</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\renderer\opengl\OpenGLRenderer.h">
+      <Filter>Header Files\graphics\renderer\opengl</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\Graphics.h">
+      <Filter>Header Files\graphics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

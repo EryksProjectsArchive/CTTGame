@@ -4,7 +4,7 @@
 //	   Copyright (C) Black Ice Mountains
 //		 	All rights reserved
 //
-// File		: video/renderer/opengl/OpenGLImpl.cpp
+// File		: graphics/renderer/opengl/OpenGLImpl.cpp
 // Author	: Eryk Dwornicki
 //			  Patryk Ławicki
 //
@@ -18,11 +18,11 @@ namespace OpenGL
 {
 	Impl::Impl()
 	{
-		this->mModule = 0;
-		this->mWindow = 0;
+		m_module = 0;
+		m_window = 0;
 #ifdef _WIN32
-		this->mHDC = NULL;
-		this->mHRC = NULL;
+		m_hDC = NULL;
+		m_hRC = NULL;
 #endif
 	}
 
@@ -30,26 +30,26 @@ namespace OpenGL
 	{
 #ifdef _WIN32
 		wglMakeCurrent(NULL, NULL);
-		wglDeleteContext(mHRC);
-		mHRC = NULL;
+		wglDeleteContext(m_hRC);
+		m_hRC = NULL;
 
-		ReleaseDC((HWND)mWindow->getPtr(), mHDC);
-		mHDC = NULL;
+		ReleaseDC((HWND)m_window->getPtr(), m_hDC);
+		m_hDC = NULL;
 #endif
-		if (this->mModule)
+		if (m_module)
 		{
 #ifdef _WIN32
-			FreeLibrary(mModule);
+			FreeLibrary(m_module);
 #elif __linux__ 
-			dlclose(mModule);
+			dlclose(m_module);
 #endif
-			this->mModule = 0;
+			m_module = 0;
 		}
 	}
 
 	bool Impl::setup(IWindow *window, unsigned short minVersion)
 	{
-		this->mWindow = window;
+		m_window = window;
 		unsigned char reqMajorVersion = (minVersion >> 8) & 0xFF;
 		unsigned char reqMinorVersion = (minVersion) & 0xFF;
 		Info("gfx", "Starting open gl Impl. Minimal version required: %d.%d", (minVersion >> 8) & 0xFF, minVersion & 0xFF);
@@ -59,7 +59,7 @@ namespace OpenGL
 		HWND wnd = (HWND)window->getPtr();
 
 		// Grab window device Impl
-		mHDC = GetDC(wnd);
+		m_hDC = GetDC(wnd);
 
 		// Setup pixel format descriptor
 		PIXELFORMATDESCRIPTOR pfd;
@@ -73,7 +73,7 @@ namespace OpenGL
 		pfd.iLayerType = PFD_MAIN_PLANE;
 
 		// Choose pixel format
-		int pixelFormat = ChoosePixelFormat(mHDC, &pfd);
+		int pixelFormat = ChoosePixelFormat(m_hDC, &pfd);
 		if (!pixelFormat)
 		{
 			Error("gfx", "Cannot chose pixel format. (%d)", GetLastError());
@@ -81,18 +81,17 @@ namespace OpenGL
 		}
 
 		// Set pixel format
-		if (!SetPixelFormat(mHDC, pixelFormat, &pfd))
+		if (!SetPixelFormat(m_hDC, pixelFormat, &pfd))
 		{
 			Error("gfx", "Cannot set pixel format. (%d)", GetLastError());
 			return false;
 		}
 
-#ifdef _WIN32
-		mModule = LoadLibrary("opengl32.dll");
+		m_module = LoadLibrary("opengl32.dll");
 #elif __linux__
-		mModule = dlopen("libGL.so", RTLD_NOW);
+		m_module = dlopen("libGL.so", RTLD_NOW);
 #endif
-		if (mModule)
+		if (m_module)
 		{
 #ifdef _WIN32
 #define GET_PROC GetProcAddress
@@ -101,7 +100,7 @@ namespace OpenGL
 #endif
 			// Macro to make code looking slightly better.
 #define METHOD(name)\
-			*(unsigned int *)&this->name = (unsigned int)GET_PROC(this->mModule, #name);\
+			*(unsigned int *)&this->name = (unsigned int)GET_PROC(m_module, #name);\
 			if(!this->name) { \
 				Error("gfx","Cannot find OpenGL Method - '%s'.",#name);\
 				return false;\
@@ -113,13 +112,13 @@ namespace OpenGL
 			METHOD(wglDeleteContext);
 			METHOD(wglGetProcAddress);
 			
-			if (!(this->mHRC = this->wglCreateContext(mHDC)))
+			if (!(m_hRC = this->wglCreateContext(m_hDC)))
 			{
 				Error("gfx", "Cannot create wgl Impl");
 				return false;
 			}
 			
-			if (!this->wglMakeCurrent(mHDC, this->mHRC))
+			if (!this->wglMakeCurrent(m_hDC, m_hRC))
 			{
 				Error("gfx", "Cannot set current opengl Impl for device Impl.");
 				return false;
@@ -139,9 +138,9 @@ namespace OpenGL
 			METHOD(glXSwapBuffers);
 
 
-			mGLXContext = this->glXCreateContext((Display *)mWindow->getSpecificPtr(1), (XVisualInfo *)mWindow->getSpecificPtr(0), NULL, GL_TRUE);
+			mGLXContext = this->glXCreateContext((Display *)m_window->getSpecificPtr(1), (XVisualInfo *)m_window->getSpecificPtr(0), NULL, GL_TRUE);
 
-			this->glXMakeCurrent((Display *)mWindow->getSpecificPtr(1),  *(GLXDrawable*)mWindow->getPtr(), mGLXContext);
+			this->glXMakeCurrent((Display *)m_window->getSpecificPtr(1),  *(GLXDrawable*)m_window->getPtr(), mGLXContext);
 
 
 #define EXT_METHOD(name)\
@@ -212,10 +211,9 @@ namespace OpenGL
 	void Impl::swapBuffers()
 	{
 #ifdef _WIN32
-		SwapBuffers(mHDC);
+		SwapBuffers(m_hDC);
 #elif __linux__ 
-
- 		this->glXSwapBuffers((Display *)mWindow->getSpecificPtr(1), *(GLXDrawable*)mWindow->getPtr());
+ 		this->glXSwapBuffers((Display *)m_window->getSpecificPtr(1), *(GLXDrawable*)m_window->getPtr());
 #endif
 	}
 

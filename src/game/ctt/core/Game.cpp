@@ -16,35 +16,34 @@
 
 #include <os/OS.h>
 
-#include <video/Model.h>
+#include <graphics/Model.h>
+#include <graphics/Graphics.h>
 
 Game::Game()
+	: m_renderer(0), m_window(0), m_isRunning(false), m_isInitialized(false)
 {
-	this->mRunning = false;
-	this->mInitialized = false;
-	this->mWindow = 0;
-	this->mRenderer = 0;
 }
 
 Game::~Game()
 {
-	if(this->mWindow)
+	if(m_window)
 	{
-		delete this->mWindow;
-		this->mWindow = 0;
+		delete m_window;
+		m_window = 0;
 	}
-	if(this->mSoundMgr)
+
+	if(m_soundMgr)
 	{
-		delete this->mSoundMgr;
-		this->mSoundMgr = 0;
+		delete m_soundMgr;
+		m_soundMgr = 0;
 	}
 }
 
-Model *gModel = 0;
+Model *g_sampleModel = 0;
 
 bool Game::init()
 {
-	if (this->mInitialized)
+	if (m_isInitialized)
 	{
 		return false;
 	}
@@ -62,55 +61,54 @@ bool Game::init()
 	Logger::init(szLogPath, false);
 
 	// Create game window
-	this->mWindow = OS::createWindowInstance();
-	this->mWindow->setup("City Transport Tycoon", 800, 600);
+	m_window = OS::createWindowInstance();
+	m_window->setup("City Transport Tycoon", 800, 600);
 
-	this->mRenderer = IRenderer::create(RENDERER_API_OPENGL);
-	if (!this->mRenderer->setup(this->mWindow))
+	m_renderer = Graphics::createRenderer(Graphics::RendererAPIs::OPENGL);
+	if (!m_renderer->setup(m_window))
 	{
 		Error("game", "Cannot setup renderer.");
 		return false;
 	}
 
-	gModel = new Model();
-	gModel->load("data/models/bus.mdl");
+	g_sampleModel = new Model();
+	g_sampleModel->load("data/models/bus.mdl");
 
 	// create game sound mgr
+	m_soundMgr = ISoundMgr::create(SOUND_API_OPENAL);
 
-	this->mSoundMgr = ISoundMgr::create(SOUND_API_OPENAL);
-
-	if (!this->mSoundMgr->setup())
+	if (!m_soundMgr->setup())
 	{
 		Error("game", "Cannot setup SoundMgr!");
 		return false;
 	}
 
-	this->mInitialized = true;
-	this->mRunning = true;
+	m_isInitialized = true;
+	m_isRunning = true;
 	return true;
 }
 
 bool Game::pulse()
 {
-	if (this->mWindow)
+	if (m_window)
 	{
-		if (!this->mWindow->processMessages())
+		if (!m_window->processMessages())
 		{
-			this->mRunning = false;
+			m_isRunning = false;
 		}
 	}
 
 	// TODO: update physics here
  
-	if (this->mRenderer)
+	if (m_renderer)
 	{
-		this->mRenderer->preFrame();
+		m_renderer->preFrame();
 
-		if (gModel)
-			gModel->render(this->mRenderer);
+		if (g_sampleModel)
+			g_sampleModel->render(m_renderer);
 
-		this->mRenderer->postFrame();
+		m_renderer->postFrame();
 	}
 
-	return this->mRunning;
+	return m_isRunning;
 }

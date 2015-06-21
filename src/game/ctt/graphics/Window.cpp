@@ -4,7 +4,7 @@
 //	   Copyright (C) Black Ice Mountains
 //		 	All rights reserved
 //
-// File		: video/Window.cpp
+// File		: graphics/Window.cpp
 // Author	: Eryk Dwornicki
 //
 //////////////////////////////////////////////
@@ -12,8 +12,8 @@
 #include "Window.h"
 
 IWindow::IWindow()
+	: m_fullscreen(false), m_width(800), m_height(600)
 {
-	this->mFullscreen = false;
 }
 	
 IWindow::~IWindow()
@@ -40,32 +40,40 @@ void * IWindow::getSpecificPtr(unsigned char slot)
 	return 0;
 }
 
+void IWindow::handleFocusLost()
+{
+}
+
+void IWindow::handleFocus()
+{
+}
+
 void IWindow::setRenderer(IRenderer *renderer)
 {
-	this->mRenderer = renderer;
+	m_renderer = renderer;
 }
 
 IRenderer * IWindow::getRenderer()
 {
-	return this->mRenderer;
+	return m_renderer;
 }
 
 unsigned short IWindow::getWidth()
 {
-	return 800;
+	return m_width;
 }
 
 unsigned short IWindow::getHeight()
 {
-	return 600;
+	return m_height;
 }
 
 void IWindow::setFullscreen(bool fullscreen, unsigned short width, unsigned short height)
 {
-	this->mFullscreen = fullscreen;
+	m_fullscreen = fullscreen;
 }
 
 bool IWindow::isFullscreenEnabled()
 {
-	return this->mFullscreen;
+	return m_fullscreen;
 }

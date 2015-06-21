@@ -11,21 +11,20 @@
 
 #pragma once
 
-#include <video/Window.h>
-
-#include <video/renderer/opengl/OpenGLRenderer.h>
-
+#include <graphics/Window.h>
 #include <sound/SoundMgr.h>
+
+class IRenderer;
 
 class Game
 {
 private:
-	bool mRunning;
-	bool mInitialized;
+	bool m_isRunning;
+	bool m_isInitialized;
 
-	IWindow * mWindow;
-	IRenderer * mRenderer;
-	ISoundMgr * mSoundMgr;
+	IWindow * m_window;
+	IRenderer * m_renderer;
+	ISoundMgr * m_soundMgr;
 public:
 	Game();
 	~Game();

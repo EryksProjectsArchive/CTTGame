@@ -81,26 +81,35 @@
   <ItemGroup>
     <ClCompile Include="core\Game.cpp" />
     <ClCompile Include="core\Logger.cpp" />
+    <ClCompile Include="graphics\Graphics.cpp" />
+    <ClCompile Include="graphics\Mesh.cpp" />
+    <ClCompile Include="graphics\Model.cpp" />
+    <ClCompile Include="graphics\renderer\BufferBase.cpp" />
+    <ClCompile Include="graphics\renderer\opengl\OpenGLImpl.cpp" />
+    <ClCompile Include="graphics\renderer\opengl\OpenGLRenderer.cpp" />
+    <ClCompile Include="graphics\renderer\Renderer.cpp" />
+    <ClCompile Include="graphics\Window.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="math\Vector.cpp" />
     <ClCompile Include="os\OS.cpp" />
     <ClCompile Include="os\win32\Win32Window.cpp" />
-    <ClCompile Include="video\Mesh.cpp" />
-    <ClCompile Include="video\Model.cpp" />
     <ClCompile Include="sound\openal\OpenALImpl.cpp" />
     <ClCompile Include="sound\openal\OpenALSound.cpp" />
     <ClCompile Include="sound\openal\OpenALSoundMgr.cpp" />
     <ClCompile Include="sound\Sound.cpp" />
     <ClCompile Include="sound\SoundMgr.cpp" />
-    <ClCompile Include="video\renderer\BufferBase.cpp" />
-    <ClCompile Include="video\renderer\opengl\OpenGLImpl.cpp" />
-    <ClCompile Include="video\renderer\opengl\OpenGLRenderer.cpp" />
-    <ClCompile Include="video\renderer\Renderer.cpp" />
-    <ClCompile Include="video\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\Game.h" />
     <ClInclude Include="core\Logger.h" />
+    <ClInclude Include="graphics\Graphics.h" />
+    <ClInclude Include="graphics\Mesh.h" />
+    <ClInclude Include="graphics\Model.h" />
+    <ClInclude Include="graphics\renderer\BufferBase.h" />
+    <ClInclude Include="graphics\renderer\opengl\OpenGLImpl.h" />
+    <ClInclude Include="graphics\renderer\opengl\OpenGLRenderer.h" />
+    <ClInclude Include="graphics\renderer\Renderer.h" />
+    <ClInclude Include="graphics\Window.h" />
     <ClInclude Include="math\EulerAngles.h" />
     <ClInclude Include="math\Matrix.h" />
     <ClInclude Include="math\Quaternion.h" />
@@ -115,11 +124,6 @@
     <ClInclude Include="sound\Sound.h" />
     <ClInclude Include="sound\SoundMgr.h" />
     <ClInclude Include="sound\WaveFile.h" />
-    <ClInclude Include="video\renderer\BufferBase.h" />
-    <ClInclude Include="video\renderer\opengl\OpenGLImpl.h" />
-    <ClInclude Include="video\renderer\opengl\OpenGLRenderer.h" />
-    <ClInclude Include="video\renderer\Renderer.h" />
-    <ClInclude Include="video\Window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

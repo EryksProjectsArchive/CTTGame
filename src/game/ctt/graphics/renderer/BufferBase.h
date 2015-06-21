@@ -4,7 +4,7 @@
 //	   Copyright (C) Black Ice Mountains
 //		 	All rights reserved
 //
-// File		: video/renderer/BufferBase.h
+// File		: graphics/renderer/BufferBase.h
 // Author	: Eryk Dwornicki
 //
 //////////////////////////////////////////////
@@ -25,5 +25,5 @@ public:
 
 	virtual void allocate(unsigned int size);
 
-	virtual void setData(void * data);
+	virtual void fillData(void * data);
 };

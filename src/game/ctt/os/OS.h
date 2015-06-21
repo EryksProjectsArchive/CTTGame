@@ -11,7 +11,7 @@
 
 #pragma once
 
-#include <video/Window.h>
+#include <graphics/Window.h>
 
 #ifndef MAX_PATH
 #define MAX_PATH 260

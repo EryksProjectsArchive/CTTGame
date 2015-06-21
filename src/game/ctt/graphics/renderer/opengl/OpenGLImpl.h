@@ -4,7 +4,7 @@
 //	   Copyright (C) Black Ice Mountains
 //		 	All rights reserved
 //
-// File		: video/renderer/opengl/OpenGLContext.h
+// File		: graphics/renderer/opengl/OpenGLContext.h
 // Author	: Eryk Dwornicki
 //			  Patryk Ławicki
 //
@@ -20,7 +20,7 @@
 #	include <GL/glx.h>
 #endif
 
-#include <video/Window.h>
+#include <graphics/Window.h>
 #include <GL/gl.h>
 
 #ifndef _WIN32
@@ -36,16 +36,16 @@ namespace OpenGL
 	{
 	private:
 #ifdef _WIN32
-		HMODULE mModule;
+		HMODULE m_module;
 
-		HDC mHDC;
-		HGLRC mHRC;
+		HDC m_hDC;
+		HGLRC m_hRC;
 #elif __linux__
-        void * mModule;
+        void * m_module;
 
-        GLXContext mGLXContext;
+        GLXContext m_GLXContext;
 #endif
-        IWindow *mWindow;
+        IWindow *m_window;
 	public:
 		Impl();
 		~Impl();

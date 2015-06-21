@@ -11,31 +11,9 @@
 
 #include <core/Game.h>
 
-#include <core/Logger.h>
-#include <math/Matrix.h>
-
-#include <functional>
-
-int function1(int x)
-{
-	return 0;
-}
-
-std::function<void()> f;
-void testFunction2(void)
-{
-	f = std::bind(function1, 2);
-}
-
 int main()
 {
-	testFunction2();
-
-	Game *game = new Game();
-	if (game->init())
-	{
-		while (game->pulse());
-	}
-	delete game;
+	Game game;
+	if (game.init()) while (game.pulse());
 	return 1;
 }

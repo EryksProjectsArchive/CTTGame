@@ -27,7 +27,7 @@ enum LogType
 class Logger
 {
 private:
-	static FILE * sLogFile;
+	static FILE * s_logFile;
 public:
 	static void init(const char * file, bool append = false);
 

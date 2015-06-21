@@ -4,7 +4,7 @@
 //	   Copyright (C) Black Ice Mountains
 //		 	All rights reserved
 //
-// File		: video/Model.h
+// File		: graphics/Mesh.h
 // Author	: Eryk Dwornicki
 //
 //////////////////////////////////////////////
@@ -12,18 +12,22 @@
 #pragma once
 
 #include "renderer/Renderer.h"
-#include "Mesh.h"
+#include "renderer/BufferBase.h"
 
-class Model
+#include <math/Vector.h>
+#include <math/Quaternion.h>
+
+class Mesh
 {
 private:
-	unsigned char mMeshesCount;
-	Mesh ** mMeshes;
+	Vector3 m_position;
+	Quaternion m_rotation;
+
+	BufferBase *m_vertexBuffer;
+	BufferBase *m_indexBuffer;
 public:
-	Model();
-	~Model();
+	Mesh();
+	~Mesh();
 
-	void load(const char *fileName);
-
-	void render(IRenderer * renderer);
+	void render(IRenderer *renderer);
 };

@@ -16,13 +16,13 @@
 
 #include "Logger.h"
 
-FILE * Logger::sLogFile = 0;
+FILE * Logger::s_logFile = 0;
 
 void Logger::init(const char *szFile, bool bAppend)
 {
-	if (!sLogFile)
+	if (!s_logFile)
 	{
-		if (sLogFile = fopen(szFile, bAppend?"a+":"w+"))
+		if (s_logFile = fopen(szFile, bAppend?"a+":"w+"))
 		{
 			Info("log", "Logger started!");
 		}
@@ -40,16 +40,16 @@ void Logger::init(const char *szFile, bool bAppend)
 void Logger::shutdown()
 {
 	Info("log", "Logger is shutting down.");
-	if (sLogFile)
+	if (s_logFile)
 	{
-		fclose(sLogFile);
-		sLogFile = NULL;
+		fclose(s_logFile);
+		s_logFile = NULL;
 	}
 }
 
 void Logger::log(const char *tag, LogType type, const char *msg, ...)
 {
-	if (!sLogFile)
+	if (!s_logFile)
 	{
 		printf("[FATAL ERROR] Cannot use Logger::log - no log file set!\n");
 		return;
@@ -61,12 +61,12 @@ void Logger::log(const char *tag, LogType type, const char *msg, ...)
 	time_t timeraw = time(NULL);
 	struct tm * pTimeInfo = localtime(&timeraw);
 
-	fprintf(sLogFile, "[%02d:%02d:%02d] ", pTimeInfo->tm_hour, pTimeInfo->tm_min, pTimeInfo->tm_sec);
+	fprintf(s_logFile, "[%02d:%02d:%02d] ", pTimeInfo->tm_hour, pTimeInfo->tm_min, pTimeInfo->tm_sec);
 	printf("[%02d:%02d:%02d] ", pTimeInfo->tm_hour, pTimeInfo->tm_min, pTimeInfo->tm_sec);
 
 	if (tag)
 	{
-		fprintf(sLogFile, "[%s] ", tag);
+		fprintf(s_logFile, "[%s] ", tag);
 		printf("[%s] ", tag);
 	}
 
@@ -74,40 +74,40 @@ void Logger::log(const char *tag, LogType type, const char *msg, ...)
 	{
 	case LogType_Error:
 		{
-			fputs("<error> ", sLogFile);
+			fputs("<error> ", s_logFile);
 			printf("<error> ");
 			break;
 		}
 	case LogType_Warning:
 		{
-			fputs("<warning> ", sLogFile);
+			fputs("<warning> ", s_logFile);
 			printf("<warning> ");
 			break;
 		}
 	case LogType_Debug:
 		{
-			fputs("<debug> ", sLogFile);
+			fputs("<debug> ", s_logFile);
 			printf("<debug> ");
 			break;
 		}
 	default:
 		{
-			fputs("<info> ", sLogFile);
+			fputs("<info> ", s_logFile);
 			printf("<info> ");
 			break;
 		}
 	}
 
 	va_copy(args2, args);
-	vfprintf(sLogFile, msg, args2);
-	fputc('\n', sLogFile);
+	vfprintf(s_logFile, msg, args2);
+	fputc('\n', s_logFile);
 	vprintf(msg, args);
 	printf("\n");
 	va_end(args);
-	fflush(sLogFile);
+	fflush(s_logFile);
 }
 
 FILE * Logger::getFile()
 {
-	return sLogFile;
+	return s_logFile;
 }

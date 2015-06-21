@@ -9,77 +9,77 @@
 //
 //////////////////////////////////////////////
 
-
 #include <core/Logger.h>
 
 #include "Win32Window.h"
+#include <graphics/renderer/Renderer.h>
 
 namespace Win32
 {
 	Window::Window()		
 	{
-		this->mWindow = NULL;
+		m_window = NULL;
 	}
 
 	Window::~Window()
 	{
-		if (mFullscreen)
+		if (m_fullscreen)
 		{
 			ChangeDisplaySettings(NULL, 0);
 			ShowCursor(TRUE);
 		}
 
-		if (mWindow)
+		if (m_window)
 		{
-			DestroyWindow(mWindow);
-			UnregisterClass("AppWindow", mWndClass.hInstance);
+			DestroyWindow(m_window);
+			UnregisterClass("AppWindow", m_wndClass.hInstance);
 		}
 	}
 
 	bool Window::setup(const char *title, unsigned short width, unsigned short height, bool fullscreen)
 	{
-		if (mWindow)
+		if (m_window)
 		{
 			Warning("window", "Cannot setup window twice.");
 			return false;
 		}
 
-		this->mWidth = width;
-		this->mHeight = height;
+		m_width = width;
+		m_height = height;
 
 		Debug("window", "Creating window (Title: %s, Width: %d, Height: %d)", title, width, height);
 
-		memset(&mWndClass, 0, sizeof(mWndClass));
-		mWndClass.cbSize = sizeof(WNDCLASSEX);
-		mWndClass.lpfnWndProc = Window::WndProc;
-		mWndClass.hInstance = GetModuleHandle(NULL);
-		mWndClass.hCursor = LoadCursor(0, IDC_ARROW);
-		mWndClass.hIcon = mWndClass.hIconSm = LoadIcon(0, IDI_APPLICATION);
-		mWndClass.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
-		mWndClass.hbrBackground = (HBRUSH)COLOR_WINDOW;
-		mWndClass.lpszClassName = "AppWindow";
+		memset(&m_wndClass, 0, sizeof(m_wndClass));
+		m_wndClass.cbSize = sizeof(WNDCLASSEX);
+		m_wndClass.lpfnWndProc = Window::WndProc;
+		m_wndClass.hInstance = GetModuleHandle(NULL);
+		m_wndClass.hCursor = LoadCursor(0, IDC_ARROW);
+		m_wndClass.hIcon = m_wndClass.hIconSm = LoadIcon(0, IDI_APPLICATION);
+		m_wndClass.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
+		m_wndClass.hbrBackground = (HBRUSH)COLOR_WINDOW;
+		m_wndClass.lpszClassName = "AppWindow";
 
-		if (RegisterClassEx(&mWndClass) == 0)
+		if (RegisterClassEx(&m_wndClass) == 0)
 		{
 			Error("window", "Cannot register class for application window!");
 			return false;
 		}
 
-		mWindow = CreateWindowEx(0, "AppWindow", title, WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX, 0, 0, width, height, 0, 0, mWndClass.hInstance, 0);
+		m_window = CreateWindowEx(0, "AppWindow", title, WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX, 0, 0, width, height, 0, 0, m_wndClass.hInstance, 0);
 
-		if (mWindow == 0)
+		if (m_window == 0)
 		{
 			Error("window", "Cannot create application window!");
 			return false;
 		}
 			
-		SetWindowLongPtr(mWindow, GWLP_USERDATA, (LONG_PTR)this);
+		SetWindowLongPtr(m_window, GWLP_USERDATA, (LONG_PTR)this);
 
 		setFullscreen(fullscreen, width, height);
 
-		ShowWindow(mWindow, SW_SHOWNORMAL);
-		SetFocus(mWindow);
-		SetForegroundWindow(mWindow);
+		ShowWindow(m_window, SW_SHOWNORMAL);
+		SetFocus(m_window);
+		SetForegroundWindow(m_window);
 
 		Debug("window", "Window has been created sucessfully.");			
 		return true;
@@ -103,17 +103,7 @@ namespace Win32
 
 	void * Window::getPtr()
 	{
-		return (void *)mWindow;
-	}
-
-	unsigned short Window::getWidth()
-	{
-		return mWidth;
-	}
-
-	unsigned short Window::getHeight()
-	{
-		return mHeight;
+		return (void *)m_window;
 	}
 
 	void Window::setFullscreen(bool fullscreen, unsigned short width, unsigned short height)
@@ -152,36 +142,36 @@ namespace Win32
 		//	ShowCursor(TRUE);
 		}
 
-		SetWindowLong(this->mWindow, GWL_STYLE, style);
+		SetWindowLong(m_window, GWL_STYLE, style);
 
-		this->mFullscreen = fullscreen;
+		m_fullscreen = fullscreen;
 
 		if (width != 0)
-			this->mWidth = width;
+			m_width = width;
 
 		if (height != 0)
-			this->mHeight = height;
+			m_height = height;
 
-		SetWindowPos(this->mWindow, NULL, 0, 0, this->mWidth, this->mHeight, SWP_NOCOPYBITS | SWP_SHOWWINDOW | SWP_FRAMECHANGED);
+		SetWindowPos(m_window, NULL, 0, 0, m_width, m_height, SWP_NOCOPYBITS | SWP_SHOWWINDOW | SWP_FRAMECHANGED);
 
-		if (this->mRenderer)
-			this->mRenderer->setFullscreen(fullscreen);
+		if (m_renderer)
+			m_renderer->setFullscreen(fullscreen);
 	}
 
 	void Window::handleFocusLost()
 	{
-		if (mFullscreen)
+		if (m_fullscreen)
 		{
 		//	ShowCursor(TRUE);
-			ShowWindow(mWindow, SW_MINIMIZE);
+			ShowWindow(m_window, SW_MINIMIZE);
 		}
 	}
 	
 	void Window::handleFocus()
 	{
-		if (mFullscreen)
+		if (m_fullscreen)
 		{	
-			ShowWindow(mWindow, SW_SHOW);			
+			ShowWindow(m_window, SW_SHOW);			
 		//	ShowCursor(FALSE);
 		}
 	}

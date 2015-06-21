@@ -4,19 +4,16 @@
 //	   Copyright (C) Black Ice Mountains
 //		 	All rights reserved
 //
-// File		: video/renderer/Renderer.cpp
+// File		: graphics/renderer/Renderer.cpp
 // Author	: Eryk Dwornicki
 //
 //////////////////////////////////////////////
 
-#include <cstring>
-
-#include "opengl/OpenGLRenderer.h"
 #include "Renderer.h"
 
 IRenderer::IRenderer()
 {
-	this->mWindow = NULL;
+	m_window = 0;
 }
 
 IRenderer::~IRenderer()
@@ -25,7 +22,7 @@ IRenderer::~IRenderer()
 
 bool IRenderer::setup(IWindow * window)
 {
-	this->mWindow = window;
+	m_window = window;
 	return false;
 }
 
@@ -50,20 +47,4 @@ void IRenderer::setFullscreen(bool fullscreen)
 BufferBase * IRenderer::createBuffer(BufferType type)
 {
 	return 0;
-}
-
-IRenderer * IRenderer::create(RendererAPIs api)
-{
-	if (api == RENDERER_API_OPENGL)
-		return new OpenGL::Renderer();
-
-	return new IRenderer();
-}
-
-RendererAPIs IRenderer::getAPIIdFromString(const char *api)
-{
-	if (!strcmp(api, "gl") || !strcmp(api, "ogl") || !strcmp(api, "opengl"))
-		return RENDERER_API_OPENGL;
-
-	return RENDERER_API_NOAPI;
 }

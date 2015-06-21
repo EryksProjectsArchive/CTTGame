@@ -10,7 +10,7 @@
 //
 //////////////////////////////////////////////
 
-#include <video/Window.h>
+#include <graphics/Window.h>
 
 #include "OS.h"
 

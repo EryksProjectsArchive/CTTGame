@@ -4,15 +4,15 @@
 //	   Copyright (C) Black Ice Mountains
 //		 	All rights reserved
 //
-// File		: video/renderer/opengl/OpenGLRenderer.h
+// File		: graphics/renderer/opengl/OpenGLRenderer.h
 // Author	: Eryk Dwornicki
 //
 //////////////////////////////////////////////
 
 #pragma once
 
-#include <video/Window.h>
-#include <video/renderer/Renderer.h>
+#include <graphics/Window.h>
+#include <graphics/renderer/Renderer.h>
 
 #include "OpenGLImpl.h"
 
@@ -21,7 +21,7 @@ namespace OpenGL
 	class Renderer : public IRenderer
 	{
 	private:
-		Impl * mGL;
+		Impl * m_gl;
 	public:
 		Renderer();
 		~Renderer();
