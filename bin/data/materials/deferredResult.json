@@ -1,6 +1,6 @@
 {	
 	"shaders": {
-        "vertex": "deffered_renderer/finalResult",
-        "fragment": "deffered_renderer/finalResult"
+        "vertex": "deferred/finalResult",
+        "fragment": "deferred/finalResult"
     }
 }

@@ -4,6 +4,7 @@ uniform mat3 normalMatrix;
 
 uniform sampler2D diffuse;
 uniform sampler2D normal;
+uniform uint mat_Parameters;
 
 in vec4 vColor;
 in vec2 vUV;
@@ -11,6 +12,7 @@ in vec3 vNormal;
 
 layout(location = 0) out vec3 outDiffuse;
 layout(location = 1) out vec3 outNormal;
+layout(location = 2) out uint outParams;
 
 //Path: Deffered rendering
 //Normal map simple
@@ -23,4 +25,5 @@ void main(void)
 	vec3 finalNormal = (normalMatrix * (vNormal * normalMapNormal));
 
 	outNormal = (finalNormal + 1) / 2;
+	outParams = mat_Parameters;
 }

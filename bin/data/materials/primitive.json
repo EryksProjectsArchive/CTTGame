@@ -2,5 +2,10 @@
 	"shaders": {
         "vertex": "simpleColor",
         "fragment": "simpleColor"
+    },
+    "parameters": {
+    	"shadeless": true,
+    	"castshadows": false,
+    	"receiveshadows": false
     }
 }

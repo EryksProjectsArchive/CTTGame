@@ -75,8 +75,9 @@ void EditorFreeCamera::onKeyEvent(Key::Type key, bool state)
 
 	if (key == Key::SCANCODE_LSHIFT) // shift
 		m_speed = state ? 300.0f : 25.0f;
-	else if (key == Key::SCANCODE_LALT) // alt
-		m_speed = state ? 5.0f : 25.0f;
+
+	else if (key == Key::SCANCODE_LCTRL) // ctrl
+		m_speed = state ? 0.1f : 25.0f;
 }
 
 bool EditorFreeCamera::isMoving()

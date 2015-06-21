@@ -106,6 +106,7 @@ PFNGLUNIFORM1IPROC Renderer::glUniform1i = 0;
 PFNGLUNIFORM2IPROC Renderer::glUniform2i = 0;
 PFNGLUNIFORM3IPROC Renderer::glUniform3i = 0;
 PFNGLUNIFORM4IPROC Renderer::glUniform4i = 0;
+PFNGLUNIFORM1UIPROC Renderer::glUniform1ui = 0;
 PFNGLUNIFORM1FVPROC Renderer::glUniform1fv = 0;
 PFNGLUNIFORM2FVPROC Renderer::glUniform2fv = 0;
 PFNGLUNIFORM3FVPROC Renderer::glUniform3fv = 0;
@@ -309,6 +310,7 @@ bool Renderer::setup(Window * window)
 	GL_FUNCTION(glUniform2i);
 	GL_FUNCTION(glUniform3i);
 	GL_FUNCTION(glUniform4i);
+	GL_FUNCTION(glUniform1ui);
 	GL_FUNCTION(glUniform1fv);
 	GL_FUNCTION(glUniform2fv);
 	GL_FUNCTION(glUniform3fv);
@@ -405,8 +407,9 @@ bool Renderer::setup(Window * window)
 	glEnable(GL_CULL_FACE);
 	glFrontFace(GL_CW);
 	glCullFace(GL_BACK);
-		
-	glClearColor(0, 0, 0, 1.0f);
+
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+
 	glClearDepth(1.0f);
 	
 	m_defaultMaterial = MaterialLib::get()->findByName("none");
@@ -418,18 +421,19 @@ bool Renderer::setup(Window * window)
 	unsigned int HackVAO;
 	glGenVertexArrays(1, &HackVAO);
 	glBindVertexArray(HackVAO);
-	
+
 	// Initialize deferred rendering
 	if (!m_deferredRenderer.initialize(this, (uint32)m_rect.right, (uint32)m_rect.bottom))
 	{
-		Error("Renderer", "Unable to initialize deferred renderer.");
+		Error("Renderer", "Unable to initialize deferred renderer. [%d]", glGetError());
 		return false;
 	}
 
 	// Initialize dynamic shadows pass
-	if (!m_dynamicShadowsPass.initialize(this, 4086, 4086))
+	uint32 shadowMapSize = Config::get()["graphics"]["shadowmap"]["size"].getInteger(4086);
+	if (!m_dynamicShadowsPass.initialize(this, shadowMapSize, shadowMapSize))
 	{
-		Error("Renderer", "Unable to initialize dynamic shadows pass.");
+		Error("Renderer", "Unable to initialize dynamic shadows pass. [%d]", glGetError());
 		return false;
 	}
 
@@ -459,7 +463,7 @@ void Renderer::beginDeferredPass()
 
 void Renderer::endDeferredPass()
 {
-	m_deferredRenderer.end(m_dynamicShadowsPass.getDepthMVP());	
+	m_deferredRenderer.end(m_dynamicShadowsPass.getViewProjectionMatrix());	
 }
 
 void Renderer::postFrame()
@@ -513,9 +517,17 @@ Material * Renderer::getMaterial()
 
 void Renderer::renderGeometry(Geometry<Vertex3d> *geometry, const glm::mat4x4& matrix)
 {
+	Material* material = m_currentMaterial;
+	if (!material)
+		material = m_defaultMaterial;
+
+	if (!material)
+		return;
+
 	if (m_dynamicShadowsPass.isActive())
 	{
-		m_dynamicShadowsPass.renderGeometry(geometry, matrix);
+		if (material->m_parameters & Material::Parameters::CAST_SHADOWS) // Check if our material is casting shadows - if so do it
+			m_dynamicShadowsPass.renderGeometry(geometry, matrix);
 		return;
 	}
 
@@ -523,14 +535,6 @@ void Renderer::renderGeometry(Geometry<Vertex3d> *geometry, const glm::mat4x4& m
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 	glDisable(GL_BLEND);
-
-	Material* material = m_currentMaterial;
-	if (!material)
-		material = m_defaultMaterial;
-
-	// Shaders
-	if (!material)
-		return;
 
 	ShaderProgram *program = material->m_program;
 	if (!program || !program->isValid())
@@ -572,6 +576,11 @@ void Renderer::renderGeometry(Geometry<Vertex3d> *geometry, const glm::mat4x4& m
 		glUniformMatrix4fv(mvpMatrixLocation, 1, GL_FALSE, glm::value_ptr(mvp));
 	}
 
+	unsigned int parametersLocation = material->m_program->getUniformLocation("mat_Parameters");
+	if (parametersLocation != -1)
+	{
+		glUniform1ui(parametersLocation, material->m_parameters);
+	}
 
 	uint32 textureId = 0;
 	if (material->m_textures.size() > 0)
@@ -638,7 +647,7 @@ void Renderer::renderGeometry(Geometry<Vertex3d> *geometry, const glm::mat4x4& m
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geometry->m_indexBuffer->m_bufferId);
 	
-	glDrawElements(material->m_wireframe ? GL_LINE_STRIP : GL_TRIANGLES, geometry->m_trianglesCount * 3, GL_UNSIGNED_SHORT, 0);
+	glDrawElements((material->m_parameters & Material::Parameters::RENDER_WIREFRAME) ? GL_LINE_STRIP : GL_TRIANGLES, geometry->m_trianglesCount * 3, GL_UNSIGNED_SHORT, 0);
 	m_stats.m_trianglesDrawn += geometry->m_trianglesCount;
 	m_stats.m_drawCalls++;
 	m_stats.m_verticesDrawn += geometry->m_verticesCount;
@@ -683,6 +692,12 @@ void Renderer::renderGeometry(Geometry<Vertex2d> *geometry)
 	if (orthoMatrixLocation != -1)
 	{
 		glUniformMatrix4fv(orthoMatrixLocation, 1, GL_FALSE, glm::value_ptr(m_orthoMatrix));
+	}
+
+	unsigned int parametersLocation = material->m_program->getUniformLocation("mat_Parameters");
+	if (parametersLocation != -1)
+	{
+		glUniform1ui(parametersLocation, material->m_parameters);
 	}
 
 	uint32 textureId = 0;
@@ -747,7 +762,7 @@ void Renderer::renderGeometry(Geometry<Vertex2d> *geometry)
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geometry->m_indexBuffer->m_bufferId);
 
-	glDrawElements(material->m_wireframe ? GL_LINE_STRIP : GL_TRIANGLES, geometry->m_trianglesCount * 3, GL_UNSIGNED_SHORT, 0);
+	glDrawElements((material->m_parameters & Material::Parameters::RENDER_WIREFRAME) ? GL_LINE_STRIP : GL_TRIANGLES, geometry->m_trianglesCount * 3, GL_UNSIGNED_SHORT, 0);
 	m_stats.m_trianglesDrawn += geometry->m_trianglesCount;
 	m_stats.m_drawCalls++;
 	m_stats.m_verticesDrawn += geometry->m_verticesCount;
@@ -791,6 +806,12 @@ void Renderer::renderGeometry(Geometry<SimpleVertex2d> *geometry)
 		glUniformMatrix4fv(orthoMatrixLocation, 1, GL_FALSE, glm::value_ptr(m_orthoMatrix));
 	}
 
+	unsigned int parametersLocation = material->m_program->getUniformLocation("mat_Parameters");
+	if (parametersLocation != -1)
+	{
+		glUniform1ui(parametersLocation, material->m_parameters);
+	}
+
 	unsigned int attributePosition = material->m_program->getAttributeLocation("vertexPosition");
 	unsigned int attributeColor = material->m_program->getAttributeLocation("vertexColor");
 
@@ -806,7 +827,7 @@ void Renderer::renderGeometry(Geometry<SimpleVertex2d> *geometry)
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geometry->m_indexBuffer->m_bufferId);
 
-	glDrawElements(material->m_wireframe ? GL_LINE_STRIP : GL_TRIANGLES, geometry->m_trianglesCount * 3, GL_UNSIGNED_SHORT, 0);
+	glDrawElements((material->m_parameters & Material::Parameters::RENDER_WIREFRAME) ? GL_LINE_STRIP : GL_TRIANGLES, geometry->m_trianglesCount * 3, GL_UNSIGNED_SHORT, 0);
 	m_stats.m_trianglesDrawn += geometry->m_trianglesCount;
 	m_stats.m_drawCalls++;
 	m_stats.m_verticesDrawn += geometry->m_verticesCount;
@@ -825,10 +846,7 @@ void Renderer::renderGeometry(Geometry<SimpleVertex2d> *geometry)
 
 void Renderer::renderGeometry(Geometry<Vertex3d_pc> * geometry, const Matrix4x4& matrix)
 {
-	if (m_dynamicShadowsPass.isActive())
-	{
-		return;
-	}
+	if (m_dynamicShadowsPass.isActive()) return;
 
 	Material* material = m_simpleColorMat;
 
@@ -850,6 +868,13 @@ void Renderer::renderGeometry(Geometry<Vertex3d_pc> * geometry, const Matrix4x4&
 	{
 		glUniformMatrix4fv(mvpMatrixLocation, 1, GL_FALSE, glm::value_ptr(mvp));
 	}
+
+	unsigned int parametersLocation = material->m_program->getUniformLocation("mat_Parameters");
+	if (parametersLocation != -1)
+	{
+		glUniform1ui(parametersLocation, material->m_parameters);
+	}
+
 	unsigned int attributePosition = material->m_program->getAttributeLocation("vertexPosition");
 	unsigned int attributeColor = material->m_program->getAttributeLocation("vertexColor");
 
@@ -877,7 +902,8 @@ void Renderer::renderGeometry(Geometry<Vertex3d_pc> * geometry, const Matrix4x4&
 void Renderer::drawLine3D(const Vector3& start, const Vector3& end, const Color& color, const Matrix4x4& matrix)
 {
 	if (m_dynamicShadowsPass.isActive()) return;
-
+	
+	glDisable(GL_DEPTH_TEST);
 	Geometry<Vertex3d_pc> geometry;
 
 	Vertex3d_pc* vertices = new Vertex3d_pc[2];

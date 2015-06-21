@@ -13,6 +13,7 @@
 #include "../ShaderProgram.h"
 
 #include "DynamicShadowsPass.h"
+#include <graphics/Camera.h>
 
 DynamicShadowsPass::DynamicShadowsPass()
 	: m_fbo(0), m_depthShadowRenderBuffer(0), m_depthShadowTexture(0), m_material(0), m_active(false)
@@ -71,13 +72,6 @@ bool DynamicShadowsPass::initialize(Renderer *renderer, uint32 width, uint32 hei
 	}
 
 	Renderer::glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-	glm::vec3 lightInvDir = glm::vec3(40, 50, 0);
-
-	// Compute the MVP matrix from the light's point of view
-	glm::mat4 depthProjectionMatrix = glm::ortho<float>(-80,80,-80,80,1,1000);
-	glm::mat4 depthViewMatrix = glm::lookAt(lightInvDir, glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
-	m_depthMVP = depthProjectionMatrix * depthViewMatrix;
 	return true;
 }
 
@@ -105,6 +99,17 @@ void DynamicShadowsPass::destroy()
 
 void DynamicShadowsPass::begin()
 {
+	// Compute shadow View Projection matrix
+	Vector3 lightPosition = Vector3(40, 50, 0);
+	Vector3 lightDirection = Vector3(0, 0, 0);
+	Vector3 cam = Camera::current->getPosition();
+	lightDirection += cam;
+	lightPosition += cam;
+
+	Matrix4x4 projection = glm::ortho<float>(-80, 80, -80, 80, 1, 1000);
+	Matrix4x4 view = glm::lookAt(lightPosition, lightDirection, glm::vec3(0, 1, 0));
+	m_viewProjectionMatrix = projection * view;
+
 	// Setup render states
 	glFrontFace(GL_CW);
 
@@ -150,7 +155,7 @@ void DynamicShadowsPass::renderGeometry(Geometry<Vertex3d> *geometry, const Matr
 	unsigned int mvpMatrixLocation = m_material->m_program->getUniformLocation("mvpMatrix");
 	if (mvpMatrixLocation != -1)
 	{
-		Renderer::glUniformMatrix4fv(mvpMatrixLocation, 1, GL_FALSE, glm::value_ptr(m_depthMVP * matrix));
+		Renderer::glUniformMatrix4fv(mvpMatrixLocation, 1, GL_FALSE, glm::value_ptr(m_viewProjectionMatrix * matrix));
 	}
 	unsigned int attributePosition = m_material->m_program->getAttributeLocation("vertexPosition");
 

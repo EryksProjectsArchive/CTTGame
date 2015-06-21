@@ -157,6 +157,7 @@ public:
 	static PFNGLUNIFORM2IPROC glUniform2i;
 	static PFNGLUNIFORM3IPROC glUniform3i;
 	static PFNGLUNIFORM4IPROC glUniform4i;
+	static PFNGLUNIFORM1UIPROC glUniform1ui;
 	static PFNGLUNIFORM1FVPROC glUniform1fv;
 	static PFNGLUNIFORM2FVPROC glUniform2fv;
 	static PFNGLUNIFORM3FVPROC glUniform3fv;

@@ -1,6 +1,6 @@
 {	
 	"shaders": {
-        "vertex": "deffered_renderer/dynamicShadowPass",
-        "fragment": "deffered_renderer/dynamicShadowPass"
+        "vertex": "deferred/dynamicShadowPass",
+        "fragment": "deferred/dynamicShadowPass"
     }
 }

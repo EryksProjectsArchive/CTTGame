@@ -49,6 +49,7 @@ bool DeferredRendering::initialize(Renderer* renderer, uint32 width, uint32 heig
 	Renderer::glGenFramebuffers(1, &m_fbo);
 	Renderer::glGenRenderbuffers(1, &m_diffuseRenderBuffer);
 	Renderer::glGenRenderbuffers(1, &m_normalRenderBuffer);
+	Renderer::glGenRenderbuffers(1, &m_materialParameterRB);
 	Renderer::glGenRenderbuffers(1, &m_depthRenderBuffer);
 
 	Renderer::glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
@@ -58,8 +59,12 @@ bool DeferredRendering::initialize(Renderer* renderer, uint32 width, uint32 heig
 	Renderer::glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, m_diffuseRenderBuffer);
 
 	Renderer::glBindRenderbuffer(GL_RENDERBUFFER, m_normalRenderBuffer);
-	Renderer::glRenderbufferStorage(GL_RENDERBUFFER, GL_RGB16F_ARB, width, height);
+	Renderer::glRenderbufferStorage(GL_RENDERBUFFER, GL_RGB16F, width, height);
 	Renderer::glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_RENDERBUFFER, m_normalRenderBuffer);
+
+	Renderer::glBindRenderbuffer(GL_RENDERBUFFER, m_materialParameterRB);
+	Renderer::glRenderbufferStorage(GL_RENDERBUFFER, GL_R32UI, width, height);
+	Renderer::glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_RENDERBUFFER, m_materialParameterRB);
 
 	Renderer::glBindRenderbuffer(GL_RENDERBUFFER, m_depthRenderBuffer);
 	Renderer::glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, width, height);
@@ -87,6 +92,18 @@ bool DeferredRendering::initialize(Renderer* renderer, uint32 width, uint32 heig
 
 	// Attach the texture to the FBO
 	Renderer::glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, m_normalTexture, 0);
+
+	glGenTextures(1, &m_materialParameterTexture);
+	glBindTexture(GL_TEXTURE_2D, m_materialParameterTexture);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE32UI_EXT, width, height, 0, GL_LUMINANCE_INTEGER_EXT, GL_UNSIGNED_INT, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	// Attach texture to frame buffer
+	Renderer::glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, m_materialParameterTexture, 0);
 
 	glGenTextures(1, &m_depthTexture);
 	glBindTexture(GL_TEXTURE_2D, m_depthTexture);
@@ -169,11 +186,11 @@ void DeferredRendering::begin()
 	Renderer::glActiveTexture(GL_TEXTURE0);
 	glEnable(GL_TEXTURE_2D);
 
-	GLenum buffers[] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
-	Renderer::glDrawBuffers(2, buffers);
+	GLenum buffers[] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2 };
+	Renderer::glDrawBuffers(3, buffers);
 }
 
-void DeferredRendering::end(const Matrix4x4& depthMVP)
+void DeferredRendering::end(const Matrix4x4& shadowMatrixParameter)
 {
 	Renderer::glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 	glPopAttrib();
@@ -216,46 +233,63 @@ void DeferredRendering::end(const Matrix4x4& depthMVP)
 		Renderer::glUniformMatrix4fv(orthoMatrixLocation, 1, GL_FALSE, glm::value_ptr(m_renderer->m_orthoMatrix));
 	}
 
+	unsigned int textureId = 0;
+
 	unsigned int textureLocation = m_deferredResultMaterial->m_program->getUniformLocation("diffuseTexture");
 	if (textureLocation != -1)
 	{
-		Renderer::glActiveTexture(GL_TEXTURE0);
+		Renderer::glActiveTexture(GL_TEXTURE0 + textureId);
 		glEnable(GL_TEXTURE_2D);
 		glBindTexture(GL_TEXTURE_2D, m_diffuseTexture);
-		Renderer::glUniform1i(textureLocation, 0);
+		Renderer::glUniform1i(textureLocation, textureId);
+		textureId++;
 	}
 
 	textureLocation = m_deferredResultMaterial->m_program->getUniformLocation("normalTexture");
 	if (textureLocation != -1)
 	{
-		Renderer::glActiveTexture(GL_TEXTURE1);
+		Renderer::glActiveTexture(GL_TEXTURE0 + textureId);
 		glEnable(GL_TEXTURE_2D);
 		glBindTexture(GL_TEXTURE_2D, m_normalTexture);
-		Renderer::glUniform1i(textureLocation, 1);
+		Renderer::glUniform1i(textureLocation, textureId);
+		textureId++;
 	}
 
 	textureLocation = m_deferredResultMaterial->m_program->getUniformLocation("depthTexture");
 	if (textureLocation != -1)
 	{
-		Renderer::glActiveTexture(GL_TEXTURE2);
+		Renderer::glActiveTexture(GL_TEXTURE0 + textureId);
 		glEnable(GL_TEXTURE_2D);
 		glBindTexture(GL_TEXTURE_2D, m_depthTexture);
-		Renderer::glUniform1i(textureLocation, 2);
+		Renderer::glUniform1i(textureLocation, textureId);
+		textureId++;
 	}
+
+	textureLocation = m_deferredResultMaterial->m_program->getUniformLocation("materialParameterTexture");
+	if (textureLocation != -1)
+	{
+		Renderer::glActiveTexture(GL_TEXTURE0 + textureId);
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, m_materialParameterTexture);
+		Renderer::glUniform1i(textureLocation, textureId);
+		textureId++;
+	}
+
 
 	if (m_depthShadowTexture != 0)
 	{
 		textureLocation = m_deferredResultMaterial->m_program->getUniformLocation("shadowTexture");
 		if (textureLocation != -1)
 		{
-			Renderer::glActiveTexture(GL_TEXTURE3);
+			Renderer::glActiveTexture(GL_TEXTURE0 + textureId);
 			glEnable(GL_TEXTURE_2D);
 			glBindTexture(GL_TEXTURE_2D, m_depthShadowTexture);
-			Renderer::glUniform1i(textureLocation, 3);
+			Renderer::glUniform1i(textureLocation, textureId);
+			textureId++;
 		}
 
 		glm::mat4 biasMatrix(0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.5, 0.5, 0.5, 1.0);
-		glm::mat4 depthBiasMVP = biasMatrix*depthMVP;
+		glm::mat4 depthBiasMVP = biasMatrix * shadowMatrixParameter;
 
 		unsigned int depthBiasMVPLocation = m_deferredResultMaterial->m_program->getUniformLocation("depthBiasMVP");
 		if (depthBiasMVPLocation != -1)

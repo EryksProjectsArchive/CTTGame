@@ -6,5 +6,5 @@
         "vertex": "simple",
         "fragment": "simple"
     },
-    "wireframe": false
+    "wireframe": false,
 }

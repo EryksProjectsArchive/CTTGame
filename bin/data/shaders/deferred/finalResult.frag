@@ -4,6 +4,7 @@ uniform sampler2D diffuseTexture;
 uniform sampler2D normalTexture;
 uniform sampler2D depthTexture;
 uniform sampler2D shadowTexture;
+uniform usampler2D materialParameterTexture;
 
 in vec2 vUV;
 
@@ -14,8 +15,13 @@ uniform mat4 depthBiasMVP;
 
 out vec4 color;
 
+// Material parameters
+const uint IS_SHADELESS = 1u;
+const uint CAST_SHADOWS = 2u;
+const uint RECEIVE_SHADOWS = 4u;
+
 // Day
-vec3 ambientColor = vec3(0.1,0.1,0.1);
+vec3 ambientColor = vec3(0.1, 0.1, 0.1);
 vec3 specularColor = vec3(0.5, 0.5, 0.5);
 
 vec3 getWorldPosition()
@@ -26,6 +32,10 @@ vec3 getWorldPosition()
     return vec3(screenPosition / screenPosition.w);
 }
 
+/*bool isFlagSet(uint flags, uint flag)
+{
+	return bool((flags & flag) == flag);
+}*/
 
 vec2 shift[20] = vec2[20](
 	vec2(0.427835603932, 0.477655295239),
@@ -50,21 +60,25 @@ vec2 shift[20] = vec2[20](
 	vec2(0.618576434245, 0.0463357570433)
 );
 
-vec4 calculatePointLight_BlinnPhong(vec3 position, vec3 normal, vec3 lightColor, vec3 lightPosition, float size, float powe)
+vec4 calculatePointLight_BlinnPhong(uint materialParams, vec3 position, vec3 normal, vec3 lightColor, vec3 lightPosition, float size, float powe)
 {
 	float visibility = 1.0;
 
-	vec3 wsPos = getWorldPosition();
-	vec4 uv = depthBiasMVP * vec4(wsPos, 1);
-	if(uv.x <= 1 && uv.y <= 1 && uv.x >= 0 && uv.y >= 0)
-	{			
-		for(int i = 0; i < 20; ++i)
-		{
-			float depthValue = texture(shadowTexture, uv.xy + shift[i]/(10 * 200)).r;
-			if(depthValue < uv.z)
+	// If our material receive shadows do calculation
+	if((materialParams & RECEIVE_SHADOWS) == RECEIVE_SHADOWS)
+	{
+		vec3 wsPos = getWorldPosition();
+		vec4 uv = depthBiasMVP * vec4(wsPos, 1);
+		if(uv.x <= 1 && uv.y <= 1 && uv.x >= 0 && uv.y >= 0)
+		{			
+			for(int i = 0; i < 20; ++i)
 			{
- 				visibility -= (0.8 / 20);
- 			}
+				float depthValue = texture(shadowTexture, uv.xy + shift[i]/(10 * 200)).r;
+				if(depthValue < uv.z)
+				{
+	 				visibility -= (0.8 / 20);
+ 				}
+			}
 		}
 	}
 	// Convert light position to screen-space.	
@@ -92,31 +106,35 @@ void main(void)
 {		
 	vec4 lighting = vec4(0, 0, 0, 0);
 
-	float depth = texture2D(shadowTexture, vUV).r;
-	color = vec4(depth, depth, depth, 1);
-
 	// Base color of texture
 	color = texture2D(diffuseTexture, vUV);
 
-	// Get world position from depth buffer
-	vec3 vecPosition = vec3(viewMatrix * vec4(getWorldPosition(), 1));
-	vec3 vecNormal = normalize((texture2D(normalTexture, vUV).xyz * 2) - 1);
+	// Get material parameters flags.
+	uint parameters = texture(materialParameterTexture, vUV).x;
 
-	// Sun
-	float power = 10.0f;
-	float size = 1000.0f;
-	vec3 lightColor = vec3(1, 1, 1);
-	vec3 lightPosition = vec3(200,500,0);
+	// Check if we have to compute lights and shadows for this pixel
+	if((parameters & IS_SHADELESS) != IS_SHADELESS)
+	{
+		// Get world position from depth buffer
+		vec3 vecPosition = vec3(viewMatrix * vec4(getWorldPosition(), 1));
+		vec3 vecNormal = normalize((texture2D(normalTexture, vUV).xyz * 2) - 1);
 
-	lighting += calculatePointLight_BlinnPhong(vecPosition, vecNormal, lightColor, lightPosition, size, power);
+		// Sun
+		float power = 10.0f;
+		float size = 1000.0f;
+		vec3 lightColor = vec3(1, 1, 1);
+		vec3 lightPosition = vec3(200,500,0);
 
-	// Light
-	power = 1.0f;
-	size = 20.0f;
-	lightColor = vec3(1, 0.5, 0);
-	lightPosition = vec3(0.8,2,0.8);
+		lighting += calculatePointLight_BlinnPhong(parameters, vecPosition, vecNormal, lightColor, lightPosition, size, power);
 
-	lighting += calculatePointLight_BlinnPhong(vecPosition, vecNormal, lightColor, lightPosition, size, power);
+		// Light
+		power = 1.0f;
+		size = 20.0f;
+		lightColor = vec3(1, 0.5, 0);
+		lightPosition = vec3(0.8,2,0.8);
 
-	color *= lighting;
+		lighting += calculatePointLight_BlinnPhong(parameters, vecPosition, vecNormal, lightColor, lightPosition, size, power);
+
+		color *= lighting;
+	}
 }

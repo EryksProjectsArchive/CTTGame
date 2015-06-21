@@ -25,7 +25,7 @@ Material::Material(const DynString& name, const FilePath& file)
 	  m_hasVertexShader(0),
 	  m_hasFragmentShader(0),
 	  m_isLoaded(0),
-	  m_wireframe(0)
+	  m_parameters(Parameters::DEFAULT)
 {
 }
 

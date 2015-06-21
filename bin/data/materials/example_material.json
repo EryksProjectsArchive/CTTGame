@@ -1,0 +1,25 @@
+{	
+	/* Array of textures - name here is the name of sampler in shaders - up to 32 textures */
+	"textures": [
+        { "name": "diffuse", "path": "nomaterial.bmp", "mipMaps": false }
+    ],
+    /* Shaders set - both vertex and fragment shaders should be set */
+	"shaders": {
+        "vertex": "simple",
+        "fragment": "simple"
+    },
+    /* Material parameters */
+    "parameters": {
+    	/* Should we disable shading? [phong, dynamic shading etc] Default: false */
+    	"shadeless": false,
+
+    	/* Should object using this material cast shadows? Default: true */
+    	"castshadows": true,
+
+    	/* Should object using this material receive shadows? Default: true */
+    	"receiveshadows": true,
+
+    	/* Should we draw objects using this material as wireframe? Default: false */
+    	"wireframe": false
+    }
+}

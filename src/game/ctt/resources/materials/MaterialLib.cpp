@@ -62,8 +62,6 @@ Material * MaterialLib::findByName(const DynString& name)
 		{			
 			material = new Material(name, FilePath("materials/%s.json", name.get()));
 
-			material->m_wireframe = root.get("wireframe", false).asBool();
-
 			if (root["textures"].isArray())
 			{
 				Json::Value textures = root["textures"];
@@ -110,8 +108,30 @@ Material * MaterialLib::findByName(const DynString& name)
 				else
 					Warning("MatLib", "Material %s has no vertex shader set.", name.get());
 			}
-			
-			Debug("MatLib", "New material loaded %s.", name.get());
+
+			Json::Value parameters = root["parameters"];
+			if (parameters.isObject())
+			{
+				material->m_parameters = Material::Parameters::EMPTY;
+
+				// By default we do receive all shadings and lights.
+				if (parameters.get("shadeless", false).asBool())
+					material->m_parameters |= Material::Parameters::IS_SHADELESS;
+
+				// By default we do cast shadows.
+				if (parameters.get("castshadows", true).asBool())
+					material->m_parameters |= Material::Parameters::CAST_SHADOWS;
+
+				// By default we do receive shadows.
+				if (parameters.get("receiveshadows", true).asBool())
+					material->m_parameters |= Material::Parameters::RECEIVE_SHADOWS;
+
+				// By default we draw solid geometry not lines.
+				if (parameters.get("wireframe", false).asBool())
+					material->m_parameters |= Material::Parameters::RENDER_WIREFRAME;
+			}
+
+			Debug("MatLib", "New material loaded %s. (Shadeless: %s, Cast shadows: %s, Receive shadows: %s)", name.get(), (material->m_parameters & Material::Parameters::IS_SHADELESS) ? "true" : "false", (material->m_parameters & Material::Parameters::CAST_SHADOWS) ? "true" : "false", (material->m_parameters & Material::Parameters::RECEIVE_SHADOWS) ? "true" : "false");
 			m_materials.pushBack(material);
 		}
 		else

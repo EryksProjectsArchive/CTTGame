@@ -31,7 +31,7 @@ private:
 	uint32 m_width;
 	uint32 m_height;
 
-	Matrix4x4 m_depthMVP;
+	Matrix4x4 m_viewProjectionMatrix;
 public:
 	DynamicShadowsPass();
 	~DynamicShadowsPass();
@@ -48,5 +48,5 @@ public:
 
 	uint32 getShadowTexture();
 
-	inline Matrix4x4& getDepthMVP() { return m_depthMVP;  }
+	inline Matrix4x4& getViewProjectionMatrix() { return m_viewProjectionMatrix;  }
 };

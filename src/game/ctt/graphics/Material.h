@@ -18,6 +18,18 @@
 
 class Material : public CacheableResource
 {
+public:
+	enum Parameters
+	{	
+		EMPTY = 0, // No parameters (everything disabled)
+		IS_SHADELESS = 1,
+		CAST_SHADOWS = 2,
+		RECEIVE_SHADOWS = 4,
+		RENDER_WIREFRAME = 8,
+
+		// Cast and receive shadows by default
+		DEFAULT = (CAST_SHADOWS | RECEIVE_SHADOWS)
+	};
 private:
 	struct TextureData
 	{
@@ -46,7 +58,7 @@ private:
 	uint8 m_hasVertexShader : 1;
 	uint8 m_hasFragmentShader : 1;
 	uint8 m_isLoaded : 1;
-	uint8 m_wireframe : 1;
+	uint32 m_parameters;
 	FilePath m_vertexShaderName;
 	FilePath m_fragmentShaderName;
 	DynString m_name;
@@ -63,4 +75,5 @@ public:
 	friend class DeferredRendering;
 	friend class DynamicShadowsPass;
 	friend class MaterialLib;
+
 };
