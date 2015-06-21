@@ -48,6 +48,7 @@ VertexShader::VertexShader(const char * source) : Shader(source)
 			char *errorLog = new char[maxLength + 1];
 
 			Renderer::glGetShaderInfoLog(m_shaderId, maxLength, &maxLength, errorLog);
+			errorLog[maxLength] = '\0';
 
 			Debug("shader", "Compilation error (%s): %s", source, errorLog);
 

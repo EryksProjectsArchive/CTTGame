@@ -34,6 +34,17 @@ protected:
 
 	Material* m_currentMaterial;
 	Material* m_defaultMaterial;
+	Material* m_defferedResultMaterial;
+
+	uint32 m_fbo;
+	uint32 m_diffuseTexture;
+	uint32 m_positionTexture; 
+	uint32 m_normalTexture;
+	uint32 m_depthTexture;
+	uint32 m_diffuseRenderBuffer;
+	uint32 m_positionRenderBuffer;
+	uint32 m_normalRenderBuffer;
+	uint32 m_depthRenderBuffer;
 
 	struct
 	{
@@ -60,6 +71,8 @@ public:
 	bool setup(Window * window);
 
 	void preFrame();
+	void beginSceneRender();
+	void endSceneRender();
 	void postFrame();
 
 	Matrix4x4 getProjectionMatrix();
@@ -94,7 +107,6 @@ public:
 	static PFNGLBINDVERTEXARRAYPROC glBindVertexArray;
 	static PFNGLGETBUFFERPARAMETERIVPROC glGetBufferParameteriv;
 
-	static PFNGLGENERATEMIPMAPPROC glGenerateMipmap;
 	static PFNGLACTIVETEXTUREPROC glActiveTexture;
 	
 	static PFNGLBLENDEQUATIONSEPARATEPROC glBlendEquationSeparate;
@@ -193,5 +205,26 @@ public:
 	static PFNGLGENVERTEXARRAYSPROC glGenVertexArrays;
 
 	static PFNGLCOMPRESSEDTEXIMAGE2DPROC glCompressedTexImage2D;
+
+	static PFNGLISRENDERBUFFERPROC glIsRenderbuffer;
+	static PFNGLBINDRENDERBUFFERPROC glBindRenderbuffer;
+	static PFNGLDELETERENDERBUFFERSPROC glDeleteRenderbuffers;
+	static PFNGLGENRENDERBUFFERSPROC glGenRenderbuffers;
+	static PFNGLRENDERBUFFERSTORAGEPROC glRenderbufferStorage;
+	static PFNGLGETRENDERBUFFERPARAMETERIVPROC glGetRenderbufferParameteriv;
+	static PFNGLISFRAMEBUFFERPROC  glIsFramebuffer;
+	static PFNGLBINDFRAMEBUFFERPROC glBindFramebuffer;
+	static PFNGLDELETEFRAMEBUFFERSPROC glDeleteFramebuffers;
+	static PFNGLGENFRAMEBUFFERSPROC glGenFramebuffers;
+	static PFNGLCHECKFRAMEBUFFERSTATUSPROC glCheckFramebufferStatus;
+	static PFNGLFRAMEBUFFERTEXTURE1DPROC glFramebufferTexture1D;
+	static PFNGLFRAMEBUFFERTEXTURE2DPROC glFramebufferTexture2D;
+	static PFNGLFRAMEBUFFERTEXTURE3DPROC glFramebufferTexture3D;
+	static PFNGLFRAMEBUFFERRENDERBUFFERPROC glFramebufferRenderbuffer;
+	static PFNGLGETFRAMEBUFFERATTACHMENTPARAMETERIVPROC glGetFramebufferAttachmentParameteriv;
+	static PFNGLGENERATEMIPMAPPROC glGenerateMipmap;
+	static PFNGLBLITFRAMEBUFFERPROC glBlitFramebuffer;
+	static PFNGLRENDERBUFFERSTORAGEMULTISAMPLEPROC glRenderbufferStorageMultisample;
+	static PFNGLFRAMEBUFFERTEXTURELAYERPROC glFramebufferTextureLayer;
 
 };

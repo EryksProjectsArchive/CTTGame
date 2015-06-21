@@ -60,7 +60,6 @@ PFNGLDELETEBUFFERSPROC Renderer::glDeleteBuffers = 0;
 PFNGLBINDVERTEXARRAYPROC Renderer::glBindVertexArray = 0;
 PFNGLGETBUFFERPARAMETERIVPROC Renderer::glGetBufferParameteriv = 0;
 
-PFNGLGENERATEMIPMAPPROC Renderer::glGenerateMipmap = 0;
 PFNGLACTIVETEXTUREPROC Renderer::glActiveTexture = 0;
 
 PFNGLBLENDEQUATIONSEPARATEPROC Renderer::glBlendEquationSeparate = 0;
@@ -160,6 +159,27 @@ PFNGLGENVERTEXARRAYSPROC Renderer::glGenVertexArrays = 0;
 
 PFNGLCOMPRESSEDTEXIMAGE2DPROC Renderer::glCompressedTexImage2D = 0;
 
+PFNGLISRENDERBUFFERPROC Renderer::glIsRenderbuffer = 0;
+PFNGLBINDRENDERBUFFERPROC Renderer::glBindRenderbuffer = 0;
+PFNGLDELETERENDERBUFFERSPROC Renderer::glDeleteRenderbuffers = 0;
+PFNGLGENRENDERBUFFERSPROC Renderer::glGenRenderbuffers = 0;
+PFNGLRENDERBUFFERSTORAGEPROC Renderer::glRenderbufferStorage = 0;
+PFNGLGETRENDERBUFFERPARAMETERIVPROC Renderer::glGetRenderbufferParameteriv = 0;
+PFNGLISFRAMEBUFFERPROC  Renderer::glIsFramebuffer = 0;
+PFNGLBINDFRAMEBUFFERPROC Renderer::glBindFramebuffer = 0;
+PFNGLDELETEFRAMEBUFFERSPROC Renderer::glDeleteFramebuffers = 0;
+PFNGLGENFRAMEBUFFERSPROC Renderer::glGenFramebuffers = 0;
+PFNGLCHECKFRAMEBUFFERSTATUSPROC Renderer::glCheckFramebufferStatus = 0;
+PFNGLFRAMEBUFFERTEXTURE1DPROC Renderer::glFramebufferTexture1D = 0;
+PFNGLFRAMEBUFFERTEXTURE2DPROC Renderer::glFramebufferTexture2D = 0;
+PFNGLFRAMEBUFFERTEXTURE3DPROC Renderer::glFramebufferTexture3D = 0;
+PFNGLFRAMEBUFFERRENDERBUFFERPROC Renderer::glFramebufferRenderbuffer = 0;
+PFNGLGETFRAMEBUFFERATTACHMENTPARAMETERIVPROC Renderer::glGetFramebufferAttachmentParameteriv = 0;
+PFNGLGENERATEMIPMAPPROC Renderer::glGenerateMipmap = 0;
+PFNGLBLITFRAMEBUFFERPROC Renderer::glBlitFramebuffer = 0;
+PFNGLRENDERBUFFERSTORAGEMULTISAMPLEPROC Renderer::glRenderbufferStorageMultisample = 0;
+PFNGLFRAMEBUFFERTEXTURELAYERPROC Renderer::glFramebufferTextureLayer = 0;
+
 Renderer * Renderer::s_instance = 0;
 
 Renderer::Renderer()
@@ -183,6 +203,15 @@ Renderer::~Renderer()
 		SDL_GL_DeleteContext(m_glContext);
 		m_glContext = 0;
 	}
+
+	glDeleteTextures(1, &m_normalTexture);
+	glDeleteTextures(1, &m_positionTexture);
+	glDeleteTextures(1, &m_diffuseTexture);
+	glDeleteFramebuffers(1, &m_fbo);
+	glDeleteRenderbuffers(1, &m_diffuseRenderBuffer);
+	glDeleteRenderbuffers(1, &m_positionRenderBuffer);
+	glDeleteRenderbuffers(1, &m_normalRenderBuffer);
+	glDeleteRenderbuffers(1, &m_depthRenderBuffer);
 
 	if (m_helperMaterial)
 		m_helperMaterial->release();
@@ -233,9 +262,6 @@ bool Renderer::setup(Window * window)
 	ASSERT_FUNCTION(glUnmapBuffer = (PFNGLUNMAPBUFFERPROC)SDL_GL_GetProcAddress("glUnmapBuffer"));
 	ASSERT_FUNCTION(glBindVertexArray = (PFNGLBINDVERTEXARRAYPROC)SDL_GL_GetProcAddress("glBindVertexArray"));
 	ASSERT_FUNCTION(glGetBufferParameteriv = (PFNGLGETBUFFERPARAMETERIVPROC)SDL_GL_GetProcAddress("glGetBufferParameteriv"));
-
-	// Texture functions (OpenGL 3.0)
-	ASSERT_FUNCTION(glGenerateMipmap = (PFNGLGENERATEMIPMAPPROC)SDL_GL_GetProcAddress("glGenerateMipmap"));
 
 	// (OpenGL 2.0)
 	ASSERT_FUNCTION(glActiveTexture = (PFNGLACTIVETEXTUREPROC)SDL_GL_GetProcAddress("glActiveTexture"));
@@ -339,8 +365,29 @@ bool Renderer::setup(Window * window)
 
 	ASSERT_FUNCTION(glCompressedTexImage2D = (PFNGLCOMPRESSEDTEXIMAGE2DPROC)SDL_GL_GetProcAddress("glCompressedTexImage2D"));
 
-	SDL_GL_SetSwapInterval(Config::get()["graphics"]["vsync"].getBool(false) ? 1 : 0); // set 0 to disable vsync
+	// Textures and framebuffers OpenGL 3.0
+	ASSERT_FUNCTION(glIsRenderbuffer = (PFNGLISRENDERBUFFERPROC)SDL_GL_GetProcAddress("glIsRenderbuffer"));
+	ASSERT_FUNCTION(glBindRenderbuffer = (PFNGLBINDRENDERBUFFERPROC)SDL_GL_GetProcAddress("glBindRenderbuffer"));
+	ASSERT_FUNCTION(glDeleteRenderbuffers = (PFNGLDELETERENDERBUFFERSPROC)SDL_GL_GetProcAddress("glDeleteRenderbuffers"));
+	ASSERT_FUNCTION(glGenRenderbuffers = (PFNGLGENRENDERBUFFERSPROC)SDL_GL_GetProcAddress("glGenRenderbuffers"));
+	ASSERT_FUNCTION(glRenderbufferStorage = (PFNGLRENDERBUFFERSTORAGEPROC)SDL_GL_GetProcAddress("glRenderbufferStorage"));
+	ASSERT_FUNCTION(glGetRenderbufferParameteriv = (PFNGLGETRENDERBUFFERPARAMETERIVPROC)SDL_GL_GetProcAddress("glGetRenderbufferParameteriv"));
+	ASSERT_FUNCTION(glIsFramebuffer = (PFNGLISFRAMEBUFFERPROC)SDL_GL_GetProcAddress("glIsFramebuffer"));
+	ASSERT_FUNCTION(glBindFramebuffer = (PFNGLBINDFRAMEBUFFERPROC)SDL_GL_GetProcAddress("glBindFramebuffer"));
+	ASSERT_FUNCTION(glDeleteFramebuffers = (PFNGLDELETEFRAMEBUFFERSPROC)SDL_GL_GetProcAddress("glDeleteFramebuffers"));
+	ASSERT_FUNCTION(glGenFramebuffers = (PFNGLGENFRAMEBUFFERSPROC)SDL_GL_GetProcAddress("glGenFramebuffers"));
+	ASSERT_FUNCTION(glCheckFramebufferStatus = (PFNGLCHECKFRAMEBUFFERSTATUSPROC)SDL_GL_GetProcAddress("glCheckFramebufferStatus"));
+	ASSERT_FUNCTION(glFramebufferTexture1D = (PFNGLFRAMEBUFFERTEXTURE1DPROC)SDL_GL_GetProcAddress("glFramebufferTexture1D"));
+	ASSERT_FUNCTION(glFramebufferTexture2D = (PFNGLFRAMEBUFFERTEXTURE2DPROC)SDL_GL_GetProcAddress("glFramebufferTexture2D"));
+	ASSERT_FUNCTION(glFramebufferTexture3D = (PFNGLFRAMEBUFFERTEXTURE3DPROC)SDL_GL_GetProcAddress("glFramebufferTexture3D"));
+	ASSERT_FUNCTION(glFramebufferRenderbuffer = (PFNGLFRAMEBUFFERRENDERBUFFERPROC)SDL_GL_GetProcAddress("glFramebufferRenderbuffer"));
+	ASSERT_FUNCTION(glGetFramebufferAttachmentParameteriv = (PFNGLGETFRAMEBUFFERATTACHMENTPARAMETERIVPROC)SDL_GL_GetProcAddress("glGetFramebufferAttachmentParameteriv"));
+	ASSERT_FUNCTION(glGenerateMipmap = (PFNGLGENERATEMIPMAPPROC)SDL_GL_GetProcAddress("glGenerateMipmap"));
+	ASSERT_FUNCTION(glBlitFramebuffer = (PFNGLBLITFRAMEBUFFERPROC)SDL_GL_GetProcAddress("glBlitFramebuffer"));
+	ASSERT_FUNCTION(glRenderbufferStorageMultisample = (PFNGLRENDERBUFFERSTORAGEMULTISAMPLEPROC)SDL_GL_GetProcAddress("glRenderbufferStorageMultisample"));
+	ASSERT_FUNCTION(glFramebufferTextureLayer = (PFNGLFRAMEBUFFERTEXTURELAYERPROC)SDL_GL_GetProcAddress("glFramebufferTextureLayer"));
 
+	SDL_GL_SetSwapInterval(Config::get()["graphics"]["vsync"].getBool(false) ? 1 : 0); // set 0 to disable vsync	
 	glViewport(0, 0, window->getWidth(), window->getHeight());
 	
 	glEnable(GL_BLEND);
@@ -360,6 +407,9 @@ bool Renderer::setup(Window * window)
 
 	m_helperMaterial = MaterialLib::get()->findByName("primitive");
 	m_helperMaterial->acquire();
+
+	m_defferedResultMaterial = MaterialLib::get()->findByName("defferedResult");
+	m_defferedResultMaterial->acquire();
 
 	unsigned int HackVAO;
 	glGenVertexArrays(1, &HackVAO);
@@ -388,7 +438,98 @@ bool Renderer::setup(Window * window)
 		0, 1, 2, 4, 3, 5
 	};
 
-	m_helperLines->fillData(vertices, 4, indices, 2);
+	m_helperLines->fillData(vertices, 4, indices, 2);	
+
+	// Setup deffered rendering
+	uint32 width = m_rect.right;
+	uint32 height = m_rect.bottom;
+
+	glGenFramebuffers(1, &m_fbo);
+	glGenRenderbuffers(1, &m_diffuseRenderBuffer);
+	glGenRenderbuffers(1, &m_positionRenderBuffer);
+	glGenRenderbuffers(1, &m_normalRenderBuffer);
+	glGenRenderbuffers(1, &m_depthRenderBuffer);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
+
+	glBindRenderbuffer(GL_RENDERBUFFER, m_diffuseRenderBuffer);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA, width, height);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, m_diffuseRenderBuffer);
+
+	glBindRenderbuffer(GL_RENDERBUFFER, m_positionRenderBuffer);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA32F_ARB, width, height);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_RENDERBUFFER, m_positionRenderBuffer);
+
+	glBindRenderbuffer(GL_RENDERBUFFER, m_normalRenderBuffer);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA16F_ARB, width, height);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_RENDERBUFFER, m_normalRenderBuffer);
+
+	glBindRenderbuffer(GL_RENDERBUFFER, m_depthRenderBuffer);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, width, height);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_depthRenderBuffer);
+
+
+	// Create diffuse texture
+	glGenTextures(1, &m_diffuseTexture);
+	glBindTexture(GL_TEXTURE_2D, m_diffuseTexture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_FLOAT, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+	// Attach texture to frame buffer
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_diffuseTexture, 0);
+
+	// Create position texture
+	glGenTextures(1, &m_positionTexture);
+	glBindTexture(GL_TEXTURE_2D, m_positionTexture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB32F_ARB, width, height, 0, GL_RGB, GL_FLOAT, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+	// Attach texture to frame buffer
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, m_positionTexture, 0);
+
+	glGenTextures(1, &m_normalTexture);
+	glBindTexture(GL_TEXTURE_2D, m_normalTexture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F_ARB, width, height, 0, GL_RGB, GL_FLOAT, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+	// Attach the texture to the FBO
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, m_normalTexture, 0);
+
+	glGenTextures(1, &m_depthTexture);
+	glBindTexture(GL_TEXTURE_2D, m_depthTexture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32F, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+	glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, m_depthTexture, 0);
+
+	GLenum buffers[] = {
+		GL_COLOR_ATTACHMENT0,
+		GL_COLOR_ATTACHMENT1,
+		GL_COLOR_ATTACHMENT2	
+	};
+	glDrawBuffers(3, buffers);
+
+	// Check if all worked fine and unbind the FBO
+	GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+	if (status != GL_FRAMEBUFFER_COMPLETE_EXT)
+	{
+		Error("renderer", "Cannot initialize deffered rendering frame buffer object!");
+		return false;
+	}
+
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 	return true;
 }
 
@@ -398,9 +539,167 @@ void Renderer::preFrame()
 	glClearColor(0.9f, 0.9f, 0.9f, 1.0f);	
 	glClearDepth(1.0f);
 
-	setMaterial(m_helperMaterial);
+	/*setMaterial(m_helperMaterial);
 	renderGeometry(m_helperLines, glm::mat4x4());
-	setMaterial(m_defaultMaterial);
+	setMaterial(m_defaultMaterial);*/
+}
+
+void Renderer::beginSceneRender()
+{
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_fbo);
+	glPushAttrib(GL_VIEWPORT_BIT);
+
+	glViewport(0, 0, m_rect.right, m_rect.bottom);
+
+	// Clear the render targets
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClearColor(0.6f, 0.6f, 1.0f, 1.0f);
+	glClearDepth(1.0f);
+
+	glActiveTexture(GL_TEXTURE0);
+	glEnable(GL_TEXTURE_2D);
+
+
+}
+
+void Renderer::endSceneRender()
+{
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+	glPopAttrib();
+
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, m_fbo);
+
+	// Render final result
+	glDisable(GL_DEPTH_TEST);
+	glDisable(GL_CULL_FACE);
+	glDisable(GL_BLEND);
+
+	Geometry<Vertex2d> geometry;
+
+	Vertex2d vertices[4] = {
+		{ 0, 0, 0, 1, 0xFFFFFFFF },
+		{ m_rect.right, 0, 1, 1, 0xFFFFFFFF },
+		{ m_rect.right, m_rect.bottom, 1, 0, 0xFFFFFFFF },
+		{ 0, m_rect.bottom, 0, 0, 0xFFFFFFFF }
+	};
+
+	uint16 triangles[] = {
+		0, 1, 2,
+		0, 2, 3
+	};
+
+	geometry.fillData(vertices, 4, triangles, 2);
+
+	if (!m_defferedResultMaterial)
+	{
+		Error("renderer", "Cannot render deffered final plan e. No material found!");
+		return;
+	}
+
+	if (!m_defferedResultMaterial->m_program || !glIsProgram(m_defferedResultMaterial->m_program->m_programId))
+	{
+		Error("renderer", "Cannot render deffered final plane. No shader program assigned for material.");
+		return;
+	}
+
+	glUseProgram(m_defferedResultMaterial->m_program->m_programId);
+
+	unsigned int orthoMatrixLocation = m_defferedResultMaterial->m_program->getUniformLocation("orthoMatrix");
+	if (orthoMatrixLocation != -1)
+	{
+		glUniformMatrix4fv(orthoMatrixLocation, 1, GL_FALSE, glm::value_ptr(m_orthoMatrix));
+	}
+
+	unsigned int textureLocation = m_defferedResultMaterial->m_program->getUniformLocation("diffuseTexture");
+	if (textureLocation != -1)
+	{
+		glActiveTexture(GL_TEXTURE0);
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, m_diffuseTexture);
+		glUniform1i(textureLocation, 0);
+	}
+
+	textureLocation = m_defferedResultMaterial->m_program->getUniformLocation("normalTexture");
+	if (textureLocation != -1)
+	{
+		glActiveTexture(GL_TEXTURE1);
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, m_normalTexture);
+		glUniform1i(textureLocation, 1);
+	}
+
+	textureLocation = m_defferedResultMaterial->m_program->getUniformLocation("positionTexture");
+	if (textureLocation != -1)
+	{
+		glActiveTexture(GL_TEXTURE2);
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, m_positionTexture);
+		glUniform1i(textureLocation, 2);
+	}
+
+	unsigned int projectionMatrixLocation = m_defferedResultMaterial->m_program->getUniformLocation("projectionMatrix");
+	if (projectionMatrixLocation != -1)
+	{
+		glUniformMatrix4fv(projectionMatrixLocation, 1, GL_FALSE, glm::value_ptr(m_projectionMatrix));
+	}
+
+	glm::mat4x4 viewMatrix = Camera::current->getViewMatrix();
+	unsigned int viewMatrixLocation = m_defferedResultMaterial->m_program->getUniformLocation("viewMatrix");
+	if (viewMatrixLocation != -1)
+	{
+		glUniformMatrix4fv(viewMatrixLocation, 1, GL_FALSE, glm::value_ptr(viewMatrix));
+	}
+
+	unsigned int attributePosition = m_defferedResultMaterial->m_program->getAttributeLocation("vertexPosition");
+	unsigned int attributeUV = m_defferedResultMaterial->m_program->getAttributeLocation("vertexUV");
+	unsigned int attributeColor = m_defferedResultMaterial->m_program->getAttributeLocation("vertexColor");
+
+	glEnableVertexAttribArray(attributePosition);
+	if (attributeColor != -1)
+		glEnableVertexAttribArray(attributeColor);
+	if (attributeUV != -1)
+		glEnableVertexAttribArray(attributeUV);
+
+	glBindBuffer(GL_ARRAY_BUFFER, geometry.m_vertexBuffer->m_bufferId);
+
+	glVertexAttribPointer(attributePosition, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex2d), 0);
+	if (attributeColor != -1)
+		glVertexAttribPointer(attributeColor, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(Vertex2d), (void *)offsetof(Vertex2d, color));
+	if (attributeUV != -1)
+		glVertexAttribPointer(attributeUV, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex2d), (void *)offsetof(Vertex2d, u));
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geometry.m_indexBuffer->m_bufferId);
+
+	glDrawElements(GL_TRIANGLES, geometry.m_trianglesCount * 3, GL_UNSIGNED_SHORT, 0);
+	m_stats.m_trianglesDrawn += geometry.m_trianglesCount;
+	m_stats.m_drawCalls++;
+	m_stats.m_verticesDrawn += geometry.m_verticesCount;
+
+	glDisableVertexAttribArray(attributePosition);
+	if (attributeColor != -1)
+		glDisableVertexAttribArray(attributeColor);
+	if (attributeUV != -1)
+		glDisableVertexAttribArray(attributeUV);
+
+	glUseProgram(0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
+
+#ifdef DEBUG_VIEWPORTS
+	glReadBuffer(GL_COLOR_ATTACHMENT0);
+	glBlitFramebuffer(0, 0, 1920, 1080, 0, 0, 800, 600, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+
+	glReadBuffer(GL_COLOR_ATTACHMENT0+1);
+	glBlitFramebuffer(0, 0, 1920, 1080, 800, 0, 800+800, 600, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+
+	glReadBuffer(GL_COLOR_ATTACHMENT0 + 2);
+	glBlitFramebuffer(0, 0, 1920, 1080, 0, 600, 800, 600+600, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+#endif
+
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
 }
 
 void Renderer::postFrame()
@@ -449,6 +748,11 @@ Material * Renderer::getMaterial()
 
 void Renderer::renderGeometry(Geometry<Vertex3d> *geometry, const glm::mat4x4& matrix)
 {
+	// Render final result
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
+	glDisable(GL_BLEND);
+
 	Material* material = m_currentMaterial;
 	if (!material)
 		material = m_defaultMaterial;
@@ -506,6 +810,7 @@ void Renderer::renderGeometry(Geometry<Vertex3d> *geometry, const glm::mat4x4& m
 		if (texture0Location != -1 && material->m_texture->isLoaded())
 		{
 			glActiveTexture(GL_TEXTURE0);
+			glEnable(GL_TEXTURE_2D);
 			glBindTexture(GL_TEXTURE_2D, material->m_texture->m_textureID);		
 
 			if (material->m_texture->m_mipmaps)
@@ -642,7 +947,7 @@ void Renderer::renderGeometry(Geometry<Vertex2d> *geometry)
 	if (attributeColor != -1)
 		glVertexAttribPointer(attributeColor, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(Vertex2d), (void *)offsetof(Vertex2d, color));
 	if (attributeUV != -1)
-		glVertexAttribPointer(attributeUV, 2, GL_FLOAT, GL_FALSE, sizeof(SimpleVertex2d), (void *)offsetof(Vertex2d, u));
+		glVertexAttribPointer(attributeUV, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex2d), (void *)offsetof(Vertex2d, u));
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geometry->m_indexBuffer->m_bufferId);
 
@@ -733,6 +1038,7 @@ void Renderer::renderFont(const WDynString& string, const Rect& rect, const Colo
 
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_CULL_FACE);
+	glEnable(GL_BLEND);
 
 	Material* material = font->m_material;
 

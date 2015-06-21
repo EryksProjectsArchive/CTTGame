@@ -1,14 +1,21 @@
 #version 330 core
 
 uniform sampler2D texture0; // Base texture from material.
-out vec4 color;
 
 in vec4 vColor;
 in vec2 vUV;
-in vec3 vPos;
+in vec4 vPos;
+in vec3 vNormal;
 
-// Simple fragment shader
+
+layout(location = 0) out vec3 diffuse;
+layout(location = 1) out vec3 position;
+layout(location = 2) out vec3 normal;
+
+// Simple deffered fragment shader
 void main(void)
 {	
-	color = vColor * texture2D(texture0, vUV);
+	diffuse = vColor.rgb * texture2D(texture0, vUV).rgb;
+	position = vPos.xyz;
+	normal = vNormal.xyz;
 }

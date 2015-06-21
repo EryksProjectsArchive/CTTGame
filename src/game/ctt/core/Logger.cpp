@@ -55,7 +55,7 @@ void Logger::log(const char *tag, LogType type, const char *msg, ...)
 
 	va_list args, args2;
 
-	char message[512] = { 0 };
+	char message[2048] = { 0 };
 	wchar_t* wcMessage = 0;
 	uint32 len = 0;
 	va_start(args, msg);

@@ -50,14 +50,18 @@ Scene::~Scene()
 
 void Scene::render()
 {
-	// Separated render context for entities
-	RenderContext ctx;
+	Renderer::get().beginSceneRender();
+	{
+		// Separated render context for entities
+		RenderContext ctx;
 
-	if (m_terrain)
-		m_terrain->render(ctx);
+		if (m_terrain)
+			m_terrain->render(ctx);
 
-	for (auto entity : m_entities)
-		entity->render(ctx);
+		for (auto entity : m_entities)
+			entity->render(ctx);
+	}
+	Renderer::get().endSceneRender();
 }
 
 void Scene::addEntity(Entity *entity)

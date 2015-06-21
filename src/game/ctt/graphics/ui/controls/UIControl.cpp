@@ -82,6 +82,6 @@ namespace UI
 		for (Control *child : m_children)
 			child->render(context);
 
-		Info("control", "render %s", m_name.get());
+		//Info("control", "render %s", m_name.get());
 	}
 };

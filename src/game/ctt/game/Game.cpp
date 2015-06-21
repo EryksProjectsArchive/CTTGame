@@ -207,7 +207,7 @@ bool Game::init()
 	}
 
 	// Create scene
-	m_scene = new Scene();
+	m_scene = new Scene(); // (Scene *)0xDEADBEEF;
 	if (!m_scene)
 	{
 		Error("game", "Cannot initialize scene!");
