@@ -55,6 +55,18 @@
     <Filter Include="Source Files\math">
       <UniqueIdentifier>{f5b83e27-dcc0-484b-bd37-8bafdc344092}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\sound">
+      <UniqueIdentifier>{e564fcf7-556e-4f5b-b016-7e298fee1a8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\sound\openal">
+      <UniqueIdentifier>{5b827f8b-8ded-4e29-91b5-46088017ec21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\sound">
+      <UniqueIdentifier>{643c8107-12e4-4737-9fe9-5235aa8d0d81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\sound\openal">
+      <UniqueIdentifier>{49a0d5ac-f287-46cd-bc2c-504b319b0d7d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -95,6 +107,21 @@
     </ClCompile>
     <ClCompile Include="video\Mesh.cpp">
       <Filter>Source Files\video</Filter>
+    </ClInclude>
+    <ClCompile Include="sound\Sound.cpp">
+      <Filter>Source Files\sound</Filter>
+    </ClCompile>
+    <ClCompile Include="sound\SoundMgr.cpp">
+      <Filter>Source Files\sound</Filter>
+    </ClCompile>
+    <ClCompile Include="sound\openal\OpenALImpl.cpp">
+      <Filter>Source Files\sound\openal</Filter>
+    </ClCompile>
+    <ClCompile Include="sound\openal\OpenALSound.cpp">
+      <Filter>Source Files\sound\openal</Filter>
+    </ClCompile>
+    <ClCompile Include="sound\openal\OpenALSoundMgr.cpp">
+      <Filter>Source Files\sound\openal</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -142,6 +169,24 @@
     </ClInclude>
     <ClInclude Include="video\Mesh.h">
       <Filter>Header Files\video</Filter>
+    </ClInclude>
+    <ClInclude Include="sound\Sound.h">
+      <Filter>Header Files\sound</Filter>
+    </ClInclude>
+    <ClInclude Include="sound\SoundMgr.h">
+      <Filter>Header Files\sound</Filter>
+    </ClInclude>
+    <ClInclude Include="sound\WaveFile.h">
+      <Filter>Header Files\sound</Filter>
+    </ClInclude>
+    <ClInclude Include="sound\openal\OpenALImpl.h">
+      <Filter>Header Files\sound\openal</Filter>
+    </ClInclude>
+    <ClInclude Include="sound\openal\OpenALSound.h">
+      <Filter>Header Files\sound\openal</Filter>
+    </ClInclude>
+    <ClInclude Include="sound\openal\OpenALSoundMgr.h">
+      <Filter>Header Files\sound\openal</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
