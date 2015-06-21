@@ -12,7 +12,7 @@
 
 #include "ExceptionHandler.h"
 
-#ifdef _WIN32
+#if defined _WIN32 && !defined(_WIN64)
 #include <Windows.h>
 #include <ShlObj.h>
 #include <stdio.h>

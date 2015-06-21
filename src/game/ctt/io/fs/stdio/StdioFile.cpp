@@ -1,8 +1,8 @@
 //////////////////////////////////////////////
 //
-//		   City Transport Tycoon
-//	   Copyright (C) Black Ice Mountains
-//		 	All rights reserved
+//		City Transport Tycoon
+//	Copyright (C) Black Ice Mountains
+//		All rights reserved
 //
 // File		: io/fs/stdio/StdioFile.cpp
 // Author	: Eryk Dwornicki
@@ -65,16 +65,18 @@ namespace Stdio
 	size_t File::write(const void *data, size_t count, size_t size)
 	{
 		if (m_isLoaded)
+		{
 			return fwrite(data, size, count, m_filePtr);
-
+		}
 		return -1;
 	}
 
 	size_t File::read(void * data, size_t count, size_t size)
 	{
 		if (m_isLoaded)
+		{
 			return fread(data, size, count, m_filePtr);
-
+		}
 		return -1;
 	}
 
@@ -127,6 +129,8 @@ namespace Stdio
 	void File::rewind()
 	{
 		if (m_isLoaded)
+		{
 			::rewind(m_filePtr);
+		}
 	}
 };

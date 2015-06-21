@@ -261,15 +261,6 @@
     <ClCompile Include="core\Logger.cpp">
       <Filter>Source Files\core</Filter>
     </ClCompile>
-    <ClCompile Include="math\Vector.cpp">
-      <Filter>Source Files\math</Filter>
-    </ClCompile>
-    <ClCompile Include="video\Model.cpp">
-      <Filter>Source Files\video</Filter>
-    </ClCompile>
-    <ClCompile Include="video\Mesh.cpp">
-      <Filter>Source Files\video</Filter>
-    </ClCompile>
     <ClCompile Include="sound\Sound.cpp">
       <Filter>Source Files\sound</Filter>
     </ClCompile>
@@ -479,9 +470,6 @@
     </ClCompile>
     <ClCompile Include="graphics\CameraManager.cpp">
       <Filter>Source Files\graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="game\environment\Sky.cpp">
-      <Filter>Source Files\game\environment</Filter>
     </ClCompile>
     <ClCompile Include="graphics\ui\UISkin.cpp">
       <Filter>Source Files\graphics\ui</Filter>
@@ -808,9 +796,6 @@
     </ClInclude>
     <ClInclude Include="graphics\CameraManager.h">
       <Filter>Header Files\graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="game\environment\Sky.h">
-      <Filter>Header Files\game\environment</Filter>
     </ClInclude>
     <ClInclude Include="graphics\ui\UISkin.h">
       <Filter>Header Files\graphics\ui</Filter>
