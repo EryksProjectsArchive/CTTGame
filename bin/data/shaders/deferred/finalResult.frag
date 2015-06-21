@@ -149,8 +149,8 @@ void main(void)
 		float fogCoord = abs(worldPositionScreenSpace.z);
 
 		vec4 fogColor = vec4(5.0/255.0, 108.0/255.0, 169.0/255.0, 1);
-		float start = 550.0;
-		float end = 850.0;
+		float start = 720.0;
+		float end = 1100.0;
 		float n = (end - fogCoord) / (end - start); // get interpolation factor
 		float factor = 1.0 - clamp(n, 0.0, 1.0);
 		if(factor < 0.8)
