@@ -16,8 +16,6 @@
 #include <graphics/Geometry.h>
 #include <graphics/Material.h>
 
-#include <math/Matrix.h>
-
 #include <core/List.h>
 
 class RenderTask
@@ -25,11 +23,10 @@ class RenderTask
 public:
 	Geometry * m_geometry;
 	Material * m_material;
-	Matrix4x4 * m_matrix;
+	Matrix4x4 m_matrix;
 
 	RenderTask()
 	{
-		m_matrix = 0;
 		m_geometry = 0;
 		m_material = 0;
 	}

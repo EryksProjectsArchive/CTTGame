@@ -36,6 +36,8 @@
 #include <graphics/VertexShader.h>
 #include <graphics/ShaderProgram.h>
 
+#include <game/scene/entities/Entity.h>
+
 Model * model = 0;
 Game::Game()
 	: m_isRunning(false), m_isInitialized(false), m_fileSystem(0), m_renderer(0), m_window(0), m_soundMgr(0), m_scene(0)
@@ -134,9 +136,9 @@ bool Game::init()
 	// Create scene
 	m_scene = new Scene();
 
-	/*Entity *entity = new Entity("building");
+	Entity *entity = new Entity("building");
 	
-	m_scene->addEntity(entity);*/
+	m_scene->addEntity(entity);
 
 	/*ShaderProgram *shaderProgram = new ShaderProgram();
 

@@ -87,7 +87,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>./;../../libs/OpenAL1.1/include;../../libs/SDL2-2.0.3/include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./;../../libs/OpenAL1.1/include;../../libs/SDL2-2.0.3/include;../../libs/glm-0.9.5.4/glm/</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4996;</DisableSpecificWarnings>
       <PreprocessorDefinitions>DEBUG;</PreprocessorDefinitions>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
@@ -123,10 +123,10 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>./;../../libs/OpenAL1.1/include;../../libs/SDL2-2.0.3/include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./;../../libs/OpenAL1.1/include;../../libs/SDL2-2.0.3/include;../../libs/glm-0.9.5.4/glm/;</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4996;</DisableSpecificWarnings>
       <DisableLanguageExtensions>false</DisableLanguageExtensions>
-      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <PreprocessorDefinitions>
@@ -188,7 +188,6 @@
     <ClCompile Include="graphics\Window.cpp" />
     <ClCompile Include="io\FileSystem.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="math\Vector.cpp" />
     <ClCompile Include="os\DynamicLibrary.cpp" />
     <ClCompile Include="os\OS.cpp" />
     <ClCompile Include="os\win32\Win32DynamicLibrary.cpp" />
@@ -233,10 +232,6 @@
     <ClInclude Include="io\CachedItem.h" />
     <ClInclude Include="io\File.h" />
     <ClInclude Include="io\FileSystem.h" />
-    <ClInclude Include="math\EulerAngles.h" />
-    <ClInclude Include="math\Matrix.h" />
-    <ClInclude Include="math\Quaternion.h" />
-    <ClInclude Include="math\Vector.h" />
     <ClInclude Include="os\DynamicLibrary.h" />
     <ClInclude Include="os\OS.h" />
     <ClInclude Include="Prerequisites.h" />

@@ -16,9 +16,12 @@
 #include "Material.h"
 #include "Geometry.h"
 #include "ModelFormat.h"
+#include <core/Logger.h>
 
 Mesh::Mesh(mesh * meshData)
-	: m_geometry(0), m_meshName(0), m_material(0)
+	: m_geometry(0), m_meshName(0), m_material(0),
+	  m_position(Vector3(meshData->worldPlacement.position.x, meshData->worldPlacement.position.y, meshData->worldPlacement.position.z)),
+	  m_rotation(Quaternion(meshData->worldPlacement.rotation.w, meshData->worldPlacement.rotation.x, meshData->worldPlacement.rotation.y, meshData->worldPlacement.rotation.z))
 {
 	m_geometry = new Geometry();
 	if (m_geometry)
@@ -30,8 +33,6 @@ Mesh::Mesh(mesh * meshData)
 
 	//m_material = MaterialLib::FindByName(meshData->material.value);
 
-	memcpy(&m_position.x, &meshData->worldPlacement.position.x, sizeof(Vector3));
-	memcpy(&m_rotation.w, &meshData->worldPlacement.rotation.w, sizeof(Quaternion));
 }
 
 Mesh::~Mesh()
@@ -58,9 +59,9 @@ void Mesh::render(RenderContext& context)
 {	
 	RenderTask * renderingTask = context.newTask();
 	Matrix4x4 translationMatrix;
-	translationMatrix.translate(m_position);	
+	glm::translate(translationMatrix, m_position);
 
 	renderingTask->m_geometry = m_geometry;
 	renderingTask->m_material = m_material;
-	renderingTask->m_matrix = &(translationMatrix * m_rotation.toMatrix4x4());
+	renderingTask->m_matrix = (translationMatrix * glm::mat4_cast(m_rotation));
 }

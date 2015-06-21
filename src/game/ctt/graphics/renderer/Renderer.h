@@ -40,7 +40,7 @@ public:
 	BufferBase * createBuffer(BufferType::Type type);
 
 	void setMaterial(Material * material);
-	void renderGeometry(Geometry *geometry, Matrix4x4 * matrix);;
+	void renderGeometry(Geometry *geometry, glm::mat4x4 * matrix);
 
 	static Renderer& get();
 
@@ -146,4 +146,5 @@ public:
 	static PFNGLVERTEXATTRIB4UIVPROC glVertexAttrib4uiv;
 	static PFNGLVERTEXATTRIB4USVPROC glVertexAttrib4usv;
 	static PFNGLVERTEXATTRIBPOINTERPROC glVertexAttribPointer;
+	static PFNGLGENVERTEXARRAYSPROC glGenVertexArrays;
 };

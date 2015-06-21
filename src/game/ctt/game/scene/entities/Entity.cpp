@@ -18,7 +18,7 @@
 
 Entity::Entity(String<32> name)
 	: m_name(name)
-{	
+{
 	JenkinsHash hash;
 	m_hashedName = hash.encode(m_name, m_name.getLength());
 

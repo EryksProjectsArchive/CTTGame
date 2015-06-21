@@ -12,6 +12,7 @@
 #include "renderer/Renderer.h"
 
 #include "BufferBase.h"
+#include <core/Logger.h>
 
 BufferBase::BufferBase()
 	: m_isDynamic(false), m_bufferId(0), m_size(-1)

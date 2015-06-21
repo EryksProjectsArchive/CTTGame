@@ -13,6 +13,8 @@
 #include "renderer/Renderer.h"
 #include "Shader.h"
 
+#include <core/Logger.h>
+
 ShaderProgram::ShaderProgram()
 {
 	m_programId = Renderer::glCreateProgram();
@@ -32,16 +34,45 @@ ShaderProgram::~ShaderProgram()
 
 void ShaderProgram::attachShader(Shader * shader)
 {
-	Renderer::glAttachShader(m_programId, shader->m_shaderId);
+	m_shaders.pushBack(shader);	
+}
+
+void ShaderProgram::link()
+{
+	for (auto shader : m_shaders)
+	{
+		Renderer::glAttachShader(m_programId, shader->m_shaderId);
+	}
+
+	Renderer::glLinkProgram(m_programId);
+
+	GLint success = 0;
+	Renderer::glGetProgramiv(m_programId, GL_LINK_STATUS, &success);
+	if (success == GL_FALSE)
+	{
+		GLint maxLength = 0;
+		Renderer::glGetProgramiv(m_programId, GL_INFO_LOG_LENGTH, &maxLength);
+
+		//The maxLength includes the NULL character
+		char *errorLog = new char[maxLength + 1];
+
+		Renderer::glGetProgramInfoLog(m_programId, maxLength, &maxLength, errorLog);
+
+		Error("program", "Link error: %s", errorLog);
+
+		delete[]errorLog;
+	}
 }
 
 unsigned int ShaderProgram::getUniformLocation(const char *name)
 {
+	return Renderer::glGetUniformLocation(m_programId, name);
+	/*
 	if (m_uniforms)
 	{
 		for (unsigned int i = 0; i < m_uniformsCount; ++i)
 		{
-			if (strcpy(m_uniforms[i].name, name))
+			if (!strcmp(m_uniforms[i].name, name))
 			{
 				return m_uniforms[i].location;
 			}
@@ -67,5 +98,5 @@ unsigned int ShaderProgram::getUniformLocation(const char *name)
 		m_uniforms[m_uniformsCount - 1].location = location;
 		return location;
 	}
-	return -1;
+	return -1;*/
 }

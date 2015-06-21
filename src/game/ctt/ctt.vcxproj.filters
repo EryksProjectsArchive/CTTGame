@@ -212,18 +212,6 @@
     <ClInclude Include="core\Logger.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
-    <ClInclude Include="math\Matrix.h">
-      <Filter>Header Files\math</Filter>
-    </ClInclude>
-    <ClInclude Include="math\Quaternion.h">
-      <Filter>Header Files\math</Filter>
-    </ClInclude>
-    <ClInclude Include="math\Vector.h">
-      <Filter>Header Files\math</Filter>
-    </ClInclude>
-    <ClInclude Include="math\EulerAngles.h">
-      <Filter>Header Files\math</Filter>
-    </ClInclude>
     <ClInclude Include="sound\Sound.h">
       <Filter>Header Files\sound</Filter>
     </ClInclude>

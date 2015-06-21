@@ -56,7 +56,7 @@ void Geometry::fillData(void *vertices, unsigned short verticesCount, void *tria
 
 	if (m_indexBuffer)
 	{
-		m_indexBuffer->allocate(sizeof(unsigned int) * (trianglesCount * 3), false);
+		m_indexBuffer->allocate(sizeof(unsigned short) * (trianglesCount * 3), false);
 		m_indexBuffer->fillData(triangles);
 	}
 }

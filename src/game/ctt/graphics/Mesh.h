@@ -13,9 +13,6 @@
 
 #include <Prerequisites.h>
 
-#include <math/Vector.h>
-#include <math/Quaternion.h>
-
 #include "ModelFormat.h"
 
 class Mesh

@@ -18,6 +18,12 @@
 #define new new(_NORMAL_BLOCK, __FILE__, __LINE__)
 #endif
 
+// GLM
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/quaternion.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/glm.hpp>
+
 // Versioning
 #define GAME_NAME "City Transport Tycoon"
 #define GAME_VERSION_MAJOR 1
@@ -117,9 +123,10 @@ class Mesh;
 struct Vertex3d;
 
 // Math
-class EulerAngles;
-class Matrix4x4;
-class Quaternion;
-class Vector3;
+typedef glm::quat Quaternion;
+typedef glm::mat4x4 Matrix4x4;
+typedef glm::vec2 Vector2;
+typedef glm::vec3 Vector3;
+typedef glm::vec4 Vector4;
 
 // EOF
