@@ -51,30 +51,29 @@ void FreeCamera::onMouseMove(int32 x, int32 y, int32 relx, int32 rely)
 	updateMatrix();
 }
 
-void FreeCamera::onKeyEvent(uint32 key, bool state)
+void FreeCamera::onKeyEvent(Key::Type key, bool state)
 {
-	if (key == 'w')
+	if (key == Key::SCANCODE_W)
 		m_keys[0] = state;
 
-	if (key == 's')
+	if (key == Key::SCANCODE_S)
 		m_keys[1] = state;
 
-	if (key == 'a')
+	if (key == Key::SCANCODE_A)
 		m_keys[2] = state;
 
-	if (key == 'd')
+	if (key == Key::SCANCODE_D)
 		m_keys[3] = state;
 
-	if (key == 'e')
+	if (key == Key::SCANCODE_E)
 		m_keys[4] = state;
 
-	if (key == 'q')
+	if (key == Key::SCANCODE_Q)
 		m_keys[5] = state;
-
-
-	if (key == 0x400000E1) // shift
+	
+	if (key == Key::SCANCODE_LSHIFT) // shift
 		m_speed = state ? 100.0f : 25.0f;
-	else if (key == 0x400000E2) // alt
+	else if (key == Key::SCANCODE_LALT) // alt
 		m_speed = state ? 5.0f : 25.0f;	
 }
 

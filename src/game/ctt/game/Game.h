@@ -42,7 +42,7 @@ public:
 
 	bool pulse();
 
-	void onKeyEvent(uint32 key, bool state) override;
+	void onKeyEvent(Key::Type key, bool state) override;
 
 	PhysicsWorld * getPhysicsWorld();
 

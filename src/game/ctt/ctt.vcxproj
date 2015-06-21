@@ -267,6 +267,7 @@
     <ClInclude Include="graphics\Window.h" />
     <ClInclude Include="input\Controllable.h" />
     <ClInclude Include="input\Input.h" />
+    <ClInclude Include="input\KeyEnum.h" />
     <ClInclude Include="io\CachedItem.h" />
     <ClInclude Include="io\Config.h" />
     <ClInclude Include="io\fs\File.h" />

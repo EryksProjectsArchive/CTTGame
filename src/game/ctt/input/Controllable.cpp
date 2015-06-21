@@ -32,3 +32,8 @@ void Controllable::unregisterInput()
 {
 	Input::get()->removeControllable(this);
 }
+
+Input * Controllable::input()
+{
+	return Input::get();
+}

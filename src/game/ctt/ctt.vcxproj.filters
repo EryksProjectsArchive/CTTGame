@@ -599,6 +599,9 @@
     <ClInclude Include="resources\images\png\PNGImageLoader.h">
       <Filter>Header Files\resources\images\png</Filter>
     </ClInclude>
+    <ClInclude Include="input\KeyEnum.h">
+      <Filter>Header Files\input</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="todo.txt">

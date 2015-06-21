@@ -31,7 +31,7 @@ public:
 	~FreeCamera();
 
 	void onMouseMove(int32 x, int32 y, int32 relx, int32 rely) override;
-	void onKeyEvent(uint32 key, bool state) override;
+	void onKeyEvent(Key::Type key, bool state) override;
 
 	void update(float dt);
 };

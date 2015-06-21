@@ -54,7 +54,7 @@ bool Window::processMessages()
 		case SDL_KEYDOWN:
 		case SDL_KEYUP:
 			if (!event.key.repeat)
-				Input::get()->onKeyEvent(event.key.keysym.sym, event.type == SDL_KEYDOWN);
+				Input::get()->onKeyEvent((Key::Type)event.key.keysym.scancode, event.type == SDL_KEYDOWN);
 			break;
 		case SDL_MOUSEWHEEL:
 			Input::get()->onMouseScroll(event.wheel.x, event.wheel.y);

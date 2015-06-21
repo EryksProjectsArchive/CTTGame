@@ -309,14 +309,14 @@ bool Game::pulse()
 	return m_isRunning;
 }
 
-void Game::onKeyEvent(uint32 key, bool state)
+void Game::onKeyEvent(Key::Type key, bool state)
 {
 	static uint64 press = 0;
-	if (key == 0x1B)	
+	if (key == Key::SCANCODE_ESCAPE)	
 		m_isRunning = false;	
 
 	// Shooting
-	if (key == ' ')
+	if (key == Key::SCANCODE_SPACE)
 	{
 		if (state)
 		{
