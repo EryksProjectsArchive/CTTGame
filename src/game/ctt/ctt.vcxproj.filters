@@ -199,6 +199,12 @@
     <Filter Include="Header Files\core\console">
       <UniqueIdentifier>{9c7bdf84-72df-4b43-9f0c-0009ee529f29}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\resources\sounds\ogg">
+      <UniqueIdentifier>{4233acc5-4a3f-48bd-af2b-974b34c56a52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\resources\sounds\ogg">
+      <UniqueIdentifier>{993b3956-b610-43fb-9589-9cfb90b112d9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -380,6 +386,9 @@
     </ClCompile>
     <ClCompile Include="game\environment\Terrain.cpp">
       <Filter>Source Files\game\environment</Filter>
+    </ClCompile>
+    <ClCompile Include="resources\sounds\ogg\OGGsoundLoader.cpp">
+      <Filter>Source Files\resources\sounds\ogg</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -625,6 +634,9 @@
     </ClInclude>
     <ClInclude Include="game\environment\Terrain.h">
       <Filter>Header Files\game\environment</Filter>
+    </ClInclude>
+    <ClInclude Include="resources\sounds\ogg\OGGsoundLoader.h">
+      <Filter>Header Files\resources\sounds\ogg</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

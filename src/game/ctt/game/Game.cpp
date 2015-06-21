@@ -38,6 +38,7 @@
 #include <resources/images/dds/DDSImageLoader.h>
 #include <resources/SoundLoader.h>
 #include <resources/sounds/wav/WAVsoundLoader.h>
+#include <resources/sounds/ogg/OGGsoundLoader.h>
 
 #include <physics/PhysicsWorld.h>
 
@@ -160,6 +161,7 @@ bool Game::init()
 
 	// create sound loader
 	SoundLoader::get()->registerLoader(new WAV::SoundLoader());
+	SoundLoader::get()->registerLoader(new OGG::SoundLoader());
 
 	// Create game window
 	m_window = new Window();

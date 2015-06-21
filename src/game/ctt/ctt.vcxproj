@@ -87,7 +87,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>./;../../libs/OpenAL1.1/include/;../../libs/SDL2-2.0.3/include/;../../libs/glm-0.9.5.4/glm/;../../libs/jsoncpp/include/;../../libs/freetype-2.5.3/include/;../../libs/bullet/src/;../../libs/jpeg-9a/;../../libs/lpng1612/;../../libs/zlib-1.2.8/</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./;../../libs/OpenAL1.1/include/;../../libs/SDL2-2.0.3/include/;../../libs/glm-0.9.5.4/glm/;../../libs/jsoncpp/include/;../../libs/freetype-2.5.3/include/;../../libs/bullet/src/;../../libs/jpeg-9a/;../../libs/lpng1612/;../../libs/zlib-1.2.8/;../../libs/libogg-1.3.2/include/;../../libs/libvorbis-1.3.4/include/</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4996;</DisableSpecificWarnings>
       <PreprocessorDefinitions>DEBUG;</PreprocessorDefinitions>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
@@ -123,7 +123,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <SDLCheck>true</SDLCheck>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>./;../../libs/OpenAL1.1/include/;../../libs/SDL2-2.0.3/include/;../../libs/glm-0.9.5.4/glm/;../../libs/jsoncpp/include/;../../libs/freetype-2.5.3/include/;../../libs/bullet/src/;../../libs/jpeg-9a/;../../libs/lpng1612/;../../libs/zlib-1.2.8/</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./;../../libs/OpenAL1.1/include/;../../libs/SDL2-2.0.3/include/;../../libs/glm-0.9.5.4/glm/;../../libs/jsoncpp/include/;../../libs/freetype-2.5.3/include/;../../libs/bullet/src/;../../libs/jpeg-9a/;../../libs/lpng1612/;../../libs/zlib-1.2.8/;../../libs/libogg-1.3.2/include/;../../libs/libvorbis-1.3.4/include/</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4996;</DisableSpecificWarnings>
       <DisableLanguageExtensions>false</DisableLanguageExtensions>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
@@ -218,6 +218,7 @@
     <ClCompile Include="resources\images\png\PNGImageLoader.cpp" />
     <ClCompile Include="resources\Resource.cpp" />
     <ClCompile Include="resources\SoundLoader.cpp" />
+    <ClCompile Include="resources\sounds\ogg\OGGsoundLoader.cpp" />
     <ClCompile Include="resources\sounds\wav\WAVsoundLoader.cpp" />
     <ClCompile Include="sound\openal\OpenALImpl.cpp" />
     <ClCompile Include="sound\Sound.cpp" />
@@ -300,6 +301,7 @@
     <ClInclude Include="resources\Resource.h" />
     <ClInclude Include="resources\ResourceLib.h" />
     <ClInclude Include="resources\SoundLoader.h" />
+    <ClInclude Include="resources\sounds\ogg\OGGsoundLoader.h" />
     <ClInclude Include="resources\sounds\wav\WAVsoundLoader.h" />
     <ClInclude Include="sound\openal\OpenALImpl.h" />
     <ClInclude Include="sound\Sound.h" />
@@ -327,6 +329,15 @@
     </ProjectReference>
     <ProjectReference Include="..\..\libs\jsoncpp\jsoncpp.vcxproj">
       <Project>{92c379eb-18c9-41b6-9f8c-11d9f6dc52f2}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\libs\libogg-1.3.2\win32\VS2010\libogg_static.vcxproj">
+      <Project>{15cbfeff-7965-41f5-b4e2-21e8795c9159}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\libs\libvorbis-1.3.4\win32\VS2010\libvorbisfile\libvorbisfile_static.vcxproj">
+      <Project>{cebde98b-a6aa-46e6-bc79-faaf823db9ec}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\libs\libvorbis-1.3.4\win32\VS2010\libvorbis\libvorbis_static.vcxproj">
+      <Project>{3a214e06-b95e-4d61-a291-1f8df2ec10fd}</Project>
     </ProjectReference>
     <ProjectReference Include="..\..\libs\lpng1612\projects\vstudio\libpng\libpng.vcxproj">
       <Project>{d6973076-9317-4ef2-a0b8-b7a18ac0713e}</Project>
