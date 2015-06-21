@@ -409,7 +409,7 @@ void Game::spawnBusStop()
 
 void Game::update(double deltaTime)
 {
-	g_lastUpdateProfiler.start();
+	PROFILER(g_lastUpdateProfiler);
 	Camera * currentCamera = CameraManager::get()->getCurrent();
 
 	if (currentCamera)
@@ -420,7 +420,6 @@ void Game::update(double deltaTime)
 	m_physicsWorld->pulse(float(deltaTime));
 
 	Environment::get()->pulse();
-	g_lastUpdateProfiler.end();
 }
 
 void Game::render()
@@ -429,108 +428,108 @@ void Game::render()
 	{
 		m_renderer->preFrame();
 
-		g_sceneDrawProfiler.start();
-
-		// Shadows
-		m_renderer->beginShadowPass();
-
-		if (m_scene)
-			m_scene->render();
-
-		m_renderer->endShadowPass();
-
-		// Deferred
-		m_renderer->beginDeferredPass();
-
-		if (m_scene)
-			m_scene->render();
-
-		if (m_currentPickedEntity)
 		{
-			Matrix4x4 modelMatrix;
-			modelMatrix = glm::translate(modelMatrix, m_currentPickedEntity->getPosition());
+			PROFILER(g_sceneDrawProfiler);
 
-			switch (m_activeMoveAxis)
+			// Shadows
+			m_renderer->beginShadowPass();
+
+			if (m_scene)
+				m_scene->render();
+
+			m_renderer->endShadowPass();
+
+			// Deferred
+			m_renderer->beginDeferredPass();
+
+			if (m_scene)
+				m_scene->render();
+
+			if (m_currentPickedEntity)
 			{
-			case ActiveMoveAxis::X:
-				{
-					m_renderer->drawLine3D(Vector3(-100,0,0), Vector3(100, 0, 0), Color(1, 0, 0, 1), modelMatrix);
-				} break;
-			case ActiveMoveAxis::Y:
-				{
-					m_renderer->drawLine3D(Vector3(0,-100,0), Vector3(0, 100, 0), Color(0, 1, 0, 1), modelMatrix);
-				} break;
-			case ActiveMoveAxis::Z:
-				{
-					m_renderer->drawLine3D(Vector3(0, 0, -100), Vector3(0, 0, 100), Color(0, 0, 1, 1), modelMatrix);
-				} break;
-			default:
-				{
-					m_renderer->drawLine3D(Vector3(), Vector3(3, 0, 0), Color(1, 0, 0, 1), modelMatrix);
-					m_renderer->drawLine3D(Vector3(), Vector3(0, 3, 0), Color(0, 1, 0, 1), modelMatrix);
-					m_renderer->drawLine3D(Vector3(), Vector3(0, 0, 3), Color(0, 0, 1, 1), modelMatrix);
-				} break;
-			};
-		}
+				Matrix4x4 modelMatrix;
+				modelMatrix = glm::translate(modelMatrix, m_currentPickedEntity->getPosition());
 
-		m_renderer->endDeferredPass();
-
-		g_sceneDrawProfiler.end();
-		g_uiDrawProfiler.start();
-
-		if (gFont)
-		{
-			if (Config::get()["engine"]["fpsCounter"].getBool(false))
-			{
-				float fps = Timer::getFPS();
-				widechar color[10] = { 0 };
-
-				if (fps < 25.f)
+				switch (m_activeMoveAxis)
 				{
-					wcscpy(color, L"#FF0000");
-				}
-				else if (fps >= 25.f && fps < 60)
-				{
-					wcscpy(color, L"#FF8000");
-				}
-				else
-				{
-					wcscpy(color, L"#00FF00");
-				}
-
-				gFont->render(WString<256>(L"#FFFFFFFPS: %s%.1f", color, fps), Rect(1, 1, 10, 10), Color(0.0f, 0.0f, 0.0f, 0.6f), Font::DrawFlags::NoClip | Font::DrawFlags::DisableColorCodding);
-				gFont->render(WString<256>(L"#FFFFFFFPS: %s%.1f", color, fps), Rect(0, 0, 10, 10), Color(1.0f, 1.0f, 1.0f, 1.0f), Font::DrawFlags::NoClip);
+					case ActiveMoveAxis::X:
+					{
+						m_renderer->drawLine3D(Vector3(-100, 0, 0), Vector3(100, 0, 0), Color(1, 0, 0, 1), modelMatrix);
+					} break;
+				case ActiveMoveAxis::Y:
+					{
+						m_renderer->drawLine3D(Vector3(0, -100, 0), Vector3(0, 100, 0), Color(0, 1, 0, 1), modelMatrix);
+					} break;
+				case ActiveMoveAxis::Z:
+					{
+						m_renderer->drawLine3D(Vector3(0, 0, -100), Vector3(0, 0, 100), Color(0, 0, 1, 1), modelMatrix);
+					} break;
+				default:
+					{
+						m_renderer->drawLine3D(Vector3(), Vector3(3, 0, 0), Color(1, 0, 0, 1), modelMatrix);
+						m_renderer->drawLine3D(Vector3(), Vector3(0, 3, 0), Color(0, 1, 0, 1), modelMatrix);
+						m_renderer->drawLine3D(Vector3(), Vector3(0, 0, 3), Color(0, 0, 1, 1), modelMatrix);
+					} break;
+				};
 			}
 
-			/*
-			glm::vec3 labelPos = glm::vec3(0, 2, 0);
-			glm::vec3 pos = glm::project(labelPos, glm::mat4()* Camera::current->getViewMatrix(), m_renderer->getProjectionMatrix(), m_renderer->getViewportAsVector());
-			pos.y = m_renderer->getViewportAsVector().w - pos.y;
+			m_renderer->endDeferredPass();
+		}
 
-			// dot (viewDirection, cameraToPointDirection)
-			float dot = glm::dot(glm::normalize(Camera::current->getTarget() - Camera::current->getPosition()), glm::normalize(glm::vec3(0, 5, 0) - Camera::current->getPosition()));
-			if (dot > 0) // Make sure if we are looking at that point.
+		{
+			PROFILER(g_uiDrawProfiler);
+			if (gFont)
 			{
+				if (Config::get()["engine"]["fpsCounter"].getBool(false))
+				{
+					float fps = Timer::getFPS();
+					widechar color[10] = { 0 };
+
+					if (fps < 25.f)
+					{
+						wcscpy(color, L"#FF0000");
+					}
+					else if (fps >= 25.f && fps < 60)
+					{
+						wcscpy(color, L"#FF8000");
+					}
+					else
+					{
+						wcscpy(color, L"#00FF00");
+					}
+
+					gFont->render(WString<256>(L"#FFFFFFFPS: %s%.1f", color, fps), Rect(1, 1, 10, 10), Color(0.0f, 0.0f, 0.0f, 0.6f), Font::DrawFlags::NoClip | Font::DrawFlags::DisableColorCodding);
+					gFont->render(WString<256>(L"#FFFFFFFPS: %s%.1f", color, fps), Rect(0, 0, 10, 10), Color(1.0f, 1.0f, 1.0f, 1.0f), Font::DrawFlags::NoClip);
+				}
+
+				/*
+				glm::vec3 labelPos = glm::vec3(0, 2, 0);
+				glm::vec3 pos = glm::project(labelPos, glm::mat4()* Camera::current->getViewMatrix(), m_renderer->getProjectionMatrix(), m_renderer->getViewportAsVector());
+				pos.y = m_renderer->getViewportAsVector().w - pos.y;
+
+				// dot (viewDirection, cameraToPointDirection)
+				float dot = glm::dot(glm::normalize(Camera::current->getTarget() - Camera::current->getPosition()), glm::normalize(glm::vec3(0, 5, 0) - Camera::current->getPosition()));
+				if (dot > 0) // Make sure if we are looking at that point.
+				{
 				gFont->render(L"#FF0000City #00FF00Transport #0000FFTycoon", Rect(pos.x + 1, pos.y + 1, 10, 10), Color(0.0f, 0.0f, 0.0f, 0.6f), Font::DrawFlags::NoClip | Font::DrawFlags::DisableColorCodding, Vector2(1, 1));
 				gFont->render(L"#FF0000City #00FF00Transport #0000FFTycoon", Rect(pos.x, pos.y, 10, 10), Color(1.0f, 1.0f, 1.0f, 1.0f), Font::DrawFlags::NoClip, Vector2(1,1));
+				}
+				*/
 			}
-			*/	
-		}
 
-		// Draw UI
-		if (m_ui)
-		{
-			RenderContext context;
-			m_ui->render(context);
-		}
+			// Draw UI
+			if (m_ui)
+			{
+				RenderContext context;
+				m_ui->render(context);
+			}
 
-		// Draw console
-		if (m_console)
-		{
-			m_console->render(m_renderer);
+			// Draw console
+			if (m_console)
+			{
+				m_console->render(m_renderer);
+			}
 		}
-
-		g_uiDrawProfiler.end();
 
 		RenderStatistics stats = m_renderer->stats();
 		m_profilerInfo->setText(WString<256>(L"Profiler(s):\nScene draw: %.02fms\nUI Draw: %.02fms\nPhysics update: %.02fms\nFrame: %.02fms\nLast update: %.02fms\nPhysical ticks: %d\nFPS: %.0f\nRenderer: DC: %d VC: %llu", 

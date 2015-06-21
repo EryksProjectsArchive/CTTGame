@@ -14,12 +14,16 @@
 #include <os/OS.h>
 #include <core/Timer.h>
 
+#include "core/Logger.h"
+
 #include <core/performance/Profiler.h>
 
 Profiler g_frameProfiler;
 Profiler g_physicsUpdateProfiler;
 
-Application::Application() : m_isInitialized(false), m_isRunning(false)
+Application::Application()
+	: m_isInitialized(false)
+	, m_isRunning(false)
 {
 
 }
@@ -32,42 +36,51 @@ Application::~Application()
 bool Application::init()
 {
 	if (m_isInitialized)
+	{
 		return false;
+	}
 
 	m_time = double(OS::getMicrosecondsCount() / 1000000);
 	m_accumulator = 0.0;
-	m_deltaTime = 0.01;
+	m_deltaTime = 0.001;
 	return true;
 }
 
 bool Application::pulse()
 {
-	g_frameProfiler.start();
+	PROFILER(g_frameProfiler);
 	Timer::frameStart();
 
 	updateWindow();
 
-	g_physicsUpdateProfiler.start();
-	double time = double(OS::getMicrosecondsCount() / double(1000 * 1000));
-	double frameTime = time - m_time;
-	if (frameTime > 0.25)
-		frameTime = 0.25;
-	m_time = time;
-
-	m_accumulator += frameTime;
-	m_physicsTicks = 0;
-	while (m_accumulator >= m_deltaTime)
+	bool shouldRender = false;
 	{
-		update(m_deltaTime);
-		m_accumulator -= m_deltaTime;
-		m_physicsTicks++;
-	}
-	g_physicsUpdateProfiler.end();
+		PROFILER(g_physicsUpdateProfiler);
+		double time = double(OS::getMicrosecondsCount() / double(1000 * 1000));
+		double frameTime = time - m_time;
+		if (frameTime > 1.0)
+		{
+			frameTime = 1.0;
+		}
+		m_time = time;
 
-	render();
+		m_accumulator += frameTime;
+		m_physicsTicks = 0;
+		while (m_accumulator >= m_deltaTime)
+		{
+			update(m_deltaTime);
+			m_accumulator -= m_deltaTime;
+			m_physicsTicks++;
+			shouldRender = true;
+		}
+	}
+
+	if (shouldRender)
+	{
+		render();
+	}
 
 	Timer::frameEnd();
-	g_frameProfiler.end();
 	return m_isRunning;
 }
 
