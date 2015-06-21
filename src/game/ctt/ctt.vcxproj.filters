@@ -269,7 +269,7 @@
     </ClCompile>
     <ClCompile Include="video\Mesh.cpp">
       <Filter>Source Files\video</Filter>
-    </ClInclude>
+    </ClCompile>
     <ClCompile Include="sound\Sound.cpp">
       <Filter>Source Files\sound</Filter>
     </ClCompile>
