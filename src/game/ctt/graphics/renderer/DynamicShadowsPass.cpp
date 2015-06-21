@@ -102,10 +102,10 @@ void DynamicShadowsPass::begin()
 	// Compute shadow View Projection matrix
 	
 	Vector3 cam = CameraManager::get()->getCurrent()->getPosition();
-	Vector3 lightPosition = cam + Vector3(20, 25, 0);
-	Vector3 lightDirection = cam - Vector3(40, 50, 0);
+	Vector3 lightPosition = cam + Vector3(20, 50, 0);
+	Vector3 lightDirection = cam /*- Vector3(40, 50, 0)*/;
 
-	Matrix4x4 projection = glm::ortho<float>(-100, 100, -100, 100, 0.1f, 1000.0f);
+	Matrix4x4 projection = glm::ortho<float>(-200, 200, -200, 200, -1.0f, 1100.0f);
 	Matrix4x4 view = glm::lookAt(lightPosition, lightDirection, glm::vec3(0, 1, 0));
 	m_viewProjectionMatrix = projection * view;
 
@@ -132,8 +132,6 @@ void DynamicShadowsPass::end()
 	glPopAttrib();
 
 	glCullFace(GL_BACK);
-
-
 	m_active = false;
 }
 

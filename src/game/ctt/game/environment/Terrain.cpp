@@ -25,7 +25,7 @@
 
 Terrain::Terrain(uint32 width, uint32 height)
 {
-	m_nodeSize = 600;
+	m_nodeSize = 1000;
 	m_width = width;
 	m_height = height;
 	m_wNodes = width / m_nodeSize;

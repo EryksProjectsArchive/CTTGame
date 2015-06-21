@@ -92,16 +92,12 @@ vec4 calculatePointLight_BlinnPhong(uint materialParams, vec3 position, vec3 nor
 	{
 		vec3 viewDirection = normalize(-position);
 		vec3 halfDirection = normalize(lightDirection + viewDirection);
-		float shininess = isSun ? 0.9f : 1.0f;
+		float shininess = isSun ? 0.1f : 1.0f;
 		float specularAngle = max(pow(dot(normal, halfDirection), shininess), 0.0);
 		specular = pow(specularAngle, 16.0);
 	}
 
-	float multiplier = 1.0;
-	if(!isSun)
-	{
-		multiplier = 1.0-clamp(distance(position, lightPosition)/size, 0, 1);
-	}
+	float multiplier = isSun ? 0.8f : (1.0-clamp(distance(position, lightPosition)/size, 0, 1));
 	return vec4(ambientColor + ((lambertian * lightColor + specular * specularColor) * multiplier) * visibility, 1);
 }
 
@@ -111,6 +107,17 @@ void main(void)
 
 	// Base color of texture
 	color = texture2D(diffuseTexture, vUV);
+
+	/*if(vUV.x <= 0.25f && vUV.y <= 0.25f)
+	{
+		vec2 sTestUV = vec2(vUV.x/0.25f, vUV.y/0.25f);
+
+		float depthValue = texture(shadowTexture, sTestUV);
+
+		color = vec4(depthValue,depthValue,depthValue,1.0);
+		return;
+	}*/
+
 
 	// Get material parameters flags.
 	uint parameters = texture(materialParameterTexture, vUV).x;
@@ -148,14 +155,14 @@ void main(void)
 		// Calculate fog
 		float fogCoord = abs(worldPositionScreenSpace.z);
 
-		vec4 fogColor = vec4(5.0/255.0, 108.0/255.0, 169.0/255.0, 1);
+		vec4 fogColor = vec4(10.0/255.0, 60.0/255.0, 91.0/255.0, 1);
 		float start = 720.0;
 		float end = 1100.0;
 		float n = (end - fogCoord) / (end - start); // get interpolation factor
 		float factor = 1.0 - clamp(n, 0.0, 1.0);
-		if(factor < 0.8)
-		{
+		/*if(factor < 0.8)
+		{*/
 			color = mix(color, fogColor, factor);
-		}
+		//}
 	}
 }
