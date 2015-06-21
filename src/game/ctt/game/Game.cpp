@@ -21,6 +21,7 @@
 #include <graphics/renderer/Renderer.h>
 #include <graphics/renderer/RenderContext.h>
 #include <graphics/Camera.h>
+#include <graphics/EditorFreeCamera.h>
 
 #include <io/fs/FileSystem.h>
 #include <io/fs/stdio/StdioFileSystem.h>
@@ -64,7 +65,7 @@ Game * Game::s_instance = 0;
 Font *gFont = 0;
 
 Game::Game()
-	: Controllable(ControllableType::Engine), m_isRunning(false), m_isInitialized(false), m_renderer(0), m_window(0), m_scene(0), m_physicsWorld(0), m_config(0), m_console(new Console())
+	: Controllable(ControllableType::Engine), m_renderer(0), m_window(0), m_scene(0), m_physicsWorld(0), m_config(0), m_console(new Console())
 {
 	s_instance = this;
 }
@@ -234,6 +235,10 @@ bool Game::init()
 		m_scene->addEntity(testEntity);
 	}
 
+	m_box = new CrossroadEntity();
+	m_box->setPosition(Vector3(0,0,0));
+	m_scene->addEntity(m_box);
+
 	Environment::get()->setSunPosition(Vector3(30.0f, 10.0f, 0.0f));
 
 	gFont = new Font("fonts/MSMHei-Bold.ttf", 15);
@@ -283,7 +288,24 @@ bool Game::pulse()
 	while (m_accumulator >= m_deltaTime)
 	{
 		if (Camera::current)
+		{
 			Camera::current->update(float(m_deltaTime));
+
+			
+			if (!((EditorFreeCamera *)Camera::current)->isMoving())
+			{
+				int32 x, y;
+				SDL_GetMouseState(&x, &y);
+
+				Vector3 pos = glm::unProject(glm::vec3(x, m_renderer->getViewportAsVector().w - y, 1), glm::mat4() * Camera::current->getViewMatrix(), m_renderer->getProjectionMatrix(), m_renderer->getViewportAsVector());
+				m_console->output(Console::MessageType::Info, WString<64>(L"%f, %f, %f", pos.x, pos.y, pos.z));
+				
+				Vector3 res;
+				m_physicsWorld->rayTest(Camera::current->getPosition(), pos, &res);
+
+				m_box->setPosition(res);
+			}
+		}
 
 		if (m_physicsWorld)
 			m_physicsWorld->pulse(float(m_deltaTime));
@@ -375,9 +397,4 @@ PhysicsWorld * Game::getPhysicsWorld()
 Game * Game::get()
 {
 	return s_instance;
-}
-
-void Game::shutdown()
-{
-	m_isRunning = false;
 }

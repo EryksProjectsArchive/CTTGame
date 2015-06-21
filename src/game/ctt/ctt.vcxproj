@@ -165,6 +165,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="core\application\Application.cpp" />
     <ClCompile Include="core\console\Console.cpp" />
     <ClCompile Include="core\ExceptionHandler.cpp" />
     <ClCompile Include="core\Logger.cpp" />
@@ -226,6 +227,7 @@
     <ClCompile Include="sound\SoundManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="core\application\Application.h" />
     <ClInclude Include="core\Array.h" />
     <ClInclude Include="core\console\Console.h" />
     <ClInclude Include="core\DynArray.h" />

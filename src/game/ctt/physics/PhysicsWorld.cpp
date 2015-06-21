@@ -131,7 +131,6 @@ void PhysicsWorld::unregisterRigidBody(btRigidBody *rigidBody)
 		m_dynamicsWorld->removeRigidBody(rigidBody);
 }
 
-
 bool PhysicsWorld::rayTest(Vector3 begin, Vector3 end, Vector3 * position)
 {
 	if (m_dynamicsWorld)

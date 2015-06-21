@@ -17,13 +17,12 @@
 
 #include <input/Input.h>
 
-class Game : public Controllable
+#include <core/application/Application.h>
+
+class Game : public Application, public Controllable
 {
 private:
 	static Game *s_instance;
-
-	bool m_isRunning;
-	bool m_isInitialized;
 
 	Window* m_window;
 	Renderer* m_renderer;
@@ -31,6 +30,7 @@ private:
 	PhysicsWorld *m_physicsWorld;
 	Config *m_config;
 	class Console *m_console;
+	class CrossroadEntity *m_box;
 
 	double m_deltaTime;
 	double m_accumulator;
@@ -39,10 +39,9 @@ public:
 	Game();
 	~Game();
 
-	bool init();
+	bool init() override;
 
-	bool pulse();
-	void shutdown();
+	bool pulse() override;
 
 	void onKeyEvent(Key::Type key, bool state) override;
 	void onMouseButtonEvent(uint8 button, bool state, uint8 clicks, sint32 x, sint32 y) override;

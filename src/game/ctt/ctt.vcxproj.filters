@@ -205,6 +205,12 @@
     <Filter Include="Header Files\resources\sounds\ogg">
       <UniqueIdentifier>{993b3956-b610-43fb-9589-9cfb90b112d9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\core\application">
+      <UniqueIdentifier>{6066252a-d41d-4320-a468-2389dab24386}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\core\application">
+      <UniqueIdentifier>{accc743d-567f-4fad-915e-d82e08b42717}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -392,6 +398,9 @@
     </ClCompile>
     <ClCompile Include="graphics\EditorFreeCamera.cpp">
       <Filter>Source Files\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="core\application\Application.cpp">
+      <Filter>Source Files\core\application</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -643,6 +652,9 @@
     </ClInclude>
     <ClInclude Include="graphics\EditorFreeCamera.h">
       <Filter>Header Files\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="core\application\Application.h">
+      <Filter>Header Files\core\application</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

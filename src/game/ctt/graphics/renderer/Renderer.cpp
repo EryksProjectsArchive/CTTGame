@@ -207,6 +207,7 @@ bool Renderer::setup(Window * window)
 	m_orthoMatrix = glm::ortho(0.f, (float)m_window->getWidth(), (float)m_window->getHeight(), 0.f, -1.f, 1.f);
 	m_rect.bottom = float(m_window->getHeight());
 	m_rect.right = float(m_window->getWidth());
+	m_viewport = glm::vec4(0, 0, float(m_window->getWidth()), float(m_window->getHeight()));
 
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
@@ -406,6 +407,16 @@ void Renderer::postFrame()
 {	
 	SDL_GL_SwapWindow(m_window->_window);	
 	m_stats.reset();
+}
+
+Matrix4x4 Renderer::getProjectionMatrix()
+{
+	return m_projectionMatrix;
+}
+
+glm::vec4 Renderer::getViewportAsVector()
+{
+	return m_viewport;
 }
 
 void Renderer::setFullscreen(bool fullscreen)

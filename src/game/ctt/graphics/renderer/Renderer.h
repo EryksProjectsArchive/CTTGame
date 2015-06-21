@@ -27,6 +27,7 @@ protected:
 
 	glm::mat4x4 m_projectionMatrix;
 	glm::mat4x4 m_orthoMatrix;
+	glm::vec4 m_viewport;
 	
 	SDL_GLContext m_glContext;
 	static Renderer* s_instance;
@@ -60,6 +61,9 @@ public:
 
 	void preFrame();
 	void postFrame();
+
+	Matrix4x4 getProjectionMatrix();
+	glm::vec4 getViewportAsVector();
 
 	void setFullscreen(bool fullscreen);
 

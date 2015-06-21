@@ -25,9 +25,16 @@ int main()
 {
 	ExceptionHandler::init();
 	{
-		Game game;
-		if (game.init()) 
-			while (game.pulse());
+#ifdef EDITOR
+		//Application *app = new Editor();
+		// TODO
+#else
+		Application *app = new Game();
+#endif
+		if (app->init()) 
+			while (app->pulse());
+
+		delete app;
 	}
 
 #ifdef _MEM_LEAKS_DEBUG
