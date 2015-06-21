@@ -32,7 +32,7 @@ namespace JPEG
 
 	}
 
-	bool ImageLoader::isFileValid(FilePath filePath)
+	bool ImageLoader::isFileValid(const FilePath& filePath)
 	{
 		bool isValid = false;
 		if (filePath.find(".jpg") != -1)
@@ -50,7 +50,7 @@ namespace JPEG
 		return isValid;
 	}
 
-	ImageData * ImageLoader::load(FilePath filePath)
+	ImageData * ImageLoader::load(const FilePath& filePath)
 	{
 		// Recursive loading
 		ImageData *data = 0;

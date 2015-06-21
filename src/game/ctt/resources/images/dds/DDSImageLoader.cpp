@@ -28,7 +28,7 @@ namespace DDS
 
 	}
 
-	bool ImageLoader::isFileValid(FilePath filePath)
+	bool ImageLoader::isFileValid(const FilePath& filePath)
 	{
 		bool isValid = false;
 		if (filePath.find(".dds") != -1)
@@ -144,7 +144,7 @@ namespace DDS
 		}
 	}
 
-	ImageData * ImageLoader::load(FilePath filePath)
+	ImageData * ImageLoader::load(const FilePath& filePath)
 	{
 		// Recursive loading
 		ImageData *data = 0;

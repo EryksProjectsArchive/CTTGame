@@ -43,7 +43,7 @@ bool Texture::load()
 	{
 		glGenTextures(1, &m_textureID);
 		glBindTexture(GL_TEXTURE_2D, m_textureID);
-		unsigned int format = GL_RGB;
+		uint32 format = GL_RGB;
 		switch (data->format)
 		{
 		case EImageFormat::BGR:

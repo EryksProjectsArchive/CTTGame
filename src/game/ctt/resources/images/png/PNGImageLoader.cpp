@@ -30,7 +30,7 @@ namespace PNG
 
 	}
 
-	bool ImageLoader::isFileValid(FilePath filePath)
+	bool ImageLoader::isFileValid(const FilePath& filePath)
 	{
 		bool isValid = false;
 		if (filePath.find(".png") != -1)
@@ -65,7 +65,7 @@ namespace PNG
 		file->file->read((int8*)data, length, 1);
 	}  
 
-	ImageData * ImageLoader::load(FilePath filePath)
+	ImageData * ImageLoader::load(const FilePath& filePath)
 	{
 		// Recursive loading
 		ImageData *data = 0;
