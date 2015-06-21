@@ -142,6 +142,12 @@ Game::Game()
 
 Game::~Game()
 {
+	if (m_sky)
+	{
+		delete m_sky;
+		m_sky = 0;
+	}
+
 	if (m_ui)
 	{
 		delete m_ui;

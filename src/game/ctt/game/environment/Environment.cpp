@@ -72,8 +72,7 @@ void Environment::pulse()
 		timeElapsed++;
 		m_deltaUpdate -= timeScale;
 	}
-
-	
+		
 	if (timeElapsed > 0)
 	{
 		m_time += timeElapsed;
