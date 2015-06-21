@@ -123,7 +123,7 @@ void Console::output(MessageType::Type type, const WDynString& message)
 	m_lines[CONSOLE_LINES - 1].Set(type, message);
 }
 
-void Console::onKeyEvent(Key::Type key, bool pressed)
+bool Console::onKeyEvent(Key::Type key, bool pressed)
 {
 	if (Config::get()["engine"]["console"].getBool(false))
 	{
@@ -314,9 +314,10 @@ void Console::onKeyEvent(Key::Type key, bool pressed)
 				m_inputBuffer = matching[0]->m_name;
 		}
 	}
+	return false;
 }
 
-void Console::onTextInput(const WDynString& string)
+bool Console::onTextInput(const WDynString& string)
 {	
 	if (m_state)
 	{
@@ -324,6 +325,7 @@ void Console::onTextInput(const WDynString& string)
 		if (string[0]!='`')
 			m_inputBuffer += string;
 	}
+	return false;
 }
 
 void Console::render(Renderer *renderer)
@@ -418,6 +420,24 @@ void Console::removeCommand(const WDynString& name)
 			break;
 		}
 	}
+}
+
+bool Console::execute(const WDynString& value)
+{
+	WDynString input = value;
+	size_t space = input.find(' ');
+	WDynString commandName = input.substr(0, (space != -1) ? space : input.getLength());
+	WDynString params = input.substr(space + 1, input.getLength());
+
+	for (ICommand *command : m_commands)
+	{
+		if (command->m_name == commandName)
+		{
+			command->onExecute(params);
+			return true;
+		}
+	}
+	return false;
 }
 
 Console::ICommand::ICommand(const WDynString& name, const WDynString& description)

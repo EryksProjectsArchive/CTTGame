@@ -24,11 +24,11 @@ public:
 	Controllable(ControllableType::Type type);
 	virtual ~Controllable();
 
-	virtual void onKeyEvent(Key::Type keyCode, bool pressed) {}
-	virtual void onMouseScroll(sint32 horizontal, sint32 vertical) {}
-	virtual void onMouseMove(sint32 x, sint32 y, sint32 relx, sint32 rely) {}
-	virtual void onMouseButtonEvent(uint8 button, bool state, uint8 clicks, sint32 x, sint32 y) {}
-	virtual void onTextInput(const WDynString& string) {}
+	virtual bool onKeyEvent(Key::Type keyCode, bool pressed) { return false; }
+	virtual bool onMouseScroll(sint32 horizontal, sint32 vertical) { return false; }
+	virtual bool onMouseMove(sint32 x, sint32 y, sint32 relx, sint32 rely) { return false;  }
+	virtual bool onMouseButtonEvent(uint8 button, bool state, uint8 clicks, sint32 x, sint32 y) { return false;  }
+	virtual bool onTextInput(const WDynString& string) { return false; }
 
 protected:
 	Input * input();

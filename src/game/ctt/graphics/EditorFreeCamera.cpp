@@ -39,10 +39,10 @@ EditorFreeCamera::~EditorFreeCamera()
 
 }
 
-void EditorFreeCamera::onMouseMove(int32 x, int32 y, int32 relx, int32 rely)
+bool EditorFreeCamera::onMouseMove(int32 x, int32 y, int32 relx, int32 rely)
 {
 	if (!m_move)
-		return;
+		return false;
 
 	float _x = (float)relx * m_sensitivity;
 	float _y = (float)rely * m_sensitivity;
@@ -51,9 +51,10 @@ void EditorFreeCamera::onMouseMove(int32 x, int32 y, int32 relx, int32 rely)
 	m_rotationY = glm::rotate(m_rotationY, glm::radians(_y), Vector3(1, 0, 0));
 
 	updateMatrix();
+	return false;
 }
 
-void EditorFreeCamera::onKeyEvent(Key::Type key, bool state)
+bool EditorFreeCamera::onKeyEvent(Key::Type key, bool state)
 {
 	if (key == Key::SCANCODE_W)
 		m_keys[0] = state;
@@ -78,6 +79,8 @@ void EditorFreeCamera::onKeyEvent(Key::Type key, bool state)
 
 	else if (key == Key::SCANCODE_LCTRL) // ctrl
 		m_speed = state ? 0.1f : 25.0f;
+
+	return false;
 }
 
 bool EditorFreeCamera::isMoving()
@@ -85,13 +88,14 @@ bool EditorFreeCamera::isMoving()
 	return m_move;
 }
 
-void EditorFreeCamera::onMouseButtonEvent(uint8 button, bool state, uint8, sint32, sint32)
+bool EditorFreeCamera::onMouseButtonEvent(uint8 button, bool state, uint8, sint32, sint32)
 {
 	if (button == 3)
 	{
 		m_move = state;	
 		Input::get()->showCursor(!m_move);
 	}
+	return false;
 }
 
 void EditorFreeCamera::update(float dt)

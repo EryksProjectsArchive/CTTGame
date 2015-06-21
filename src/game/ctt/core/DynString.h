@@ -94,6 +94,29 @@ public:
 		return *this;
 	}
 
+	DynString& append(const DynString& rhs)
+	{
+		char *temp = new char[m_size + 1];
+		strcpy(temp, m_buffer);
+
+		m_size += rhs.m_size;
+
+		delete[]m_buffer;
+		m_buffer = new char[m_size + 1];
+		strcpy(m_buffer, temp);
+		strcat(m_buffer, rhs.m_buffer);
+		m_buffer[m_size] = '\0';
+
+		delete[]temp;
+		return *this;
+	}
+
+	DynString& operator+=(const char c)
+	{
+		char s[2] = { c, 0 };
+		return append(s);
+	}
+
 	bool operator==(const DynString& rhs) const
 	{
 		return !strcmp(m_buffer, rhs.m_buffer);

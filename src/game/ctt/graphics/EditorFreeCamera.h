@@ -32,9 +32,9 @@ public:
 	EditorFreeCamera();
 	~EditorFreeCamera();
 
-	void onMouseMove(int32 x, int32 y, int32 relx, int32 rely) override;
-	void onKeyEvent(Key::Type key, bool state) override;
-	void onMouseButtonEvent(uint8 button, bool state, uint8, sint32, sint32) override;
+	bool onMouseMove(int32 x, int32 y, int32 relx, int32 rely) override;
+	bool onKeyEvent(Key::Type key, bool state) override;
+	bool onMouseButtonEvent(uint8 button, bool state, uint8, sint32, sint32) override;
 
 	bool isMoving();
 	void update(float dt);

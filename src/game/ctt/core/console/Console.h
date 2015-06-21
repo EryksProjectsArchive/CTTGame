@@ -133,11 +133,12 @@ public:
 
 	void addCommand(ICommand* command);
 	void removeCommand(const WDynString& name);
+	bool execute(const WDynString& value);
 
 	void output(MessageType::Type type, const WDynString& message);
 
-	void onKeyEvent(Key::Type key, bool pressed) override;
-	void onTextInput(const WDynString& string) override;
+	virtual bool onKeyEvent(Key::Type key, bool pressed);
+	virtual bool onTextInput(const WDynString& string);
 
 	void render(Renderer *renderer);
 

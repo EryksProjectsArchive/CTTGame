@@ -183,6 +183,10 @@ Game::~Game()
 		m_console = 0;
 	}
 
+	File *_file = FileSystem::get()->open("home/inputBinds.json", FileOpenMode::Write | FileOpenMode::Extra);
+	Input::get()->serializeBinds(_file);
+	FileSystem::get()->close(_file);
+
 	s_instance = 0;
 }
 Sound *sound = 0;
@@ -232,6 +236,13 @@ bool Game::init()
 		Error("game", "Cannot setup renderer.");
 		return false;
 	}
+
+	// Bind escape key
+	Input::get()->bind(L"keyboard.escape", true, L"quit");
+
+	File *inputFile = FileSystem::get()->open("home/inputBinds.json", FileOpenMode::Read | FileOpenMode::Extra);
+	Input::get()->deserializeBinds(inputFile);
+	FileSystem::get()->close(inputFile);
 
 	// Set camera manager to use free editor cam
 	CameraManager::get()->setCurrent(CAMERA_TYPE_EDITOR_FREE);
@@ -611,7 +622,7 @@ void Game::render()
 	}
 }
 
-void Game::onKeyEvent(Key::Type key, bool state)
+bool Game::onKeyEvent(Key::Type key, bool state)
 {
 	if (key == Key::SCANCODE_ESCAPE)	
 		m_isRunning = false;	
@@ -632,14 +643,15 @@ void Game::onKeyEvent(Key::Type key, bool state)
 	{
 		m_activeMoveAxis = ActiveMoveAxis::None;
 	}
+	return false;
 }
 
-void Game::onMouseButtonEvent(uint8 button, bool state, uint8 clicks, sint32 x, sint32 y)
+bool Game::onMouseButtonEvent(uint8 button, bool state, uint8 clicks, sint32 x, sint32 y)
 {
 	static uint64 press = 0;
 
 	if (input()->isLocked())
-		return;
+		return false;
 
 	// Shotting
 	if (button == 1 && CameraManager::get()->getByType<EditorFreeCamera>(CAMERA_TYPE_EDITOR_FREE)->isMoving())
@@ -664,12 +676,13 @@ void Game::onMouseButtonEvent(uint8 button, bool state, uint8 clicks, sint32 x, 
 			m_scene->addEntity(ball);
 		}
 	}
+	return false;
 }
 
-void Game::onMouseScroll(sint32 horizontal, sint32 vertical)
+bool Game::onMouseScroll(sint32 horizontal, sint32 vertical)
 {	
 	if (!m_currentPickedEntity)
-		return;
+		return false;
 
 	if (m_rotate)
 	{
@@ -684,6 +697,7 @@ void Game::onMouseScroll(sint32 horizontal, sint32 vertical)
 
 		m_currentPickedEntity->setRotation(glm::rotate(rotation, v/10, Vector3(0,1,0)));
 	}
+	return false;
 }
 
 PhysicsWorld* Game::getPhysicsWorld()

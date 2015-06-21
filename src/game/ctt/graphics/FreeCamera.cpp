@@ -40,7 +40,7 @@ FreeCamera::~FreeCamera()
 
 }
 
-void FreeCamera::onMouseMove(int32 x, int32 y, int32 relx, int32 rely)
+bool FreeCamera::onMouseMove(int32 x, int32 y, int32 relx, int32 rely)
 {
 	float _x = (float)relx * m_sensitivity;
 	float _y = (float)rely * m_sensitivity;
@@ -49,9 +49,10 @@ void FreeCamera::onMouseMove(int32 x, int32 y, int32 relx, int32 rely)
 	m_rotationY = glm::rotate(m_rotationY, glm::radians(_y), Vector3(1, 0, 0));
 
 	updateMatrix();
+	return false;
 }
 
-void FreeCamera::onKeyEvent(Key::Type key, bool state)
+bool FreeCamera::onKeyEvent(Key::Type key, bool state)
 {
 	if (key == Key::SCANCODE_W)
 		m_keys[0] = state;
@@ -75,6 +76,7 @@ void FreeCamera::onKeyEvent(Key::Type key, bool state)
 		m_speed = state ? 100.0f : 25.0f;
 	else if (key == Key::SCANCODE_LALT) // alt
 		m_speed = state ? 5.0f : 25.0f;	
+	return false;
 }
 
 void FreeCamera::update(float dt)

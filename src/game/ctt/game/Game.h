@@ -63,9 +63,9 @@ public:
 	void spawnBox();
 	void spawnBusStop();
 
-	void onKeyEvent(Key::Type key, bool state) override;
-	void onMouseButtonEvent(uint8 button, bool state, uint8 clicks, sint32 x, sint32 y) override;
-	void onMouseScroll(sint32 horizontal, sint32 vertical) override;
+	virtual bool onKeyEvent(Key::Type key, bool state);
+	virtual bool onMouseButtonEvent(uint8 button, bool state, uint8 clicks, sint32 x, sint32 y);
+	virtual bool onMouseScroll(sint32 horizontal, sint32 vertical);
 
 	PhysicsWorld* getPhysicsWorld();
 	UI::Manager* getUI();

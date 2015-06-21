@@ -45,6 +45,26 @@ public:
 		return string;
 	}
 
+
+	// ---------------------------- Lower casing ----------------------------
+
+
+	static WDynString toLower(const WDynString& str)
+	{
+		WDynString string;
+		for (uint32 i = 0; i < str.getLength(); ++i)
+			string += towlower(str[i]);
+		return string;
+	}
+
+	static DynString toLower(const DynString& str)
+	{
+		DynString string;
+		for (uint32 i = 0; i < str.getLength(); ++i)
+			string += tolower(str[i]);
+		return string;
+	}
+	
 	// ---------------------------- Numbers ----------------------------
 
 	static bool isFloat(const DynString& str)
