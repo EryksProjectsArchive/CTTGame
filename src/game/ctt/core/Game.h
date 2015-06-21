@@ -15,6 +15,8 @@
 
 #include <video/renderer/opengl/OpenGLRenderer.h>
 
+#include <sound/SoundMgr.h>
+
 class Game
 {
 private:
@@ -23,6 +25,7 @@ private:
 
 	IWindow * mWindow;
 	IRenderer * mRenderer;
+	ISoundMgr * mSoundMgr;
 public:
 	Game();
 	~Game();

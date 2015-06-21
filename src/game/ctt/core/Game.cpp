@@ -33,6 +33,11 @@ Game::~Game()
 		delete this->mWindow;
 		this->mWindow = 0;
 	}
+	if(this->mSoundMgr)
+	{
+		delete this->mSoundMgr;
+		this->mSoundMgr = 0;
+	}
 }
 
 Model *gModel = 0;
@@ -69,6 +74,16 @@ bool Game::init()
 
 	gModel = new Model();
 	gModel->load("data/models/bus.mdl");
+
+	// create game sound mgr
+
+	this->mSoundMgr = ISoundMgr::create(SOUND_API_OPENAL);
+
+	if (!this->mSoundMgr->setup())
+	{
+		Error("game", "Cannot setup SoundMgr!");
+		return false;
+	}
 
 	this->mInitialized = true;
 	this->mRunning = true;
