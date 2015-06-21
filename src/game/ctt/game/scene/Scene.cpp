@@ -22,10 +22,8 @@
 #include <game/environment/Terrain.h>
 
 Scene::Scene()
-	: m_camera(0), m_terrain(0)
-{
-	m_camera = new EditorFreeCamera();
-	Camera::setCurrent(m_camera);
+	: m_terrain(0)
+{	
 	m_terrain = new Terrain(10000, 10000);
 
 	Console::get()->addCommand(new SceneInfoCommand(this));
@@ -35,12 +33,6 @@ Scene::Scene()
 Scene::~Scene()
 {
 	clear();
-
-	if (m_camera)
-	{
-		delete m_camera;
-		m_camera = 0;
-	}
 
 	if (m_terrain)
 	{
@@ -94,7 +86,7 @@ void Scene::SceneInfoCommand::onExecute(const WDynString& params)
 {
 	m_console->output(Console::MessageType::Info, L"Scene info:");
 	m_console->output(Console::MessageType::Info, WString<64>(L"There are %d spawned entities", m_scene->m_entities.size()));
-	Vector3 camPos = m_scene->m_camera->getPosition();
+	Vector3 camPos = CameraManager::get()->getCurrent()->getPosition();
 	m_console->output(Console::MessageType::Info, WString<128>(L"Current cam pos: %f, %f, %f", camPos.x, camPos.y, camPos.z));
 }
 

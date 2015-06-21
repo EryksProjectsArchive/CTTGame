@@ -84,7 +84,7 @@ void Terrain::render(RenderContext& context)
 	int32 wNodes = (int32) m_wNodes;
 	int32 hNodes = (int32) m_hNodes;
 
-	Vector3 cameraRelative = Camera::current->getPosition() - Vector3(-(float)(m_width / 2), 0, -(float)(m_height / 2));
+	Vector3 cameraRelative = CameraManager::get()->getCurrent()->getPosition() - Vector3(-(float)(m_width / 2), 0, -(float)(m_height / 2));
 
 	x = (int32)(cameraRelative.x / m_nodeSize);
 	y = (int32)(cameraRelative.z / m_nodeSize);

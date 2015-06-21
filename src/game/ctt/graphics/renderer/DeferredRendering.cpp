@@ -304,7 +304,8 @@ void DeferredRendering::end(const Matrix4x4& shadowMatrixParameter)
 		Renderer::glUniformMatrix4fv(projectionMatrixLocation, 1, GL_FALSE, glm::value_ptr(m_renderer->m_projectionMatrix));
 	}
 
-	glm::mat4x4 viewMatrix = Camera::current->getViewMatrix();
+	Camera * camera = CameraManager::get()->getCurrent();
+	glm::mat4x4 viewMatrix = camera->getViewMatrix();
 	unsigned int viewMatrixLocation = m_deferredResultMaterial->m_program->getUniformLocation("viewMatrix");
 	if (viewMatrixLocation != -1)
 	{
@@ -314,7 +315,8 @@ void DeferredRendering::end(const Matrix4x4& shadowMatrixParameter)
 	unsigned int cameraPositionLocation = m_deferredResultMaterial->m_program->getUniformLocation("cameraPosition");
 	if (cameraPositionLocation != -1)
 	{
-		Renderer::glUniform3f(cameraPositionLocation, Camera::current->getPosition().x, Camera::current->getPosition().y, Camera::current->getPosition().z);
+		Vector3 position = camera->getPosition();
+		Renderer::glUniform3f(cameraPositionLocation, position.x, position.y, position.z);
 	}
 
 	glm::mat4 unProjectMatrix = glm::inverse(m_renderer->m_projectionMatrix * viewMatrix);

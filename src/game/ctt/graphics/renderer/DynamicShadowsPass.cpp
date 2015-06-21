@@ -102,7 +102,7 @@ void DynamicShadowsPass::begin()
 	// Compute shadow View Projection matrix
 	Vector3 lightPosition = Vector3(40, 50, 0);
 	Vector3 lightDirection = Vector3(0, 0, 0);
-	Vector3 cam = Camera::current->getPosition();
+	Vector3 cam = CameraManager::get()->getCurrent()->getPosition();
 	lightDirection += cam;
 	lightPosition += cam;
 

@@ -468,6 +468,12 @@
     <ClCompile Include="graphics\renderer\DynamicShadowsPass.cpp">
       <Filter>Source Files\graphics\renderer</Filter>
     </ClCompile>
+    <ClCompile Include="game\environment\Sky.cpp">
+      <Filter>Source Files\game\environment</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\CameraManager.cpp">
+      <Filter>Source Files\graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="os\OS.h">
@@ -784,6 +790,12 @@
     </ClInclude>
     <ClInclude Include="graphics\renderer\DynamicShadowsPass.h">
       <Filter>Header Files\graphics\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="game\environment\Sky.h">
+      <Filter>Header Files\game\environment</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\CameraManager.h">
+      <Filter>Header Files\graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

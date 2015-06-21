@@ -38,4 +38,6 @@ public:
 
 	bool isMoving();
 	void update(float dt);
+
+	DEFINE_CAMERA_TYPE(EDITOR_FREE);
 };

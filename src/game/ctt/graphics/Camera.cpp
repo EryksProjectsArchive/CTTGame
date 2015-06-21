@@ -11,15 +11,28 @@
 
 #include "Camera.h"
 
-Camera * Camera::current = 0;
-
-Camera::Camera() : Controllable(ControllableType::Gameplay), m_viewMatrix(glm::lookAt(glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0))), m_fov(45.f)
+Camera::Camera() : Controllable(ControllableType::Gameplay), m_viewMatrix(glm::lookAt(glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0))), m_fov(45.f), m_isActive(false)
 {
 }
 
 Camera::~Camera()
 {
 
+}
+
+void Camera::activate()
+{
+	m_isActive = true;
+}
+
+void Camera::deactivate()
+{
+	m_isActive = false;
+}
+
+bool Camera::isActive()
+{
+	return m_isActive;
 }
 
 void Camera::setPosition(const glm::vec3 & position)
@@ -68,9 +81,4 @@ float Camera::getFov()
 glm::mat4x4 Camera::getViewMatrix()
 {
 	return m_viewMatrix;
-}
-
-void Camera::setCurrent(Camera * camera)
-{
-	current = camera;
 }

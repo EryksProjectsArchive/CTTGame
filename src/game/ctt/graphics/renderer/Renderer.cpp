@@ -552,7 +552,7 @@ void Renderer::renderGeometry(Geometry<Vertex3d> *geometry, const glm::mat4x4& m
 
 	program->begin();
 
-	glm::mat4 viewMatrix = Camera::current->getViewMatrix();
+	glm::mat4 viewMatrix = CameraManager::get()->getCurrent()->getViewMatrix();
 	glm::mat3 normalMatrix = glm::mat3(viewMatrix * matrix);
 	unsigned int normalMatrixLocation = material->m_program->getUniformLocation("normalMatrix");
 	if (normalMatrixLocation != -1)
@@ -870,7 +870,7 @@ void Renderer::renderGeometry(Geometry<Vertex3d_pc> * geometry, const Matrix4x4&
 
 	program->begin();
 
-	glm::mat4 viewMatrix = Camera::current->getViewMatrix();
+	glm::mat4 viewMatrix = CameraManager::get()->getCurrent()->getViewMatrix();
 	glm::mat4x4 mvp = m_projectionMatrix * viewMatrix * matrix;
 
 	unsigned int mvpMatrixLocation = material->m_program->getUniformLocation("mvpMatrix");

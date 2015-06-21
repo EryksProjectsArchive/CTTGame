@@ -233,6 +233,9 @@ bool Game::init()
 		return false;
 	}
 
+	// Set camera manager to use free editor cam
+	CameraManager::get()->setCurrent(CAMERA_TYPE_EDITOR_FREE);
+
 	// Create main menu
 	m_ui = new UI::Manager();
 
@@ -337,8 +340,8 @@ void Game::spawnBox()
 #include "scene/entities/types/BusStopEntity.h"
 void Game::spawnBusStop()
 {
-	Vector3 a = Camera::current->getPosition();
-	Vector3 b = Camera::current->getTarget();
+	Vector3 a = CameraManager::get()->getCurrent()->getPosition();
+	Vector3 b = CameraManager::get()->getCurrent()->getTarget();
 
 	Vector3 diff = glm::normalize(b - a);
 
@@ -352,107 +355,146 @@ void Game::spawnBusStop()
 
 void Game::update(double deltaTime)
 {
-	if (Camera::current)
+	Camera * currentCamera = CameraManager::get()->getCurrent();
+
+	if (currentCamera)
 	{
-		Camera::current->update(float(deltaTime));
+		currentCamera->update(float(deltaTime));
+
+		// Editor stuffs
 		{		
-			EditorFreeCamera * camera = ((EditorFreeCamera *)Camera::current);
-			sound->setListenerPosition(camera->getPosition());
-			sound->setListenerOrientation(camera->getTarget(), Vector3(0.0f, 1.0f, 0.0f));
-
-			bool resetPosition = false;
-			int32 x, y;
-			if (camera->isMoving())
+			EditorFreeCamera * camera = CameraManager::get()->getByType<EditorFreeCamera>(CAMERA_TYPE_EDITOR_FREE);
+			if (camera->isActive())
 			{
-				x = m_window->getWidth() / 2;
-				y = m_window->getHeight() / 2;
-			}
-			else 
-			{
-				SDL_GetMouseState(&x, &y);
+				sound->setListenerPosition(camera->getPosition());
+				sound->setListenerOrientation(camera->getTarget(), Vector3(0.0f, 1.0f, 0.0f));
 
-				if (m_activeMoveAxis != ActiveMoveAxis::None && m_currentPickedEntity)
+				bool resetPosition = false;
+				int32 x, y;
+				if (camera->isMoving())
 				{
-					if (x >= m_window->getWidth()-1)
-					{
-						SDL_WarpMouseInWindow(m_window->_window, 0, y);
-						x = 0;
-						resetPosition = true;
-					}
-					else if (x < 1)
-					{
-						SDL_WarpMouseInWindow(m_window->_window, m_window->getWidth(), y);
-						x = m_window->getWidth();
-						resetPosition = true;
-					}
+					x = m_window->getWidth() / 2;
+					y = m_window->getHeight() / 2;
+				}
+				else
+				{
+					SDL_GetMouseState(&x, &y);
 
-					if (y >= m_window->getHeight() - 1)
+					if ((m_moveObject || m_rotateObject) && m_currentPickedEntity && m_activeAxis != None)
 					{
-						SDL_WarpMouseInWindow(m_window->_window, x, 0);
-						y = 0;
-						resetPosition = true;
-					}
-					else if (y < 1)
-					{
-						SDL_WarpMouseInWindow(m_window->_window, x, m_window->getHeight());
-						y = m_window->getHeight();
-						resetPosition = true;
+						if (x >= m_window->getWidth() - 1)
+						{
+							SDL_WarpMouseInWindow(m_window->_window, 0, y);
+							x = 0;
+							resetPosition = true;
+						}
+						else if (x < 1)
+						{
+							SDL_WarpMouseInWindow(m_window->_window, m_window->getWidth(), y);
+							x = m_window->getWidth();
+							resetPosition = true;
+						}
+
+						if (y >= m_window->getHeight() - 1)
+						{
+							SDL_WarpMouseInWindow(m_window->_window, x, 0);
+							y = 0;
+							resetPosition = true;
+						}
+						else if (y < 1)
+						{
+							SDL_WarpMouseInWindow(m_window->_window, x, m_window->getHeight());
+							y = m_window->getHeight();
+							resetPosition = true;
+						}
 					}
 				}
-			}
 
-			Vector3 pos = glm::unProject(glm::vec3(x, m_renderer->getViewportAsVector().w - y, 1), glm::mat4() * camera->getViewMatrix(), m_renderer->getProjectionMatrix(), m_renderer->getViewportAsVector());
-					
-			if (!camera->isMoving() && Input::get()->isMouseBtnPressed(MouseButton::Left) /*&& !m_currentPickedEntity*/)
-			{				
-				PhysicalEntity *entity = 0;
-				Vector3 res;
-				if (m_physicsWorld->rayTest(Camera::current->getPosition(), pos, &res, &entity))
+				if (!m_action)
 				{
-					if (entity)
+					Vector3 pos = glm::unProject(glm::vec3(x, m_renderer->getViewportAsVector().w - y, 1), glm::mat4() * camera->getViewMatrix(), m_renderer->getProjectionMatrix(), m_renderer->getViewportAsVector());
+
+					if (!camera->isMoving() && Input::get()->isMouseBtnPressed(MouseButton::Left) /*&& !m_currentPickedEntity*/)
 					{
-						m_currentPickedEntity = entity;			
+						PhysicalEntity *entity = 0;
+						Vector3 res;
+						if (m_physicsWorld->rayTest(camera->getPosition(), pos, &res, &entity))
+						{
+							if (entity)
+							{
+								m_currentPickedEntity = entity;
+							}
+						}
 					}
 				}
-			}
 
-			if(Input::get()->isKeyDown(Key::SCANCODE_LSHIFT) && m_currentPickedEntity) 
-			{
-				m_currentPickedEntity = 0;
-			}
+				if (Input::get()->isKeyDown(Key::SCANCODE_LSHIFT) && m_currentPickedEntity)
+				{
+					m_currentPickedEntity = 0;
+					m_moveObject = false;
+					m_rotateObject = false;
+					m_action = false;
+					m_activeAxis = ActiveAxis::None;
+				}
+				if (Input::get()->isMouseBtnPressed(MouseButton::Left) && m_currentPickedEntity && m_action)
+				{
+					m_activeAxis = ActiveAxis::None;
+				}
 
-			Matrix4x4 persp = glm::perspective(glm::radians(45.0f), m_window->getAspectRatio(), 0.1f, 100.0f);
+				Matrix4x4 persp = glm::perspective(glm::radians(45.0f), m_window->getAspectRatio(), 0.1f, 100.0f);
 
-			Vector3 _world = glm::unProject(glm::vec3(x, m_renderer->getViewportAsVector().w - y, 1), glm::mat4() * camera->getViewMatrix(), persp, m_renderer->getViewportAsVector());
-			Vector3 world;
-			if (!resetPosition)
-				 world = _world - m_lastMouseWorldPos;
-			m_lastMouseWorldPos = _world;
+				Vector3 _world = glm::unProject(
+					glm::vec3(x, m_renderer->getViewportAsVector().w - y, 1),
+					camera->getViewMatrix(),
+					persp,
+					m_renderer->getViewportAsVector());
 
-			if (m_currentPickedEntity && !camera->isMoving())
-			{
-				if (m_activeMoveAxis != ActiveMoveAxis::None)
-				{				
-					Vector3 _pos = m_currentPickedEntity->getPosition();
+				Vector3 world;
+				if (!resetPosition)
+					world = _world - m_lastMouseWorldPos;
+				m_lastMouseWorldPos = _world;
+
+				if (m_currentPickedEntity && !camera->isMoving())
+				{
+					if (m_moveObject && (m_activeAxis != ActiveAxis::None))
+					{
+						Matrix4x4 matrix = m_currentPickedEntity->getMatrix();
 		
-					float mp = 0.2f;
-					switch (m_activeMoveAxis)
-					{
-					case ActiveMoveAxis::X:
-						{
-							_pos.x += world.x * mp;
-						} break;
-					case ActiveMoveAxis::Y:
-						{
-							_pos.y += world.y * mp;
-						} break;
-					case ActiveMoveAxis::Z:
-						{
-							_pos.z += world.z * mp;
-						} break;
-					};
+						float mp = 0.2f;
+						if (Input::get()->isKeyDown(Key::SCANCODE_LCTRL)) {
+							mp = 0.05f;
+						}
+						Vector4 world4(world.x, world.y, world.z, 1.f);
+						world4 = glm::mat4_cast(Quaternion(glm::inverse(matrix))) * world4;
 
-					m_currentPickedEntity->setPosition(_pos);
+						Vector4 _pos(0.f, 0.f, 0.f, 1.f);
+						float mp = 0.2f;
+						if (Input::get()->isKeyDown(Key::SCANCODE_LCTRL))
+							mp = 0.05f;
+
+						switch (m_activeAxis)
+						{
+						case ActiveAxis::X:
+							{
+								_pos.x += world4.x * mp;
+							} break;
+						case ActiveAxis::Y:
+							{
+								_pos.y += world4.y * mp;
+							} break;
+						case ActiveAxis::Z:
+							{
+								_pos.z += world4.z * mp;
+							} break;
+						};
+
+						Vector4 pos4 = matrix * _pos;
+
+						Vector3 newPosition = Vector3(pos4.x, pos4.y, pos4.z) / pos4.w;
+						m_currentPickedEntity->setPosition(newPosition);
+
+						sound->setPosition(newPosition);
+					}
 				}
 			}
 		}
@@ -600,7 +642,7 @@ void Game::onMouseButtonEvent(uint8 button, bool state, uint8 clicks, sint32 x, 
 		return;
 
 	// Shotting
-	if (button == 1 && ((EditorFreeCamera *)Camera::current)->isMoving())
+	if (button == 1 && CameraManager::get()->getByType<EditorFreeCamera>(CAMERA_TYPE_EDITOR_FREE)->isMoving())
 	{
 		if (state)
 		{
@@ -609,8 +651,8 @@ void Game::onMouseButtonEvent(uint8 button, bool state, uint8 clicks, sint32 x, 
 		else
 		{
 			float force = (OS::getMicrosecondsCount() - press) / 10000.f;
-			Vector3 a = Camera::current->getPosition();
-			Vector3 b = Camera::current->getTarget();
+			Vector3 a = CameraManager::get()->getCurrent()->getPosition();
+			Vector3 b = CameraManager::get()->getCurrent()->getTarget();
 
 			Vector3 diff = glm::normalize(b - a);
 			Vector3 velocity = diff;

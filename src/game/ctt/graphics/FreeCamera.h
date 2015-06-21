@@ -35,4 +35,6 @@ public:
 	void onKeyEvent(Key::Type key, bool state) override;
 
 	void update(float dt);
+
+	DEFINE_CAMERA_TYPE(FREE);
 };

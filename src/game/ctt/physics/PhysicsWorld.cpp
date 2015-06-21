@@ -25,7 +25,7 @@ private:
 public:
 	virtual void	drawLine(const btVector3& from, const btVector3& to, const btVector3& color)
 	{
-		Vector3 pos = Camera::current->getPosition();
+		Vector3 pos = CameraManager::get()->getCurrent()->getPosition();
 
 		Vector3 diffA = pos - Vector3(from.x(), from.y(), from.z());
 		Vector3 diffB = pos - Vector3(to.x(), to.y(), to.z());

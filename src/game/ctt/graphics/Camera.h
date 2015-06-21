@@ -14,6 +14,8 @@
 #include <Prerequisites.h>
 #include <input/Controllable.h>
 
+#include "CameraManager.h"
+
 class Camera : public Controllable
 {
 protected:
@@ -23,9 +25,15 @@ protected:
 	glm::vec3 m_target;
 	glm::quat m_rotation;
 	float m_fov;
+
+	bool m_isActive;
 public:
 	Camera();
 	virtual ~Camera();
+
+	virtual void activate();
+	virtual void deactivate();
+	virtual bool isActive();
 
 	virtual void setPosition(const glm::vec3 & position);
 	virtual glm::vec3 getPosition();
@@ -42,8 +50,6 @@ public:
 	virtual void update(float dt) {};
 	
 	virtual glm::mat4x4 getViewMatrix();
-	
-	// TODO: Camera manager.
-	static void setCurrent(Camera *);
-	static Camera * current;
+
+	DEFINE_CAMERA_TYPE(STATIC);
 };
