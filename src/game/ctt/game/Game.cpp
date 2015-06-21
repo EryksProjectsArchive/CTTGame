@@ -33,6 +33,9 @@
 
 #include <resources/ImageLoader.h>
 #include <resources/images/bmp/BMPImageLoader.h>
+#include <resources/images/png/PNGImageLoader.h>
+#include <resources/images/jpeg/JPEGImageLoader.h>
+//#include <resources/images/dds/DDSImageLoader.h>
 #include <resources/SoundLoader.h>
 #include <resources/sounds/wav/WAVsoundLoader.h>
 
@@ -143,6 +146,9 @@ bool Game::init()
 
 	// create image loader
 	ImageLoader::get()->registerLoader(new BMP::ImageLoader());
+	ImageLoader::get()->registerLoader(new PNG::ImageLoader());
+	ImageLoader::get()->registerLoader(new JPEG::ImageLoader());
+//	ImageLoader::get()->registerLoader(new DDS::ImageLoader());
 
 	// create sound loader
 	SoundLoader::get()->registerLoader(new WAV::SoundLoader());

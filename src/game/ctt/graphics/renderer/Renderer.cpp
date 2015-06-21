@@ -156,6 +156,8 @@ PFNGLVERTEXATTRIB4USVPROC Renderer::glVertexAttrib4usv = 0;
 PFNGLVERTEXATTRIBPOINTERPROC Renderer::glVertexAttribPointer = 0;
 PFNGLGENVERTEXARRAYSPROC Renderer::glGenVertexArrays = 0;
 
+PFNGLCOMPRESSEDTEXIMAGE2DPROC Renderer::glCompressedTexImage2D = 0;
+
 Renderer * Renderer::s_instance = 0;
 
 
@@ -331,7 +333,7 @@ bool Renderer::setup(Window * window)
 	ASSERT_FUNCTION(glGenVertexArrays = (PFNGLGENVERTEXARRAYSPROC)SDL_GL_GetProcAddress("glGenVertexArrays"));
 
 	SDL_GL_SetSwapInterval(Config::get()["graphics"]["vsync"].getBool(false) ? 1 : 0); // set 0 to disable vsync
-	
+
 	glViewport(0, 0, window->getWidth(), window->getHeight());
 	
 	glEnable(GL_BLEND);

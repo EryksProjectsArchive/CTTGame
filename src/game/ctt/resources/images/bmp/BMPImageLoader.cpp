@@ -10,7 +10,7 @@
 //////////////////////////////////////////////
 
 #include "BMPImageLoader.h"
-#include <stdio.h>
+#include <io/fs/FileSystem.h>
 
 #include <graphics/ImageData.h>
 
@@ -33,14 +33,14 @@ namespace BMP
 		bool isValid = false;
 		if (filePath.find(".bmp") != -1)
 		{
-			FILE * fp = fopen(filePath, "rb");
-			if (fp)
+			File *file = FileSystem::get()->open(filePath, FileOpenMode::Binary);
+			if (file->isLoaded())
 			{
 				char id[3] = { 0 };
-				fread(id, sizeof(char), 2, fp);
+				file->read(id, 2, 1);
 
 				isValid = (id[0] == 'B' && id[1] == 'M');
-				fclose(fp);
+				FileSystem::get()->close(file);
 			}
 		}
 		return isValid;
@@ -53,20 +53,20 @@ namespace BMP
 		if (data = ::ImageLoader::load(filePath))
 			return data;
 
-		FILE *fp = fopen(filePath, "rb");
-		if (fp)
+		File *file = FileSystem::get()->open(filePath, FileOpenMode::Binary);
+		if (file->isLoaded())
 		{
 			Magic magic = { 0 };
-			fread(&magic, sizeof(Magic), 1, fp);
+			file->read(&magic, sizeof(Magic), 1);
 
 			Header header = { 0 };
-			fread(&header.size, sizeof(Header), 1, fp);
+			file->read(&header.size, sizeof(Header), 1);
 
 			// header.id - we don't have to check id here it's checked in parent loader via isFileValid method
 			if (header.size > 0)
 			{
 				InfoHeader infoHeader = { 0 };
-				fread(&infoHeader, sizeof(InfoHeader), 1, fp);
+				file->read(&infoHeader, sizeof(InfoHeader), 1);
 	
 				// Validate file we support 24 bits and no compression atm
 				if (infoHeader.bitCount == 24 && infoHeader.compression == 0)
@@ -78,8 +78,8 @@ namespace BMP
 					unsigned int size = data->width * data->height * 3;
 					data->pixels = new unsigned char[size];
 
-					fseek(fp, header.offBits, SEEK_SET);
-					fread(data->pixels, sizeof(unsigned char), size, fp);
+					file->seek(header.offBits, SeekOrigin::Set);
+					file->read(data->pixels, sizeof(unsigned char), size);
 
 					data->format = EImageFormat::BGR;
 				}
@@ -91,7 +91,7 @@ namespace BMP
 				Error("BMPImageLoader", "Cannot load image. Header size is not valid. (%s, %d)", filePath.get(), header.size);
 			}
 
-			fclose(fp);
+			FileSystem::get()->close(file);
 		}
 
 		return data;

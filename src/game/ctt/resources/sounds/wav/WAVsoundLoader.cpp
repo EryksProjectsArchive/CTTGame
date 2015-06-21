@@ -36,7 +36,7 @@ namespace WAV
 		if (filePath.find(".wav") != -1)
 		{
 			File *file = FileSystem::get()->open(filePath, FileOpenMode::Binary);
-			if (file)
+			if (file->isLoaded())
 			{
 				char id[5] = { 0 };
 				file->read(id, 4, 1);
@@ -65,7 +65,7 @@ namespace WAV
 			return data;
 
 		File *file = FileSystem::get()->open(filePath, FileOpenMode::Binary);
-		if (file)
+		if (file->isLoaded())
 		{
 			WaveFile waveFile = { 0 };
 			file->read(&waveFile, sizeof(WaveFile) - sizeof(waveFile.data.Data), 1);

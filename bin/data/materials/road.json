@@ -1,6 +1,6 @@
 {
 	"texture": {
-        "name": "road.bmp", "mipMaps": true
+        "name": "road.png", "mipMaps": true
     },
 	"shaders": {
         "vertex": "simple",

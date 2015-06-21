@@ -87,7 +87,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>./;../../libs/OpenAL1.1/include/;../../libs/SDL2-2.0.3/include/;../../libs/glm-0.9.5.4/glm/;../../libs/jsoncpp/include/;../../libs/freetype-2.5.3/include/;../../libs/bullet/src/</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./;../../libs/OpenAL1.1/include/;../../libs/SDL2-2.0.3/include/;../../libs/glm-0.9.5.4/glm/;../../libs/jsoncpp/include/;../../libs/freetype-2.5.3/include/;../../libs/bullet/src/;../../libs/jpeg-9a/;../../libs/lpng1612/;../../libs/zlib-1.2.8/</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4996;</DisableSpecificWarnings>
       <PreprocessorDefinitions>DEBUG;</PreprocessorDefinitions>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
@@ -123,7 +123,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <SDLCheck>true</SDLCheck>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>./;../../libs/OpenAL1.1/include/;../../libs/SDL2-2.0.3/include/;../../libs/glm-0.9.5.4/glm/;../../libs/jsoncpp/include/;../../libs/freetype-2.5.3/include/;../../libs/bullet/src/</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./;../../libs/OpenAL1.1/include/;../../libs/SDL2-2.0.3/include/;../../libs/glm-0.9.5.4/glm/;../../libs/jsoncpp/include/;../../libs/freetype-2.5.3/include/;../../libs/bullet/src/;../../libs/jpeg-9a/;../../libs/lpng1612/;../../libs/zlib-1.2.8/</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4996;</DisableSpecificWarnings>
       <DisableLanguageExtensions>false</DisableLanguageExtensions>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
@@ -211,6 +211,9 @@
     <ClCompile Include="resources\images\bmp\BMPImageLoader.cpp" />
     <ClCompile Include="resources\materials\MaterialLib.cpp" />
     <ClCompile Include="resources\models\ModelLib.cpp" />
+    <ClCompile Include="resources\images\dds\DDSImageLoader.cpp" />
+    <ClCompile Include="resources\images\jpeg\JPEGImageLoader.cpp" />
+    <ClCompile Include="resources\images\png\PNGImageLoader.cpp" />
     <ClCompile Include="resources\Resource.cpp" />
     <ClCompile Include="resources\SoundLoader.cpp" />
     <ClCompile Include="resources\sounds\wav\WAVsoundLoader.cpp" />
@@ -284,6 +287,9 @@
     <ClInclude Include="resources\images\bmp\BMPImageLoader.h" />
     <ClInclude Include="resources\materials\MaterialLib.h" />
     <ClInclude Include="resources\models\ModelLib.h" />
+    <ClInclude Include="resources\images\dds\DDSImageLoader.h" />
+    <ClInclude Include="resources\images\jpeg\JPEGImageLoader.h" />
+    <ClInclude Include="resources\images\png\PNGImageLoader.h" />
     <ClInclude Include="resources\Resource.h" />
     <ClInclude Include="resources\ResourceLib.h" />
     <ClInclude Include="resources\SoundLoader.h" />
@@ -309,11 +315,20 @@
     <ProjectReference Include="..\..\libs\freetype-2.5.3\builds\windows\vc2013_ctt\freetype.vcxproj">
       <Project>{78b079bd-9fc7-4b9e-b4a6-96da0f00248b}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\..\libs\jpeg-9a\jpeg.vcxproj">
+      <Project>{019dbd2a-273d-4ba4-bf86-b5efe2ed76b1}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\libs\jsoncpp\jsoncpp.vcxproj">
       <Project>{92c379eb-18c9-41b6-9f8c-11d9f6dc52f2}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\..\libs\lpng1612\projects\vstudio\libpng\libpng.vcxproj">
+      <Project>{d6973076-9317-4ef2-a0b8-b7a18ac0713e}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\libs\SDL2-2.0.3\VisualC\SDL\SDL_VS2013.vcxproj">
       <Project>{81ce8daf-ebb2-4761-8e45-b71abcca8c68}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\libs\zlib-1.2.8\win32\zlib.vcxproj">
+      <Project>{60f89955-91c6-3a36-8000-13c592fec2df}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

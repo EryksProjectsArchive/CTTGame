@@ -175,6 +175,24 @@
     <Filter Include="Header Files\os\win32">
       <UniqueIdentifier>{eeea9bfd-95d5-4f3b-aaa5-956286fd7268}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\resources\images\jpeg">
+      <UniqueIdentifier>{f3bb6697-13df-42ce-95bc-d465fe89b0c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\resources\images\jpeg">
+      <UniqueIdentifier>{4c1c6395-fa95-4961-b317-c0815da1a608}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\resources\images\dds">
+      <UniqueIdentifier>{606c3822-364e-459b-8645-735407c0cdbb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\resources\images\dds">
+      <UniqueIdentifier>{28fa0925-32a1-4ccf-a191-bf95f8eb6e0b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\resources\images\png">
+      <UniqueIdentifier>{5234607b-1a06-443d-9146-e95f0fd6d35d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\resources\images\png">
+      <UniqueIdentifier>{31023c4e-dab1-4b6b-96a2-83b370126c6f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -341,6 +359,14 @@
     </ClCompile>
     <ClCompile Include="core\ExceptionHandler.cpp">
       <Filter>Source Files\core</Filter>
+    <ClCompile Include="resources\images\jpeg\JPEGImageLoader.cpp">
+      <Filter>Source Files\resources\images\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="resources\images\dds\DDSImageLoader.cpp">
+      <Filter>Source Files\resources\images\dds</Filter>
+    </ClCompile>
+    <ClCompile Include="resources\images\png\PNGImageLoader.cpp">
+      <Filter>Source Files\resources\images\png</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -562,6 +588,15 @@
     </ClInclude>
     <ClInclude Include="core\WString.h">
       <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="resources\images\jpeg\JPEGImageLoader.h">
+      <Filter>Header Files\resources\images\jpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="resources\images\dds\DDSImageLoader.h">
+      <Filter>Header Files\resources\images\dds</Filter>
+    </ClInclude>
+    <ClInclude Include="resources\images\png\PNGImageLoader.h">
+      <Filter>Header Files\resources\images\png</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -180,4 +180,7 @@ public:
 	static PFNGLVERTEXATTRIB4USVPROC glVertexAttrib4usv;
 	static PFNGLVERTEXATTRIBPOINTERPROC glVertexAttribPointer;
 	static PFNGLGENVERTEXARRAYSPROC glGenVertexArrays;
+
+	static PFNGLCOMPRESSEDTEXIMAGE2DPROC glCompressedTexImage2D;
+
 };
