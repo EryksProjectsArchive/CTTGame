@@ -13,12 +13,20 @@
 
 #include <Prerequisites.h>
 
+#include <btBulletDynamicsCommon.h>
+
 class Scene
 {
 private:
 	List<Entity *> m_entities;
 
 	Camera * m_camera;
+
+	btBroadphaseInterface* m_broadphase;
+	btDefaultCollisionConfiguration* m_collisionConfiguration;
+	btCollisionDispatcher* m_dispatcher;
+	btSequentialImpulseConstraintSolver* m_solver;
+	btDiscreteDynamicsWorld* m_dynamicsWorld;
 public:
 	Scene();
 	~Scene();

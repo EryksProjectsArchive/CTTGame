@@ -18,11 +18,11 @@ class Timer
 private:
 	static unsigned long long s_frameTime;
 	static unsigned long long s_startFrameTime;
-	static double s_deltaTime;
-	static float s_deltaTimeF;
+	static double s_deltaTimed;
+	static float s_deltaTime;
 public:
-	static double getDeltaTime();
-	static float getDeltaTimef();
+	static double getDeltaTimed();
+	static float getDeltaTime();
 
 	static void frameStart();
 	static void frameEnd();

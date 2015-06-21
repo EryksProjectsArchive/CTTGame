@@ -16,17 +16,17 @@
 
 unsigned long long Timer::s_frameTime = 0ull;
 unsigned long long Timer::s_startFrameTime = 0ull;
-float Timer::s_deltaTimeF = 0.0f;
-double Timer::s_deltaTime = 0.0;
+float Timer::s_deltaTime = 0.0f;
+double Timer::s_deltaTimed = 0.0;
 
-double Timer::getDeltaTime()
+double Timer::getDeltaTimed()
 {
 	return s_deltaTime;
 }
 
-float Timer::getDeltaTimef()
+float Timer::getDeltaTime()
 {
-	return s_deltaTimeF;
+	return s_deltaTime;
 }
 
 void Timer::frameStart()
@@ -37,6 +37,6 @@ void Timer::frameStart()
 void Timer::frameEnd()
 {
 	s_frameTime = OS::getMicrosecondsCount() - s_startFrameTime;
-	s_deltaTimeF = s_frameTime * 0.00001f;
-	s_deltaTime = s_frameTime * 0.00001;
+	s_deltaTime = s_frameTime * 0.00001f;
+	s_deltaTimed = s_frameTime * 0.00001;
 }

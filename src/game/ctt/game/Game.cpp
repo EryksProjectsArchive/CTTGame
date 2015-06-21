@@ -40,7 +40,8 @@
 
 #include "environment/Environment.h"
 
-Model * road = 0;
+#include <game/scene/entities/types/CrossroadEntity.h>
+
 Model *simpleBox = 0;
 #define FREE_MODEL(mdl)\
 	mdl->free();\
@@ -58,7 +59,6 @@ Game::Game()
 
 Game::~Game()
 {
-	FREE_MODEL(road);
 	FREE_MODEL(simpleBox);
 
 	if (m_renderer)
@@ -142,11 +142,12 @@ bool Game::init()
 	
 	m_scene->addEntity(entity);
 
+	CrossroadEntity * crossroad = new CrossroadEntity();
+
+	m_scene->addEntity(crossroad);
+
 	Camera::current->setPosition(Vector3(0.0f, 4.0f, 6.0f));
 	Camera::current->setTarget(Vector3());
-
-	road = new Model("../../data/models/road.mdl");
-	road->acquire();
 
 	simpleBox = new Model("../../data/models/simpleBox.mdl");
 	simpleBox->acquire();
@@ -183,15 +184,15 @@ bool Game::pulse()
 		pos.z = cosf(mov) * distance;
 
 		if (controlls[2])
-			mov += 0.05f * Timer::getDeltaTimef();
+			mov += 0.05f * Timer::getDeltaTime();
 		else if (controlls[3])
-			mov -= 0.05f * Timer::getDeltaTimef();
+			mov -= 0.05f * Timer::getDeltaTime();
 
 		if (controlls[0])
-			pos.y += 1.0f * Timer::getDeltaTimef();
+			pos.y += 1.0f * Timer::getDeltaTime();
 
 		if (controlls[1])
-			pos.y -= 1.0f * Timer::getDeltaTimef();
+			pos.y -= 1.0f * Timer::getDeltaTime();
 
 		Camera::current->setPosition(pos);
 	}
@@ -208,7 +209,6 @@ bool Game::pulse()
 
 		{
 			RenderContext ctx;
-			road->render(ctx);
 			simpleBox->render(ctx);
 		}
 
@@ -237,7 +237,7 @@ void Game::onKeyEvent(int key, bool state)
 void Game::onMouseScroll(int horizontal, int vertical)
 {
 	if (vertical > 0)
-		distance -= 1.0f * Timer::getDeltaTimef();
+		distance -= 1.0f * Timer::getDeltaTime();
 	else
-		distance += 1.0f * Timer::getDeltaTimef();
+		distance += 1.0f * Timer::getDeltaTime();
 }

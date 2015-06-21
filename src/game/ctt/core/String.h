@@ -127,8 +127,8 @@ public:
 
 	unsigned short String::find(const char * key)
 	{		
-		int range = maxSize - strlen(key);
-		for (unsigned int i = 0; i < range; ++i)
+		uint32 range = maxSize - strlen(key);
+		for (uint32 i = 0; i < range; ++i)
 			if (!memcmp(&m_buffer[i], key, strlen(key)))
 				return i;			
 		

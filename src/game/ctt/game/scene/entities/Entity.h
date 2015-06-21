@@ -65,7 +65,7 @@ public:
 	* This function is called from Scene when whole scene is rendered.
 	* @param: render context (RenderContext)
 	*/
-	virtual void render(const RenderContext & ctx);
+	virtual void render(RenderContext & ctx);
 
 	/**
 	* @name: physicsUpdate

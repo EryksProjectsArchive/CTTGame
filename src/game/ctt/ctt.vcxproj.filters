@@ -136,6 +136,12 @@
     <Filter Include="Header Files\resources\sounds\wav">
       <UniqueIdentifier>{d66c336d-62c1-41f6-9304-433f3442ede6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\game\scene\entities\types">
+      <UniqueIdentifier>{8731653c-ac28-4ab9-9096-a16b0f656bdc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\game\scene\entities\types">
+      <UniqueIdentifier>{224d7998-3d1c-4b0d-8bcf-87ca1cf6f794}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -272,6 +278,9 @@
     </ClCompile>
     <ClCompile Include="sound\SoundManager.cpp">
       <Filter>Source Files\sound</Filter>
+    </ClCompile>
+    <ClCompile Include="game\scene\entities\types\CrossroadEntity.cpp">
+      <Filter>Source Files\game\scene\entities\types</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -442,6 +451,9 @@
     </ClInclude>
     <ClInclude Include="sound\SoundManager.h">
       <Filter>Header Files\sound</Filter>
+    </ClCompile>
+    <ClInclude Include="game\scene\entities\types\CrossroadEntity.h">
+      <Filter>Header Files\game\scene\entities\types</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
