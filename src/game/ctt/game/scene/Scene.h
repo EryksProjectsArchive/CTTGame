@@ -22,6 +22,8 @@ private:
 	List<Entity *> m_entities;
 
 	Camera * m_camera;
+
+	Terrain *m_terrain;
 public:
 	Scene();
 	~Scene();

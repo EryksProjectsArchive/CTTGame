@@ -105,6 +105,8 @@ void Console::init()
 void Console::output(MessageType::Type type, const WDynString& message)
 {
 	m_lines.pushBack(new Console::Line(type, message));
+	if (m_lines.size() > 30) // Limit console to 30 messages
+		m_lines.remove(*m_lines.begin());	
 }	
 
 void Console::onKeyEvent(Key::Type key, bool pressed)

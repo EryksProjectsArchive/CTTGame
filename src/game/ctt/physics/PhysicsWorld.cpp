@@ -149,3 +149,8 @@ bool PhysicsWorld::rayTest(Vector3 begin, Vector3 end, Vector3 * position)
 	}
 	return false;
 }
+
+btDiscreteDynamicsWorld * PhysicsWorld::getDynamicsWorld()
+{
+	return m_dynamicsWorld;
+}

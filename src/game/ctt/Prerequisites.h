@@ -61,6 +61,8 @@ typedef double Scalar;
 typedef float Scalar;
 #endif
 
+typedef wchar_t wchar; // wide char
+
 // Predefinitions
 
 // Core
@@ -82,6 +84,11 @@ class WString;
 // Hashing
 class Hash;
 class JenkinsHash;
+
+// Environment
+class Environment;
+class TerrainNode;
+class Terrain;
 
 // Game
 class Game;
@@ -142,10 +149,14 @@ class Material;
 class MaterialLib;
 class Model;
 class Mesh;
-struct Vertex3d;
 class Camera;
-struct ImageData;
 class Font;
+
+struct Vertex2d;
+struct Vertex3d;
+struct SimpleVertex2d;
+struct ImageData;
+
 
 // Math
 typedef glm::quat Quaternion;
@@ -153,9 +164,10 @@ typedef glm::mat4x4 Matrix4x4;
 typedef glm::vec2 Vector2;
 typedef glm::vec3 Vector3;
 typedef glm::vec4 Vector4;
+typedef glm::vec4 Color;
+
 class AABB;
 class Rect;
-typedef glm::vec4 Color;
 
 // Input
 class Controllable;

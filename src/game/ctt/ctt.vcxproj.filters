@@ -378,6 +378,9 @@
     <ClCompile Include="core\console\Console.cpp">
       <Filter>Source Files\core\console</Filter>
     </ClCompile>
+    <ClCompile Include="game\environment\Terrain.cpp">
+      <Filter>Source Files\game\environment</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="os\OS.h">
@@ -619,6 +622,9 @@
     </ClInclude>
     <ClInclude Include="graphics\Vertex2d.h">
       <Filter>Header Files\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="game\environment\Terrain.h">
+      <Filter>Header Files\game\environment</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

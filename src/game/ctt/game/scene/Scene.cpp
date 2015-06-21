@@ -19,10 +19,13 @@
 #include <graphics/FreeCamera.h>
 #include <graphics/renderer/RenderContext.h>
 
+#include <game/environment/Terrain.h>
+
 Scene::Scene()
 {
 	m_camera = new FreeCamera();
-	Camera::setCurrent(m_camera);	
+	Camera::setCurrent(m_camera);
+	//m_terrain = new Terrain(200, 200);
 }
 
 Scene::~Scene()
@@ -37,12 +40,22 @@ Scene::~Scene()
 		delete m_camera;
 		m_camera = 0;
 	}
+
+	//if (m_terrain)
+	//{
+	//	delete m_terrain;
+	//	m_terrain = 0;
+	//}
 }
 
 void Scene::render()
 {
 	// Separated render context for entities
 	RenderContext ctx;
+
+	//if (m_terrain)
+	//	m_terrain->render(ctx);
+
 	for (auto entity : m_entities)
 		entity->render(ctx);
 }

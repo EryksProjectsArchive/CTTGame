@@ -21,11 +21,11 @@ template <int maxSize>
 class WString
 {
 private:
-	wchar_t m_buffer[maxSize];
+	wchar m_buffer[maxSize];
 public:
 	WString()
 	{
-		memset(m_buffer, 0, maxSize * sizeof(wchar_t));
+		memset(m_buffer, 0, maxSize * sizeof(wchar));
 	}
 
 	WString(const WString<maxSize>& string) : WString()
@@ -33,7 +33,7 @@ public:
 		wcscpy(m_buffer, string.m_buffer);
 	}
 
-	WString(const wchar_t *buffer) : WString()
+	WString(const wchar *buffer) : WString()
 	{
 		size_t size = wcslen(buffer);
 		if (size > maxSize)
@@ -44,7 +44,7 @@ public:
 		m_buffer[len] = '\0';
 	}
 
-	WString(wchar_t *buffer) : WString()
+	WString(wchar *buffer) : WString()
 	{
 		size_t size = wcslen(buffer);
 		if (size > maxSize)
@@ -55,9 +55,9 @@ public:
 		m_buffer[len] = '\0';
 	}
 
-	explicit WString(const wchar_t *buffer, ...)
+	explicit WString(const wchar *buffer, ...)
 	{
-		wchar_t tempBuffer[maxSize] = { 0 };
+		wchar tempBuffer[maxSize] = { 0 };
 		va_list args;
 		va_start(args, buffer);
 		vswprintf(tempBuffer, buffer, args);
@@ -69,7 +69,7 @@ public:
 	{
 	}
 
-	WString& append(const wchar_t *buffer)
+	WString& append(const wchar *buffer)
 	{
 		size_t size = wcslen(buffer);
 		size_t length = getLength();
@@ -79,7 +79,7 @@ public:
 
 		if (size > 0)
 		{
-			memcpy(((wchar_t *)m_buffer + length), buffer, size * sizeof(wchar_t));
+			memcpy(((wchar *)m_buffer + length), buffer, size * sizeof(wchar));
 		}
 
 		return *this;
@@ -88,14 +88,14 @@ public:
 	WString& operator=(WString& string)
 	{
 		unsigned int size = wcslen(string.m_buffer);
-		memcpy(m_buffer, string.m_buffer, (size > maxSize ? maxSize : size) * sizeof(wchar_t));
+		memcpy(m_buffer, string.m_buffer, (size > maxSize ? maxSize : size) * sizeof(wchar));
 		return *this;
 	}
 
-	WString& operator=(const wchar_t *buffer)
+	WString& operator=(const wchar *buffer)
 	{
 		uint32 size = wcslen(buffer);
-		memcpy(m_buffer, buffer, (size > maxSize ? maxSize : size) * sizeof(wchar_t));
+		memcpy(m_buffer, buffer, (size > maxSize ? maxSize : size) * sizeof(wchar));
 		return *this;
 	}
 
@@ -104,12 +104,12 @@ public:
 		return WString(L"%s%s", m_buffer, string.m_buffer);
 	}
 
-	WString operator+(const wchar_t *buffer) const
+	WString operator+(const wchar *buffer) const
 	{
 		return WString(L"%s%s", m_buffer, buffer);
 	}
 
-	wchar_t operator[](unsigned int index)
+	wchar operator[](unsigned int index)
 	{
 		if (index < 0 || index > maxSize)
 			return 0;
@@ -117,12 +117,12 @@ public:
 		return m_buffer[index];
 	}
 
-	operator const wchar_t*() const
+	operator const wchar*() const
 	{
 		return m_buffer;
 	}
 
-	const wchar_t * WString::get() const
+	const wchar * WString::get() const
 	{
 		return m_buffer;
 	}
@@ -137,7 +137,7 @@ public:
 		return maxSize;
 	}
 
-	uint16 WString::find(const wchar_t * key) const
+	uint16 WString::find(const wchar * key) const
 	{
 		uint32 range = wcslen(m_buffer);
 		if (range + wcslen(key) > maxSize)
@@ -145,7 +145,7 @@ public:
 
 		for (uint32 i = 0; i < range; ++i)
 		{
-			if (!memcmp(m_buffer + i, key, wcslen(key)*  sizeof(wchar_t)))
+			if (!memcmp(m_buffer + i, key, wcslen(key)*  sizeof(wchar)))
 			{
 				return i;
 			}
@@ -154,14 +154,14 @@ public:
 		return -1;
 	}
 
-	WString operator+=(const wchar_t *value)
+	WString operator+=(const wchar *value)
 	{
 		return append(value);
 	}
 
-	WString operator+=(wchar_t c)
+	WString operator+=(wchar c)
 	{
-		wchar_t value[2] = { 0 };
+		wchar value[2] = { 0 };
 		value[0] = c;
 		return append(value);
 	}
@@ -182,12 +182,12 @@ public:
 		return newWString;
 	}
 
-	WString replace(const wchar_t *key, const wchar_t *value)
+	WString replace(const wchar *key, const wchar *value)
 	{
 		WString newWString;
 		uint16 keyPos = find(key);
 
-		wchar_t temp[maxSize] = { 0 };
+		wchar temp[maxSize] = { 0 };
 		wcscpy(temp, keyPos < wcslen(key) ? substr(wcslen(key), wcslen(m_buffer)) : substr(keyPos + wcslen(key), wcslen(m_buffer)));
 
 		wcscpy(newWString.m_buffer, value);
