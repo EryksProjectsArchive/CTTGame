@@ -11,7 +11,6 @@
 
 #pragma once
 
-#include <graphics/Window.h>
 #include <core/String.h>
 
 #include "DynamicLibrary.h"
@@ -32,9 +31,6 @@ namespace OS
 	bool fileExists(FilePath path);
 	bool makeDirectory(FilePath path);
 	bool isFileOSDynLib(FilePath path);
-
-	// Window
-	IWindow* createWindowInstance();
 
 	// Dynamic libs
 	DynamicLibrary * openDynamicLibrary(FilePath path);

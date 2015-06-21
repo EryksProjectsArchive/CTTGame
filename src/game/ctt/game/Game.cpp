@@ -19,6 +19,7 @@
 
 #include <os/OS.h>
 
+#include <graphics/Window.h>
 #include <graphics/Model.h>
 #include <graphics/Graphics.h>
 #include <graphics/renderer/Renderer.h>
@@ -76,6 +77,9 @@ bool Game::init()
 		return false;
 	}
 
+	// Initialize SDL
+	SDL_Init(SDL_INIT_VIDEO);
+
 	// Create file system
 	m_fileSystem = new FileSystem();
 	m_fileSystem->setBaseDirectory(OS::getAppPath());
@@ -87,10 +91,10 @@ bool Game::init()
 	Logger::init(FilePath("%sgame.log", szHomePath), false);
 
 	// Create game window
-	m_window = OS::createWindowInstance();
+	m_window = new Window();
 	m_window->setup("City Transport Tycoon", 800, 600);
 
-	m_renderer = Graphics::createRenderer(Graphics::RendererAPIs::OPENGL);
+	m_renderer = new Renderer();
 	if (!m_renderer->setup(m_window))
 	{
 		Error("game", "Cannot setup renderer.");

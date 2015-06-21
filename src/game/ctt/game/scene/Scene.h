@@ -25,7 +25,7 @@ public:
 	Scene();
 	~Scene();
 
-	void updatePhysics(); // Do some delta time calculation here to make physics FPS indepent
+	void updatePhysics();
 
 	void addEntity(Entity *entity);
 

@@ -11,69 +11,47 @@
 
 #include "Window.h"
 
-IWindow::IWindow()
-	: m_fullscreen(false), m_width(800), m_height(600)
+Window::Window()
+	: _window(0)
 {
-}
-	
-IWindow::~IWindow()
-{
+
 }
 
-bool IWindow::setup(const char *title, unsigned short width, unsigned short height, bool fullscreen)
+Window::~Window()
 {
+	if (_window)
+	{
+		_window = 0;
+		SDL_DestroyWindow(_window);
+	}
+}
+
+bool Window::setup(const char *title, unsigned short width, unsigned short height, bool fullscreen)
+{
+	if (!_window)
+	{
+		_window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
+		if (!_window)
+			return false;
+
+
+
+		return true;
+	}
 	return false;
 }
 
-bool IWindow::processMessages()
+bool Window::processMessages()
 {
-	return false;
-}
-
-void * IWindow::getPtr()
-{
-	return 0;
-}
-
-void * IWindow::getSpecificPtr(unsigned char slot)
-{
-	return 0;
-}
-
-void IWindow::handleFocusLost()
-{
-}
-
-void IWindow::handleFocus()
-{
-}
-
-void IWindow::setRenderer(IRenderer *renderer)
-{
-	m_renderer = renderer;
-}
-
-IRenderer * IWindow::getRenderer()
-{
-	return m_renderer;
-}
-
-unsigned short IWindow::getWidth()
-{
-	return m_width;
-}
-
-unsigned short IWindow::getHeight()
-{
-	return m_height;
-}
-
-void IWindow::setFullscreen(bool fullscreen, unsigned short width, unsigned short height)
-{
-	m_fullscreen = fullscreen;
-}
-
-bool IWindow::isFullscreenEnabled()
-{
-	return m_fullscreen;
+	SDL_Event event;
+	while (SDL_PollEvent(&event))
+	{
+		switch (event.type)
+		{
+		case SDL_QUIT:
+			return false;
+			break;
+		}
+	}
+	return true;
 }

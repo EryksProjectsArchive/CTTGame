@@ -21,7 +21,6 @@
 #	include <Windows.h>
 #	include <ShlObj.h>
 
-#	include "win32/Win32Window.h"
 #	include "win32/Win32DynamicLibrary.h"
 #elif __linux__ 
 #	include <sys/stat.h>
@@ -29,7 +28,7 @@
 #	include <pwd.h>
 #	include <unistd.h>
 
-#	include "linux/LinuxWindow.h"
+#	include "win32/LinuxDynamicLibrary.h"
 #endif
 
 namespace OS
@@ -119,15 +118,6 @@ namespace OS
 		return ::CreateDirectory(path, NULL) == TRUE;
 #elif __linux__ 
 		return ::mkdir(path, S_IRWXU|S_IRGRP|S_IXGRP);
-#endif
-	}
-
-	IWindow * createWindowInstance()
-	{
-#ifdef _WIN32
-		return new Win32::Window();
-#elif __linux__ 
-		return new Linux::Window();
 #endif
 	}
 

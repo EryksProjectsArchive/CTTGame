@@ -11,8 +11,8 @@
 
 #pragma once
 
-class IWindow;
-class IRenderer;
+class Window;
+class Renderer;
 class ISoundMgr;
 class FileSystem;
 class Scene;
@@ -23,8 +23,8 @@ private:
 	bool m_isRunning;
 	bool m_isInitialized;
 
-	IWindow* m_window;
-	IRenderer* m_renderer;
+	Window* m_window;
+	Renderer* m_renderer;
 	ISoundMgr* m_soundMgr;
 
 	FileSystem *m_fileSystem;

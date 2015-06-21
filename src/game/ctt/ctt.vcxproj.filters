@@ -25,9 +25,6 @@
     <Filter Include="Header Files\os">
       <UniqueIdentifier>{d26f86f3-da0f-4aad-9448-9b1d4a569196}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\os\win32">
-      <UniqueIdentifier>{4fb62505-d168-4f7e-936d-d0aeb90b939d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\os\win32">
       <UniqueIdentifier>{3d067636-e8ae-43c0-8d62-94ca53d3a7bc}</UniqueIdentifier>
     </Filter>
@@ -60,12 +57,6 @@
     </Filter>
     <Filter Include="Source Files\graphics\renderer">
       <UniqueIdentifier>{ef30589c-382a-4136-a550-334787ad7856}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\graphics\renderer\opengl">
-      <UniqueIdentifier>{cfb2d6cf-fe6d-4247-81a7-fabc058744c2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\graphics\renderer\opengl">
-      <UniqueIdentifier>{51b82679-e37a-4747-8892-2a26b72f3d5a}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\game">
       <UniqueIdentifier>{dab718cd-d399-4c50-88f2-c842130c00bf}</UniqueIdentifier>
@@ -111,9 +102,6 @@
     <ClCompile Include="os\OS.cpp">
       <Filter>Source Files\os</Filter>
     </ClCompile>
-    <ClCompile Include="os\win32\Win32Window.cpp">
-      <Filter>Source Files\os\win32</Filter>
-    </ClCompile>
     <ClCompile Include="core\Logger.cpp">
       <Filter>Source Files\core</Filter>
     </ClCompile>
@@ -155,12 +143,6 @@
     </ClCompile>
     <ClCompile Include="graphics\renderer\BufferBase.cpp">
       <Filter>Source Files\graphics\renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="graphics\renderer\opengl\OpenGLRenderer.cpp">
-      <Filter>Source Files\graphics\renderer\opengl</Filter>
-    </ClCompile>
-    <ClCompile Include="graphics\renderer\opengl\OpenGLImpl.cpp">
-      <Filter>Source Files\graphics\renderer\opengl</Filter>
     </ClCompile>
     <ClCompile Include="graphics\Graphics.cpp">
       <Filter>Source Files\graphics</Filter>
@@ -212,9 +194,6 @@
     <ClInclude Include="os\OS.h">
       <Filter>Header Files\os</Filter>
     </ClInclude>
-    <ClInclude Include="os\win32\Win32Window.h">
-      <Filter>Header Files\os\win32</Filter>
-    </ClInclude>
     <ClInclude Include="core\Logger.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
@@ -263,12 +242,6 @@
     <ClInclude Include="graphics\renderer\Renderer.h">
       <Filter>Header Files\graphics\renderer</Filter>
     </ClInclude>
-    <ClInclude Include="graphics\renderer\opengl\OpenGLImpl.h">
-      <Filter>Header Files\graphics\renderer\opengl</Filter>
-    </ClInclude>
-    <ClInclude Include="graphics\renderer\opengl\OpenGLRenderer.h">
-      <Filter>Header Files\graphics\renderer\opengl</Filter>
-    </ClInclude>
     <ClInclude Include="graphics\Graphics.h">
       <Filter>Header Files\graphics</Filter>
     </ClInclude>
@@ -286,9 +259,6 @@
     </ClInclude>
     <ClInclude Include="os\DynamicLibrary.h">
       <Filter>Header Files\os</Filter>
-    </ClInclude>
-    <ClInclude Include="os\win32\Win32DynamicLibrary.h">
-      <Filter>Header Files\os\win32</Filter>
     </ClInclude>
     <ClInclude Include="io\CachedItem.h">
       <Filter>Header Files\io</Filter>

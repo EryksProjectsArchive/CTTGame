@@ -11,30 +11,34 @@
 
 #pragma once
 
+#include <SDL.h>
+#include <SDL_opengl.h>
+
 #include "BufferBase.h"
+#include <graphics/Window.h>
 
 class RenderQueue;
 
-class IWindow;
+class Window;
 
-class IRenderer
+class Renderer
 {
 protected:
-	IWindow* m_window;
+	Window* m_window;
+
+	SDL_GLContext m_glContext;
 public:
-	IRenderer();
-	virtual ~IRenderer();
+	Renderer();
+	~Renderer();
 
-	virtual bool setup(IWindow * window);
+	bool setup(Window * window);
 
-	virtual void preFrame();
-	virtual void postFrame();
+	void preFrame();
+	void postFrame();
 
-	virtual char * getAPIName();
+	void setFullscreen(bool fullscreen);
 
-	virtual void setFullscreen(bool fullscreen);
+	void doQueueRender(RenderQueue * queue);
 
-	virtual void doQueueRender(RenderQueue * queue);
-
-	virtual BufferBase * createBuffer(BufferType::Type type);
+	BufferBase * createBuffer(BufferType::Type type);
 };
