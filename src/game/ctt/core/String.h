@@ -29,7 +29,7 @@ public:
 	{
 		memset(m_buffer, 0, maxSize);
 
-		int size = strlen(buffer);
+		size_t size = strlen(buffer);
 		if (size > maxSize)
 			size = maxSize;
 
@@ -52,8 +52,8 @@ public:
 
 	void append(const char *buffer)
 	{
-		unsigned int size = strlen(buffer);
-		unsigned int length = getLength();
+		size_t size = strlen(buffer);
+		size_t length = getLength();
 
 		if (length + size >= maxSize)
 			size = maxSize - length;
@@ -87,7 +87,7 @@ public:
 		return m_buffer;
 	}
 
-	unsigned short String::getLength()
+	size_t String::getLength()
 	{
 		return strlen(m_buffer);
 	}

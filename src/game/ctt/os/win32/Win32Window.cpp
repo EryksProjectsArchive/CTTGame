@@ -66,7 +66,7 @@ namespace Win32
 		}
 
 		m_window = CreateWindowEx(0, "AppWindow", title, WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX, 0, 0, width, height, 0, 0, m_wndClass.hInstance, 0);
-
+	
 		if (m_window == 0)
 		{
 			Error("window", "Cannot create application window!");

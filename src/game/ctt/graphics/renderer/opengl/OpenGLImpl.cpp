@@ -83,6 +83,8 @@ namespace OpenGL
 			return false;
 		}
 
+		printf("GLE:%d\n", GetLastError());
+
 #define DYN_LIB_NAME "opengl32"
 #elif __linux__
 #define DYN_LIB_NAME "libGL"
@@ -93,18 +95,19 @@ namespace OpenGL
 		{
 			// Macro to make code looking slightly better.
 #define METHOD(name)\
-			*(unsigned int *)&this->name = (unsigned int)m_openGLDynLib->getProcAddress(#name);\
+			*(unsigned long *)&this->name = m_openGLDynLib->getProcAddress(#name);\
 			if(!this->name) { \
 				Error("gfx","Cannot find OpenGL Method - '%s'.",#name);\
 				return false;\
 			}
-			
+
+					
 #ifdef _WIN32
 			METHOD(wglCreateContext);
 			METHOD(wglMakeCurrent);
 			METHOD(wglDeleteContext);
 			METHOD(wglGetProcAddress);
-			
+
 			if (!(m_hRC = this->wglCreateContext(m_hDC)))
 			{
 				Error("gfx", "Cannot create wgl Impl");
@@ -118,8 +121,8 @@ namespace OpenGL
 			}
 
 #define EXT_METHOD(name)\
-			*(unsigned int *)&name = (unsigned int)wglGetProcAddress(#name);\
-			if(!name) { \
+			*(unsigned long *)&this->name = (unsigned long)this->wglGetProcAddress(#name);\
+			if(!this->name) { \
 				Error("gfx","Cannot find OpenGL Method - '%s'.",#name);\
 				return false;\
 			}
@@ -137,7 +140,7 @@ namespace OpenGL
 
 
 #define EXT_METHOD(name)\
-			*(unsigned int *)&name = (unsigned int)glXGetProcAddress(#name);\
+			*(unsigned long *)&name = (unsigned long)glXGetProcAddress(#name);\
 			if(!name) { \
 				Error("gfx","Cannot find OpenGL Method - '%s'.",#name);\
 				return false;\

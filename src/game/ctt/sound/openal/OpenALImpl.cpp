@@ -43,7 +43,7 @@ namespace OpenAL
 		{
             // Macro to make code looking slightly better.
 #define METHOD(name)\
-    *(unsigned int *)&name = (unsigned int)m_openALDynLib->getProcAddress(#name);\
+    *(unsigned long *)&name = m_openALDynLib->getProcAddress(#name);\
     if(!name) { \
         Error("openAL", "Cannot find OpenAL Method - '%s'.",#name);\
         return false;\
@@ -52,7 +52,7 @@ namespace OpenAL
             METHOD(alGetProcAddress);
 
 #define EXT_METHOD(name)\
-    *(unsigned int *)&name = (unsigned int)alGetProcAddress(#name);\
+    *(unsigned long *)&name = alGetProcAddress(#name);\
     if(!name) { \
         Error("openAL", "Cannot find OpenAL Method - '%s'.",#name);\
         return false;\

@@ -39,7 +39,7 @@ namespace OS
 #ifdef _WIN32
 		static char path[MAX_PATH] = { 0 };
 		GetModuleFileName(NULL, path, MAX_PATH);
-		for (unsigned int i = strlen(path); i > 0; i--)
+		for (size_t i = strlen(path); i > 0; i--)
 		{
 			if (path[i] == '\\')
 			{
