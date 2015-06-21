@@ -1,6 +1,7 @@
 #version 330 core
 
 uniform sampler2D diffuse;
+uniform sampler2D normal;
 
 in vec4 vColor;
 in vec2 vUV;
@@ -14,6 +15,6 @@ layout(location = 2) out float outDepth;
 void main(void)
 {	
 	outDiffuse = vColor.rgb * texture2D(diffuse, vUV).rgb;
-	outNormal = vNormal;
+	outNormal = vNormal * normalize(texture2D(normal, vUV).rgb * 2.0 - 1.0);
 	outDepth = gl_FragCoord.z;
 }

@@ -1,7 +1,7 @@
 {
-	"texture": {
-        "name": "terrain_grass_0.png", "mipMaps": true
-    },
+	"textures": [
+        { "name": "diffuse", "path": "terrain_grass_0.png", "mipMaps": true }
+    ],
 	"shaders": {
         "vertex": "simple",
         "fragment": "simple"

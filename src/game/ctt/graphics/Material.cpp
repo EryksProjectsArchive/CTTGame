@@ -21,9 +21,7 @@
 Material::Material(const DynString& name, const FilePath& file)
 	: CacheableResource(file),
 	  m_name(name),
-	  m_texture(0),
 	  m_program(0),
-	  m_hasTexture(0),
 	  m_hasVertexShader(0),
 	  m_hasFragmentShader(0),
 	  m_isLoaded(0),
@@ -31,32 +29,24 @@ Material::Material(const DynString& name, const FilePath& file)
 {
 }
 
-
 Material::~Material()
 {
-	// NOTE: I don't remember if it's necessary here.
-	if (m_texture)
-	{
-		m_texture->release();
-		delete m_texture;
-		m_texture = 0;
-	}
-
-	if (m_program)
-	{
-		delete m_program;
-		m_program = 0;
-	}
+	for (TextureData* texture : m_textures)
+		delete texture;
+	m_textures.clear();
 }
 
 void Material::destroy()
 {
-	if (m_texture)
+	for (TextureData* texture : m_textures)
 	{
-		m_texture->release();
-		delete m_texture;
-		m_texture = 0;
-	}
+		if (texture->m_texture)
+		{
+			texture->m_texture->release();
+			delete texture->m_texture;
+			texture->m_texture = 0;
+		}
+	}	
 
 	if (m_program)
 	{
@@ -70,10 +60,10 @@ bool Material::load()
 	if (!m_isLoaded)
 	{
 		// TODO: TextureLib
-		if (m_hasTexture)
+		for (TextureData* texture : m_textures)
 		{
-			m_texture = new Texture(FilePath("textures/%s", m_textureName.get()), m_mipmaps ? true : false);			
-			m_texture->acquire(); // Acquire texture into material - we are calling free when material is being removed
+			texture->m_texture = new Texture(FilePath("textures/%s", texture->m_path.get()), texture->m_mipmaps ? true : false);
+			texture->m_texture->acquire(); // Acquire texture into material - we are calling free when material is being removed
 		}
 
 		m_program = new ShaderProgram();
@@ -93,4 +83,13 @@ bool Material::load()
 		return true;
 	}
 	return false;
+}
+
+void Material::addTexture(const DynString& name, const FilePath& path, bool mipmaps)
+{
+	TextureData* data = new TextureData;
+	data->m_name = name;
+	data->m_path = path;
+	data->m_mipmaps = mipmaps ? 1 : 0;
+	m_textures.pushBack(data);
 }

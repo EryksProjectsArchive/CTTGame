@@ -1,10 +1,11 @@
 {	
-	"texture": {
-        "name": "box.bmp", "mipMaps": true
-    },
+	"textures": [
+        { "name": "diffuse", "path": "box.bmp", "mipMaps": true },
+        { "name": "normal", "path": "normal.jpg", "mipMaps": false }
+    ],
 	"shaders": {
         "vertex": "simple",
-        "fragment": "simple"
+        "fragment": "simple.normal"
     },
     "wireframe": false
 }

@@ -533,35 +533,44 @@ void Renderer::renderGeometry(Geometry<Vertex3d> *geometry, const glm::mat4x4& m
 		glUniformMatrix4fv(mvpMatrixLocation, 1, GL_FALSE, glm::value_ptr(mvp));
 	}
 
-	if (material->m_texture)
+
+	uint32 textureId = 0;
+	if (material->m_textures.size() > 0)
 	{
-		unsigned int texture0Location = material->m_program->getUniformLocation("texture0");
-		if (texture0Location != -1 && material->m_texture->isLoaded())
+		for (Material::TextureData* textureData : material->m_textures)
 		{
-			glActiveTexture(GL_TEXTURE0);
-			glEnable(GL_TEXTURE_2D);
-			glBindTexture(GL_TEXTURE_2D, material->m_texture->m_textureID);		
+			// Validate texture
+			if (!textureData->m_texture || !textureData->m_texture->isLoaded())
+				continue;
 
-			if (material->m_texture->m_mipmaps)
+			unsigned int textureLocation = material->m_program->getUniformLocation(textureData->m_name.get());
+			if (textureLocation != -1)
 			{
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+				glActiveTexture(GL_TEXTURE0 + textureId);
+				glEnable(GL_TEXTURE_2D);
+				glBindTexture(GL_TEXTURE_2D, textureData->m_texture->m_textureID);
 
-				// Set max anisotropy level (TODO: user settings)
-				GLfloat largest = 1.0f;
-				glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &largest);
-				glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, largest);
+				if (textureData->m_texture->m_mipmaps)
+				{
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+					// Set max anisotropy level (TODO: user settings)
+					GLfloat largest = 1.0f;
+					glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &largest);
+					glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, largest);
+				}
+				else
+				{
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+				}
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+				glUniform1i(textureLocation, textureId);
+				++textureId;
 			}
-			else 
-			{
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-			}
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-			
-			
-			glUniform1i(texture0Location, 0);
 		}
 	}
 
@@ -635,19 +644,47 @@ void Renderer::renderGeometry(Geometry<Vertex2d> *geometry)
 		glUniformMatrix4fv(orthoMatrixLocation, 1, GL_FALSE, glm::value_ptr(m_orthoMatrix));
 	}
 
-	if (material->m_hasTexture)
+	uint32 textureId = 0;
+	if (material->m_textures.size() > 0)
 	{
-		if (glIsTexture(material->m_texture->m_textureID))
+		for (Material::TextureData* textureData : material->m_textures)
 		{
-			unsigned int textureLocation = material->m_program->getUniformLocation("texture");
-			if (textureLocation != -1)
+			// Validate texture
+			if (!textureData->m_texture || !textureData->m_texture->isLoaded())
+				continue;
+
+			unsigned int textureLocation = material->m_program->getUniformLocation(textureData->m_name.get());
+			if (textureLocation != -1 && textureData->m_texture->isLoaded())
 			{
-				glActiveTexture(GL_TEXTURE0);
-				glBindTexture(GL_TEXTURE_2D, material->m_texture->m_textureID);
-				glUniform1i(textureLocation, 0);
+				glActiveTexture(GL_TEXTURE0 + textureId);
+				glEnable(GL_TEXTURE_2D);
+				glBindTexture(GL_TEXTURE_2D, textureData->m_texture->m_textureID);
+
+				if (textureData->m_texture->m_mipmaps)
+				{
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+					// Set max anisotropy level (TODO: user settings)
+					GLfloat largest = 1.0f;
+					glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &largest);
+					glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, largest);
+				}
+				else
+				{
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+				}
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+
+				glUniform1i(textureLocation, textureId);
+				++textureId;
 			}
 		}
 	}
+
 
 	unsigned int attributePosition = material->m_program->getAttributeLocation("vertexPosition");
 	unsigned int attributeUV = material->m_program->getAttributeLocation("vertexUV");

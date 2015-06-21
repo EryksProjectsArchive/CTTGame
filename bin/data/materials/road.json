@@ -1,7 +1,7 @@
 {
-	"texture": {
-        "name": "road.dds", "mipMaps": true
-    },
+	"textures": [
+        { "name" : "diffuse", "path": "road.dds", "mipMaps": true }
+    ],
 	"shaders": {
         "vertex": "simple",
         "fragment": "simple"

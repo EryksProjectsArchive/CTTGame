@@ -64,14 +64,29 @@ Material * MaterialLib::findByName(const DynString& name)
 
 			material->m_wireframe = root.get("wireframe", false).asBool();
 
-			if (!root["texture"].empty() && !root["texture"]["name"].empty())
+			if (root["textures"].isArray())
 			{
-				material->m_textureName = root["texture"]["name"].asCString();
-				material->m_mipmaps = root["texture"].get("mipMaps", false).asBool();
-				material->m_hasTexture = 1;
+				Json::Value textures = root["textures"];
+				uint32 size = textures.size();
+				if (size > 32)
+				{
+					Warning("MaterialLib", "Maximum supported textures = 32 (Found %d). Material: %s", size, name.get());
+					size = 32;
+				}
+				for (uint32 i = 0; i < size; ++i)
+				{
+					Json::Value texture = textures[i];
+					if (texture.isObject() && texture["path"].isString())
+					{												
+						Json::Value name = texture.get("name", String<64>("texture%d", i).get());
+						Json::Value path = texture["path"];
+						Json::Value mipmap = texture["mipMaps"];
+
+						material->addTexture(name.asCString(), path.asCString(), mipmap.asBool());
+					}
+				}
 			}
-			else
-				Warning("MatLib", "Material %s has no textures set.", name.get());
+
 
 			if (root["shaders"].empty())
 			{

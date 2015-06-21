@@ -102,8 +102,21 @@ namespace OGG
 					data_size = ov_pcm_total(&vorbis_file, -1) * vi->channels * 2;
 
 					ov_pcm_seek(&vorbis_file, 0);
+					
+					// Disable warning about that new operator argument conversion on 32bit operating system
+					// the parameter type is size_t so 32 bit system has problem with it (Better allocator todo?)
+					#ifdef _WIN32
+					#pragma warning(push)
+					#pragma warning(disable : 4244)
+					#endif
 
 					data->data = new uint8[data_size];
+
+					// Restore previous warning state
+					#ifdef _WIN32
+					#pragma warning(pop)
+					#endif
+
 					data->size = data_size;
 
 					while (size < data_size)

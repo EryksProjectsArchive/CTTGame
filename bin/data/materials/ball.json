@@ -1,7 +1,7 @@
 {
-	"texture": {
-        "name": "avatar.bmp", "mipMaps": true
-    },
+	"textures": [
+        {"name": "diffuse", "path": "avatar.bmp", "mipMaps": true}
+    ],
 	"shaders": {
         "vertex": "simple",
         "fragment": "simple"
