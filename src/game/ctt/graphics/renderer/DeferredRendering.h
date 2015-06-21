@@ -33,6 +33,8 @@ private:
 	uint32 m_width;
 	uint32 m_height;
 
+	uint32 m_depthShadowTexture;
+
 	Renderer *m_renderer;
 public:
 	DeferredRendering();
@@ -41,6 +43,8 @@ public:
 	bool initialize(Renderer *renderer, uint32 width, uint32 height);
 	void destroy();
 
+	void setShadowTexture(uint32 depthShadowTexture);
+
 	void begin();
-	void end();
+	void end(const Matrix4x4& depthMVP);
 };

@@ -182,6 +182,7 @@ struct SoundData;
 // Graphics
 class RenderContext;
 class Renderer;
+class DynamicShadowsPass;
 class ModelFormat;
 class BufferBase;
 class IndexBuffer;
@@ -211,6 +212,7 @@ struct Vertex2d;
 struct Vertex3d;
 struct SimpleVertex2d;
 struct ImageData;
+
 
 
 // Math

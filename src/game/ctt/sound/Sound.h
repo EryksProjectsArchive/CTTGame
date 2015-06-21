@@ -34,5 +34,9 @@ public:
 	void setVolume(float volume);
 	float getVolume();
 
+	void setPosition(const Vector3& pos);
+	void setListenerPosition(const Vector3& pos);
+	void setListenerOrientation(const Vector3& pos, const Vector3& up);
+
 	bool isPlaying();
 };

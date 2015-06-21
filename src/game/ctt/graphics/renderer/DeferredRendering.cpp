@@ -24,7 +24,7 @@ DeferredRendering::DeferredRendering()
 	: m_deferredResultMaterial(0), m_fbo(0),
 	  m_diffuseTexture(0), m_normalTexture(0), m_depthTexture(0),
 	  m_diffuseRenderBuffer(0), m_normalRenderBuffer(0), m_depthRenderBuffer(0),
-	  m_renderer(0), m_width(0), m_height(0)
+	  m_renderer(0), m_width(0), m_height(0), m_depthShadowTexture(0)
 {
 }
 
@@ -110,6 +110,12 @@ bool DeferredRendering::initialize(Renderer* renderer, uint32 width, uint32 heig
 	return true;
 }
 
+
+void DeferredRendering::setShadowTexture(uint32 depthShadowTexture)
+{
+	m_depthShadowTexture = depthShadowTexture;
+}
+
 void DeferredRendering::destroy()
 {
 	if (m_deferredResultMaterial)
@@ -150,6 +156,8 @@ void DeferredRendering::destroy()
 
 void DeferredRendering::begin()
 {
+	glFrontFace(GL_CW);
+
 	Renderer::glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_fbo);
 	glPushAttrib(GL_VIEWPORT_BIT);
 
@@ -165,7 +173,7 @@ void DeferredRendering::begin()
 	Renderer::glDrawBuffers(2, buffers);
 }
 
-void DeferredRendering::end()
+void DeferredRendering::end(const Matrix4x4& depthMVP)
 {
 	Renderer::glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 	glPopAttrib();
@@ -233,6 +241,27 @@ void DeferredRendering::end()
 		glEnable(GL_TEXTURE_2D);
 		glBindTexture(GL_TEXTURE_2D, m_depthTexture);
 		Renderer::glUniform1i(textureLocation, 2);
+	}
+
+	if (m_depthShadowTexture != 0)
+	{
+		textureLocation = m_deferredResultMaterial->m_program->getUniformLocation("shadowTexture");
+		if (textureLocation != -1)
+		{
+			Renderer::glActiveTexture(GL_TEXTURE3);
+			glEnable(GL_TEXTURE_2D);
+			glBindTexture(GL_TEXTURE_2D, m_depthShadowTexture);
+			Renderer::glUniform1i(textureLocation, 3);
+		}
+
+		glm::mat4 biasMatrix(0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.5, 0.5, 0.5, 1.0);
+		glm::mat4 depthBiasMVP = biasMatrix*depthMVP;
+
+		unsigned int depthBiasMVPLocation = m_deferredResultMaterial->m_program->getUniformLocation("depthBiasMVP");
+		if (depthBiasMVPLocation != -1)
+		{
+			Renderer::glUniformMatrix4fv(depthBiasMVPLocation, 1, GL_FALSE, glm::value_ptr(depthBiasMVP));
+		}
 	}
 
 	unsigned int projectionMatrixLocation = m_deferredResultMaterial->m_program->getUniformLocation("projectionMatrix");

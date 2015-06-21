@@ -61,5 +61,6 @@ public:
 
 	friend class Renderer;
 	friend class DeferredRendering;
+	friend class DynamicShadowsPass;
 	friend class MaterialLib;
 };

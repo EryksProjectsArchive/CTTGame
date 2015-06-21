@@ -185,6 +185,7 @@ Game::~Game()
 
 	s_instance = 0;
 }
+Sound *sound = 0;
 
 bool Game::init()
 {
@@ -293,16 +294,17 @@ bool Game::init()
 
 	gFont = new Font("fonts/MSMHei-Bold.ttf", 15);
 
-	Sound *sound = SoundManager::get()->createSound(SoundType::Effect);
+	sound = SoundManager::get()->createSound(SoundType::Effect);
 
 	if (!sound->load("sounds/test.wav"))
 	{
 		return false;
 	}
 
-	sound->setVolume(0.1f);
+	sound->setPosition(Vector3(0, 1, 0));
+	sound->setVolume(0.2f);
 	sound->play(false);
-
+	
 	m_isInitialized = true;
 	m_isRunning = true;
 	return true;
@@ -355,6 +357,8 @@ void Game::update(double deltaTime)
 		Camera::current->update(float(deltaTime));
 		{		
 			EditorFreeCamera * camera = ((EditorFreeCamera *)Camera::current);
+			sound->setListenerPosition(camera->getPosition());
+			sound->setListenerOrientation(camera->getTarget(), Vector3(0.0f, 1.0f, 0.0f));
 
 			bool resetPosition = false;
 			int32 x, y;
@@ -465,7 +469,17 @@ void Game::render()
 	{
 		m_renderer->preFrame();
 
-		m_renderer->beginSceneRender();
+		// Shadows
+		m_renderer->beginShadowPass();
+
+		if (m_scene)
+			m_scene->render();
+
+		m_renderer->endShadowPass();
+
+		// Deferred
+		m_renderer->beginDeferredPass();
+
 		if (m_scene)
 			m_scene->render();
 
@@ -497,7 +511,7 @@ void Game::render()
 			};
 		}
 
-		m_renderer->endSceneRender();
+		m_renderer->endDeferredPass();
 
 		if (gFont)
 		{

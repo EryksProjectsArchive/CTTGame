@@ -52,7 +52,7 @@ namespace OpenAL
             METHOD(alGetProcAddress);
 
 #define EXT_METHOD(name)\
-    *(unsigned long *)&name = alGetProcAddress(#name);\
+    *(void *)&name = alGetProcAddress(#name);\
     if(!name) { \
         Debug("openAL", "Cannot find OpenAL Method - '%s'.",#name);\
         return false;\

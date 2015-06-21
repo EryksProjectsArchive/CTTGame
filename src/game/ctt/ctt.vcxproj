@@ -196,6 +196,7 @@
     <ClCompile Include="graphics\Model.cpp" />
     <ClCompile Include="graphics\ModelFormat.cpp" />
     <ClCompile Include="graphics\renderer\DeferredRendering.cpp" />
+    <ClCompile Include="graphics\renderer\DynamicShadowsPass.cpp" />
     <ClCompile Include="graphics\renderer\RenderContext.cpp" />
     <ClCompile Include="graphics\renderer\Renderer.cpp" />
     <ClCompile Include="graphics\Shader.cpp" />
@@ -286,6 +287,7 @@
     <ClInclude Include="graphics\Model.h" />
     <ClInclude Include="graphics\ModelFormat.h" />
     <ClInclude Include="graphics\renderer\DeferredRendering.h" />
+    <ClInclude Include="graphics\renderer\DynamicShadowsPass.h" />
     <ClInclude Include="graphics\renderer\RenderContext.h" />
     <ClInclude Include="graphics\renderer\Renderer.h" />
     <ClInclude Include="graphics\renderer\RenderPriority.h" />

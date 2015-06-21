@@ -3,12 +3,14 @@
 uniform sampler2D diffuseTexture; 
 uniform sampler2D normalTexture;
 uniform sampler2D depthTexture;
+uniform sampler2D shadowTexture;
 
 in vec2 vUV;
 
 uniform mat4 unProjectMatrix;
 uniform mat4 viewMatrix;
 uniform mat4 projectionMatrix;
+uniform mat4 depthBiasMVP;
 
 out vec4 color;
 
@@ -21,12 +23,26 @@ vec3 getWorldPosition()
     float z = texture(depthTexture, vUV).r * 2.0 - 1.0;
     vec4 screenPosition = vec4(vUV * 2.0 - 1.0, z, 1.0);
     screenPosition = unProjectMatrix * screenPosition;
-
-    return vec3(viewMatrix * vec4(screenPosition.xyz / screenPosition.w, 1));
+    return vec3(screenPosition / screenPosition.w);
 }
+
 
 vec4 calculatePointLight_BlinnPhong(vec3 position, vec3 normal, vec3 lightColor, vec3 lightPosition, float size, float powe)
 {
+	float visibility = 1.0;
+
+
+	vec3 wsPos = getWorldPosition();
+	vec4 uv = depthBiasMVP * vec4(wsPos, 1);
+	if(uv.x <= 1 && uv.y <= 1 && uv.x >= 0 && uv.y >= 0)
+	{	
+		float bias = 0.00002;
+		float depthValue = texture(shadowTexture, uv.xy).r;
+		if(depthValue < uv.z-bias)
+		{
+			visibility = 0.02;
+		}
+	}
 	// Convert light position to screen-space.	
 	lightPosition = vec3(viewMatrix * vec4(lightPosition, 1));
 
@@ -45,18 +61,21 @@ vec4 calculatePointLight_BlinnPhong(vec3 position, vec3 normal, vec3 lightColor,
 
 	float multiplier = 1.0-clamp(distance(position, lightPosition)/size, 0, 1);
 
-	return vec4(ambientColor + (lambertian * lightColor + specular * specularColor) * multiplier, 1);
+	return vec4(ambientColor + ((lambertian * lightColor + specular * specularColor) * multiplier) * visibility, 1);
 }
 
 void main(void)
 {		
 	vec4 lighting = vec4(0, 0, 0, 0);
 
+	float depth = texture2D(shadowTexture, vUV).r;
+	color = vec4(depth, depth, depth, 1);
+
 	// Base color of texture
 	color = texture2D(diffuseTexture, vUV);
 
 	// Get world position from depth buffer
-	vec3 vecPosition = getWorldPosition();
+	vec3 vecPosition = vec3(viewMatrix * vec4(getWorldPosition(), 1));
 	vec3 vecNormal = normalize((texture2D(normalTexture, vUV).xyz * 2) - 1);
 
 	// Sun

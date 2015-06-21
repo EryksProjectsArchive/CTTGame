@@ -83,9 +83,29 @@ bool Sound::load(const FilePath& filepath)
 		m_al->alGenBuffers(1, &m_bufferID);
 		m_al->alBufferData(m_bufferID, data->format, data->data, (ALsizei)data->size, data->sampleRate);
 		m_al->alGenSources(1, &m_sourceID);
-		m_al->alSourcei(m_sourceID, AL_BUFFER, m_bufferID);
+		m_al->alSourcei(m_sourceID, AL_BUFFER, m_bufferID);		
+		m_al->alSourcef(m_sourceID, AL_MAX_DISTANCE, 10.0f);
+		m_al->alSource3f(m_sourceID, AL_VELOCITY, 0.f, 0.f, 0.f);
+		setPosition(Vector3(0.f, 0.f, 0.f));
 		delete data;
 		return true;
 	}
 	return false;
+}
+
+void Sound::setPosition(const Vector3& pos)
+{
+	m_al->alSourcei(m_sourceID, AL_SOURCE_RELATIVE, AL_FALSE);
+	m_al->alSource3f(m_sourceID, AL_POSITION, pos.x, pos.y, pos.z);
+}
+
+void Sound::setListenerPosition(const Vector3& pos)
+{
+	m_al->alListener3f(AL_POSITION, pos.x, pos.y, pos.z);
+}
+
+void Sound::setListenerOrientation(const Vector3& pos, const Vector3& up)
+{
+	float o[6] = { -pos.x, -pos.y, -pos.z, up.x, up.y, up.z };
+	m_al->alListenerfv(AL_ORIENTATION, o);
 }

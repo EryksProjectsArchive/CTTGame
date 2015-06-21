@@ -200,6 +200,7 @@ Renderer::~Renderer()
 	}
 
 	m_deferredRenderer.destroy();
+	m_dynamicShadowsPass.destroy();
 
 	if (m_defaultMaterial)
 		m_defaultMaterial->release();
@@ -424,6 +425,14 @@ bool Renderer::setup(Window * window)
 		Error("Renderer", "Unable to initialize deferred renderer.");
 		return false;
 	}
+
+	// Initialize dynamic shadows pass
+	if (!m_dynamicShadowsPass.initialize(this, 4086, 4086))
+	{
+		Error("Renderer", "Unable to initialize dynamic shadows pass.");
+		return false;
+	}
+
 	return true;
 }
 
@@ -432,14 +441,25 @@ void Renderer::preFrame()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void Renderer::beginSceneRender()
+void Renderer::beginShadowPass()
 {
+	m_dynamicShadowsPass.begin();
+}
+
+void Renderer::endShadowPass()
+{
+	m_dynamicShadowsPass.end();
+}
+
+void Renderer::beginDeferredPass()
+{	
+	m_deferredRenderer.setShadowTexture(m_dynamicShadowsPass.getShadowTexture());
 	m_deferredRenderer.begin();
 }
 
-void Renderer::endSceneRender()
+void Renderer::endDeferredPass()
 {
-	m_deferredRenderer.end();	
+	m_deferredRenderer.end(m_dynamicShadowsPass.getDepthMVP());	
 }
 
 void Renderer::postFrame()
@@ -493,6 +513,12 @@ Material * Renderer::getMaterial()
 
 void Renderer::renderGeometry(Geometry<Vertex3d> *geometry, const glm::mat4x4& matrix)
 {
+	if (m_dynamicShadowsPass.isActive())
+	{
+		m_dynamicShadowsPass.renderGeometry(geometry, matrix);
+		return;
+	}
+
 	// Render final result
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
@@ -633,6 +659,8 @@ void Renderer::renderGeometry(Geometry<Vertex3d> *geometry, const glm::mat4x4& m
 
 void Renderer::renderGeometry(Geometry<Vertex2d> *geometry)
 {
+	if (m_dynamicShadowsPass.isActive()) return;
+
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_CULL_FACE);
 
@@ -740,6 +768,8 @@ void Renderer::renderGeometry(Geometry<Vertex2d> *geometry)
 
 void Renderer::renderGeometry(Geometry<SimpleVertex2d> *geometry)
 {
+	if (m_dynamicShadowsPass.isActive()) return;
+
 	Material* material = m_currentMaterial;
 	if (!material)
 		material = m_defaultMaterial;
@@ -795,6 +825,11 @@ void Renderer::renderGeometry(Geometry<SimpleVertex2d> *geometry)
 
 void Renderer::renderGeometry(Geometry<Vertex3d_pc> * geometry, const Matrix4x4& matrix)
 {
+	if (m_dynamicShadowsPass.isActive())
+	{
+		return;
+	}
+
 	Material* material = m_simpleColorMat;
 
 	// Shaders
@@ -841,6 +876,8 @@ void Renderer::renderGeometry(Geometry<Vertex3d_pc> * geometry, const Matrix4x4&
 
 void Renderer::drawLine3D(const Vector3& start, const Vector3& end, const Color& color, const Matrix4x4& matrix)
 {
+	if (m_dynamicShadowsPass.isActive()) return;
+
 	Geometry<Vertex3d_pc> geometry;
 
 	Vertex3d_pc* vertices = new Vertex3d_pc[2];

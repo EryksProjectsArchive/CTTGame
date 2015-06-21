@@ -23,6 +23,7 @@
 #include <core/Instance.h>
 
 #include "DeferredRendering.h"
+#include "DynamicShadowsPass.h"
 
 struct Vertex3d_pc
 {
@@ -46,6 +47,7 @@ protected:
 	Material* m_simpleColorMat;
 
 	DeferredRendering m_deferredRenderer;
+	DynamicShadowsPass m_dynamicShadowsPass;
 
 	struct
 	{
@@ -69,8 +71,10 @@ public:
 	bool setup(Window * window);
 
 	void preFrame();
-	void beginSceneRender();
-	void endSceneRender();
+	void beginShadowPass();
+	void endShadowPass();
+	void beginDeferredPass();
+	void endDeferredPass();
 	void postFrame();
 
 	Matrix4x4 getProjectionMatrix();

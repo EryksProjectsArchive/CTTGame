@@ -465,6 +465,9 @@
     <ClCompile Include="game\scene\entities\types\BusStopEntity.cpp">
       <Filter>Source Files\game\scene\entities\types</Filter>
     </ClCompile>
+    <ClCompile Include="graphics\renderer\DynamicShadowsPass.cpp">
+      <Filter>Source Files\graphics\renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="os\OS.h">
@@ -778,6 +781,9 @@
     </ClInclude>
     <ClInclude Include="game\scene\entities\types\BusStopEntity.h">
       <Filter>Header Files\game\scene\entities\types</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\renderer\DynamicShadowsPass.h">
+      <Filter>Header Files\graphics\renderer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
