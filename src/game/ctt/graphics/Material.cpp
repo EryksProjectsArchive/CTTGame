@@ -53,6 +53,8 @@ void Material::destroy()
 		delete m_program;
 		m_program = 0;
 	}
+
+	m_isLoaded = false;
 }
 
 bool Material::load()
@@ -79,7 +81,7 @@ bool Material::load()
 		}
 
 		m_program->link();
-		m_isLoaded = 1;
+		m_isLoaded = true;
 		return true;
 	}
 	return false;
